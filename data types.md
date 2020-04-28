@@ -4,6 +4,7 @@
 
 1. [Setup](#setup)
 1. [Numbers and Strings (Variables)](#numbers-and-strings-variables)
+1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Imports and Packages](#imports-and-packages)
 1. [Date Time API](#date-time-api)
@@ -58,8 +59,10 @@ public class App {
     {
       char c = 'J';
       String s = "Hello, this is my string";
+      String u = "\uD83D\uDC4B 🌎"; /* Equivalent to "👋 \uD83C\uDF0D" */
       System.out.printf( "My char    %s%n", c );
       System.out.printf( "My String  %s%n", s );
+      System.out.printf( "My Emoji   %s%n", u );
     }
   }
 }
@@ -77,6 +80,18 @@ My float   5,99
 My double  123456,1235
 My char    J
 My String  Hello, this is my string
+```
+
+## Operators
+
+Example
+
+```java
+```
+
+Output
+
+```bash
 ```
 
 ## Autoboxing

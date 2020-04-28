@@ -16,6 +16,7 @@ Boot Camp for developers interested to learn Java.
 ### [Data Types](data%20types.md)
 
 1. [Numbers and Strings (Variables)](data%20types.md#numbers-and-strings-variables)
+1. [Operators](data%20types.md#operators)
 1. [Autoboxing](data%20types.md#autoboxing)
 1. [Imports and Packages](data%20types.md#imports-and-packages)
 1. [Date Time API](data%20types.md#date-time-api)
@@ -25,6 +26,7 @@ Boot Camp for developers interested to learn Java.
 
 1. [Classes and methods (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#classes-and-methods-static-no-oop)
 1. [Properties (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#properties-static-no-oop)
+1. [Mutable and Immutable](classes%2C%20methods%20and%20control%20flow.md#mutable-and-immutable)
 1. [Access Control](classes%2C%20methods%20and%20control%20flow.md#access-control)
 1. [Control Flow and Loops](classes%2C%20methods%20and%20control%20flow.md#control-flow-and-loops)
 1. [Exceptions](classes%2C%20methods%20and%20control%20flow.md#exceptions)
