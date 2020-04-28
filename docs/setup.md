@@ -349,12 +349,12 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
     JAR is a simple ZIP file.  Unzip it.
 
     ```bash
-    $ unzip build/libs/demo.jar -d ./temp
+    $ unzip build/libs/demo.jar -d temp
     Archive:  build/libs/demo.jar
-      creating: ./temp/META-INF/
-     inflating: ./temp/META-INF/MANIFEST.MF
-      creating: ./temp/demo/
-     inflating: ./temp/demo/App.class
+      creating: temp/META-INF/
+     inflating: temp/META-INF/MANIFEST.MF
+      creating: temp/demo/
+     inflating: temp/demo/App.class
     ```
 
     The `temp` dir contains two folders and each folder will contain one file.
@@ -406,14 +406,14 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
     Remove the `temp` directory and unzip it again
 
     ```bash
-    $ rm -rf ./temp
-    $ unzip build/libs/demo.jar -d ./temp
+    $ rm -rf temp
+    $ unzip build/libs/demo.jar -d temp
     ```
 
     The manifest will now contain the `Main-Class`
 
     ```bash
-    $ cat ./temp/META-INF/MANIFEST.MF
+    $ cat temp/META-INF/MANIFEST.MF
     Manifest-Version: 1.0
     Main-Class: demo.App
     ```
@@ -451,24 +451,24 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
 
     ```bash
     $ ./gradlew clean build
-    $ rm -rf ./temp
-    $ unzip build/libs/demo.jar -d ./temp
+    $ rm -rf temp
+    $ unzip build/libs/demo.jar -d temp
     ```
 
     Notice that this time much more many files are included
 
     ```bash
     Archive:  build/libs/demo.jar
-       creating: ./temp/META-INF/
-      inflating: ./temp/META-INF/MANIFEST.MF
-       creating: ./temp/demo/
-      inflating: ./temp/demo/App.class
-       creating: ./temp/META-INF/maven/
-       creating: ./temp/META-INF/maven/com.google.guava/
+       creating: temp/META-INF/
+      inflating: temp/META-INF/MANIFEST.MF
+       creating: temp/demo/
+      inflating: temp/demo/App.class
+       creating: temp/META-INF/maven/
+       creating: temp/META-INF/maven/com.google.guava/
     ...
-      inflating: ./temp/com/google/j2objc/annotations/RetainedWith.class
-      inflating: ./temp/com/google/j2objc/annotations/Weak.class
-      inflating: ./temp/com/google/j2objc/annotations/WeakOuter.class
+      inflating: temp/com/google/j2objc/annotations/RetainedWith.class
+      inflating: temp/com/google/j2objc/annotations/Weak.class
+      inflating: temp/com/google/j2objc/annotations/WeakOuter.class
     ```
 
     The JAR file now contains runtime dependencies.
@@ -479,10 +479,12 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
 
         ```groovy
         task fatJar(type: Jar) {
+          group = 'Distribution'
+          description = 'Create an executable fat JAR'
+          archiveBaseName = 'fat-jar'
           manifest {
             attributes 'Main-Class': application.mainClassName
           }
-          archiveBaseName = 'fat-jar'
           from {
             configurations.runtimeClasspath.collect {
               it.isDirectory() ? it : zipTree(it)
@@ -492,6 +494,28 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
         }
         ```
 
+        List the available gradle tasks (some tasks may bot be visible but still be available).
+
+        ```bash
+        $ ./gradlew tasks
+        ```
+
+        Note that `fatJar` task under the `Distribution tasks` section.
+
+        ```bash
+        ...
+
+        Distribution tasks
+        ------------------
+        assembleDist - Assembles the main distributions
+        distTar - Bundles the project as a distribution.
+        distZip - Bundles the project as a distribution.
+        fatJar - Create an executable fat JAR
+        installDist - Installs the project as a distribution as-is.
+
+        ...
+        ```
+
         Create the fat JAR using the custom task
 
         ```bash
@@ -499,5 +523,66 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
         ```
 
         The JAR file: `build/libs/fat-jar.jar` will be created containing the application together with it's runtime dependencies.
+
+        Run the application.
+
+        ```bash
+        $ java -jar build/libs/fat-jar.jar
+        Hello world.
+        ```
+
+    1. Use a plugin
+
+        The [shadowJar](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin is a very popular plugin.
+
+        Add the `shadowJar` plugin (do no remove the other plugins)
+
+        ```groovy
+        plugins {
+            id 'com.github.johnrengelman.shadow' version '5.2.0'
+        }
+        ```
+
+        List the available tasks
+
+        ```bash
+        $ ./gradlew tasks
+        ```
+
+        `shadowJar` is one of the newly available tasks
+
+        ```bash
+        ...
+
+        Shadow tasks
+        ------------
+        knows - Do you know who knows?
+        shadowJar - Create a combined JAR of project and runtime dependencies
+
+        ...
+        ```
+
+        Create the fat JAR using the `shadowJar` task
+
+        ```bash
+        $ ./gradlew shadowJar
+        ```
+
+        Two JAR file will be created
+
+        ```bash
+        $ ls -l build/libs
+        -rw-r--r-- demo-all.jar
+        -rw-r--r-- demo.jar
+        ```
+
+        The `demo.jar` file does not include dependencies, while the `demo-all.jar` file does.
+
+        Run the application.
+
+        ```bash
+        $ java -jar build/libs/demo-all.jar
+        Hello world.
+        ```
 
 ## Docker
