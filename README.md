@@ -13,7 +13,7 @@ Boot Camp for developers interested to learn Java.
 1. [Hello World Application (packaged as an executable application)](setup.md#hello-world-application-packaged-as-an-executable-application)
 1. [Docker](setup.md#docker)
 
-### Data Types
+### [Data Types](data%20types.md)
 
 1. Numbers and Strings (Variables)
 1. Autoboxing

@@ -224,6 +224,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Extensions
     1. [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+    1. [Gradle Tasks](https://marketplace.visualstudio.com/items?itemName=richardwillis.vscode-gradle)
     1. [Spring Boot Tools](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-spring-boot)
     1. [Spring Initializr Java Support](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-spring-initializr)
     1. [Spring Boot Dashboard](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-spring-boot-dashboard)
@@ -320,6 +321,26 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     ```bash
     $ code .
     ```
+
+1. Run the project from the IDE
+
+    IntelliJ
+
+    1. Open the `App.java` file
+
+        ![App](assets/images/IntelliJ%20App%20Class.png)
+
+    1. Click any of the green arrows next to the line numbers.  Alternatively, click anywhere in the class and click `[control] + [shift] + [R]`
+
+        ![Output](assets/images/IntelliJ%20App%20Run%20Output.png)
+
+    VS Code
+
+    1. Open the `App.java` file
+
+    1. Right click on the file and select `Run`
+
+        ![App](assets/images/VS%20Code%20App%20Class.png)
 
 For more details, please refer to: [https://guides.gradle.org/creating-new-gradle-builds/](https://guides.gradle.org/creating-new-gradle-builds/)
 
@@ -647,16 +668,34 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
 1. Create [.dockerignore](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file
 
     ```
+    .classpath
+    .dockerignore
     .git
-    .gradle
-    .idea
-    build
     .gitattributes
     .gitignore
+    .gradle
+    .idea
+    .project
+    .settings
+    .vscode
+    Dockerfile
+    bin
+    build
     gradlew.bat
+    out
     ```
 
-    The `COPY` command will ignore all matching files
+    The `COPY` command will ignore all matching files.
+
+    Alternatively to adding a `.dockerignore`, add multiple `COPY` commands to the `Dockerfile`
+
+    ```dockerfile
+    COPY ./build.gradle .
+    COPY ./gradle ./gradle
+    COPY ./gradlew .
+    COPY ./settings.gradle .
+    COPY ./src ./src
+    ```
 
 1. Clean the project
 
@@ -670,6 +709,24 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     FROM adoptopenjdk/openjdk14:jdk-14.0.1_7-alpine-slim AS builder
     WORKDIR /opt/app
     COPY . .
+    RUN ./gradlew build
+
+    FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+    WORKDIR /opt/app
+    COPY --from=builder /opt/app/build/libs/demo.jar ./application.jar
+    CMD ["java", "-jar", "application.jar"]
+    ```
+
+    Alternatively, copy individual files and folders.
+
+    ```dockerfile
+    FROM adoptopenjdk/openjdk14:jdk-14.0.1_7-alpine-slim AS builder
+    WORKDIR /opt/app
+    COPY ./build.gradle .
+    COPY ./gradle ./gradle
+    COPY ./gradlew .
+    COPY ./settings.gradle .
+    COPY ./src ./src
     RUN ./gradlew build
 
     FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
