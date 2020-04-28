@@ -21,13 +21,13 @@ Boot Camp for developers interested to learn Java.
 1. [Date Time API](data%20types.md#date-time-api)
 1. [Internationalization](data%20types.md#internationalization)
 
-### Classes, Methods and Control Flow
+### [Classes, Methods and Control Flow](classes%2C%20methods%20and%20control%20flow.md)
 
-1. Classes and methods (static no OOP)
-1. Properties (static no OOP)
-1. Access Control
-1. Control Flow and Loops
-1. Exceptions
+1. [Classes and methods (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#classes-and-methods-static-no-oop)
+1. [Properties (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#properties-static-no-oop)
+1. [Access Control](classes%2C%20methods%20and%20control%20flow.md#access-control)
+1. [Control Flow and Loops](classes%2C%20methods%20and%20control%20flow.md#control-flow-and-loops)
+1. [Exceptions](classes%2C%20methods%20and%20control%20flow.md#exceptions)
 
 ### Testing
 
