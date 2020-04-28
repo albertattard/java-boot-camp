@@ -112,6 +112,34 @@
     Default java version set to 14.0.1.hs-adpt
     ```
 
+1. Set the `JAVA_HOME` environment variable
+
+    ```bash
+    $ echo $JAVA_HOME
+    ~/.sdkman/candidates/java/current
+    ```
+   
+    If the environment variable is missing, it will be blank.  Edit the `~/.zshrc` to set the `JAVA_HOME` environment variable.
+    
+    ```bash
+    $ vi ~/.zshrc
+    ```
+   
+    Add the `JAVA_HOME` environment variable
+    
+    ```bash
+    export JAVA_HOME="~/.sdkman/candidates/java/current"
+    ```
+   
+    Open a new terminal and verify that this was properly set.
+    
+    ```bash
+    $ ${JAVA_HOME}/bin/java -version
+    openjdk version "14.0.1" 2020-04-14
+    OpenJDK Runtime Environment AdoptOpenJDK (build 14.0.1+7)
+    OpenJDK 64-Bit Server VM AdoptOpenJDK (build 14.0.1+7, mixed mode, sharing)
+    ``` 
+
 For more details, please refer to: [https://sdkman.io/install](https://sdkman.io/install)
 
 ## Gradle and Maven
@@ -170,11 +198,116 @@ For more details, please refer to: [https://sdkman.io/install](https://sdkman.io
     JVM:          14.0.1 (AdoptOpenJDK 14.0.1+7)
     OS:           Mac OS X 10.15.4 x86_64
     ```
-For more details, please refer to: [https://gradle.org/install/](https://gradle.org/install/)
+
+For more details, please refer to: [https://gradle.org/install/](https://gradle.org/install/).
+
+### Recommended Readings
+
+1. Gradle Beyond the Basics ([O'Reilly Books](https://learning.oreilly.com/library/view/gradle-beyond-the/9781449373801/))
+1. Gradle Fundamentals ([O'Reilly Video Series](https://learning.oreilly.com/videos/gradle-fundamentals/9781491937266))
 
 ## IDE (IntelliJ IDEA and VS Code)
 
+1. **IntelliJ IDEA** ([https://www.jetbrains.com/idea/download/#section=mac](https://www.jetbrains.com/idea/download/#section=mac))
+
+    Plugins
+    1. [Nyan Progress Bar](https://plugins.jetbrains.com/plugin/8575-nyan-progress-bar)
+    1. [Lombok](https://plugins.jetbrains.com/plugin/6317-lombok)
+    1. [Rainbow Brackets](https://plugins.jetbrains.com/plugin/10080-rainbow-brackets)
+    1. [FindBugs-IDEA](https://plugins.jetbrains.com/plugin/3847-findbugs-idea)
+    
+    Setup command-line Launcher
+    
+    ![IntelliJ Create Command-Line Launcher](images/IntelliJ%20Create%20Command-Line%20Launcher.png)
+
+1. **VS Code** ([https://code.visualstudio.com/](https://code.visualstudio.com/))
+
+    Extensions
+    1. [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+    1. [Spring Boot Tools](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-spring-boot)
+    1. [Spring Initializr Java Support](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-spring-initializr)
+    1. [Spring Boot Dashboard](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-spring-boot-dashboard)
+
+    Setup shell command.  (Press [`F1`])
+    
+    ![VS Code Shell Command](images/VS%20Code%20Shell%20Command.png)
+
 ## Create a project using Gradle
+
+1. Create a directory
+
+    ```bash
+    $ mkdir demo
+    ```
+
+    Navigate inside the directory
+    
+    ```bash
+    $ cd demo
+    ```
+   
+    **All command will be executed from within the `demo` directory unless otherwise stated.**
+
+1. Initialise the project
+
+    ```bash
+    $ gradle init
+    ```
+    
+    This will bring up an interactive menu
+    
+    | Selection               | Value                     |
+    |-------------------------|---------------------------|
+    | Type of project         | `2: application`          |
+    | Implementation language | `3: Java`                 |
+    | Build script DSL        | `1: Groovy` (the default) |
+    | Test framework          | `4: JUnit Jupiter`        |
+    | Project name            | `demo` (the default)      |
+    | Source package          | `demo` (the default)      |
+    
+    Full run
+
+    ```bash
+    Starting a Gradle Daemon, 2 incompatible Daemons could not be reused, use --status for details
+    
+    Select type of project to generate:
+      1: basic
+      2: application
+      3: library
+      4: Gradle plugin
+    Enter selection (default: basic) [1..4] 2
+    
+    Select implementation language:
+      1: C++
+      2: Groovy
+      3: Java
+      4: Kotlin
+      5: Swift
+    Enter selection (default: Java) [1..5] 3
+    
+    Select build script DSL:
+      1: Groovy
+      2: Kotlin
+    Enter selection (default: Groovy) [1..2]
+    
+    Select test framework:
+      1: JUnit 4
+      2: TestNG
+      3: Spock
+      4: JUnit Jupiter
+    Enter selection (default: JUnit 4) [1..4] 4
+    
+    Project name (default: demo):
+    Source package (default: demo):
+    
+    > Task :init
+    Get more help with your project: https://docs.gradle.org/6.3/userguide/tutorial_java_projects.html
+    
+    BUILD SUCCESSFUL in 1m 23s
+    2 actionable tasks: 2 executed
+    ```
+
+For more details, please refer to: [https://guides.gradle.org/creating-new-gradle-builds/](https://guides.gradle.org/creating-new-gradle-builds/)
 
 ## Hello World Application (packaged as an executable application)
 
