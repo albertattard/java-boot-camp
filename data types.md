@@ -11,7 +11,7 @@
 
 ## Setup
 
-1. Clone Repo
+1. Clone Repo: [java-boot-camp-blank](https://github.com/albertattard/java-boot-camp-blank)
 
     ```bash
     $ git clone https://github.com/albertattard/java-boot-camp-blank.git
