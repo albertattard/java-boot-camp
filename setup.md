@@ -147,7 +147,7 @@ For more details, please refer to: [https://sdkman.io/install](https://sdkman.io
 1. Gradle ([https://gradle.org/](https://gradle.org/))
 1. Maven ([http://maven.apache.org/](http://maven.apache.org/))
 
-![Popularity](images/Maven%20vs.%20Gradle.png)
+![Popularity](assets/images/Maven%20vs.%20Gradle.png)
 
 ### Advantages of Gradle over Maven
 
@@ -218,7 +218,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Setup command-line Launcher
 
-    ![IntelliJ Create Command-Line Launcher](images/IntelliJ%20Create%20Command-Line%20Launcher.png)
+    ![IntelliJ Create Command-Line Launcher](assets/images/IntelliJ%20Create%20Command-Line%20Launcher.png)
 
 1. **VS Code** ([https://code.visualstudio.com/](https://code.visualstudio.com/))
 
@@ -230,7 +230,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Setup shell command.  (Press [`F1`])
 
-    ![VS Code Shell Command](images/VS%20Code%20Shell%20Command.png)
+    ![VS Code Shell Command](assets/images/VS%20Code%20Shell%20Command.png)
 
 ## Create a project using Gradle
 
@@ -600,7 +600,7 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
 
 1. Verify that docker is running
 
-    ![Docker Desktop](images/Docker%20Desktop%20Tray%20Icon.png)
+    ![Docker Desktop](assets/images/Docker%20Desktop%20Tray%20Icon.png)
 
 ### Dockerize the Application
 
@@ -688,3 +688,8 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     ```
 
 For more details, please refer to: [https://docs.docker.com/develop/develop-images/multistage-build/](https://docs.docker.com/develop/develop-images/multistage-build/)
+
+### Recommended Readings
+
+1. Docker in Action, Second Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/docker-in-action/9781617294761/))
+1. Docker Essentials: The Definitive Guide to Docker Containerization ([O'Reilly Video Series](https://learning.oreilly.com/videos/docker-essentials-the/9781634625814))
