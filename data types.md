@@ -87,11 +87,54 @@ My String  Hello, this is my string
 Example
 
 ```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    /* Basic Arithmetic */
+    {
+
+    }
+
+    /* String concatenation */
+    {
+      int a = 7;
+      int b = 3;
+      String m = "The number is " + a + b;
+      String n = "The number is " + ( a + b );
+      System.out.println( "-- String concatenation ----" );
+      System.out.println( m );
+      System.out.println( n );
+    }
+
+    /* Arithmetic operations return an int (or long) */
+    {
+      byte a = 7;
+      byte b = 3;
+      int plus = a + b;
+      int minus = a - b;
+      byte c = 7;
+      c += b;
+      System.out.println( "-- Arithmetic operations ---" );
+      System.out.println( "a + b = " + plus );
+      System.out.println( "a - b = " + minus );
+      System.out.println( "c = " + c );
+    }
+
+  }
+}
 ```
 
 Output
 
 ```bash
+-- String concatenation ----
+The number is 73
+The number is 10
+-- Arithmetic operations ---
+a + b = 10
+a - b = 4
+c = 10
 ```
 
 ## Autoboxing
