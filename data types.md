@@ -245,9 +245,39 @@ Parsed:    2020-04-27
 Example
 
 ```java
+package demo;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.Locale;
+
+public class App {
+  public static void main( String[] args ) {
+    LocalDate now = LocalDate.now();
+
+    TemporalField fieldSys = WeekFields.of( Locale.getDefault() ).dayOfWeek();
+    TemporalField fieldUK = WeekFields.of( Locale.UK ).dayOfWeek();
+    TemporalField fieldUS = WeekFields.of( Locale.US ).dayOfWeek();
+
+    LocalDate firstSys = now.with( fieldSys, 1 );
+    LocalDate firstUK = now.with( fieldUK, 1 );
+    LocalDate firstUS = now.with( fieldUS, 1 );
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern( "dd E" );
+
+    System.out.printf( "First day of week: %s (System)%n", firstSys.format( formatter ) );
+    System.out.printf( "First day of week: %s (UK)%n", firstUK.format( formatter ) );
+    System.out.printf( "First day of week: %s (US)%n", firstUS.format( formatter ) );
+  }
+}
 ```
 
 Output
 
 ```bash
+First day of week: 27 Mon (System)
+First day of week: 27 Mon (UK)
+First day of week: 26 Sun (US)
 ```
