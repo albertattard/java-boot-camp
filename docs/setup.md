@@ -378,12 +378,12 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
 
 1. Run the application
 
-    This JAR is not yet an executable JAR.
-
     ```bash
     $ java -jar build/libs/demo.jar
     no main manifest attribute, in build/libs/demo.jar
     ```
+
+    This JAR is not yet an executable JAR.  The `MANIFEST.MF` is missing the `Main-Class` attribute.
 
 1. Add the `jar` task
 
@@ -586,3 +586,105 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
         ```
 
 ## Docker
+
+### Setup Docker
+
+1. Verify that docker is installed
+
+    ```bash
+    $ docker --version
+    Docker version 19.03.8, build afacb8b
+    ```
+
+    Install docker if missing following the instructions: [https://docs.docker.com/docker-for-mac/install/](https://docs.docker.com/docker-for-mac/install/)
+
+1. Verify that docker is running
+
+    ![Docker Desktop](images/Docker%20Desktop%20Tray%20Icon.png)
+
+### Dockerize the Application
+
+1. Built the project
+
+    ```bash
+    ./gradlew clean build
+    ```
+
+1. Create file `Dockerfile`
+
+    ```dockerfile
+    FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+    WORKDIR /opt/app
+    COPY ./build/libs/demo.jar ./application.jar
+    CMD ["java", "-jar", "application.jar"]
+    ```
+
+    The above docker file relies on the JAR file
+
+    ```
+    build/libs/demo.jar
+    ```
+
+    This needs to be an executable JAR
+
+1. Build the Java image
+
+    ```bash
+    $ docker build . -t demo:local
+    ```
+
+1. Run the docker image
+
+    ```bash
+    $ docker run -it demo:local
+    Hello world.
+    ```
+
+### Multi-Stage Docker Build
+
+The docker file depends on the JAR file to be generated before it runs.  Docker can be used to first build the executable JAR and then creates the image.
+
+1. Create [.dockerignore](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file
+
+    ```
+    .git
+    .gradle
+    .idea
+    build
+    .gitattributes
+    .gitignore
+    gradlew.bat
+    ```
+
+    The `COPY` command will ignore all matching files
+
+1. Clean the project
+
+    ```bash
+    $ ./gradlew clean
+    ```
+
+1. Update the `dockerfile` making it a multi-stage docker file
+
+    ```dockerfile
+    FROM adoptopenjdk/openjdk14:jdk-14.0.1_7-alpine-slim AS builder
+    WORKDIR /opt/app
+    COPY . .
+    RUN ./gradlew build
+
+    FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+    WORKDIR /opt/app
+    COPY --from=builder /opt/app/build/libs/demo.jar ./application.jar
+    CMD ["java", "-jar", "application.jar"]
+    ```
+
+    This time docker will build the JAR and then package it.  Unfortunately it does not take advantage of any caching and makes it a bit slower.  **While this is slow for development purposes, it ensures that the build is not relying on caches.**
+
+1. Run the docker image
+
+    ```bash
+    $ docker run -it demo:local
+    Hello world.
+    ```
+
+For more details, please refer to: [https://docs.docker.com/develop/develop-images/multistage-build/](https://docs.docker.com/develop/develop-images/multistage-build/)
