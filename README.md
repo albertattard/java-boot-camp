@@ -15,11 +15,11 @@ Boot Camp for developers interested to learn Java.
 
 ### [Data Types](data%20types.md)
 
-1. Numbers and Strings (Variables)
-1. Autoboxing
-1. Imports and Packages
-1. Date Time API
-1. Internationalization
+1. [Numbers and Strings (Variables)](data%20types.md#numbers-and-strings-variables)
+1. [Autoboxing](data%20types.md#autoboxing)
+1. [Imports and Packages](data%20types.md#imports-and-packages)
+1. [Date Time API](data%20types.md#date-time-api)
+1. [Internationalization](data%20types.md#internationalization)
 
 ### Classes, Methods and Control Flow
 
