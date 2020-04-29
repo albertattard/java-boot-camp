@@ -397,31 +397,41 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     }
     ```
 
-    Plugins enable more features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) gradle tasks.
+    [Plugins](https://docs.gradle.org/current/userguide/plugins.html) enable more features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) gradle tasks.
 
     ```groovy
     plugins {
         id 'org.springframework.boot' version '2.2.6.RELEASE'
     }
     ```
+   
+    A list of plugins is available [here](https://plugins.gradle.org/).
 
-    The dependency section manages other libraries that our project uses.  For example, we can add new dependency, such as the [Apache Commons Lang3](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.0) shown next by, adding the dependency.
+    The [dependency](https://docs.gradle.org/current/userguide/declaring_dependencies.html) section manages other libraries that our project uses.  For example, we can add new dependency, such as the [Apache Commons Lang3](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.0) shown next by, adding the dependency.
 
     ```groovy
     dependencies {
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     }
     ```
+   
+    The dependencies can defined as a single line, delimited by a `:`  
 
-    Dependencies are fetched from repositories, defined in the `repositories` section.  We are using the JCenter repository.
+    ```groovy
+    dependencies {
+        implementation 'org.apache.commons:commons-lang3:3.0'
+    }
+    ```
+   
+    Dependencies have [scopes](https://docs.gradle.org/current/userguide/java_plugin.html#tab:configurations).  Dependencies that are only needed for tests, will have the `testImplementation` scope and are excluded from other scopes.  These two scopes are enabled by the [Java plugin](https://docs.gradle.org/current/userguide/java_plugin.html).
+
+    Dependencies are fetched from [repositories](https://docs.gradle.org/current/userguide/declaring_repositories.html), defined in the `repositories` section.  We are using the [JCenter](https://bintray.com/bintray/jcenter) repository.
 
     ```groovy
     repositories {
         jcenter()
     }
     ```
-
-    Note that we are pulling dependencies from Maven central, a very popular dependency repository.
 
     The application and tests are configured in the following respective sections.
 
