@@ -100,6 +100,8 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
       }
     }
     ```
+   
+    **Note that the method does not have the `static` key word**.
 
     This test fails on purpose.
 
@@ -476,6 +478,10 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))
 
 ## Mocking (Mockito and Easy Mock)
+
+Mockito is [Google Trends](https://trends.google.com/trends/explore?q=Mockito,Easy%20Mock)
+
+![Mockito vs. Easy Mock](assets/images/Mockito%20vs.%20Easy%20Mock.png)
 
 ### Mockito
 
