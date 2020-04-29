@@ -81,10 +81,159 @@ Game started.  Please roll the 🎲
 
 ## Properties (static no OOP)
 
+Example
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( String[] args ) {
+    int a = rollDice();
+    System.out.printf( "You rolled %d%n", a );
+  }
+
+  public static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  public static Random random = new Random();
+}
+```
+
+Output
+
+```bash
+You rolled a 1
+```
+
 ## Mutable and Immutable
+
+Example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Mutable */
+    int a = 2;
+    a++;
+
+    /* Immutable */
+    final int b = 3;
+
+    /* Immutable (initialised after declared)*/
+    final int c;
+    c = 3;
+
+    System.out.printf( "a = %d%n", a );
+    System.out.printf( "b = %d%n", b );
+    System.out.printf( "c = %d%n", c );
+  }
+}
+```
+
+Output
+
+```
+a = 3
+b = 3
+c = 3
+```
 
 ## Access Control
 
+Example (`Dice.java`)
+
+```java
+package demo;
+
+import java.util.Random;
+
+class Dice {
+  private static Random random = new Random();
+
+  static int roll() {
+    return random.nextInt( 6 ) + 1;
+  }
+}
+```
+
+Example (`App.java`)
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    int a = Dice.roll();
+    System.out.printf( "You rolled a %d%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+You rolled a 5
+```
+
 ## Control Flow and Loops
+
+Example
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( String[] args ) {
+
+    boolean won = false;
+
+    for ( int i = 0; i < 3; i++ ) {
+      final int a = rollDice();
+      final int b = rollDice();
+      System.out.printf( "You rolled %d and %d%n", a, b );
+
+      if ( a + b >= 10 ) {
+        won = true;
+        break;
+      }
+
+      System.out.println( "Not enough, please try again." );
+    }
+
+    if ( won ) {
+      System.out.println( "You won!!" );
+    } else {
+      System.out.println( "Better luck next time" );
+    }
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+
+}
+```
+
+Output
+
+```bash
+You rolled 1 and 3
+Not enough, please try again.
+You rolled 5 and 6
+You won!!
+```
 
 ## Exceptions
