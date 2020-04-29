@@ -28,7 +28,7 @@
 
     ```groovy
     dependencies {
-      testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.7.0-M1'
+      testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
     }
 
     test {
