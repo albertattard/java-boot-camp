@@ -101,9 +101,11 @@
     Add the aliases
 
     ```bash
-    alias java11='sdk default java 11.0.6.hs-adpt'
+    alias java11='sdk default java 11.0.7.hs-adpt'
     alias java14='sdk default java 14.0.1.hs-adpt'
     ```
+
+    Note that the aliases will need to be updated when different versions of Java are added or removed.
 
     Two switch between versions just use `java11` and `java14`.
 
