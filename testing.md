@@ -20,11 +20,11 @@
 
 ## Testing with JUnit 5 (Hamcrest and AssertJ)
 
-## Add JUnit 5
+**Context**:  A player is playing a dice game and 10 or more are required for the placer to win.  Write a function that determines whether the player has won.  This function will take two integers as an input and will return true if the sum of the given integers are equal to or greater than 10.
+
+### Add JUnit 5
 
 1. Add the [junit-jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) aggregator dependency and configure that `test` task to make use of [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
-
-    File: `build.gradle`
 
     ```groovy
     dependencies {
@@ -169,7 +169,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
     }
     ```
 
-    Note that in TDD, we would simply return `true` (just enough to make the test passes).
+    **Note that in TDD, we would simply return `true` (just enough to make the test passes)**.
 
     Run the tests again, this time these should pass.
 
@@ -251,9 +251,60 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
 ### Hamcrest
 
+[Hamcrest](http://hamcrest.org/JavaHamcrest/) is a framework for writing matcher objects allowing 'match' rules to be defined declaratively.
+
+1. Add the [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all/1.3) dependency
+
+    ```groovy
+    dependencies {
+        testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    }
+    ```
+
+1. Example
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    import java.math.BigDecimal;
+
+    import static org.hamcrest.MatcherAssert.assertThat;
+    import static org.hamcrest.core.CombinableMatcher.either;
+    import static org.hamcrest.core.Is.is;
+    import static org.hamcrest.core.Is.isA;
+    import static org.hamcrest.core.IsEqual.equalTo;
+    import static org.hamcrest.core.StringStartsWith.startsWith;
+    import static org.hamcrest.number.IsCloseTo.closeTo;
+    import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
+    import static org.hamcrest.number.OrderingComparison.greaterThan;
+    import static org.hamcrest.number.OrderingComparison.lessThan;
+
+    class AppTest {
+
+        @Test
+        public void tryingOutHamcrest() {
+            assertThat( "my string", equalTo( "my string" ) );
+            assertThat( "Hello everyone", startsWith( "Hello" ) );
+
+            assertThat( 10, is( greaterThan( 5 ) ) );
+            assertThat( 10, isA( Integer.class ) );
+            assertThat( 10, either( greaterThan( 50 ) ).or( lessThan( 20 ) ) );
+
+            assertThat( new BigDecimal( "10" ), comparesEqualTo( new BigDecimal( "10.00" ) ) );
+            assertThat( 10.01, closeTo( 10, 0.02 ) );
+        }
+    }
+    ```
+
+    The tests are not referring to the application.
+
 ### AssertJ
 
 ### Recommended Readings
+
+1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
 
 ## Mocking (Mockito and Easy Mock)
 
