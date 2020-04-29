@@ -151,7 +151,7 @@ Gradle and Maven are build automation tool that are designed to be flexible enou
 1. Gradle ([https://gradle.org/](https://gradle.org/))
 1. Maven ([http://maven.apache.org/](http://maven.apache.org/))
 
-Maven is the most popular build tool.
+According to [Google Trends](https://trends.google.com/trends/explore?q=maven,gradle), Maven is the most popular build tool.
 
 ![Popularity](assets/images/Maven%20vs.%20Gradle.png)
 

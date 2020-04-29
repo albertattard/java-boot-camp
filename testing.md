@@ -218,7 +218,6 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
     public class AppTest {
 
-      @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
       @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
       @CsvSource( { "5, 5", "5, 6", "6, 5", "6, 6" } )
       public void shouldReturnTrueIfWon( int a, int b ) {
@@ -227,7 +226,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
     }
     ```
 
-    Note that there is no `@Test` annotation was replaced by the `@ParameterizedTest` annotation.
+    Note that there is no `@Test` annotation was replaced by the `@ParameterizedTest` annotation.  The annotation `@DisplayName` is not required either as the test will take the name from the `@ParameterizedTest` annotation.
 
 1. Run the test
 
@@ -298,13 +297,97 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
     }
     ```
 
-    The tests are not referring to the application.
-
 ### AssertJ
+
+[Assertj](https://assertj.github.io/doc/) is a java library providing a rich set of assertions, truly helpful error messages, improves test code readability and is designed to be super easy to use.
+
+1. Add the [Assertj](https://mvnrepository.com/artifact/org.assertj/assertj-core/3.15.0) dependency
+
+    ```groovy
+    dependencies {
+        testImplementation 'org.assertj:assertj-core:3.15.0'
+    }
+    ```
+
+1. Example
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    import java.math.BigDecimal;
+
+    import static org.assertj.core.api.Assertions.assertThat;
+    import static org.assertj.core.api.Assertions.offset;
+
+    class AppTest {
+
+        @Test
+        public void tryingOutAssertJ() {
+            assertThat( "my string" ).isEqualTo( "my string" );
+            assertThat( "Hello everyone" ).startsWith( "Hello" );
+
+            assertThat( 10 ).isGreaterThan( 5 );
+            assertThat( 10 ).isInstanceOfAny( Integer.class );
+            /* Using Lambdas here */
+            assertThat( 10 ).satisfiesAnyOf(
+                    i -> assertThat( i ).isGreaterThan( 50 ),
+                    i -> assertThat( i ).isLessThan( 20 )
+            );
+
+            assertThat( new BigDecimal( "10" ) ).isEqualByComparingTo( new BigDecimal( "10.00" ) );
+            assertThat( 10.01 ).isCloseTo( 10, offset( 0.02 ) );
+        }
+    }
+    ```
+
+### JUnit 5, Hamcrest and AssertJ
+
+| Library  | Test Runner | Matcher |
+|----------|:-----------:|:-------:|
+| JUnit 5  |   **YES**   | **YES** |
+| Hamcrest |     NO      | **YES** |
+| AssertJ  |     NO      | **YES** |
+
+According to [Google Trends](https://trends.google.com/trends/explore?q=hamcrest,assertj), the matchers share similar popularity.
+
+![Harmcrest vs AssertJ](assets/images/Harmcrest%20vs.%20AssertJ.png)
+
+The good news is that these are not mutually exclusive and it is not uncommon to find them both.
+
+```groovy
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+    testImplementation 'org.hamcrest:hamcrest-all:1.3'
+    testImplementation 'org.assertj:assertj-core:3.15.0'
+}
+```
+
+With that said, using both Hamcrest and AssertJ may be challenging as both use the same method name `assertThat()` and thus cannot just static import this method.
+
+```java
+package demo;
+
+import org.assertj.core.api.Assertions;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+
+class AppTest {
+
+    @Test
+    public void tryingOutBothInSameTest() {
+        Assertions.assertThat( 10 ).isEqualTo( 10 );
+        MatcherAssert.assertThat( 10, Matchers.equalTo( 10 ) );
+    }
+}
+```
 
 ### Recommended Readings
 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
+1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))
 
 ## Mocking (Mockito and Easy Mock)
 
