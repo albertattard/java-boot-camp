@@ -357,6 +357,29 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
     Hello world.
     ```
 
+1. Adjust Logging Level
+
+    The [run](https://docs.gradle.org/current/userguide/command_line_interface.html#running_applications) tasks will also compile the code and perform all necessary things.  It performs three more tasks:
+
+    1. [compileJava](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_tasks)
+    1. [processResources](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_tasks)
+    1. [classes](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_tasks)
+
+    Using the `-i` (or `--info`) [logging option](https://docs.gradle.org/current/userguide/logging.html#logging), gradle will produce more information.
+
+    ```bash
+    $ ./gradlew run -i
+    ...
+    > Configure project :
+    Evaluating root project 'demo' using build file 'build.gradle'.
+    All projects evaluated.
+    Selected primary task 'run' from project :
+    Tasks to be executed: [task ':compileJava', task ':processResources', task ':classes', task ':run']
+    Tasks that were excluded: []
+    :compileJava (Thread[Execution worker for ':',5,main]) started.
+    ...
+    ```
+
 1. Build the project
 
     ```bash
