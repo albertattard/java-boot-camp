@@ -91,11 +91,6 @@ package demo;
 
 public class App {
   public static void main( String[] args ) {
-    /* Basic Arithmetic */
-    {
-
-    }
-
     /* String concatenation */
     {
       int a = 7;
@@ -107,6 +102,29 @@ public class App {
       System.out.println( n );
     }
 
+    /* Basic Arithmetic */
+    {
+      int a = 2;
+      int b = 2;
+      int c = a + b + 2;
+      int d = a++;
+      int e = ++b;
+
+      int f = 1 / 2;
+      int g = 1 % 2;
+      int h = -1 % 2;
+
+      System.out.println( "-- Basic Arithmetic ----------" );
+      System.out.printf( "a = %d%n", a );
+      System.out.printf( "b = %d%n", b );
+      System.out.printf( "c = %d%n", c );
+      System.out.printf( "d = %d%n", d );
+      System.out.printf( "e = %d%n", e );
+      System.out.printf( "f = %d%n", f );
+      System.out.printf( "g = %d%n", g );
+      System.out.printf( "h = %d%n", h );
+    }
+
     /* Arithmetic operations return an int (or long) */
     {
       byte a = 7;
@@ -116,11 +134,27 @@ public class App {
       byte c = 7;
       c += b;
       System.out.println( "-- Arithmetic operations ---" );
-      System.out.println( "a + b = " + plus );
-      System.out.println( "a - b = " + minus );
-      System.out.println( "c = " + c );
+      System.out.printf( "a + b = %d%n", plus );
+      System.out.printf( "a - b = %d%n", minus );
+      System.out.printf( "c = %d%n", c );
     }
 
+    /* Relational operators */
+    {
+      boolean a = 2 > 1;
+      boolean b = 2 != 2;
+      boolean c = a && b;
+      boolean d = a || b;
+      boolean e = !a;
+
+      System.out.println( "-- Relational operators ---" );
+      System.out.printf( "2 > 1 = %s%n", a );
+      System.out.printf( "2 != 2 = %s%n", b );
+      System.out.printf( "%s && %s = %s%n", a, b, c );
+      System.out.printf( "%s || %s = %s%n", a, b, d );
+      System.out.printf( "!%s = %s%n", a, e );
+
+    }
   }
 }
 ```
@@ -128,6 +162,15 @@ public class App {
 Output
 
 ```bash
+-- Basic Arithmetic ----------
+a = 3
+b = 3
+c = 6
+d = 2
+e = 3
+f = 0
+g = 1
+h = -1
 -- String concatenation ----
 The number is 73
 The number is 10
