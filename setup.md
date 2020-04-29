@@ -146,8 +146,12 @@ For more details, please refer to: [https://sdkman.io/install](https://sdkman.io
 
 ## Gradle and Maven
 
+Gradle and Maven are build automation tool that are designed to be flexible enough to build almost any type of software, ranging from mobile application to web applications and command line applications.
+
 1. Gradle ([https://gradle.org/](https://gradle.org/))
 1. Maven ([http://maven.apache.org/](http://maven.apache.org/))
+
+Maven is the most popular build tool.
 
 ![Popularity](assets/images/Maven%20vs.%20Gradle.png)
 
@@ -205,6 +209,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
 ### Recommended Readings
 
+1. Gradle in Action ([O'Reilly Books](https://learning.oreilly.com/library/view/gradle-in-action/9781617291302/))
 1. Gradle Beyond the Basics ([O'Reilly Books](https://learning.oreilly.com/library/view/gradle-beyond-the/9781449373801/))
 1. Gradle Fundamentals ([O'Reilly Video Series](https://learning.oreilly.com/videos/gradle-fundamentals/9781491937266))
 
@@ -262,7 +267,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     | Selection               | Value                     |
     |-------------------------|---------------------------|
     | Type of project         | `2: application`          |
-    | Implementation language | `3: Java`                 |
+    | Implementation language | `3: Java` (the default)   |
     | Build script DSL        | `1: Groovy` (the default) |
     | Test framework          | `4: JUnit Jupiter`        |
     | Project name            | `demo` (the default)      |
@@ -286,7 +291,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
       3: Java
       4: Kotlin
       5: Swift
-    Enter selection (default: Java) [1..5] 3
+    Enter selection (default: Java) [1..5]
 
     Select build script DSL:
       1: Groovy
@@ -310,6 +315,31 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     2 actionable tasks: 2 executed
     ```
 
+1. [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
+
+    ```bash
+    $ ls -l
+    -rw-r--r-- .gitattributes
+    -rw-r--r-- .gitignore
+    drwxr-xr-x .gradle
+    -rw-r--r-- build.gradle
+    drwxr-xr-x gradle
+    -rwxr-xr-x gradlew
+    -rw-r--r-- gradlew.bat
+    -rw-r--r-- settings.gradle
+    drwxr-xr-x src
+    ```
+
+    A gradle wrapper was included by the `gradle init` process as this is the preferred way to run gradle ([reference](https://docs.gradle.org/current/userguide/gradle_wrapper.html)).
+
+    ```bash
+    drwxr-xr-x gradle
+    -rwxr-xr-x gradlew
+    -rw-r--r-- gradlew.bat
+    ```
+
+    Instead of using `gradle`, now we can use `./gradlew` (or `./gradlew.bat` on Windows).  **Using the wrapper, we do not require to have gradle installed**.
+
 1. Open the project in IDE
 
     IntelliJ
@@ -322,6 +352,79 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     ```bash
     $ code .
+    ```
+
+1. Open the `gradle/wrapper/gradle-wrapper.properties` file
+
+    ```properties
+    distributionBase=GRADLE_USER_HOME
+    distributionPath=wrapper/dists
+    distributionUrl=https\://services.gradle.org/distributions/gradle-6.3-bin.zip
+    zipStoreBase=GRADLE_USER_HOME
+    zipStorePath=wrapper/dists
+    ```
+
+    The list of releases is found at: [releases](https://gradle.org/releases/) page.
+
+    We can configure gradle's properties to be used by the project from this file, including the version of gradle.  This ensures that everyone on the project make use of the same configuration (and version) of gradle.
+
+1. Open the `build.gradle` file
+
+    ```groovy
+    plugins {
+        id 'java'
+        id 'application'
+    }
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        implementation 'com.google.guava:guava:28.2-jre'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    }
+
+    application {
+        mainClassName = 'demo.App'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+    ```
+
+    Comments removed for brevity.
+
+    Plugins enable more features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) gradle tasks.
+
+    ```groovy
+    plugins {
+        id 'org.springframework.boot' version '2.2.6.RELEASE'
+    }
+    ```
+
+    The dependency section manages other libraries that our project uses.  For example, we can add new dependency, such as the [Apache Commons Lang3](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.0) shown next by, adding the dependency.
+
+    ```groovy
+    dependencies {
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    }
+    ```
+
+    Note that we are pulling dependencies from Maven central, a very popular dependency repository.
+
+    The application and tests are configured in the following respective sections.
+
+    ```groovy
+    application {
+        mainClassName = 'demo.App'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
     ```
 
 1. Run the project from the IDE
