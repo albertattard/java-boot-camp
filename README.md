@@ -31,12 +31,12 @@ Boot Camp for developers interested to learn Java.
 1. [Control Flow and Loops](classes%2C%20methods%20and%20control%20flow.md#control-flow-and-loops)
 1. [Exceptions](classes%2C%20methods%20and%20control%20flow.md#exceptions)
 
-### Testing
+### [Testing](testing.md)
 
-1. Testing with JUnit 5 (Hamcrest and AssertJ)
-1. Mocking (Mockito and Easy Mock)
-1. Google Guava (Preconditions)
-1. PIT Mutation Testing
+1. [Testing with JUnit 5 (Hamcrest and AssertJ)](testing.md#testing-with-junit-5-hamcrest-and-assertj)
+1. [Mocking (Mockito and Easy Mock)](testing.md#mocking-mockito-and-easy-mock)
+1. [Google Guava (Preconditions)](testing.md#google-guava-preconditions)
+1. [PIT Mutation Testing](testing.md#pit-mutation-testing)
 
 ### Objects
 
