@@ -370,6 +370,8 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
 1. Open the `build.gradle` file
 
+    Comments removed for brevity.
+
     ```groovy
     plugins {
         id 'java'
@@ -395,8 +397,6 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     }
     ```
 
-    Comments removed for brevity.
-
     Plugins enable more features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) gradle tasks.
 
     ```groovy
@@ -410,6 +410,14 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     ```groovy
     dependencies {
         implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    }
+    ```
+
+    Dependencies are fetched from repositories, defined in the `repositories` section.  We are using the JCenter repository.
+
+    ```groovy
+    repositories {
+        jcenter()
     }
     ```
 
