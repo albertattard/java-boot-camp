@@ -22,7 +22,7 @@
 
 ## Add JUnit 5
 
-1. Add the [junit-jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) aggregator dependency.
+1. Add the [junit-jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) aggregator dependency and configure that `test` task to make use of [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
 
     File: `build.gradle`
 
@@ -36,11 +36,13 @@
     }
     ```
 
-    Use the latest version when possible.
-
     The Maven repository make use of older dependency configurations.  Use the new dependency configuration `testImplementation` that replaced the `testCompile` dependency configuration.
 
-    **You may need to refresh gradle through the IDE**
+    ![Maven JUnit 5](assets/images/Maven%20JUnit%205.png)
+
+    Use the latest version when possible.
+
+    **You may need to refresh gradle to see the changes in the IDE**
 
     ![Refresh Gradle](assets/images/Refresh%20Gradle.png)
 
@@ -48,7 +50,7 @@
 
     ![JUnit 5 Dependency](assets/images/JUnit%205%20Dependency.png)
 
-1. Open the `App.java` class, click `[command] + [shift] + [T]` and select the *Create New Test...* menu option
+1. Open the `App.java` class, press `[command] + [shift] + [T]` and select the *Create New Test...* menu option
 
     ![Create new Test](assets/images/Create%20New%20Test.png)
 
@@ -56,11 +58,25 @@
 
     ![No Test Roots Found](assets/images/No%20Test%20Roots%20Found.png)
 
-    Click *Cancel* and create a new directory under `src` folder.
+    Click *Cancel* and create the `test` directory under `src` folder first.
 
     ![New Test Directory](assets/images/New%20Test%20Directory.png)
 
     Create the test class.
+
+    ![Create Test](assets/images/Create%20Test.png)
+
+    A blank test class under the `test` directory will be created.
+
+    ```java
+    package demo;
+
+    import static org.junit.jupiter.api.Assertions.*;
+
+    class AppTest {
+
+    }
+    ```
 
     Please refer to [gradle documentation](
 https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layout) for more information about the project structure.
