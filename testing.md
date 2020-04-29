@@ -256,7 +256,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
     ```groovy
     dependencies {
-        testImplementation 'org.hamcrest:hamcrest-all:1.3'
+      testImplementation 'org.hamcrest:hamcrest-all:1.3'
     }
     ```
 
@@ -282,18 +282,18 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
     class AppTest {
 
-        @Test
-        public void tryingOutHamcrest() {
-            assertThat( "my string", equalTo( "my string" ) );
-            assertThat( "Hello everyone", startsWith( "Hello" ) );
+      @Test
+      public void tryingOutHamcrest() {
+        assertThat( "my string", equalTo( "my string" ) );
+        assertThat( "Hello everyone", startsWith( "Hello" ) );
 
-            assertThat( 10, is( greaterThan( 5 ) ) );
-            assertThat( 10, isA( Integer.class ) );
-            assertThat( 10, either( greaterThan( 50 ) ).or( lessThan( 20 ) ) );
+        assertThat( 10, is( greaterThan( 5 ) ) );
+        assertThat( 10, isA( Integer.class ) );
+        assertThat( 10, either( greaterThan( 50 ) ).or( lessThan( 20 ) ) );
 
-            assertThat( new BigDecimal( "10" ), comparesEqualTo( new BigDecimal( "10.00" ) ) );
-            assertThat( 10.01, closeTo( 10, 0.02 ) );
-        }
+        assertThat( new BigDecimal( "10" ), comparesEqualTo( new BigDecimal( "10.00" ) ) );
+        assertThat( 10.01, closeTo( 10, 0.02 ) );
+      }
     }
     ```
 
@@ -305,7 +305,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
     ```groovy
     dependencies {
-        testImplementation 'org.assertj:assertj-core:3.15.0'
+      testImplementation 'org.assertj:assertj-core:3.15.0'
     }
     ```
 
@@ -323,22 +323,22 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
     class AppTest {
 
-        @Test
-        public void tryingOutAssertJ() {
-            assertThat( "my string" ).isEqualTo( "my string" );
-            assertThat( "Hello everyone" ).startsWith( "Hello" );
+      @Test
+      public void tryingOutAssertJ() {
+        assertThat( "my string" ).isEqualTo( "my string" );
+        assertThat( "Hello everyone" ).startsWith( "Hello" );
 
-            assertThat( 10 ).isGreaterThan( 5 );
-            assertThat( 10 ).isInstanceOfAny( Integer.class );
-            /* Using Lambdas here */
-            assertThat( 10 ).satisfiesAnyOf(
-                    i -> assertThat( i ).isGreaterThan( 50 ),
-                    i -> assertThat( i ).isLessThan( 20 )
-            );
+        assertThat( 10 ).isGreaterThan( 5 );
+        assertThat( 10 ).isInstanceOfAny( Integer.class );
+        /* Using Lambdas here */
+        assertThat( 10 ).satisfiesAnyOf(
+            i -> assertThat( i ).isGreaterThan( 50 ),
+            i -> assertThat( i ).isLessThan( 20 )
+        );
 
-            assertThat( new BigDecimal( "10" ) ).isEqualByComparingTo( new BigDecimal( "10.00" ) );
-            assertThat( 10.01 ).isCloseTo( 10, offset( 0.02 ) );
-        }
+        assertThat( new BigDecimal( "10" ) ).isEqualByComparingTo( new BigDecimal( "10.00" ) );
+        assertThat( 10.01 ).isCloseTo( 10, offset( 0.02 ) );
+      }
     }
     ```
 
@@ -358,9 +358,9 @@ The good news is that these are not mutually exclusive and it is not uncommon to
 
 ```groovy
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
-    testImplementation 'org.hamcrest:hamcrest-all:1.3'
-    testImplementation 'org.assertj:assertj-core:3.15.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+  testImplementation 'org.hamcrest:hamcrest-all:1.3'
+  testImplementation 'org.assertj:assertj-core:3.15.0'
 }
 ```
 
@@ -376,11 +376,11 @@ import org.junit.jupiter.api.Test;
 
 class AppTest {
 
-    @Test
-    public void tryingOutBothInSameTest() {
-        Assertions.assertThat( 10 ).isEqualTo( 10 );
-        MatcherAssert.assertThat( 10, Matchers.equalTo( 10 ) );
-    }
+  @Test
+  public void tryingOutBothInSameTest() {
+    Assertions.assertThat( 10 ).isEqualTo( 10 );
+    MatcherAssert.assertThat( 10, Matchers.equalTo( 10 ) );
+  }
 }
 ```
 
