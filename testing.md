@@ -384,6 +384,92 @@ class AppTest {
 }
 ```
 
+### Test Lifecycle
+
+JUnit 5 provides a set of powerful [annotations](https://junit.org/junit5/docs/current/user-guide/#writing-tests-annotations) that help managing the tests lifecycle.
+
+Example
+
+```java
+package demo;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class AppTest {
+
+  @Test
+  public void test1() {
+    System.out.println( "@Test 1" );
+  }
+
+  @Test
+  public void test2() {
+    System.out.println( "@Test 2" );
+  }
+
+  @BeforeAll
+  public static void setupOnce() {
+    System.out.println( "@BeforeAll" );
+  }
+
+  @AfterAll
+  public static void teardownOnce() {
+    System.out.println( "@AfterAll" );
+  }
+
+  @BeforeEach
+  public void setupBeforeEachTest() {
+    System.out.println( "@BeforeEach" );
+  }
+
+  @AfterEach
+  public void teardownAfterEachTest() {
+    System.out.println( "@AfterEach" );
+  }
+}
+```
+
+Run the tests
+
+```bash
+$ ./gradlew clean test
+```
+
+Will show how each method is called.
+
+```bash
+> Task :test
+
+AppTest STANDARD_OUT
+    @BeforeAll
+
+AppTest > test1() STANDARD_OUT
+    @BeforeEach
+    @Test 1
+    @AfterEach
+
+AppTest > test1() PASSED
+
+AppTest > test2() STANDARD_OUT
+    @BeforeEach
+    @Test 2
+    @AfterEach
+
+AppTest > test2() PASSED
+
+AppTest STANDARD_OUT
+    @AfterAll
+
+BUILD SUCCESSFUL in 1s
+4 actionable tasks: 4 executed
+```
+
+Note that the methods invoked by an `@AfterEach` are called even when the tests fail. Also, note that here there is a mixture of `static` and non `static` methods.
+
 ### Recommended Readings
 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
