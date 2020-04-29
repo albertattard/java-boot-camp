@@ -237,3 +237,56 @@ You won!!
 ```
 
 ## Exceptions
+
+Example
+
+```java
+package demo;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+public class App {
+
+  public static void main( String[] args ) {
+    System.out.print( "Input a number: " );
+    String input = "";
+    try {
+      input = readUserInput();
+      final int number = Integer.parseInt( input );
+      System.out.printf( "You have entered the number %d%n", number );
+    } catch ( NumberFormatException e ) {
+      System.out.printf( "Cannot parse the input '%s' into a number%n", input );
+    } catch ( IOException e ) {
+      System.out.println( "Failed to read user input due to a technical failure" );
+    } finally {
+      System.out.println( "I am always called before the try/catch block exists" );
+    }
+  }
+
+  private static String readUserInput() throws IOException {
+    return reader.readLine();
+  }
+
+  private static final BufferedReader reader =
+    new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
+}
+```
+
+Output (for the input `4`)
+
+```bash
+Input a number: 4
+You have entered the number 4
+I am always called before the try/catch block exists
+```
+
+Output (for the input `Hello there`)
+
+```bash
+Input a number: Hello there
+Cannot parse the input 'Hello there' into a number
+I am always called before the try/catch block exists
+```
