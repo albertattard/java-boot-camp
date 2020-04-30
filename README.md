@@ -4,14 +4,14 @@ Boot Camp for developers interested to learn Java.
 
 ## Plan
 
-### [Setup](setup.md)
+### [Setup](01%20-%20Setup.md)
 
-1. [Setup Environment (SDKMAN)](setup.md#setup-environment-sdkman)
-1. [Gradle and Maven](setup.md#gradle-and-maven)
-1. [IDE (IntelliJ IDEA and VS Code)](setup.md#ide-intellij-idea-and-vs-code)
-1. [Create a project using Gradle](setup.md#create-a-project-using-gradle)
-1. [Hello World Application (packaged as an executable application)](setup.md#hello-world-application-packaged-as-an-executable-application)
-1. [Docker](setup.md#docker)
+1. [Setup Environment (SDKMAN)](01%20-%20Setup.md#setup-environment-sdkman)
+1. [Gradle and Maven](01%20-%20Setup.md#gradle-and-maven)
+1. [IDE (IntelliJ IDEA and VS Code)](01%20-%20Setup.md#ide-intellij-idea-and-vs-code)
+1. [Create a project using Gradle](01%20-%20Setup.md#create-a-project-using-gradle)
+1. [Hello World Application (packaged as an executable application)](01%20-%20Setup.md#hello-world-application-packaged-as-an-executable-application)
+1. [Docker](01%20-%20Setup.md#docker)
 
 ### [Data Types](data%20types.md)
 
