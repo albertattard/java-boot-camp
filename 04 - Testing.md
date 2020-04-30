@@ -556,6 +556,8 @@ Finally, there is a big prize associate with this game and we need to make sure 
 1. It is not easy to simulate the input
 1. It is not easy to confirm that the correct messages are being displayed
 
+**An Alternative Approach**
+
 The game can be refactored such that we have anything which is not related to logic is moved to another class, called `GamePeripherals` and then the game interacts with this class to perform IO.
 
 ```java
