@@ -100,7 +100,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
       }
     }
     ```
-   
+
     **Note that the method does not have the `static` key word**.
 
     This test fails on purpose.
@@ -498,8 +498,8 @@ public class Game {
 
   public static void main( String[] args ) {
     final BufferedReader reader = new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
-
     final Random random = new Random();
+
     final int numberToBeGuessed = random.nextInt( 10 ) + 1;
     boolean guessed = false;
 
@@ -508,7 +508,7 @@ public class Game {
       try {
         System.out.print( "Enter a number between 1 and 10 (both inclusive): " );
         input = reader.readLine();
-        int numberEntered = Integer.parseInt( input );
+        final int numberEntered = Integer.parseInt( input );
 
         if ( numberEntered < 1 || numberEntered > 10 ) {
           System.out.printf( "The number %d is out of range%n", numberEntered  );
@@ -543,9 +543,9 @@ public class Game {
 }
 ```
 
-The game needs to be robust and should handle invalid inputs by printing an error message on the screen.  
+The game needs to be robust and should handle invalid inputs by printing an error message on the screen.
 
-The above game is very hard to test as everything is in one place.  For example, it is hard to simulate an IO error and it is not easy to see what messages are being printed on the screen.  
+The above game is very hard to test as everything is in one place.  For example, it is hard to simulate an IO error and it is not easy to see what messages are being printed on the screen.
 
 Finally, there is a big prize associate with this game and we need to make sure only those really guess the number win.
 
@@ -603,7 +603,7 @@ import java.io.IOException;
 public class Game {
 
   public static void main( String[] args ) {
-    GamePeripherals peripherals = new GamePeripherals();
+    final GamePeripherals peripherals = new GamePeripherals();
     playGame( peripherals );
   }
 
@@ -615,7 +615,7 @@ public class Game {
       String input = "";
       try {
         input = peripherals.readInput( "Enter a number between 1 and 10 (both inclusive): " );
-        int numberEntered = Integer.parseInt( input );
+        final int numberEntered = Integer.parseInt( input );
 
         if ( numberEntered < 1 || numberEntered > 10 ) {
           peripherals.displayf( "The number %d is out of range%n", numberEntered );
@@ -650,7 +650,7 @@ public class Game {
 }
 ```
 
-Now we can test the game logic and simulate all the scenarios we need. 
+Now we can test the game logic and simulate all the scenarios we need.
 
 ```java
 package demo;
