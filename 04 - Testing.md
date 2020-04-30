@@ -527,7 +527,7 @@ public class Game {
         }
         attempts++;
       } catch ( NumberFormatException e ) {
-        System.out.printf( "The input '%s' is not a number%n" );
+        System.out.printf( "The input '%s' is not a number%n", input );
       } catch ( IOException e ) {
         System.out.println( "Encountered an error" );
         return;
@@ -537,7 +537,7 @@ public class Game {
     if ( guessed ) {
       System.out.println( "WOW!! You got it" );
     } else {
-      System.out.printf( "The number was: %d. Better luck next time!!%n" );
+      System.out.printf( "The number was: %d. Better luck next time!!%n", numberToBeGuessed );
     }
   }
 }
@@ -620,7 +620,7 @@ public class Game {
         final int numberEntered = Integer.parseInt( input );
 
         if ( numberEntered < 1 || numberEntered > 10 ) {
-          peripherals.displayf( "The number %d is out of range%n", numberEntered );
+          peripherals.displayf( "The number %d is out of range", numberEntered );
           continue;
         }
 
@@ -630,13 +630,13 @@ public class Game {
         }
 
         if ( numberEntered < numberToBeGuessed ) {
-          peripherals.displayf( "Not quite right. Try a number greater than %d%n", numberEntered );
+          peripherals.displayf( "Not quite right. Try a number greater than %d", numberEntered );
         } else {
-          peripherals.displayf( "Not quite right. Try a number smaller than %d%n", numberEntered );
+          peripherals.displayf( "Not quite right. Try a number smaller than %d", numberEntered );
         }
         attempts++;
       } catch ( NumberFormatException e ) {
-        peripherals.displayf( "The input '%s' is not a number%n" );
+        peripherals.displayf( "The input '%s' is not a number", input );
       } catch ( IOException e ) {
         peripherals.display( "Encountered an error" );
         return;
@@ -646,7 +646,7 @@ public class Game {
     if ( guessed ) {
       peripherals.display( "WOW!! You got it" );
     } else {
-      peripherals.displayf( "The number was: %d. Better luck next time!!%n" );
+      peripherals.displayf( "The number was: %d. Better luck next time!!", numberToBeGuessed );
     }
   }
 }
