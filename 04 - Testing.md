@@ -4,7 +4,7 @@
 
 1. [Setup](#setup)
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](#testing-with-junit-5-hamcrest-and-assertj)
-1. [Mocking (Mockito and Easy Mock)](#mocking-mockito-and-easy-mock)
+1. [Mocking (Mockito and EasyMock)](#mocking-mockito-and-easymock)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
 1. [PIT Mutation Testing](#pit-mutation-testing)
 
@@ -477,15 +477,29 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
 1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))
 
-## Mocking (Mockito and Easy Mock)
+## Mocking (Mockito and EasyMock)
 
-Mockito is [Google Trends](https://trends.google.com/trends/explore?q=Mockito,Easy%20Mock)
+### Test Doubles
 
-![Mockito vs. Easy Mock](assets/images/Mockito%20vs.%20Easy%20Mock.png)
+[Test Double](https://martinfowler.com/bliki/TestDouble.html) is a generic term for any case where you replace a production object for testing purposes. There are various kinds of double that Gerard lists:
+
+* **Dummy** objects are passed around but never actually used.  Usually they are just used to fill parameter lists.
+* **Stubs** provide canned answers to calls made during the test, usually not responding at all to anything outside what's programmed in for the test.
+* **Spies** are stubs that also record some information based on how they were called. One form of this might be an email service that records how many messages it was sent.
+* **Mocks** are pre-programmed with expectations which form a specification of the calls they are expected to receive. They can throw an exception if they receive a call they don't expect and are checked during verification to ensure they got all the calls they were expecting.
+* **Fake** objects actually have working implementations, but usually take some shortcut which makes them not suitable for production (an InMemoryTestDatabase is a good example).
+
+![Test Doubles](assets/images/Test%20Doubles.png)
 
 ### Mockito
 
-### Easy Mock
+### EasyMock
+
+### Which Mocking Framework
+
+Mockito is the most popular mocking framework according to [Google Trends](https://trends.google.com/trends/explore?q=Mockito,EasyMock,JMock,JMockit,PowerMock).
+
+![Mockito vs. the rest](assets/images/Mockito%20vs.%20the%20Rest.png)
 
 ## Google Guava (Preconditions)
 
