@@ -211,6 +211,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
 1. Gradle in Action ([O'Reilly Books](https://learning.oreilly.com/library/view/gradle-in-action/9781617291302/))
 1. Gradle Beyond the Basics ([O'Reilly Books](https://learning.oreilly.com/library/view/gradle-beyond-the/9781449373801/))
+1. Building and Testing with Gradle ([O'Reilly Books](https://learning.oreilly.com/library/view/building-and-testing/9781449306816/))
 1. Gradle Fundamentals ([O'Reilly Video Series](https://learning.oreilly.com/videos/gradle-fundamentals/9781491937266))
 
 ## IDE (IntelliJ IDEA and VS Code)
@@ -374,26 +375,26 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     ```groovy
     plugins {
-        id 'java'
-        id 'application'
+      id 'java'
+      id 'application'
     }
 
     repositories {
-        jcenter()
+      jcenter()
     }
 
     dependencies {
-        implementation 'com.google.guava:guava:28.2-jre'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+      implementation 'com.google.guava:guava:28.2-jre'
+      testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+      testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
     }
 
     application {
-        mainClassName = 'demo.App'
+      mainClassName = 'demo.App'
     }
 
     test {
-        useJUnitPlatform()
+      useJUnitPlatform()
     }
     ```
 
@@ -401,7 +402,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     ```groovy
     plugins {
-        id 'org.springframework.boot' version '2.2.6.RELEASE'
+      id 'org.springframework.boot' version '2.2.6.RELEASE'
     }
     ```
    
@@ -411,7 +412,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     ```groovy
     dependencies {
-        implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+      implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     }
     ```
    
@@ -419,11 +420,22 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     ```groovy
     dependencies {
-        implementation 'org.apache.commons:commons-lang3:3.0'
+      implementation 'org.apache.commons:commons-lang3:3.0'
     }
     ```
    
     Dependencies have [scopes](https://docs.gradle.org/current/userguide/java_plugin.html#tab:configurations).  Dependencies that are only needed for tests, will have the `testImplementation` scope and are excluded from other scopes.  These two scopes are enabled by the [Java plugin](https://docs.gradle.org/current/userguide/java_plugin.html).
+    
+    Dependencies of the same scope can be grouped together as shown next.
+    
+    ```groovy
+    dependencies {
+      implementation(
+       'org.apache.commons:commons-lang3:3.0',
+       'com.google.guava:guava:28.2-jre'
+      )
+    }
+    ```
 
     Dependencies are fetched from [repositories](https://docs.gradle.org/current/userguide/declaring_repositories.html), defined in the `repositories` section.  We are using the [JCenter](https://bintray.com/bintray/jcenter) repository.
 
@@ -552,7 +564,7 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
 
     This JAR is not yet an executable JAR.  The `MANIFEST.MF` is missing the `Main-Class` attribute.
 
-1. Add the `jar` task
+1. Configure the `jar` task
 
     File: `build.gradle`
 
@@ -697,6 +709,8 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
         $ java -jar build/libs/fat-jar.jar
         Hello world.
         ```
+       
+       For more information about tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
 
     1. Use a plugin
 
