@@ -479,6 +479,222 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 
 ## Mocking (Mockito and EasyMock)
 
+### What is Mocking (Test Doubles) and Why do we need it?
+
+A game company developed a new game and would like to test the game well before release it to the players.  The game is very simple.  The player is given three chances to guess a number between 1 and 10 both inclusive.
+
+Example:
+
+```java
+package demo;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+public class Game {
+
+  public static void main( String[] args ) {
+    final BufferedReader reader = new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
+
+    final Random random = new Random();
+    final int numberToBeGuessed = random.nextInt( 10 ) + 1;
+    boolean guessed = false;
+
+    for ( int attempts = 1; attempts <= 3; ) {
+      String input = "";
+      try {
+        System.out.print( "Enter a number between 1 and 10 (both inclusive): " );
+        input = reader.readLine();
+        int numberEntered = Integer.parseInt( input );
+
+        if ( numberEntered < 1 || numberEntered > 10 ) {
+          System.out.printf( "The number %d is out of range%n", numberEntered  );
+          continue;
+        }
+
+        if ( numberToBeGuessed == numberEntered ) {
+          guessed = true;
+          break;
+        }
+
+        if ( numberEntered < numberToBeGuessed ) {
+          System.out.printf( "Not quite right. Try a number greater than %d%n", numberEntered );
+        } else {
+          System.out.printf( "Not quite right. Try a number smaller than %d%n", numberEntered );
+        }
+        attempts++;
+      } catch ( NumberFormatException e ) {
+        System.out.printf( "The input '%s' is not a number%n" );
+      } catch ( IOException e ) {
+        System.out.println( "Encountered an error" );
+        return;
+      }
+    }
+
+    if ( guessed ) {
+      System.out.println( "WOW!! You got it" );
+    } else {
+      System.out.printf( "The number was: %d. Better luck next time!!%n" );
+    }
+  }
+}
+```
+
+The game needs to be robust and should handle invalid inputs by printing an error message on the screen.  
+
+The above game is very hard to test as everything is in one place.  For example, it is hard to simulate an IO error and it is not easy to see what messages are being printed on the screen.  
+
+Finally, there is a big prize associate with this game and we need to make sure only those really guess the number win.
+
+**Some Challenges**
+
+1. It is hard to predict the random number
+1. It is hard to simulate errors
+1. It is not easy to simulate the input
+1. It is not easy to confirm that the correct messages are being displayed
+
+The game can be refactored such that we have anything which is not related to logic is moved to another class, called `GamePeripherals` and then the game interacts with this class to perform IO.
+
+```java
+package demo;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+public class GamePeripherals {
+
+  private final BufferedReader reader = new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
+  private final Random random = new Random();
+
+  public int generateRandomNumber() {
+    return random.nextInt( 10 ) + 1;
+  }
+
+  public String readInput( String prompt ) throws IOException {
+    System.out.print( prompt );
+    return reader.readLine();
+  }
+
+  public void display( String message ) {
+    System.out.println( message );
+  }
+
+  public void displayf( String pattern, Object... values ) {
+    display( String.format( pattern, values ) );
+  }
+}
+```
+
+Note that all methods in this class are not `static`.  This is covered in more detail later on.
+
+The `Game` class is refactored to make use of the `GamePeripherals` class to get input and display messages.
+
+```java
+package demo;
+
+import java.io.IOException;
+
+public class Game {
+
+  public static void main( String[] args ) {
+    GamePeripherals peripherals = new GamePeripherals();
+    playGame( peripherals );
+  }
+
+  public static void playGame( GamePeripherals peripherals ) {
+    final int numberToBeGuessed = peripherals.generateRandomNumber();
+    boolean guessed = false;
+
+    for ( int attempts = 1; attempts <= 3; ) {
+      String input = "";
+      try {
+        input = peripherals.readInput( "Enter a number between 1 and 10 (both inclusive): " );
+        int numberEntered = Integer.parseInt( input );
+
+        if ( numberEntered < 1 || numberEntered > 10 ) {
+          peripherals.displayf( "The number %d is out of range%n", numberEntered );
+          continue;
+        }
+
+        if ( numberToBeGuessed == numberEntered ) {
+          guessed = true;
+          break;
+        }
+
+        if ( numberEntered < numberToBeGuessed ) {
+          peripherals.displayf( "Not quite right. Try a number greater than %d%n", numberEntered );
+        } else {
+          peripherals.displayf( "Not quite right. Try a number smaller than %d%n", numberEntered );
+        }
+        attempts++;
+      } catch ( NumberFormatException e ) {
+        peripherals.displayf( "The input '%s' is not a number%n" );
+      } catch ( IOException e ) {
+        peripherals.display( "Encountered an error" );
+        return;
+      }
+    }
+
+    if ( guessed ) {
+      peripherals.display( "WOW!! You got it" );
+    } else {
+      peripherals.displayf( "The number was: %d. Better luck next time!!%n" );
+    }
+  }
+}
+```
+
+Now we can test the game logic and simulate all the scenarios we need. 
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class GameTest {
+
+  @Test
+  @DisplayName( "should display an error when an IO Exception is thrown while reading input" )
+  public void shouldHandleIoException() throws Exception {
+    /* Create the mock */
+    final GamePeripherals mocked = mock( GamePeripherals.class );
+
+    /* Simulate the mock behaviour */
+    when( mocked.generateRandomNumber() ).thenReturn( 1 );
+    when( mocked.readInput( anyString() ) ).thenThrow( new IOException( "Simulating an error" ) );
+
+    /* Run the game */
+    Game.playGame( mocked );
+
+    /* Verify that the error message is displayed */
+    verify( mocked ).display( "Encountered an error" );
+  }
+}
+```
+
+The above example make use of the [Mockito](https://site.mockito.org/) mocking framework.
+
+```groovy
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
+  testImplementation 'org.mockito:mockito-core:3.3.3'
+}
+```
+
 ### Test Doubles
 
 [Test Double](https://martinfowler.com/bliki/TestDouble.html) is a generic term for any case where you replace a production object for testing purposes. There are various kinds of double that Gerard lists:
