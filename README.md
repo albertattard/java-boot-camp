@@ -13,30 +13,30 @@ Boot Camp for developers interested to learn Java.
 1. [Hello World Application (packaged as an executable application)](01%20-%20Setup.md#hello-world-application-packaged-as-an-executable-application)
 1. [Docker](01%20-%20Setup.md#docker)
 
-### [Data Types](data%20types.md)
+### [Data Types](02%20-%20Data%20Types.md)
 
-1. [Numbers and Strings (Variables)](data%20types.md#numbers-and-strings-variables)
-1. [Operators](data%20types.md#operators)
-1. [Autoboxing](data%20types.md#autoboxing)
-1. [Imports and Packages](data%20types.md#imports-and-packages)
-1. [Date Time API](data%20types.md#date-time-api)
-1. [Internationalization](data%20types.md#internationalization)
+1. [Numbers and Strings (Variables)](02%20-%20Data%20Types.md#numbers-and-strings-variables)
+1. [Operators](02%20-%20Data%20Types.md#operators)
+1. [Autoboxing](02%20-%20Data%20Types.md#autoboxing)
+1. [Imports and Packages](02%20-%20Data%20Types.md#imports-and-packages)
+1. [Date Time API](02%20-%20Data%20Types.md#date-time-api)
+1. [Internationalization](02%20-%20Data%20Types.md#internationalization)
 
-### [Classes, Methods and Control Flow](classes%2C%20methods%20and%20control%20flow.md)
+### [Classes, Methods and Control Flow](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md)
 
-1. [Classes and methods (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#classes-and-methods-static-no-oop)
-1. [Properties (static no OOP)](classes%2C%20methods%20and%20control%20flow.md#properties-static-no-oop)
-1. [Mutable and Immutable](classes%2C%20methods%20and%20control%20flow.md#mutable-and-immutable)
-1. [Access Control](classes%2C%20methods%20and%20control%20flow.md#access-control)
-1. [Control Flow and Loops](classes%2C%20methods%20and%20control%20flow.md#control-flow-and-loops)
-1. [Exceptions](classes%2C%20methods%20and%20control%20flow.md#exceptions)
+1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#classes-and-methods-static-no-oop)
+1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#properties-static-no-oop)
+1. [Mutable and Immutable](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#mutable-and-immutable)
+1. [Access Control](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#access-control)
+1. [Control Flow and Loops](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#control-flow-and-loops)
+1. [Exceptions](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#exceptions)
 
-### [Testing](testing.md)
+### [Testing](04%20-%20Testing.md)
 
-1. [Testing with JUnit 5 (Hamcrest and AssertJ)](testing.md#testing-with-junit-5-hamcrest-and-assertj)
-1. [Mocking (Mockito and Easy Mock)](testing.md#mocking-mockito-and-easy-mock)
-1. [Google Guava (Preconditions)](testing.md#google-guava-preconditions)
-1. [PIT Mutation Testing](testing.md#pit-mutation-testing)
+1. [Testing with JUnit 5 (Hamcrest and AssertJ)](04%20-%20Testing.md#testing-with-junit-5-hamcrest-and-assertj)
+1. [Mocking (Mockito and Easy Mock)](04%20-%20Testing.md#mocking-mockito-and-easy-mock)
+1. [Google Guava (Preconditions)](04%20-%20Testing.md#google-guava-preconditions)
+1. [PIT Mutation Testing](04%20-%20Testing.md#pit-mutation-testing)
 
 ### Objects
 
