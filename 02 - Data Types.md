@@ -3,6 +3,7 @@
 ## TOC
 
 1. [Setup](#setup)
+1. [JShell](#jshell)
 1. [Numbers and Strings (Variables)](#numbers-and-strings-variables)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
@@ -19,6 +20,99 @@
     ```
 
 1. Open the repo in IDE
+
+## JShell
+
+The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm) is an interactive tool for learning the Java programming language and prototyping Java code.  JShell is a Read-Evaluate-Print Loop (REPL), which evaluates declarations, statements, and expressions as they are entered and immediately shows the results.  The tool is run from the command line.
+
+1. Open JShell
+
+    ```bash
+    $ jshell
+    ```
+
+    The following error maybe shown instead
+
+    ```bash
+    Unable to locate an executable at "~/.sdkman/candidates/java/current/bin/jshell" (-1)
+    ```
+
+    Verify the version of Java
+
+    ```bash
+    $ java -version
+    openjdk version "1.8.0_252"
+    OpenJDK Runtime Environment (AdoptOpenJDK)(build 1.8.0_252-b09)
+    OpenJDK 64-Bit Server VM (AdoptOpenJDK)(build 25.252-b09, mixed mode)
+    ```
+
+    **JShell requires Java 9 or higher**
+
+    ```jshelllanguage
+    |  Welcome to JShell -- Version 14.0.1
+    |  For an introduction type: /help intro
+
+    jshell>
+    ```
+
+    To exit type `/exit`
+
+    ```jshelllanguage
+    jshell> /exit
+    ```
+
+1. Create a variable
+
+    ```jshelllanguage
+    jshell> a = 7
+    |  Error:
+    |  cannot find symbol
+    |    symbol:   variable a
+    |  a = 7
+    |  ^
+    ```
+
+    In Java, variables require a type
+
+    ```jshelllanguage
+    jshell> int a = 7
+    a ==> 7
+    ```
+
+    Enter the variable name to print its value
+
+    ```jshelllanguage
+    jshell> a
+    a ==> 7
+    ```
+
+1. Arithmetic Operations
+
+    ```jshelllanguage
+    jshell> int b = 3
+    b ==> 3
+
+    jshell> a + b
+    $4 ==> 10
+    ```
+
+    The result is stored in a new variable `$4` which can be accessed as any other variable.
+
+    ```jshelllanguage
+    jshell> $4
+    $4 ==> 10
+    ```
+
+1. Use libraries
+
+    ```jshelllanguage
+    jshell> import static java.lang.Math.*
+
+    jshell> max(a, b)
+    $5 ==> 7
+    ```
+
+    A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
 
 ## Numbers and Strings (Variables)
 
