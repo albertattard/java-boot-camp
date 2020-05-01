@@ -889,6 +889,10 @@ PITest produces a report at `build/reports/pitest/index.html`
 
 ![Pit Test Coverage Report](assets/images/Pit%20Test%20Coverage%20Report.png)
 
+### Recommended Reading
+
+1. Chapter 8 Test Adequacy Assessment using Program Mutation *of Foundations of Software Testing, 2nd Edition* ([O'Reilly Books](https://learning.oreilly.com/library/view/foundations-of-software/9788131794760/xhtml/chapter008-1.xhtml))
+
 ## Google Guava (Preconditions)
 
 [Guava](https://github.com/google/guava) is a set of core Java libraries from Google that includes new collection types (such as multimap and multiset), immutable collections, a graph library, and utilities for concurrency, I/O, hashing, caching, primitives, strings, and more! It is widely used on most Java projects within Google, and widely used by many other companies as well.
