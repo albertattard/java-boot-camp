@@ -86,6 +86,15 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     a ==> 7
     ```
 
+    Java 10 introduced Local Variable Type Inference ([JEP 286](https://openjdk.java.net/jeps/286)).  Previously, all local variable declarations required an explicit (manifest) type on the left-hand side.  With type inference, the explicit type can be replaced by the reserved type name `var` for local variable declarations that have initializers.  The type of the variable is inferred from the type of the initializer.
+
+    ```jshelllanguage
+    jshell> var x = 7
+    x ==> 7
+    ```
+
+    For more information about Local Variable Type Inference please refer to the [style guidelines](http://openjdk.java.net/projects/amber/LVTIstyle.html).
+
 1. Arithmetic Operations
 
     ```jshelllanguage
