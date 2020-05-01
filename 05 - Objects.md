@@ -337,6 +337,92 @@ Box: an open box
 
 There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can take more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
+1. Create the `LightBox` and add the `isEmpty()` method
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when no items are placed" )
+      public void shouldBeEmpty() {
+        final LightBox box = new LightBox();
+        assertTrue( box.isEmpty() );
+      }
+    }
+    ```
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+
+      public boolean isEmpty() {
+        return true;
+      }
+    }
+    ```
+
+    Test should pass.
+
+1. Add the ability to add an item's id (of type `long`) to the `LightBox`.
+
+    **The light box should not be empty (the `isEmpty()` function should return `false`) once an item is placed in the box**.
+
+    Create the test
+
+    ```java
+    package demo;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    /* Other imports removed for brevity */
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should not be empty when an item is placed in the box" )
+      public void shouldNotBeEmpty() {
+        final LightBox box = new LightBox();
+        box.putItem( 1 );
+        assertFalse( box.isEmpty() );
+      }
+
+      /* Other test removed for brevity */
+    }
+    ```
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+
+      public void putItem( final long itemId ) {
+      }
+
+      /* Other method removed for brevity */
+    }
+    ```
+
+    Run the tests.  The second test will fail as expected.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+    LightBoxTest > should not be empty when an item is placed in the box FAILED
+        org.opentest4j.AssertionFailedError at LightBoxTest.java:23
+    ...
+    ```
 ## Interfaces
 
 ## Overloading and Overriding
