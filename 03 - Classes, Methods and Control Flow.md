@@ -9,6 +9,7 @@
 1. [Access Control](#access-control)
 1. [Control Flow and Loops](#control-flow-and-loops)
 1. [Exceptions](#exceptions)
+1. [Java Single File Execution](#java-single-file-execution)
 
 ## Setup
 
@@ -290,3 +291,39 @@ Input a number: Hello there
 Cannot parse the input 'Hello there' into a number
 I am always called before the try/catch block exists
 ```
+
+## Java Single File Execution
+
+Java 11 introduced Java Single File Execution ([JEP-330](https://openjdk.java.net/jeps/330)) which enhanced the java launcher to run a program supplied as a single file of Java source code, including usage from within a script by means of "[shebang" files](https://openjdk.java.net/jeps/330#Shebang_files) and related techniques.
+
+```java
+$ vi hello
+```
+
+The script file name dose not need to match the class name.
+
+```jshelllanguage
+#!/usr/bin/java --source 11
+
+public class HelloWorld {
+  public static void main(String[] args) {
+    System.out.println("Hello World!!");
+  }
+}
+```
+
+The script needs to be executable
+
+```bash
+$ chmod +x hello
+```
+
+and can be executed like any other script
+
+```bash
+$ ./hello
+
+Hello World!!
+```
+
+The [gist x_init](https://gist.github.com/albertattard/3f9a66faf2a90dc2bf6376d37c7c6052) shows a more elaborated example.

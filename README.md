@@ -31,6 +31,7 @@ Boot Camp for developers interested to learn Java.
 1. [Access Control](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#access-control)
 1. [Control Flow and Loops](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#control-flow-and-loops)
 1. [Exceptions](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#exceptions)
+1. [Java Single File Execution](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#java-single-file-execution)
 
 ### [Testing](04%20-%20Testing.md)
 
@@ -41,7 +42,6 @@ Boot Camp for developers interested to learn Java.
 
 ### [Objects](05%20-%20Objects.md)
 
-1. [Setup](05%20-%20Objects.md#setup)
 1. [Simple Objects](05%20-%20Objects.md#simple-objects)
 1. [Inheritance](05%20-%20Objects.md#inheritance)
 1. [Interfaces](05%20-%20Objects.md#interfaces)
