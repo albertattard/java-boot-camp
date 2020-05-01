@@ -6,6 +6,8 @@
 1. [Simple Objects](#simple-objects)
 1. [Inheritance](#inheritance)
 1. [Interfaces](#interfaces)
+1. [instanceof and cast operators](#instanceof-and-cast-operators)
+1. [Inheritance and Composition](#inheritance-and-composition)
 1. [Overloading and Overriding](#overloading-and-overriding)
 1. [Outer, Inner and Anonymous Classes](#outer-and-inner-classes)
 1. [Enumerations](#enumerations)
@@ -14,7 +16,7 @@
 
 ## Setup
 
-1. Clone Repo: [java-boot-camp-blueprint](clone https://github.com/albertattard/java-boot-camp-blueprint.git)
+1. Clone Repo: [java-boot-camp-blueprint](https://github.com/albertattard/java-boot-camp-blueprint.git)
 
     ```bash
     $ git clone https://github.com/albertattard/java-boot-camp-blueprint.git
@@ -51,11 +53,11 @@
 
 ## Simple Objects
 
-The post-office is automating the packaging of letters or items into boxes and is creating a program to handles this.  There are two types of boxes, the light boxes and the heavy boxes. The light boxes only take one item in them whereas the heavy boxes can take as many items as it can fit.
+The post-office is automating the packaging of letters or items into boxes and is creating a program to handles this.  There are two types of boxes, the light boxes and the heavy boxes.  The light boxes only take one item in them whereas the heavy boxes can take as many items as it can fit.
 
 ### Basic Object
 
-Let start by creating a basic object that will represent a box.  The box will not have any functionality.  Do not worry about light and heavy boxes.
+Let start by creating a basic object that will represent a box.  The box will not have any functionality.  Do not worry about light and heavy boxes just yet.
 
 1. Create the `Box` class
 
@@ -363,7 +365,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```java
     package demo;
 
-    public class LightBox extends Box {
+    public class LightBox {
 
       public boolean isEmpty() {
         return true;
@@ -372,6 +374,55 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```
 
     Test should pass.
+
+1.  Like a box, light box can be opened and closed.  This logic can either be copied here, or inherited from the `Box` class.
+
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+
+      public boolean isEmpty() {
+        return true;
+      }
+    }
+    ```
+
+    All `LightBox`es are `Box`es.
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( String[] args ) {
+        final LightBox a = new LightBox();
+        final Box b = new LightBox();
+
+        a.open();
+        b.close();
+
+        System.out.printf( "Box a: %s%n", a );
+        System.out.printf( "Box b: %s%n", b );
+      }
+    }
+    ```
+
+    All methods and state available to the `Box` is not also available to the `LightBox`.
+
+    ```bash
+    Box a: an open box
+    Box b: a closed box
+    ```
+
+    Note that the opposite does not hold.  In other words, not all `Box`es are `LightBox`es.  Fruit is a good analogy to this.  All apples are fruit but not all fruit are apples.
+
+    The following will not compile.
+
+    ```java
+    final LightBox a = new Box();
+    ```
+
 
 1. Add the ability to add an item's id (of type `long`) to the `LightBox`.
 
@@ -423,7 +474,12 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         org.opentest4j.AssertionFailedError at LightBoxTest.java:23
     ...
     ```
+
 ## Interfaces
+
+## instanceof and cast operators
+
+## Inheritance and Composition
 
 ## Overloading and Overriding
 
