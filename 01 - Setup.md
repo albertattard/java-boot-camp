@@ -319,6 +319,41 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     2 actionable tasks: 2 executed
     ```
 
+1.  Print the directory structure
+
+    ```bash
+    $ tree -a .
+    ```
+
+    Gradle created the following directory structure
+
+    ```bash
+    .
+    ├── .gitattributes
+    ├── .gitignore
+    ├── .gradle
+    ... content of the .gradle directory removed for brevity
+    ├── build.gradle
+    ├── gradle
+    │   └── wrapper
+    │       ├── gradle-wrapper.jar
+    │       └── gradle-wrapper.properties
+    ├── gradlew
+    ├── gradlew.bat
+    ├── settings.gradle
+    └── src
+        ├── main
+        │   ├── java
+        │   │   └── demo
+        │   │       └── App.java
+        │   └── resources
+        └── test
+            ├── java
+            │   └── demo
+            │       └── AppTest.java
+            └── resources
+    ```
+
 1. [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
 
     ```bash
