@@ -814,11 +814,11 @@ class GameTest {
 }
 ```
 
-The syntax is very similar to  Mockito.
+The syntax is very similar to Mockito.
 
 ```groovy
 dependencies {
-  testImplementation 'org.mockito:mockito-core:3.3.3'
+  testImplementation 'org.easymock:easymock:4.2'
 }
 ```
 
