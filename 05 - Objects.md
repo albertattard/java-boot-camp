@@ -230,7 +230,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
       }
 
       @Override public String toString() {
-        return String.format( "an %s box", open ? "open" : "closed" );
+        return String.format( "%s box", open ? "an open" : "a closed" );
       }
     }
     ```
@@ -251,7 +251,91 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
     Both tests pass
 
+### Multiple Instances
+
+Example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Create two boxes */
+    Box a = new Box();
+    Box b = new Box();
+
+    System.out.println( "-- Two boxes --------" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+
+    /* Open only one of the boxes */
+    b.open();
+
+    System.out.println( "-- Opened box b -----" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+
+    /* Close one of the boxes */
+    b.close();
+
+    System.out.println( "-- Closed box b -----" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+  }
+}
+```
+
+Output
+
+```bash
+-- Two boxes --------
+Box a: a closed box
+Box b: a closed box
+-- Opened box b -----
+Box a: a closed box
+Box b: an open box
+-- Closed box b -----
+Box a: a closed box
+Box b: a closed box
+```
+
+This can be captured by a test, but it is too naïve.
+
+### Mutable and Immutable
+
+Example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    final Box a = new Box();
+
+    System.out.println( "-- Initial State ----" );
+    System.out.printf( "Box: %s%n", a );
+
+    a.open();
+    System.out.println( "-- Mutated State ----" );
+    System.out.printf( "Box: %s%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+-- Initial State ----
+Box: a closed box
+-- Mutated State ----
+Box: an open box
+```
+
 ## Inheritance
+
+There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can take more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
 ## Interfaces
 
