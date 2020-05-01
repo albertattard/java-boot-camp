@@ -220,6 +220,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Plugins
     1. [Nyan Progress Bar](https://plugins.jetbrains.com/plugin/8575-nyan-progress-bar)
+    1. [jclasslib Bytecode viewer](https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer)
     1. [Lombok](https://plugins.jetbrains.com/plugin/6317-lombok)
     1. [Rainbow Brackets](https://plugins.jetbrains.com/plugin/10080-rainbow-brackets)
     1. [FindBugs-IDEA](https://plugins.jetbrains.com/plugin/3847-findbugs-idea)
@@ -240,6 +241,8 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     Setup shell command.  (Press [`F1`])
 
     ![VS Code Shell Command](assets/images/VS%20Code%20Shell%20Command.png)
+
+**The examples shown refer to IntelliJ IDEA**.
 
 ## Create a project using Gradle
 
@@ -405,7 +408,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
       id 'org.springframework.boot' version '2.2.6.RELEASE'
     }
     ```
-   
+
     A list of plugins is available [here](https://plugins.gradle.org/).
 
     The [dependency](https://docs.gradle.org/current/userguide/declaring_dependencies.html) section manages other libraries that our project uses.  For example, we can add new dependency, such as the [Apache Commons Lang3](https://mvnrepository.com/artifact/org.apache.commons/commons-lang3/3.0) shown next by, adding the dependency.
@@ -415,19 +418,19 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
       implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
     }
     ```
-   
-    The dependencies can defined as a single line, delimited by a `:`  
+
+    The dependencies can defined as a single line, delimited by a `:`
 
     ```groovy
     dependencies {
       implementation 'org.apache.commons:commons-lang3:3.0'
     }
     ```
-   
+
     Dependencies have [scopes](https://docs.gradle.org/current/userguide/java_plugin.html#tab:configurations).  Dependencies that are only needed for tests, will have the `testImplementation` scope and are excluded from other scopes.  These two scopes are enabled by the [Java plugin](https://docs.gradle.org/current/userguide/java_plugin.html).
-    
+
     Dependencies of the same scope can be grouped together as shown next.
-    
+
     ```groovy
     dependencies {
       implementation(
@@ -459,8 +462,6 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
 1. Run the project from the IDE
 
-    IntelliJ
-
     1. Open the `App.java` file
 
         ![App](assets/images/IntelliJ%20App%20Class.png)
@@ -468,16 +469,6 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     1. Click any of the green arrows next to the line numbers.  Alternatively, click anywhere in the class and click `[control] + [shift] + [R]`
 
         ![Output](assets/images/IntelliJ%20App%20Run%20Output.png)
-
-    VS Code
-
-    1. Open the `App.java` file
-
-    1. Right click on the file and select `Run`
-
-        ![App](assets/images/VS%20Code%20App%20Class.png)
-
-For more details, please refer to: [https://guides.gradle.org/creating-new-gradle-builds/](https://guides.gradle.org/creating-new-gradle-builds/)
 
 ## Hello World Application (packaged as an executable application)
 
@@ -553,7 +544,17 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
     Manifest-Version: 1.0
     ```
 
-    The `demo/App.class` file is the compiled version of the source file: `src/main/java/demo/App.java`.
+    The `demo/App.class` file is the compiled version of the source file: `src/main/java/demo/App.java`.  The bytecode produced when compiling this class can be viewed using the [Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer).
+
+    Click on `View > Show Bytecode with Jclasslib`
+
+    ![Show Bytecode With Jclasslib](assets/images/Show%20Bytecode%20With%20Jclasslib.png)
+
+    Expand `Methods > main > Code`
+
+    ![Bytecode](assets/images/App%20Main%20Method%20Bytecode.png)
+
+    The section [Internals: Bytecode Basics](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323889), part of the [Optimizing Java O'Reilly Video Series](https://learning.oreilly.com/videos/optimizing-java/9781492044673), covers this topic in some depth and is a recommended follow up.
 
 1. Run the application
 
@@ -709,7 +710,7 @@ For more details, please refer to: [https://guides.gradle.org/creating-new-gradl
         $ java -jar build/libs/fat-jar.jar
         Hello world.
         ```
-       
+
        For more information about tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
 
     1. Use a plugin
