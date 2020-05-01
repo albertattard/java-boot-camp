@@ -253,6 +253,121 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
     Both tests pass
 
+### More State
+
+Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label: `To be processsed by Dept. XYZ` or `Need to be rechecked by MNO`.  A box always has a label which is initially set to `No label`.  **Note that the label cannot be blank/empty**.
+
+The label can be represented by the `String` data-type.
+
+1. By default, the label should have the value of `No label`.
+
+    ```java
+    package demo;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    /* Other imports removed for brevity */
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() {
+        final Box box = new Box();
+        assertEquals( "No Label", box.getLabel() );
+      }
+
+      /* Other test removed for brevity */
+    }
+    ```
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      public String getLabel() {
+        return "No Label";
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
+    Run the tests.  All tests should pass.
+
+1. Add the ability to change the label (assuming that only valid values will be provided)
+
+    ```java
+    package demo;
+
+    /* Imports removed for brevity */
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should have the given label value" )
+      public void shouldHaveTheGivenLabel() {
+        final Box box = new Box();
+        box.setLabel( "Test Label" );
+        assertEquals( "Test Label", box.getLabel() );
+      }
+
+      /* Other tests removed for brevity */
+    }
+    ```
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      public void setLabel( final String label ) {
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
+    The test should fail.
+
+1. Implement the required logic
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      private String label = "No Label";
+
+      public void setLabel( final String label ) {
+        this.label = label;
+      }
+
+      public String getLabel() {
+        return label;
+      }
+
+      @Override public String toString() {
+        final String openClose = open ? "an open" : "a closed";
+        return String.format( "%s box labelled '%s'", openClose, label );
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
+    Re-run the tests.  All should pass.
+
+    The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) always represents the object.  Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is not need to bind it or do any gymnastics.
+
+1. Add Validation.  The label cannot be empty and an `IllegalArgumaneException` should be thrown if an invalid value is passed.
+
+    **Pending...**
+
 ### Multiple Instances
 
 Example
@@ -292,14 +407,14 @@ Output
 
 ```bash
 -- Two boxes --------
-Box a: a closed box
-Box b: a closed box
+Box a: a closed box labelled 'No Label'
+Box b: a closed box labelled 'No Label'
 -- Opened box b -----
-Box a: a closed box
-Box b: an open box
+Box a: a closed box labelled 'No Label'
+Box b: an open box labelled 'No Label'
 -- Closed box b -----
-Box a: a closed box
-Box b: a closed box
+Box a: a closed box labelled 'No Label'
+Box b: a closed box labelled 'No Label'
 ```
 
 This can be captured by a test, but it is too naïve.
@@ -330,9 +445,9 @@ Output
 
 ```bash
 -- Initial State ----
-Box: a closed box
+Box: a closed box labelled 'No Label'
 -- Mutated State ----
-Box: an open box
+Box: an open box labelled 'No Label'
 ```
 
 ## Inheritance
@@ -423,6 +538,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     final LightBox a = new Box();
     ```
 
+    This is discussed further in the [instanceof and cast operators section](#instanceof-and-cast-operators).
 
 1. Add the ability to add an item's id (of type `long`) to the `LightBox`.
 
@@ -474,6 +590,10 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         org.opentest4j.AssertionFailedError at LightBoxTest.java:23
     ...
     ```
+
+1. Add state to the `LightBox` class.
+
+    **Pending...**
 
 ## Interfaces
 

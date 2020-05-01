@@ -4,6 +4,7 @@
 
 1. [Setup](#setup)
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](#testing-with-junit-5-hamcrest-and-assertj)
+1. [Tests Tagging](#tests-tagging)
 1. [Mocking (Mockito and EasyMock)](#mocking-mockito-and-easymock)
 1. [Mutation Testing (PIT)](#mutation-testing-pit)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
@@ -476,6 +477,10 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
 1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))
+
+## Tests Tagging
+
+**Pending...**
 
 ## Mocking (Mockito and EasyMock)
 
