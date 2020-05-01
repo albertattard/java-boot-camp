@@ -724,13 +724,126 @@ This is a naïve mock which has limited flexibility and only used to demonstrate
 
 ### Mockito
 
+Instead of creating a specific mock objects for each type or situation, we can leverage existing mocking frameworks such as [Mockito](https://github.com/mockito/mockito).
+
+```groovy
+dependencies {
+  testImplementation 'org.mockito:mockito-core:3.3.3'
+}
+```
+
+The previous example can be converted to use Mockito instead.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class GameTest {
+
+  @Test
+  @DisplayName( "should display an error when an IO Exception is thrown while reading input" )
+  public void shouldHandleIoException() throws Exception {
+    /* Create the mock */
+    final GamePeripherals mocked = mock( GamePeripherals.class );
+
+    /* Configure the mock to behave as we need it to */
+    when( mocked.generateRandomNumber() ).thenReturn( 1 );
+    when( mocked.readInput( anyString() ) ).thenThrow( new IOException( "Simulating an error" ) );
+
+    /* Run the game with the mocked peripherals */
+    Game.playGame( mocked );
+
+    /* Verify that the error message is displayed */
+    verify( mocked ).display( "Encountered an error" );
+  }
+}
+```
+
+#### Recommended Reading
+
+1. Mockito Essentials ([O'Reilly Books](https://learning.oreilly.com/library/view/mockito-essentials/9781783983605/))
+1. Mockito Tutorial ([O'Reilly Video Series](https://learning.oreilly.com/videos/mockito-tutorial/9781789135039))
+
 ### EasyMock
+
+[EasyMock](https://easymock.org/user-guide.html) is an alternative to Mockito.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.easymock.EasyMock.anyString;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.mock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+class GameTest {
+
+  @Test
+  @DisplayName( "should display an error when an IO Exception is thrown while reading input" )
+  public void shouldHandleIoException() throws Exception {
+    /* Create the mock */
+    final GamePeripherals mocked = mock( GamePeripherals.class );
+
+    /* Configure the mock to behave as we need it to */
+    expect( mocked.generateRandomNumber() ).andReturn( 1 );
+    expect( mocked.readInput( anyString() ) ).andThrow( new IOException( "Simulating an error" ) );
+    mocked.display( "Encountered an error" );
+    replay( mocked );
+
+    /* Run the game with the mocked peripherals */
+    Game.playGame( mocked );
+
+    /* Verify that the error message is displayed */
+    verify( mocked );
+  }
+}
+```
+
+The syntax is very similar to  Mockito.
+
+```groovy
+dependencies {
+  testImplementation 'org.mockito:mockito-core:3.3.3'
+}
+```
+
+Note that EasyMock will produce warnings when used with Java 9 or newer.
+
+```bash
+$ ./gradlew test
+
+> Task :test
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.easymock.cglib.core.ReflectUtils$1 (file:/Users/albertattard/.gradle/caches/modules-2/files-2.1/org.easymock/easymock/4.2/251b26f1b853673c1aac277fd2fb0c8d5844cdc8/easymock-4.2.jar) to method java.lang.ClassLoader.defineClass(java.lang.String,byte[],int,int,java.security.ProtectionDomain)
+WARNING: Please consider reporting this to the maintainers of org.easymock.cglib.core.ReflectUtils$1
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+
+GameTest > should display an error when an IO Exception is thrown while reading input PASSED
+```
 
 ### Which Mocking Framework
 
 Mockito is the most popular mocking framework according to [Google Trends](https://trends.google.com/trends/explore?q=Mockito,EasyMock,JMock,JMockit,PowerMock).
 
 ![Mockito vs. the rest](assets/images/Mockito%20vs.%20the%20Rest.png)
+
+The mocking libraries are not mutually exclusive and can both be used in the same project.  With that said, mocks created by one framework need to be configured and verified with the same framework.  A mock created with Mockito cannot be then verified by EasyMock, for example.
 
 ## Google Guava (Preconditions)
 
