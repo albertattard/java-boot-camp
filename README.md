@@ -45,6 +45,7 @@ Boot Camp for developers interested to learn Java.
 
 1. [Simple Objects](05%20-%20Objects.md#simple-objects)
 1. [Inheritance](05%20-%20Objects.md#inheritance)
+1. [The Object Class](05%20-%20Objects.md#the-object-class)
 1. [Interfaces](05%20-%20Objects.md#interfaces)
 1. [instanceof and cast operators](05%20-%20Objects.md#instanceof-and-cast-operators)
 1. [Inheritance and Composition](05%20-%20Objects.md#inheritance-and-composition)

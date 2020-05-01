@@ -1,10 +1,13 @@
 # Objects
 
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) is a very good and popular book.  Several references are made in this page to specific items described in the book.
+
 ## TOC
 
 1. [Setup](#setup)
 1. [Simple Objects](#simple-objects)
 1. [Inheritance](#inheritance)
+1. [The Object Class](#the-object-class)
 1. [Interfaces](#interfaces)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
 1. [Inheritance and Composition](#inheritance-and-composition)
@@ -103,6 +106,10 @@ Let start by creating a basic object that will represent a box.  The box will no
       }
     }
     ```
+
+    [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
+    1. [Item 12: Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12)
+    1. [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev40)
 
 1. Run the program again
 
@@ -593,20 +600,88 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
 1. Add state to the `LightBox` class.
 
-    **Pending...**
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+
+      private boolean empty = true;
+
+      public boolean isEmpty() {
+        return empty;
+      }
+
+      public void putItem( final long itemId ) {
+        empty = false;
+      }
+    }
+    ```
+
+    Sometimes a property is used for various purposes.  Instead of creating a new property, `empty`, we could use the following.
+
+    **NOT RECOMMENDED!!**
+
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+
+      private long itemId = -1L;
+
+      public boolean isEmpty() {
+        return itemId == -1L;
+      }
+
+      public void putItem( final long itemId ) {
+        this.itemId = itemId;
+      }
+    }
+    ```
+
+    The property `itemId` is used for two purposes and that's discouraged.  If negative IDs become valid, for any reason, this logic becomes invalid.
+
+## The Object Class
+
+**Pending...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11)
 
 ## Interfaces
 
+**Pending...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev20)
+
 ## instanceof and cast operators
+
+**Pending...**
 
 ## Inheritance and Composition
 
+**Pending...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
+
 ## Overloading and Overriding
+
+**Pending...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
 ## Outer and Inner Classes
 
+**Pending...**
+
 ## Enumerations
+
+**Pending...**
 
 ## Annotations
 
+**Pending...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
+
 ## Generics
+
+**Pending...**
