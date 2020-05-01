@@ -36,8 +36,8 @@ Boot Camp for developers interested to learn Java.
 
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](04%20-%20Testing.md#testing-with-junit-5-hamcrest-and-assertj)
 1. [Mocking (Mockito and EasyMock)](04%20-%20Testing.md#mocking-mockito-and-easymock)
+1. [Mutation Testing (PIT)](04%20-%20Testing.md#mutation-testing-pit)
 1. [Google Guava (Preconditions)](04%20-%20Testing.md#google-guava-preconditions)
-1. [PIT Mutation Testing](04%20-%20Testing.md#pit-mutation-testing)
 
 ### Objects
 

@@ -5,8 +5,8 @@
 1. [Setup](#setup)
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](#testing-with-junit-5-hamcrest-and-assertj)
 1. [Mocking (Mockito and EasyMock)](#mocking-mockito-and-easymock)
+1. [Mutation Testing (PIT)](#mutation-testing-pit)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
-1. [PIT Mutation Testing](#pit-mutation-testing)
 
 ## Setup
 
@@ -845,6 +845,130 @@ Mockito is the most popular mocking framework according to [Google Trends](https
 
 The mocking libraries are not mutually exclusive and can both be used in the same project.  With that said, mocks created by one framework need to be configured and verified with the same framework.  A mock created with Mockito cannot be then verified by EasyMock, for example.
 
+## Mutation Testing (PIT)
+
+[Mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) is used to design new software tests and evaluate the quality of existing software tests.  [PIT](https://pitest.org/) is a mutation testing system, providing great test coverage for Java and the JVM.
+
+PITest requires some Gradle configuration
+
+1. Plugin
+
+    ```groovy
+    plugins {
+      id 'info.solidsoft.pitest' version '1.4.8'
+    }
+    ```
+
+1. JUnit 5 runtime dependency
+
+    ```groovy
+    dependencies {
+      testRuntimeOnly 'org.pitest:pitest-junit5-plugin:0.12'
+    }
+    ```
+
+1. Configuring PITest
+
+    ```groovy
+    pitest {
+      testPlugin = 'junit5'
+      targetClasses = ['demo.*']
+      timestampedReports = false
+    }
+    ```
+
+No further changes are required to the code.  Run the pitest
+
+```bash
+$ ./gradlew clean pitest
+```
+
+The `clean` task is not necessary, but it is useful in cleaning the reports from the previous run.
+
+PITest produces a report at `build/reports/pitest/index.html`
+
+![Pit Test Coverage Report](assets/images/Pit%20Test%20Coverage%20Report.png)
+
 ## Google Guava (Preconditions)
 
-## PIT Mutation Testing
+[Guava](https://github.com/google/guava) is a set of core Java libraries from Google that includes new collection types (such as multimap and multiset), immutable collections, a graph library, and utilities for concurrency, I/O, hashing, caching, primitives, strings, and more! It is widely used on most Java projects within Google, and widely used by many other companies as well.
+
+```groovy
+dependencies {
+  implementation 'com.google.guava:guava:29.0-jre'
+}
+```
+
+Example
+
+```java
+package demo;
+
+import com.google.common.base.Preconditions;
+
+public class App {
+
+  public static boolean hasWon( final int a, final int b ) {
+    Preconditions.checkArgument( a >= 1 && a <= 6, "Invalid dice value %d", a );
+    Preconditions.checkArgument( b >= 1 && b <= 6, "Invalid dice value %d", b );
+    return a + b >= 10;
+  }
+}
+```
+
+Passing any invalid value will cause the function to throw an `IllegalArgumentException`.
+
+```java
+App.hasWon( 7 ,1);
+```
+
+Exception
+
+```
+Exception in thread "main" java.lang.IllegalArgumentException: Invalid dice value 7
+  at com.google.common.base.Preconditions.checkArgument(Preconditions.java:190)
+```
+
+Testing
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class AppTest {
+
+  @ParameterizedTest( name = "should throw an IllegalArgumentException({0}) when provided the invalid dice value {1}" )
+  @CsvSource( {
+    "Invalid dice value 7, 7, 1",
+    "Invalid dice value 7, 1, 7",
+    "Invalid dice value 0, 0, 7",
+  } )
+  public void shouldThrowAnExceptionWhen( String expectedErrorMessage, int a, int b ) {
+    final IllegalArgumentException exception = assertThrows( IllegalArgumentException.class, () -> App.hasWon( a, b ) );
+    assertEquals( expectedErrorMessage, exception.getMessage() );
+  }
+}
+```
+
+The above example runs three tests.
+
+```bash
+$ ./gradlew test
+
+> Task :test
+
+AppTest > should throw an IllegalArgumentException(Invalid dice value 7) when provided the invalid dice value 7 PASSED
+
+AppTest > should throw an IllegalArgumentException(Invalid dice value 7) when provided the invalid dice value 1 PASSED
+
+AppTest > should throw an IllegalArgumentException(Invalid dice value 0) when provided the invalid dice value 0 PASSED
+```
+
+### Recommended Reading
+
+1. Getting Started with Google Guava ([O'Reilly Books](https://learning.oreilly.com/library/view/getting-started-with/9781783280155/))
