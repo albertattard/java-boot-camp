@@ -550,13 +550,13 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     ```
 
     Display the other tasks the `run` task depends on
-    
+
     ```bash
     $ ./gradlew run taskTree
     ```
 
     The result shows an inverted tree, where the top nodes depend on the lower nodes
-    
+
     ```bash
     :run
     \--- :classes
@@ -565,6 +565,17 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     ```
 
     The `run` task depends on the `classes` task which depends on two more tasks.
+
+1. List project dependencies
+
+    ```bash
+    $ ./gradlew dep
+    ```
+
+    This is very useful to identify any conflicting dependencies
+
+    ```bash
+    ```
 
 1. Build the project
 

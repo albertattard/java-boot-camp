@@ -847,7 +847,7 @@ The mocking libraries are not mutually exclusive and can both be used in the sam
 
 ## Mutation Testing (PIT)
 
-[Mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) is used to design new software tests and evaluate the quality of existing software tests.  [PIT](https://pitest.org/) is a mutation testing system, providing great test coverage for Java and the JVM.
+[Mutation testing](https://en.wikipedia.org/wiki/Mutation_testing) is used to design new software tests and evaluate the quality of existing software tests.  [PITest](https://pitest.org/) is a mutation testing system, providing great test coverage for Java and the JVM.  ThoughtWorks has moved PITest in the [access group in the technology radar](https://www.thoughtworks.com/de/radar/tools/pitest) in November 2016 where it is still today.
 
 PITest requires some Gradle configuration
 

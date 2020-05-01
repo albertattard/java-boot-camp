@@ -39,16 +39,17 @@ Boot Camp for developers interested to learn Java.
 1. [Mutation Testing (PIT)](04%20-%20Testing.md#mutation-testing-pit)
 1. [Google Guava (Preconditions)](04%20-%20Testing.md#google-guava-preconditions)
 
-### Objects
+### [Objects](05%20-%20Objects.md)
 
-1. Objects
-1. Inheritance
-1. Interfaces
-1. Overloading and Overriding
-1. Outer and Inner Classes
-1. Enumerations
-1. Annotations
-1. Generics
+1. [Setup](05%20-%20Objects.md#setup)
+1. [Simple Objects](05%20-%20Objects.md#simple-objects)
+1. [Inheritance](05%20-%20Objects.md#inheritance)
+1. [Interfaces](05%20-%20Objects.md#interfaces)
+1. [Overloading and Overriding](05%20-%20Objects.md#overloading-and-overriding)
+1. [Outer, Inner and Anonymous Classes](05%20-%20Objects.md#outer-and-inner-classes)
+1. [Enumerations](05%20-%20Objects.md#enumerations)
+1. [Annotations](05%20-%20Objects.md#annotations)
+1. [Generics](05%20-%20Objects.md#generics)
 
 ### Collections
 
