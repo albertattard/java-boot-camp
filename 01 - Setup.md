@@ -539,6 +539,33 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     ...
     ```
 
+1. Display Task Dependency Tree
+
+    Add the [task tree](https://plugins.gradle.org/plugin/com.dorongold.task-tree) plugin
+
+    ```groovy
+    plugins {
+      id 'com.dorongold.task-tree' version '1.5'
+    }
+    ```
+
+    Display the other tasks the `run` task depends on
+    
+    ```bash
+    $ ./gradlew run taskTree
+    ```
+
+    The result shows an inverted tree, where the top nodes depend on the lower nodes
+    
+    ```bash
+    :run
+    \--- :classes
+         +--- :compileJava
+         \--- :processResources
+    ```
+
+    The `run` task depends on the `classes` task which depends on two more tasks.
+
 1. Build the project
 
     ```bash
