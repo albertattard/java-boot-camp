@@ -545,7 +545,7 @@ public class Game {
 
 The game needs to be robust and should handle invalid inputs by printing an error message on the screen.
 
-The above game is very hard to test as everything is in one place.  For example, it is hard to simulate an IO error and it is not easy to see what messages are being printed on the screen.
+The above game is very hard to test as everything is in one place.  For example, it is hard to simulate an IO Error and it is not easy to see what messages are being printed on the screen.
 
 Finally, there is a big prize associate with this game and we need to make sure only those really guess the number win.
 
@@ -571,9 +571,6 @@ import java.util.Random;
 
 public class GamePeripherals {
 
-  private final BufferedReader reader = new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
-  private final Random random = new Random();
-
   public int generateRandomNumber() {
     return random.nextInt( 10 ) + 1;
   }
@@ -590,6 +587,9 @@ public class GamePeripherals {
   public void displayf( String pattern, Object... values ) {
     display( String.format( pattern, values ) );
   }
+
+  private final BufferedReader reader = new BufferedReader( new InputStreamReader( System.in, StandardCharsets.UTF_8 ) );
+  private final Random random = new Random();
 }
 ```
 
@@ -652,7 +652,7 @@ public class Game {
 }
 ```
 
-Now we can test the game logic and simulate all the scenarios we need.
+Now we can test the game logic and simulate all the scenarios we need by replacing the `GamePeripherals` with a version we can easily control.
 
 ```java
 package demo;
@@ -660,42 +660,55 @@ package demo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 class GameTest {
 
   @Test
   @DisplayName( "should display an error when an IO Exception is thrown while reading input" )
   public void shouldHandleIoException() throws Exception {
-    /* Create the mock */
-    final GamePeripherals mocked = mock( GamePeripherals.class );
+    /* Create the naïve mock */
+    final NaïveIoErrorMockGamePeripherals mocked = new NaïveIoErrorMockGamePeripherals();
 
-    /* Simulate the mock behaviour */
-    when( mocked.generateRandomNumber() ).thenReturn( 1 );
-    when( mocked.readInput( anyString() ) ).thenThrow( new IOException( "Simulating an error" ) );
-
-    /* Run the game */
+    /* Run the game with the mocked peripherals */
     Game.playGame( mocked );
 
     /* Verify that the error message is displayed */
-    verify( mocked ).display( "Encountered an error" );
+    mocked.verify( "Encountered an error" );
   }
 }
 ```
 
-The above example make use of the [Mockito](https://site.mockito.org/) mocking framework.
+The above example make use of `NaïveIoErrorMockGamePeripherals` instead the original.
 
-```groovy
-dependencies {
-  testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
-  testImplementation 'org.mockito:mockito-core:3.3.3'
+```java
+package demo;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class NaïveIoErrorMockGamePeripherals extends GamePeripherals {
+
+  public String readInput( String prompt ) throws IOException {
+    exceptionThrown = true;
+    throw new IOException( "Simulating an error" );
+  }
+
+  public void display( String message ) {
+    displayed = message;
+  }
+
+  public void verify( String output ) {
+    assertTrue( exceptionThrown, "The readInput() method was not called and the exception was not thrown" );
+    assertEquals( displayed, output );
+  }
+
+  private boolean exceptionThrown;
+  private String displayed;
 }
 ```
+
+This is a naïve mock which has limited flexibility and only used to demonstrate the problem that mocks address.
 
 ### Test Doubles
 
