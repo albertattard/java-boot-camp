@@ -565,11 +565,14 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     The `temp` dir contains two folders and each folder will contain one file.
 
     ```
+    $ tree temp
     temp
-     +-META-INF
-     |  +-MANIFEST.MF
-     +-demo
-        +-App.class
+    ├── META-INF
+    │   └── MANIFEST.MF
+    └── demo
+        └── App.class
+
+    2 directories, 2 files
     ```
 
     The `temp/META-INF/MANIFEST.MF` file is a text file
