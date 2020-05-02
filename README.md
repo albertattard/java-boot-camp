@@ -54,15 +54,15 @@ Boot Camp for developers interested to learn Java.
 1. [Annotations](05%20-%20Objects.md#annotations)
 1. [Generics](05%20-%20Objects.md#generics)
 
-### Collections
+### [Collections](06%20-%20Collections.md)
 
-1. Arrays
-1. Lists (ArrayList and Vector)
-1. Set (HashSet, linkedHashSet and TreeSet)
-1. Map (HashMap, LinkedHashMap and TreeMap)
-1. Queue and Stack
-1. Java Collections Framework
-1. Google Guava (Collections)
+1. [Arrays](06%20-%20Collections.md#arrays)
+1. [Lists (ArrayList and Vector)](06%20-%20Collections.md#lists-arraylist-and-vector)
+1. [Set (HashSet, linkedHashSet and TreeSet)](06%20-%20Collections.md#set-hashset-linkedhashset-and-treeset)
+1. [Map (HashMap, LinkedHashMap and TreeMap)](06%20-%20Collections.md#map-hashmap-linkedhashmap-and-treemap)
+1. [Queue and Stack](06%20-%20Collections.md#queue-and-stack)
+1. [Java Collections Framework](06%20-%20Collections.md#java-collections-framework)
+1. [Google Guava (Collections)](06%20-%20Collections.md#google-guava-collections)
 
 ### Lambda
 

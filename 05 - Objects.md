@@ -570,6 +570,8 @@ Box: an open box labelled 'No Label'
 
 There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can take more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
+### Light Box Example
+
 1. Create the `LightBox` and add the `isEmpty()` method
 
     ```java
@@ -618,6 +620,8 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
       }
     }
     ```
+
+    The `LightBox` [inherits from (or extends)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) `Box`, which is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html).
 
     All `LightBox`es are `Box`es.
 
@@ -803,6 +807,8 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Tests should pass now.
 
+### Heavy Box Example
+
 A heavy box is a box that can take more than one item.
 
 1.  Tests class
@@ -878,7 +884,54 @@ A heavy box is a box that can take more than one item.
     }
     ```
 
+    The above example make use of `List`, which are discussed in more depth in the [Lists (ArrayList and Vector) section](06%20-%20Collections.md#lists-arraylist-and-vector) part of the [collections](06%20-%20Collections.md).
+
+### super
+
+While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should raise an `IllegalArgumentException`
+
+1. Tests
+
+    ```java
+    package demo;
+
+    /* Imports removed for brevity */
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
+      public void shouldThrowExceptionWhenSettingLongLabels() {
+        final LightBox box = new LightBox();
+        assertThrows( IllegalArgumentException.class, () -> box.setLabel( "123456789 123456789 123456789 123" ) );
+      }
+
+      /* Other tests removed for brevity */
+    }
+    ```
+
+1. Solution
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+    import com.google.common.base.Strings;
+
+    public class LightBox extends Box {
+
+      @Override public void setLabel( final String label ) {
+        Preconditions.checkArgument( Strings.nullToEmpty( label ).length() <= 32 );
+        super.setLabel( label );
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
 ## Abstraction
+
+Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the some thing for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
 
 ## The Object Class
 
