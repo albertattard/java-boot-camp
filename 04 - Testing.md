@@ -4,7 +4,6 @@
 
 1. [Setup](#setup)
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](#testing-with-junit-5-hamcrest-and-assertj)
-1. [Tests Tagging](#tests-tagging)
 1. [Mocking (Mockito and EasyMock)](#mocking-mockito-and-easymock)
 1. [Mutation Testing (PIT)](#mutation-testing-pit)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
@@ -251,6 +250,122 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
     AppTest > Dice values 6 and 6 should yield a victory PASSED
     ```
 
+### Custom Converters
+
+In some applications, negative numbers are wrapped in round brackets.  For example, the negative ten is represented as `(10)`.
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class AppTest {
+
+  @ParameterizedTest( name = "The value {0} should be converted to {1}" )
+  @CsvSource( { "(10), -10" } )
+  public void shouldConvertInput( int actual, int expected ) {
+    assertEquals( actual, expected );
+  }
+}
+```
+
+The above will fail to convert the value `(10)` to `-10`
+
+```bash
+org.junit.jupiter.api.extension.ParameterResolutionException: Error converting parameter at index 0: Failed to convert String "(10)" to type java.lang.Integer
+
+  at org.junit.jupiter.params.ParameterizedTestMethodContext.parameterResolutionException(ParameterizedTestMethodContext.java:273)
+  ...
+```
+
+1. Create a custom converter
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.converter.ArgumentConversionException;
+    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
+    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+
+    import java.util.regex.Pattern;
+
+    public final class CustomNumberConverter extends SimpleArgumentConverter {
+
+      private static final Pattern REGEX = Pattern.compile( "\\(\\d+\\)" );
+
+      @Override
+      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
+        final String updated = replaceRoundBracketsWithMinus( source );
+        return DefaultArgumentConverter.INSTANCE.convert( updated, targetType );
+      }
+
+      private String replaceRoundBracketsWithMinus( final Object source ) {
+        final String value = source.toString();
+        if ( REGEX.matcher( value ).matches() ) {
+          return "-" + value.subSequence( 1, value.length() - 1 );
+        }
+        return value;
+      }
+    }
+    ```
+
+1. Use the custom converter
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.ParameterizedTest;
+    import org.junit.jupiter.params.converter.ConvertWith;
+    import org.junit.jupiter.params.provider.CsvSource;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+
+    public class AppTest {
+
+      @ParameterizedTest( name = "The value {0} should be converted to {1}" )
+      @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
+      public void shouldConvertInput(
+        @ConvertWith( CustomNumberConverter.class ) int actual,
+        int expected
+      ) {
+        assertEquals( actual, expected );
+      }
+    }
+    ```
+
+1. Run the test
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    AppTest > The value (1) should be converted to -1 PASSED
+
+    AppTest > The value (10) should be converted to -10 PASSED
+
+    AppTest > The value (100) should be converted to -100 PASSED
+
+    AppTest > The value (1000) should be converted to -1000 PASSED
+
+    AppTest > The value 10 should be converted to 10 PASSED
+
+    ...
+    ```
+
+    The values are converted using our converter and then by the default converter.
+
+### Tests Tagging
+
+**Pending...**
+
+### Nested Tests
+
+**Pending...**
+
 ### Hamcrest
 
 [Hamcrest](http://hamcrest.org/JavaHamcrest/) is a framework for writing matcher objects allowing 'match' rules to be defined declaratively.
@@ -477,10 +592,6 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
 1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))
-
-## Tests Tagging
-
-**Pending...**
 
 ## Mocking (Mockito and EasyMock)
 
