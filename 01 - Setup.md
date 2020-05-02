@@ -623,7 +623,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     The `demo/App.class` file is the compiled version of the source file: `src/main/java/demo/App.java`.
 
     ![What does a modern JVM look like](assets/images/What%20does%20a%20modern%20JVM%20look%20like.png)
-    ([reference](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323884))
+    *Image copied from: [Theory: JVM Subsystems](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323884)*
 
     The bytecode produced when compiling this class can be viewed using the [Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer).
 
