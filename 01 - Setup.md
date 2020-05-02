@@ -251,6 +251,8 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
 ## Create a project using Gradle
 
+### Create Project
+
 1. Create a directory
 
     ```bash
@@ -323,6 +325,12 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     BUILD SUCCESSFUL in 1m 23s
     2 actionable tasks: 2 executed
     ```
+
+Demo
+
+![Create Java Project using Gradle](assets/gifs/Create%20Java%20Project%20using%20Gradle.gif)
+
+### Explore Project
 
 1.  Print the directory structure
 
