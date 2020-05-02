@@ -15,6 +15,8 @@
     1. [Light Box Example](#light-box-example)
     1. [Heavy Box Example](#heavy-box-example)
     1. [The `super` keyword](#the-super-keyword)
+    1. [The `final` keyword](#the-final-keyword)
+    1. [Private Constructor](#private-constructor)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Final Classes](#final-classes)
@@ -940,11 +942,32 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
     }
     ```
 
-##
+### The `final` keyword
+
+Java allows a class to extend another by default.  This can be prevented by the `final` keyword.
+
+```java
+package demo;
+
+/* Imports removed for brevity */
+
+public final class LightBox extends Box {
+
+  /* Members removed for brevity */
+}
+```
+
+The `LightBox` class cannot be extended.
+
+### Private Constructor
+
+Constructors can be `private` and if all constructors of a class are `private`, then this class cannot be extended.
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
 
 ## Abstraction
 
-Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the some thing for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
+Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the something for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
 
 The `Box` class does not have enough information to determine whether it is empty or not.  The sub-classes use different mechanism to determine whether they are empty or not.
 
