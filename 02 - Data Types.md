@@ -201,8 +201,8 @@ public class App {
       String m = "The number is " + a + b;
       String n = "The number is " + ( a + b );
       System.out.println( "-- String concatenation ----" );
-      System.out.println( m );
-      System.out.println( n );
+      System.out.printf( "Concatenation:   %s%n", m );
+      System.out.printf( "Grouping before: %s%n", n );
     }
 
     /* Basic Arithmetic */
@@ -220,12 +220,12 @@ public class App {
       System.out.println( "-- Basic Arithmetic ----------" );
       System.out.printf( "a = %d%n", a );
       System.out.printf( "b = %d%n", b );
-      System.out.printf( "c = %d%n", c );
-      System.out.printf( "d = %d%n", d );
-      System.out.printf( "e = %d%n", e );
-      System.out.printf( "f = %d%n", f );
-      System.out.printf( "g = %d%n", g );
-      System.out.printf( "h = %d%n", h );
+      System.out.printf( "a + b + 2 = %d%n", c );
+      System.out.printf( "a++ = %d%n", d );
+      System.out.printf( "++b = %d%n", e );
+      System.out.printf( "1 / 2 = %d%n", f );
+      System.out.printf( "1 %% 2 = %d%n", g );
+      System.out.printf( "1- %% 2 = %d%n", h );
     }
 
     /* Arithmetic operations return an int (or long) */
@@ -256,7 +256,6 @@ public class App {
       System.out.printf( "%s && %s = %s%n", a, b, c );
       System.out.printf( "%s || %s = %s%n", a, b, d );
       System.out.printf( "!%s = %s%n", a, e );
-
     }
   }
 }
@@ -265,22 +264,28 @@ public class App {
 Output
 
 ```bash
+-- String concatenation ----
+Concatenation:   The number is 73
+Grouping before: The number is 10
 -- Basic Arithmetic ----------
 a = 3
 b = 3
-c = 6
-d = 2
-e = 3
-f = 0
-g = 1
-h = -1
--- String concatenation ----
-The number is 73
-The number is 10
+a + b + 2 = 6
+a++ = 2
+++b = 3
+1 / 2 = 0
+1 % 2 = 1
+1- % 2 = -1
 -- Arithmetic operations ---
 a + b = 10
 a - b = 4
 c = 10
+-- Relational operators ---
+2 > 1 = true
+2 != 2 = false
+true && false = false
+true || false = true
+!true = false
 ```
 
 ## Autoboxing
