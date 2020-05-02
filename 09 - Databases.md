@@ -47,4 +47,3 @@
 ## JPA and Hibernate
 
 **Pending...**
-
