@@ -1,5 +1,7 @@
 # Concurrency
 
+## TOC
+
 1. [Setup](#setup)
 1. [Threads](#threads)
 1. [Synchronized](#synchronized)

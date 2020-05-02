@@ -4,7 +4,21 @@
 
 1. [Setup](#setup)
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](#testing-with-junit-5-hamcrest-and-assertj)
+    1. [Add JUnit 5](#add-junit-5)
+    1. [Parameterized Test](#parameterized-test)
+    1. [Custom Converters](#custom-converters)
+    1. [Tests Tagging](#tests-tagging)
+    1. [Nested Tests](#nested-tests)
+    1. [Hamcrest](#hamcrest)
+    1. [AssertJ](#assertj)
+    1. [JUnit 5, Hamcrest and AssertJ](#junit-5-hamcrest-and-assertj)
+    1. [Test Lifecycle](#test-lifecycle)
 1. [Mocking (Mockito and EasyMock)](#mocking-mockito-and-easymock)
+    1. [What is Mocking (Test Doubles) and Why do we need it?](#what-is-mocking-test-doubles-and-why-do-we-need-it)
+    1. [Test Doubles](#test-doubles)
+    1. [Mockito](#mockito)
+    1. [EasyMock](#easymock)
+    1. [Which Mocking Framework](#which-mocking-framework)
 1. [Mutation Testing (PIT)](#mutation-testing-pit)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
 
@@ -590,7 +604,7 @@ BUILD SUCCESSFUL in 1s
 
 Note that the methods invoked by an `@AfterEach` are called even when the tests fail. Also, note that here there is a mixture of `static` and non `static` methods.
 
-### Recommended Readings
+### Recommended Reading
 
 1. Mastering Software Testing with JUnit 5 ([O'Reilly Books](https://learning.oreilly.com/library/view/mastering-software-testing/9781787285736/))
 1. Pragmatic Unit Testing in Java 8 with JUnit ([O'Reilly Books](https://learning.oreilly.com/library/view/pragmatic-unit-testing/9781680500769/))

@@ -4,10 +4,15 @@
 
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
+    1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
+    1. [Install Gradle](#install-gradle)
 1. [IDE (IntelliJ IDEA and VS Code)](#ide-intellij-idea-and-vs-code)
 1. [Create a project using Gradle](#create-a-project-using-gradle)
 1. [Hello World Application (packaged as an executable application)](#hello-world-application-packaged-as-an-executable-application)
 1. [Docker](#docker)
+    1. [Setup Docker](#setup-docker)
+    1. [Dockerize the Application](#dockerize-the-application)
+    1. [Multi-Stage Docker Build](#multi-stage-docker-build)
 
 ## Setup Environment (SDKMAN)
 
@@ -170,7 +175,7 @@ According to [Google Trends](https://trends.google.com/trends/explore?q=maven,gr
 
    Maven allows one to override a dependency, but only by their version. Gradle provides customizable dependency selection and substitution rules that can be declared once and handle unwanted dependencies project-wide. This substitution mechanism enables Gradle to build multiple source projects together to create composite builds ([reference](https://gradle.org/maven-vs-gradle/)).
 
-### Setup
+### Install Gradle
 
 1. Install
 
