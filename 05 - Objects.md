@@ -16,6 +16,8 @@
     1. [Heavy Box Example](#heavy-box-example)
     1. [super](#super)
 1. [Abstraction](#abstraction)
+    1. [When a class must be abstract?](#when-a-class-must-be-abstract)
+    1. [Final Classes](#final-classes)
 1. [The Object Class](#the-object-class)
 1. [Interfaces](#interfaces)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
@@ -938,9 +940,64 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
     }
     ```
 
+##
+
 ## Abstraction
 
 Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the some thing for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
+
+The `Box` class does not have enough information to determine whether it is empty or not.  The sub-classes use different mechanism to determine whether they are empty or not.
+
+1. The `LightBox` make use of the `empty` field
+1. The `HeavyBox` delegates this to the `items` (`List`) field
+
+```java
+package demo;
+
+/* Imports removed for brevity */
+
+public abstract class Box {
+
+  public abstract boolean isEmpty();
+
+  /* Other members removed for brevity */
+}
+```
+
+### When a class must be abstract?
+
+1. A class can be abstract
+
+    ```java
+    public abstract class A {
+    }
+    ```
+
+1. A class that has abstract methods must be abstract
+
+    ```java
+    public abstract class A {
+
+      public abstract void m();
+    }
+    ```
+
+1. A class that inherits abstract methods that are not implemented must be abstract
+
+    ```java
+    public abstract class A {
+
+      public abstract void m();
+    }
+
+    public abstract class B extends A {
+      /* Inherited abstract methods not implemented */
+    }
+    ```
+
+### Final Classes
+
+A class that is marked final cannot be extended.  Therefore, a final class cannot be abstract.
 
 ## The Object Class
 
