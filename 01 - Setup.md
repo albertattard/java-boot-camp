@@ -8,6 +8,8 @@
     1. [Install Gradle](#install-gradle)
 1. [IDE (IntelliJ IDEA and VS Code)](#ide-intellij-idea-and-vs-code)
 1. [Create a project using Gradle](#create-a-project-using-gradle)
+    1. [Create Project](#create-project)
+    1. [Explore Project](#explore-project)
 1. [Hello World Application (packaged as an executable application)](#hello-world-application-packaged-as-an-executable-application)
 1. [Docker](#docker)
     1. [Setup Docker](#setup-docker)

@@ -12,6 +12,8 @@ Boot Camp for developers interested to learn Java.
     1. [Install Gradle](01%20-%20Setup.md#install-gradle)
 1. [IDE (IntelliJ IDEA and VS Code)](01%20-%20Setup.md#ide-intellij-idea-and-vs-code)
 1. [Create a project using Gradle](01%20-%20Setup.md#create-a-project-using-gradle)
+    1. [Create Project](01%20-%20Setup.md#create-project)
+    1. [Explore Project](01%20-%20Setup.md#explore-project)
 1. [Hello World Application (packaged as an executable application)](01%20-%20Setup.md#hello-world-application-packaged-as-an-executable-application)
 1. [Docker](01%20-%20Setup.md#docker)
     1. [Setup Docker](01%20-%20Setup.md#setup-docker)
