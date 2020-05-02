@@ -4,6 +4,7 @@
 
 1. [Setup](#setup)
 1. [Arrays](#arrays)
+    1. [Create Arrays](#create-arrays)
 1. [Lists (ArrayList and Vector)](#lists-arraylist-and-vector)
 1. [Set (HashSet, linkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
 1. [Map (HashMap, LinkedHashMap and TreeMap)](#map-hashmap-linkedhashmap-and-treemap)
@@ -49,6 +50,104 @@
     ```
 
 ## Arrays
+
+### Create Arrays
+
+1. Create an integer array of 5 elements
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 1, 2, 3, 4, 5 };
+        System.out.printf( "Array of int: %s%n", a );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array of int: [I@279f2327
+    ```
+
+1. Use [Arrays.toString()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#toString(int%5B%5D)) to convert the array to a string
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 1, 2, 3, 4, 5 };
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array of int: [1, 2, 3, 4, 5]
+    ```
+
+1. Alternative methods to create an array
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = new int[] { 1, 2, 3, 4, 5 };
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Or
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = new int[5];
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    The array is filled with the data type default value
+
+    ```bash
+    Array of int: [0, 0, 0, 0, 0]
+    ```
+
+1. The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = new int[5];
+        Arrays.fill( a, 1 );
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array of int: [1, 1, 1, 1, 1]
+    ```
 
 **Pending...**
 

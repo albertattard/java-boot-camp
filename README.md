@@ -94,6 +94,7 @@ Boot Camp for developers interested to learn Java.
 ### [Collections](06%20-%20Collections.md)
 
 1. [Arrays](06%20-%20Collections.md#arrays)
+    1. [Create Arrays](06%20-%20Collections.md#create-arrays)
 1. [Lists (ArrayList and Vector)](06%20-%20Collections.md#lists-arraylist-and-vector)
 1. [Set (HashSet, linkedHashSet and TreeSet)](06%20-%20Collections.md#set-hashset-linkedhashset-and-treeset)
 1. [Map (HashMap, LinkedHashMap and TreeMap)](06%20-%20Collections.md#map-hashmap-linkedhashmap-and-treemap)
