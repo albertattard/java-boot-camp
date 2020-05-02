@@ -961,7 +961,7 @@ Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does th
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
-## Outer and Inner Classes
+## Outer, Inner and Anonymous Classes
 
 **Pending...**
 
