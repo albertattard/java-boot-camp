@@ -109,7 +109,7 @@ Let start by creating a basic object that will represent a box.  The box will no
 
     [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
     1. [Item 12: Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12)
-    1. [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev40)
+    1. [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch6.xhtml#lev40)
 
 1. Run the program again
 
@@ -177,6 +177,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
     /* Other imports removed for brevity */
 
     public class BoxTest {
+
       @Test
       @DisplayName( "should not be open after the close method is called" )
       public void shouldNotBeOpen() {
@@ -727,7 +728,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Sometimes a property is used for various purposes.  Instead of creating a new property, `empty`, we could use the following.
 
-    **NOT RECOMMENDED!!**
+    **⚠️ NOT RECOMMENDED!!**
 
     ```java
     package demo;
@@ -747,6 +748,137 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```
 
     The property `itemId` is used for two purposes and that's discouraged.  If negative IDs become valid, for any reason, this logic becomes invalid.
+
+1. A light box can only contain one item and an `IllegalArgumentException` should be thrown if an item is added to a non-empty box.
+
+    ```java
+    package demo;
+
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    /* Other imports removed for brevity */
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
+      public void shouldThrowExceptionWhenItemAlreadyExists() {
+        final LightBox box = new LightBox();
+        box.putItem( 1 );
+        assertThrows( IllegalArgumentException.class, () -> box.putItem( 1 ) );
+      }
+
+      /* Other tests removed for brevity */
+    }
+    ```
+
+    The test should fail.
+
+    ```bash
+    ./gradlew test
+
+    ...
+
+    LightBoxTest > should thrown an IllegalArgumentException when adding an item to a non-empty box FAILED
+        org.opentest4j.AssertionFailedError at LightBoxTest.java:32
+    ...
+    ```
+
+    Fix failing tests
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+
+    public class LightBox extends Box {
+
+      public void putItem( final long itemId ) {
+        Preconditions.checkArgument( empty );
+        empty = false;
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
+    Tests should pass now.
+
+A heavy box is a box that can take more than one item.
+
+1.  Tests class
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class HeavyBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when no items are placed" )
+      public void shouldBeEmpty() {
+        final HeavyBox box = new HeavyBox();
+        assertTrue( box.isEmpty() );
+      }
+
+      @Test
+      @DisplayName( "should not be empty when an item is placed in the box" )
+      public void shouldNotBeEmpty() {
+        final HeavyBox box = new HeavyBox();
+        box.addItem( 1 );
+        assertFalse( box.isEmpty() );
+      }
+
+      @Test
+      @DisplayName( "should allow multiple items in the box" )
+      public void shouldAllowMultipleItems() {
+        final HeavyBox box = new HeavyBox();
+        box.addItem( 1 );
+        box.addItem( 2 );
+        box.addItem( 3 );
+      }
+
+      @Test
+      @DisplayName( "should thrown an IllegalArgumentException when adding an item that is already in the box" )
+      public void shouldThrowExceptionWhenItemAlreadyExists() {
+        final HeavyBox box = new HeavyBox();
+        box.addItem( 1 );
+        assertThrows( IllegalArgumentException.class, () -> box.addItem( 1 ) );
+      }
+    }
+    ```
+
+1. Heavy box class
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+
+    import java.util.ArrayList;
+    import java.util.List;
+
+    public class HeavyBox extends Box {
+
+      private final List<Long> items = new ArrayList<>();
+
+      public boolean isEmpty() {
+        return items.isEmpty();
+      }
+
+      public void addItem( final long itemId ) {
+        Preconditions.checkArgument( false == items.contains( itemId ) );
+        items.add( itemId );
+      }
+    }
+    ```
+
+## Abstraction
 
 ## The Object Class
 
