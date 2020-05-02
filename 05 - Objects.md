@@ -14,7 +14,7 @@
 1. [Inheritance](#inheritance)
     1. [Light Box Example](#light-box-example)
     1. [Heavy Box Example](#heavy-box-example)
-    1. [super](#super)
+    1. [The `super` keyword](#the-super-keyword)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Final Classes](#final-classes)
@@ -897,7 +897,7 @@ A heavy box is a box that can take more than one item.
 
     The above example make use of `List`, which are discussed in more depth in the [Lists (ArrayList and Vector) section](06%20-%20Collections.md#lists-arraylist-and-vector) part of the [collections](06%20-%20Collections.md).
 
-### super
+### The `super` keyword
 
 While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should raise an `IllegalArgumentException`
 

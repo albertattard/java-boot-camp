@@ -70,7 +70,7 @@ Boot Camp for developers interested to learn Java.
 1. [Inheritance](05%20-%20Objects.md#inheritance)
     1. [Light Box Example](05%20-%20Objects.md#light-box-example)
     1. [Heavy Box Example](05%20-%20Objects.md#heavy-box-example)
-    1. [super](05%20-%20Objects.md#super)
+    1. [The `super` keyword](05%20-%20Objects.md#the-super-keyword)
 1. [Abstraction](05%20-%20Objects.md#abstraction)
     1. [When a class must be abstract?](05%20-%20Objects.md#when-a-class-must-be-abstract)
     1. [Final Classes](05%20-%20Objects.md#final-classes)
