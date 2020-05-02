@@ -207,7 +207,9 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
 ### Parameterized Test
 
-1. Convert the test to make use of Parameters instead
+The following example makes use of the [`@CsvSource` annotation](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvSource.html) as we have multiple parameters.  In case of single parameters, the [`@ValueSource` annotation](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/ValueSource.html) can be used.
+
+1. Convert the test to make use of parameters instead
 
     ```java
     package demo;

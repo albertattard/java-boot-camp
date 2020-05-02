@@ -195,6 +195,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
     package demo;
 
     public class Box {
+
       public void close() {
       }
 
@@ -371,9 +372,116 @@ The label can be represented by the `String` data-type.
 
     The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) always represents the object.  Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is not need to bind it or do any gymnastics.
 
-1. Add Validation.  The label cannot be empty and an `IllegalArgumaneException` should be thrown if an invalid value is passed.
+1. Create custom Converter.
 
-    **Pending...**
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.converter.ArgumentConversionException;
+    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
+    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+
+    public final class NullableConverter extends SimpleArgumentConverter {
+      @Override
+      protected Object convert( Object source, Class<?> targetType ) throws ArgumentConversionException {
+        if ( "null".equals( source ) ) {
+          return null;
+        }
+        return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+      }
+    }
+    ```
+
+    Converts the text `"null"` to an actual `null`.
+
+1. Add a test and use the `NullableConverter` converter.
+
+    The label cannot be empty and an `IllegalArgumaneException` should be thrown if an invalid value is passed.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.ParameterizedTest;
+    import org.junit.jupiter.params.converter.ConvertWith;
+    import org.junit.jupiter.params.provider.ValueSource;
+
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    /* Other imports removed for brevity */
+
+    public class BoxTest {
+
+      @ParameterizedTest( name = "should throw an IllegalArgumentException when given and invalid label ''{0}''" )
+      @ValueSource( strings = { "", " ", "null" } )
+      public void shouldThrowAnExceptionWhenGivenInvalidLabel( @ConvertWith( NullableConverter.class ) String invalidLabel ) {
+        final Box box = new Box();
+        assertThrows( IllegalArgumentException.class, () -> box.setLabel( invalidLabel ) );
+      }
+
+      /* Other tests removed for brevity */
+    }
+    ```
+
+    Run the test
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    ...
+    ```
+
+1. Add the validation
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+    import com.google.common.base.Strings;
+
+    public class Box {
+
+      public void setLabel( String label ) throws IllegalArgumentException {
+        Preconditions.checkArgument( false == Strings.nullToEmpty( label ).isBlank() );
+        this.label = label;
+      }
+
+      /* Other members removed for brevity */
+    }
+    ```
+
+    The above example makes use of [Google Guava](https://mvnrepository.com/artifact/com.google.guava/guava).
+
+    ```groovy
+    dependencies {
+      implementation 'com.google.guava:guava:29.0-jre'
+    }
+    ```
+
+    Run the tests again.  All tests should pass.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' PASSED
+
+    ...
+    ```
 
 ### Multiple Instances
 
