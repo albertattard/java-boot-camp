@@ -1020,7 +1020,7 @@ public abstract class Box {
 
 ### Final Classes
 
-A class that is marked final cannot be extended.  Therefore, a final class cannot be abstract.
+A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be abstract.
 
 ## The Object Class
 
