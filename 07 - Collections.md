@@ -11,6 +11,8 @@
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
 1. [Lists (ArrayList and Vector)](#lists-arraylist-and-vector)
+    1. [Create Lists](#create-lists)
+    1. [Working with Lists](#working-with-lists)
 1. [Set (HashSet, linkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
 1. [Map (HashMap, LinkedHashMap and TreeMap)](#map-hashmap-linkedhashmap-and-treemap)
 1. [Queue and Stack](#queue-and-stack)
@@ -504,6 +506,103 @@ Java arrays are always mutable and there is nothing preventing that.
     ```
 
 ## Lists (ArrayList and Vector)
+
+### Create Lists
+
+1. Create lists
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = Arrays.asList( "a", "b", "c" );
+        System.out.printf( "List %s%n", a );
+      }
+    }
+    ```
+
+    Java 9 added a default functions to the [List](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) interface [List.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...))
+
+    ```java
+    package demo;
+
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = List.of( "a", "b", "c" );
+        System.out.printf( "List %s%n", a );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    List [a, b, c]
+    ```
+
+### Working with Lists
+
+1. [ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
+
+    ```java
+    package demo;
+
+    import java.util.ArrayList;
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = new ArrayList<>();
+        a.add( "b" );
+        a.add( "c" );
+
+        /* Add at a given existing location */
+        a.add( 0, "a" );
+
+        System.out.printf( "List %s%n", a );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    List [a, b, c]
+    ```
+
+1. [LinkedList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html)
+
+    ```java
+    package demo;
+
+    import java.util.LinkedList;
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = new LinkedList<>();
+        a.add( "b" );
+        a.add( "c" );
+
+        /* Add at a given existing location */
+        a.add( 0, "a" );
+
+        System.out.printf( "List %s%n", a );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    List [a, b, c]
+    ```
 
 **Pending...**
 
