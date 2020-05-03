@@ -10,9 +10,11 @@
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
+    1. [Sorting and Searching](#sorting-and-searching)
 1. [Lists (ArrayList and Vector)](#lists-arraylist-and-vector)
     1. [Create Lists](#create-lists)
-    1. [Working with Lists](#working-with-lists)
+    1. [Types of Lists](#types-of-lists)
+    1. [Mutable and Immutable Lists](#mutable-and-immutable-lists)
 1. [Set (HashSet, linkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
 1. [Map (HashMap, LinkedHashMap and TreeMap)](#map-hashmap-linkedhashmap-and-treemap)
 1. [Queue and Stack](#queue-and-stack)
@@ -505,6 +507,72 @@ Java arrays are always mutable and there is nothing preventing that.
       at demo.App.main(App.java:6)
     ```
 
+### Sorting and Searching
+
+1. Sorting and Searching
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 9, 10, 2, 5, 12 };
+        Arrays.sort( a );
+
+        int b = Arrays.binarySearch( a, 9 );
+        int c = Arrays.binarySearch( a, 4 );
+
+        System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
+        System.out.printf( "Index of 9: %d%n", b );
+        System.out.printf( "Index of 4: %d%n", c );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Sorted array a: [2, 5, 9, 10, 12]
+    Index of 9: 2
+    Index of 4: -2
+    ```
+
+    The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to b inserted in position `1`, that it `1 + the negative index`.
+
+1. Searching on an unsorted array may produce unexpected results
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 9, 10, 2, 5, 12 };
+
+        /* Search on an unsorted array */
+        int b = Arrays.binarySearch( a, 9 );
+        int c = Arrays.binarySearch( a, 4 );
+
+        System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
+        System.out.printf( "Index of 9: %d%n", b );
+        System.out.printf( "Index of 4: %d%n", c );
+      }
+    }
+    ```
+
+    Ouput
+
+    ```bash
+    Sorted array a: [9, 10, 2, 5, 12]
+    Index of 9: -5
+    Index of 4: -4
+    ```
+
+    The binary search was not able to find 9, and provided the wrong insertion point for the value 4.
+
 ## Lists (ArrayList and Vector)
 
 ### Create Lists
@@ -546,7 +614,35 @@ Java arrays are always mutable and there is nothing preventing that.
     List [a, b, c]
     ```
 
-### Working with Lists
+### Types of Lists
+
+1. [Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html)
+
+    ```java
+    package demo;
+
+    import java.util.List;
+    import java.util.Vector;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = new Vector<>( 3 );
+        a.add( "b" );
+        a.add( "c" );
+
+        /* Add at a given existing location */
+        a.add( 0, "a" );
+
+        System.out.printf( "List %s%n", a );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    List [a, b, c]
+    ```
 
 1. [ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
 
@@ -558,7 +654,7 @@ Java arrays are always mutable and there is nothing preventing that.
 
     public class App {
       public static void main( String[] args ) {
-        List<String> a = new ArrayList<>();
+        List<String> a = new ArrayList<>( 3 );
         a.add( "b" );
         a.add( "c" );
 
@@ -604,7 +700,75 @@ Java arrays are always mutable and there is nothing preventing that.
     List [a, b, c]
     ```
 
-**Pending...**
+### Mutable and Immutable Lists
+
+1. Unmodifiable lists cannot be modified
+
+    ```java
+    package demo;
+
+    import java.util.ArrayList;
+    import java.util.Collections;
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = new ArrayList<>( 3 );
+        a.add( "a" );
+        a.add( "b" );
+        a.add( "c" );
+
+        /* Cannot modify the list through b*/
+        List<String> b = Collections.unmodifiableList( a );
+
+        /* Throws UnsupportedOperationException */
+        b.add( "d" );
+      }
+    }
+    ```
+
+    Changing the unmodifiable list will throw an `UnsupportedOperationException`.
+
+    ```bash
+    Exception in thread "main" java.lang.UnsupportedOperationException
+      at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
+      at demo.App.main(App.java:18)
+    ```
+
+1. Changes to the underlying list will also affect the main list
+
+    ```java
+    package demo;
+
+    import java.util.ArrayList;
+    import java.util.Collections;
+    import java.util.List;
+
+    public class App {
+      public static void main( String[] args ) {
+        List<String> a = new ArrayList<>( 3 );
+        a.add( "a" );
+        a.add( "b" );
+        a.add( "c" );
+
+        /* Cannot modify the list through b*/
+        List<String> b = Collections.unmodifiableList( a );
+
+        /* The immutable list b will be modified too */
+        a.add( "d" );
+
+        System.out.printf( "List a: %s%n", a );
+        System.out.printf( "List b: %s%n", b );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    List a: [a, b, c, d]
+    List b: [a, b, c, d]
+    ```
 
 ## Set (HashSet, linkedHashSet and TreeSet)
 
