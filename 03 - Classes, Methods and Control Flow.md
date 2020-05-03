@@ -8,6 +8,7 @@
 1. [Mutable and Immutable](#mutable-and-immutable)
 1. [Access Control](#access-control)
 1. [Control Flow and Loops](#control-flow-and-loops)
+    1. [Switch](#switch)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
 
@@ -235,6 +236,56 @@ You rolled 1 and 3
 Not enough, please try again.
 You rolled 5 and 6
 You won!!
+```
+
+### Switch
+
+Example
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int a = 2;
+
+    switch ( a ) {
+      case 1:
+      case 3:
+        System.out.println( "Options 1 or 3" );
+        break;
+      case 2:
+        System.out.println( "Option 2" );
+        break;
+      default:
+        System.out.println( "Anything other than 1, 2 or 3" );
+    }
+  }
+}
+```
+
+Java 14 introduced [switch expressions (JEP 361)](https://openjdk.java.net/jeps/361)
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int a = 2;
+
+    String result = switch ( a ) {
+      case 1, 3 -> "Options 1 or 3";
+      case 2 -> "Option 2";
+      default -> "Anything other than 1, 2 or 3";
+    };
+
+    System.out.println( result );
+  }
+}
+```
+
+```bash
+Option 2
 ```
 
 ## Exceptions
