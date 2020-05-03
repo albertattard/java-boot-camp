@@ -1,4 +1,4 @@
-# Setup
+# Primer
 
 ## TOC
 
@@ -18,6 +18,7 @@
     1. [Setup Docker](#setup-docker)
     1. [Dockerize the Application](#dockerize-the-application)
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
+1. [Java Language Specification](#java-language-specification)
 
 ## Setup Environment (SDKMAN)
 
@@ -1050,3 +1051,14 @@ For more details, please refer to: [https://docs.docker.com/develop/develop-imag
 
 1. Docker in Action, Second Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/docker-in-action/9781617294761/))
 1. Docker Essentials: The Definitive Guide to Docker Containerization ([O'Reilly Video Series](https://learning.oreilly.com/videos/docker-essentials-the/9781634625814))
+
+## Java Language Specification
+
+The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.
+
+For examples, Java supports the following comments styles
+
+1. /* comment */
+1. // comment
+
+These are defined in [section 3.7 of the specification](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.7).
