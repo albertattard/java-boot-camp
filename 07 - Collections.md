@@ -6,8 +6,9 @@
 1. [Arrays](#arrays)
     1. [Create Arrays](#create-arrays)
     1. [Working with Arrays](#working-with-arrays)
+    1. [Multidimensional Arrays](#multidimensional-arrays)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
-        1. [Defensive Copying](#defensive-copying)
+    1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
 1. [Lists (ArrayList and Vector)](#lists-arraylist-and-vector)
 1. [Set (HashSet, linkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
@@ -237,6 +238,78 @@
 
     Array's range is always between 0 (inclusive) and the array's length (exclusive)
 
+### Multidimensional Arrays
+
+1. Two dimensional array
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+
+        for ( int i = 0; i < a.length; i++ ) {
+          for ( int j = 0; j < a[i].length; j++ ) {
+            System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
+          }
+          System.out.println();
+        }
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    a[0][0]=1
+    a[0][1]=2
+    a[0][2]=3
+
+    a[1][0]=4
+    a[1][1]=5
+    a[1][2]=6
+
+    a[2][0]=7
+    a[2][1]=8
+    a[2][2]=9
+    ```
+
+1. Irregular Arrays
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
+
+        for ( int i = 0; i < a.length; i++ ) {
+          for ( int j = 0; j < a[i].length; j++ ) {
+            System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
+          }
+          System.out.println();
+        }
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    a[0][0]=1
+    a[0][1]=2
+    a[0][2]=3
+    a[0][3]=4
+
+    a[1][0]=5
+    a[1][1]=6
+
+    a[2][0]=7
+    a[2][1]=8
+    a[2][2]=9
+    ```
+
 ### Arrays are always Mutable
 
 Making and array variable `final `dose not make it immutable
@@ -266,7 +339,7 @@ Java arrays are always mutable and there is nothing preventing that.
 
 [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28)
 
-#### Defensive Copying
+### Defensive Copying
 
 1. A data class contains an array of it
 
@@ -356,7 +429,79 @@ Java arrays are always mutable and there is nothing preventing that.
 
 ### Arrays of Objects
 
-**Pending...**
+1. Arrays are objects
+
+    ```java
+    package demo;
+
+    import java.lang.reflect.Array;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 1, 2, 3, 4, 5 };
+        Object b = a;
+        System.out.printf( "Array of %d elements%n", Array.getLength( b ) );
+      }
+    }
+    ```
+
+    Ouput
+
+    ```bash
+    Array of 5 elements
+    ```
+
+1. An array of objects can hold any type
+
+    **⚠️ PROCEED WITH CAUTION!!**
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( String[] args ) {
+        Object[] a = new Object[5];
+        a[0] = "A String";
+        a[1] = 21; /* Integer */
+        a[2] = 42L; /* Long */
+        a[3] = true; /* Boolean */
+        a[4] = 'c'; /* Character */
+        System.out.printf( "Array: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array: [A String, 21, 42, true, c]
+    ```
+
+1. A word of caution
+
+    **⚠️ PROCEED WITH CAUTION!!**
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        Object[] a = new Long[5];
+
+        /* Throws ArrayStoreException */
+        a[0] = "A String";
+      }
+    }
+    ```
+
+    An array of object can be instantiated with any other array, but then can only accept types of that type.  The above will fail.
+
+    ```bash
+    Exception in thread "main" java.lang.ArrayStoreException: java.lang.String
+      at demo.App.main(App.java:6)
+    ```
 
 ## Lists (ArrayList and Vector)
 
