@@ -543,6 +543,8 @@ Java arrays are always mutable and there is nothing preventing that.
 
 1. Searching on an unsorted array may produce unexpected results
 
+    **⚠️ PROCEED WITH CAUTION!!**
+
     ```java
     package demo;
 
