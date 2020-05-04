@@ -26,7 +26,6 @@
 1. [Inheritance and Composition](#inheritance-and-composition)
 1. [Overloading and Overriding](#overloading-and-overriding)
 1. [Outer, Inner and Anonymous Classes](#outer-inner-and-anonymous-classes)
-1. [Enumerations](#enumerations)
 1. [Annotations](#annotations)
 1. [Generics](#generics)
 
@@ -1051,10 +1050,6 @@ A class that is marked `final` cannot be extended.  Therefore, a `final` class c
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
 ## Outer, Inner and Anonymous Classes
-
-**Pending...**
-
-## Enumerations
 
 **Pending...**
 

@@ -34,6 +34,7 @@ Boot Camp for developers interested to learn Java.
 1. [Numbers and Strings (Variables)](02%20-%20Data%20Types.md#numbers-and-strings-variables)
 1. [Operators](02%20-%20Data%20Types.md#operators)
 1. [Autoboxing](02%20-%20Data%20Types.md#autoboxing)
+1. [Enumerations](02%20-%20Data%20Types.md#enumerations)
 1. [Imports and Packages](02%20-%20Data%20Types.md#imports-and-packages)
 1. [Date Time API](02%20-%20Data%20Types.md#date-time-api)
 1. [Internationalization](02%20-%20Data%20Types.md#internationalization)
@@ -93,13 +94,12 @@ Boot Camp for developers interested to learn Java.
 1. [Inheritance and Composition](05%20-%20Objects.md#inheritance-and-composition)
 1. [Overloading and Overriding](05%20-%20Objects.md#overloading-and-overriding)
 1. [Outer, Inner and Anonymous Classes](05%20-%20Objects.md#outer-inner-and-anonymous-classes)
-1. [Enumerations](05%20-%20Objects.md#enumerations)
 1. [Annotations](05%20-%20Objects.md#annotations)
 1. [Generics](05%20-%20Objects.md#generics)
 
 ### [SOLID](06%20-%20SOLID.md)
 
-1. [Single-responsibility principle](06%20-%20SOLID.md#single-responsibility-principle)
+1. [Single-responsibility Principle](06%20-%20SOLID.md#single-responsibility-principle)
 1. [Open–closed principle](06%20-%20SOLID.md#open-closed-principle)
 1. [Liskov substitution principle](06%20-%20SOLID.md#liskov-substitution-principle)
 1. [Interface segregation principle](06%20-%20SOLID.md#interface-segregation-principle)

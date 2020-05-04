@@ -565,7 +565,7 @@ Java arrays are always mutable and there is nothing preventing that.
     }
     ```
 
-    Ouput
+    Output
 
     ```bash
     Sorted array a: [9, 10, 2, 5, 12]

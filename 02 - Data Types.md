@@ -7,6 +7,7 @@
 1. [Numbers and Strings (Variables)](#numbers-and-strings-variables)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
+1. [Enumerations](#enumerations)
 1. [Imports and Packages](#imports-and-packages)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
@@ -346,6 +347,155 @@ int g     10
 Integer h 10
 int i     10
 ```
+
+## Enumerations
+
+```java
+package demo;
+
+public class PaperScissorsRock {
+
+  public static final int PAPER = 1;
+  public static final int SCISSORS = 2;
+  public static final int ROCK = 3;
+
+  public static final int DRAW = 0;
+  public static final int WIN_PLAYER_1 = 1;
+  public static final int WIN_PLAYER_2 = 2;
+
+  public static int determineOutcome( int player1, int player2 ) {
+    if ( player1 == player2 ) {
+      return DRAW;
+    }
+
+    return switch ( player1 ) {
+      case PAPER -> player2 == ROCK ? WIN_PLAYER_1 : WIN_PLAYER_2;
+      case SCISSORS -> player2 == PAPER ? WIN_PLAYER_1 : WIN_PLAYER_2;
+      default -> player1 == SCISSORS ? WIN_PLAYER_1 : WIN_PLAYER_2;
+    };
+  }
+}
+```
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static demo.PaperScissorsRock.DRAW;
+import static demo.PaperScissorsRock.PAPER;
+import static demo.PaperScissorsRock.ROCK;
+import static demo.PaperScissorsRock.SCISSORS;
+import static demo.PaperScissorsRock.WIN_PLAYER_1;
+import static demo.PaperScissorsRock.WIN_PLAYER_2;
+import static demo.PaperScissorsRock.determineOutcome;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PaperScissorsRockTest {
+
+  @ValueSource( ints = { PAPER, SCISSORS, ROCK } )
+  @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+  void shouldReturnDraw( int hand ) {
+    assertEquals( DRAW, determineOutcome( hand, hand ) );
+  }
+
+  @CsvSource( { "2,1", "3,2", "1,3" } )
+  @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer1( int player1, int player2 ) {
+    assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
+  }
+
+  @CsvSource( { "1,2", "2,3", "3,1" } )
+  @ParameterizedTest( name = "should return WIN_PLAYER_2 (2) when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer2( int player1, int player2 ) {
+    assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
+  }
+}
+```
+
+Refactor Outcome
+
+```java
+import static demo.PaperScissorsRock.DRAW;
+import static demo.PaperScissorsRock.WIN_PLAYER_1;
+import static demo.PaperScissorsRock.WIN_PLAYER_2;
+```
+
+```java
+import static demo.PaperScissorsRock.Outcome.DRAW;
+import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_1;
+import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_2;
+```
+
+```java
+package demo;
+
+public class PaperScissorsRock {
+
+  public enum Outcome {
+    DRAW,
+    WIN_PLAYER_1,
+    WIN_PLAYER_2;
+  }
+
+  public enum Hand {
+    PAPER,
+    SCISSORS,
+    ROCK;
+  }
+
+  public static Outcome determineOutcome( Hand player1, Hand player2 ) {
+    if ( player1 == player2 ) {
+      return Outcome.DRAW;
+    }
+
+    return switch ( player1 ) {
+      case PAPER -> player2 == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+      case SCISSORS -> player2 == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+      case ROCK -> player2 == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+    };
+  }
+}
+```
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import static demo.PaperScissorsRock.Hand;
+import static demo.PaperScissorsRock.Outcome.DRAW;
+import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_1;
+import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_2;
+import static demo.PaperScissorsRock.determineOutcome;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class PaperScissorsRockTest {
+
+  @EnumSource( Hand.class )
+  @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+  void shouldReturnDraw( PaperScissorsRock.Hand hand ) {
+    assertEquals( DRAW, determineOutcome( hand, hand ) );
+  }
+
+  @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
+  @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
+    assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
+  }
+
+  @CsvSource( { "ROCK,PAPER", "PAPER,SCISSORS", "SCISSORS,ROCK" } )
+  @ParameterizedTest( name = "should return WIN_PLAYER_2 (2) when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer2( Hand player1, Hand player2 ) {
+    assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
+  }
+}
+```
+
 
 ## Imports and Packages
 
