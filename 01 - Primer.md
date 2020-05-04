@@ -909,6 +909,71 @@ Demo
 
 ## Docker
 
+### What is Docker?
+
+Say that we write an application with [OpenJDK 14](https://openjdk.java.net/projects/jdk/14/) and we would like to deploy this application on a server somewhere within the organisation.  The OS where our application will be running needs to have OpenJDK 14 installed otherwise our application will not run.
+
+Another team builds another application, this time using [NodeJS 12](https://nodejs.org/en/).  The OS where this application will be running needs to have the right version of NodeJS installed.
+
+This raises the following questions
+
+1. Who will be managing this?
+1. Who will make sure that the correct version of libraries/frameworks are installed?
+1. How can we ensure that the application works as expected on the production environment?
+1. How will we save the configuration such that we can scale it to hundreds or thousands of servers?
+
+Gradle helps us building and packaging all application dependencies into one fat JAR, but it falls short in setting up the operating system.  That's outside its scope.
+
+[Docker](https://docs.docker.com/) is a tool that we can use to bridge this gap and have an environment ready for our application to run on.
+
+### How does this work?
+
+In a nutshell, an application is packaged into a [Docker Image](https://docs.docker.com/get-started/overview/#docker-objects).  For example, if OpenJDK 14 is needed to run the application, we set up Docker to have OpenJDK 14 installed.
+
+Similar to Java JAR files, docker creates images, which are the unit of work for docker.  Similar to Java, an image can be started using a command similar to the following.
+
+```bash
+$ docker run my-app
+```
+
+Docker takes the image named `my-app` and runs it as a docker container.  Docker also starts our application and kick off any initialisation tasks if needed.
+
+**An instance of a docker image is called a docker container**.
+
+A docker container is a running version of the docker image.  If the application produces logs files, these logs files will be in the docker container (not in the docker image).
+
+A docker container can start and stop like any OS and it will preserve state.  With that said, **do not rely on the container state in production**.
+
+### More than Just Containers
+
+Docker provides more than just the correct configuration.
+
+1. **Limited Access**
+
+    Consider the case where two or more applications are running on the same OS.  One of the applications may be able (intentionally or unintentionally) be able to access files saved by another application running on the same OS.
+
+    Someone needs to make sure that an application does not access resources that belong to another application.
+
+    Secrets used to access resources, such as databases, may be saved as environment variables.  OS scope environment variables are available to all applications running on the same OS.  Any application running on the same OS will be able to access the secrets that belong to another application.
+
+1. **Limit attack surface area**
+
+    Say that we have a server with several applications running on it and one of these applications have a security vulnerability.
+
+    Vulnerabilities may come from different places including libraries used by an application or the platform on which it runs.
+
+    The other applications running on the same OS may be affected by this vulnerability too.
+
+1. **Limit Damage**
+
+    An application may misbehave such that it causes the OS to misbehave, perform poorly or crash
+
+    1. Consume more memory than planned
+    1. Open too many files handles
+    1. Open too many threads
+
+    It is not always easy to configure the OS such that it limits the resources each application uses.
+
 ### Setup Docker
 
 1. Verify that docker is installed
