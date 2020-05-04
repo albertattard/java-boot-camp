@@ -14,6 +14,7 @@
     1. [Gradle Task Dependency Tree](#gradle-task-dependency-tree)
     1. [Project Dependencies](#project-dependencies)
     1. [Package Project](#package-project)
+    1. [Make a fat JAR](#make-a-fat-jar)
 1. [Docker](#docker)
     1. [What is Docker?](#what-is-docker)
     1. [How does this work?](#how-does-this-work)
@@ -753,9 +754,11 @@ Demo
     Hello world.
     ```
 
-1. Make a fat JAR
+### Make a fat JAR
 
-    Update the `jar` task
+There are several ways how to create a fat JAR
+
+1. Update the `jar` task
 
     ```groovy
     jar {
@@ -796,119 +799,130 @@ Demo
 
     The JAR file now contains runtime dependencies.
 
-    There are other ways to create fat JARs.
+1. Create custom task
 
-    1. Create custom task
-
-        ```groovy
-        task fatJar(type: Jar) {
-          group = 'Distribution'
-          description = 'Create an executable fat JAR'
-          archiveBaseName = 'fat-jar'
-          manifest {
-            attributes 'Main-Class': application.mainClassName
-          }
-          from {
-            configurations.runtimeClasspath.collect {
-              it.isDirectory() ? it : zipTree(it)
-            }
-          }
-          with jar
+    ```groovy
+    task fatJar(type: Jar) {
+      group = 'Distribution'
+      description = 'Create an executable fat JAR'
+      archiveBaseName = 'fat-jar'
+      manifest {
+        attributes 'Main-Class': application.mainClassName
+      }
+      from {
+        configurations.runtimeClasspath.collect {
+          it.isDirectory() ? it : zipTree(it)
         }
-        ```
+      }
+      with jar
+    }
+    ```
 
-        List the available gradle tasks (some tasks may bot be visible but still be available).
+    List the available gradle tasks (some tasks may bot be visible but still be available).
 
-        ```bash
-        $ ./gradlew tasks
-        ```
+    ```bash
+    $ ./gradlew tasks
+    ```
 
-        Note that `fatJar` task under the `Distribution tasks` section.
+    Note that `fatJar` task under the `Distribution tasks` section.
 
-        ```bash
-        ...
+    ```bash
+    ...
 
-        Distribution tasks
-        ------------------
-        assembleDist - Assembles the main distributions
-        distTar - Bundles the project as a distribution.
-        distZip - Bundles the project as a distribution.
-        fatJar - Create an executable fat JAR
-        installDist - Installs the project as a distribution as-is.
+    Distribution tasks
+    ------------------
+    assembleDist - Assembles the main distributions
+    distTar - Bundles the project as a distribution.
+    distZip - Bundles the project as a distribution.
+    fatJar - Create an executable fat JAR
+    installDist - Installs the project as a distribution as-is.
 
-        ...
-        ```
+    ...
+    ```
 
-        Create the fat JAR using the custom task
+    Create the fat JAR using the custom task
 
-        ```bash
-        $ ./gradlew fatJar
-        ```
+    ```bash
+    $ ./gradlew fatJar
+    ```
 
-        The JAR file: `build/libs/fat-jar.jar` will be created containing the application together with it's runtime dependencies.
+    The JAR file: `build/libs/fat-jar.jar` will be created containing the application together with it's runtime dependencies.
 
-        Run the application.
+    Run the application.
 
-        ```bash
-        $ java -jar build/libs/fat-jar.jar
-        Hello world.
-        ```
+    ```bash
+    $ java -jar build/libs/fat-jar.jar
+    Hello world.
+    ```
 
-       For more information about tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
+   For more information about tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
 
-    1. Use a plugin
+1. Use a plugin
 
-        The [shadowJar](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin is a very popular plugin.
+    The [shadowJar](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin is a very popular plugin.
 
-        Add the `shadowJar` plugin (do no remove the other plugins)
+    Add the `shadowJar` plugin (do no remove the other plugins)
 
-        ```groovy
-        plugins {
-            id 'com.github.johnrengelman.shadow' version '5.2.0'
-        }
-        ```
+    ```groovy
+    plugins {
+        id 'com.github.johnrengelman.shadow' version '5.2.0'
+    }
+    ```
 
-        List the available tasks
+    List the available tasks
 
-        ```bash
-        $ ./gradlew tasks
-        ```
+    ```bash
+    $ ./gradlew tasks
+    ```
 
-        `shadowJar` is one of the newly available tasks
+    `shadowJar` is one of the newly available tasks
 
-        ```bash
-        ...
+    ```bash
+    ...
 
-        Shadow tasks
-        ------------
-        knows - Do you know who knows?
-        shadowJar - Create a combined JAR of project and runtime dependencies
+    Shadow tasks
+    ------------
+    knows - Do you know who knows?
+    shadowJar - Create a combined JAR of project and runtime dependencies
 
-        ...
-        ```
+    ...
+    ```
 
-        Create the fat JAR using the `shadowJar` task
+    Create the fat JAR using the `shadowJar` task
 
-        ```bash
-        $ ./gradlew shadowJar
-        ```
+    ```bash
+    $ ./gradlew shadowJar
+    ```
 
-        Two JAR file will be created
+    JAR file will be created
 
-        ```bash
-        $ ls -l build/libs
-        -rw-r--r-- demo-all.jar
-        -rw-r--r-- demo.jar
-        ```
+    ```bash
+    $ ls -l build/libs
+    -rw-r--r-- demo-all.jar
+    ```
 
-        The `demo.jar` file does not include dependencies, while the `demo-all.jar` file does.
+    The `shadowJar` task is also triggered with the `build` task.
 
-        Run the application.
+     ```bash
+    $ ./gradlew clean build
+     ```
 
-        ```bash
-        $ java -jar build/libs/demo-all.jar
-        Hello world.
-        ```
+     In this case two JAR files will be produced
+
+    ```bash
+    $ ls -l build/libs
+    -rw-r--r-- demo-all.jar
+    -rw-r--r-- demo.jar
+    ```
+
+    The `demo.jar` file does not include dependencies, while the `demo-all.jar` file does.
+
+    Run the application.
+
+    ```bash
+    $ java -jar build/libs/demo-all.jar
+    Hello world.
+    ```
 
 ## Docker
 

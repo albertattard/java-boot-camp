@@ -18,6 +18,7 @@ Boot Camp for developers interested to learn Java.
     1. [Gradle Task Dependency Tree](01%20-%20Primer.md#gradle-task-dependency-tree)
     1. [Project Dependencies](01%20-%20Primer.md#project-dependencies)
     1. [Package Project](01%20-%20Primer.md#package-project)
+    1. [Make a fat JAR](01%20-%20Primer.md#make-a-fat-jar)
 1. [Docker](01%20-%20Primer.md#docker)
     1. [What is Docker?](01%20-%20Primer.md#what-is-docker)
     1. [How does this work?](01%20-%20Primer.md#how-does-this-work)
