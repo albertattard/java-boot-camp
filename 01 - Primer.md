@@ -2,6 +2,9 @@
 
 ## TOC
 
+1. [Java](#java)
+    1. [What is Java?](#what-is-java)
+    1. [How do we develop Java Applications?](#how-do-we-develop-java-applications)
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
     1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
@@ -25,6 +28,45 @@
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
 1. [Managing Docker Containers](#managing-docker-containers)
 1. [Java Language Specification](#java-language-specification)
+
+## Java
+
+### What is Java?
+
+Java is a general purpose programming language and computing platform first released by Sun Microsystems in 1995.
+
+Java is fast, secure, and reliable. From laptops to datacenters, game consoles to scientific supercomputers, cell phones to the Internet, Java is everywhere!
+
+Java is an overloaded term.  Some times the term Java is used to refer to the programming language while other times it is used to refer to the Java Virtual Machine.
+
+1. The Java Programming Language
+1. The Java Virtual Machine (JVM)
+1. The Java Development Kit (JDK)
+1. The Java Runtime Environment (JRE) sometimes also referred to as Platform
+1. The Java Standard Edition (JSE)
+1. The Java Micro Edition (JME)
+1. The Java Enterprise Environment (JEE)
+
+### How do we develop Java Applications?
+
+An application running on the Java platform starts from source code written in one of the JVM languages as shown next.
+
+![Java from Development to Runtime](assets/images/Java%20from%20Development%20to%20Runtime.png)
+
+The source code is compiled into Bytecode.  Bytecode is a form of instruction set designed for efficient execution by the Java JIT compiler.  Each bytecode is composed of one byte that represents the `opcode`, along with zero or more bytes for operands.  Of the 256 possible byte-long `opcodes`, 202 are in use.
+
+**The bytecode is machine independent and it does not matter on which OS the bytecode is generated**.  The source code can be compiled on a Windows machine and then used on a Mac or vice versa.  The JIT takes the bytecode and then convert this into machine dependent code.
+
+It is important to note that to develop and compile code you need to have a JDK installed.  To run a Java application (including all programming languages that run on the JVM) you need to have the JRE installed.  Note that a JDK also includes the JRE and no need to install a separate JRE when you have a JDK installed.
+
+### Recommended Reading
+
+1. Java in a Nutshell, 7th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-in-a/9781492037248/))
+1. Java: A Beginner's Guide, Eighth Edition, 8th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-a-beginners/9781260440225/))
+1. Effective Java, 3rd Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/))
+1. Java: The Complete Reference, Eleventh Edition, 11th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-the-complete/9781260440249/))
+1. Java Cookbook, 4th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-cookbook-4th/9781492072577/))
+1. Introduction to Java 8 ([O'Reilly Video Series](https://learning.oreilly.com/videos/introduction-to-java/9781491907795))
 
 ## Setup Environment (SDKMAN)
 
@@ -1578,7 +1620,7 @@ Once an application is built and packaged into a container, this needs to be exe
 $ docker run -it demo:local
 ```
 
-That all great for development.
+That's all great for development.
 
 Consider the following:
 
@@ -1597,6 +1639,7 @@ There are many more things to consider when running an application irrespective 
 1. [Microsoft Azure](https://azure.microsoft.com/)
 1. [Digital Ocean](https://www.digitalocean.com/)
 1. [Kubernetes](https://kubernetes.io/)
+1. [Docker Swarm](https://docs.docker.com/engine/swarm/)
 1. [Portainer](https://www.portainer.io/)
 1. [Rancher](https://rancher.com/)
 
@@ -1606,6 +1649,10 @@ Some of the above services are able work with JAR files directly and we do not n
 
 1. Docker in Action, Second Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/docker-in-action/9781617294761/))
 1. Docker Essentials: The Definitive Guide to Docker Containerization ([O'Reilly Video Series](https://learning.oreilly.com/videos/docker-essentials-the/9781634625814))
+1. Docker, Dockerfile, and Docker-Compose (2020 Ready!)
+ ([O'Reilly Video Series](https://learning.oreilly.com/videos/docker-dockerfile-and/9781800206847))
+1. Kubernetes in Action ([O'Reilly Books](https://learning.oreilly.com/library/view/kubernetes-in-action/9781617293726/))
+1. Kubernetes: Up and Running, 2nd Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/kubernetes-up-and/9781492046523/))
 
 ## Java Language Specification
 
