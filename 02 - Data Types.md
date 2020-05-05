@@ -558,7 +558,7 @@ Java 5 introduced Enums which simplifies the above problem.
       }
 
       public static Outcome determineOutcome( final Hand player1, final Hand player2 ) {
-        if ( player1 == other ) {
+        if ( player1 == player2 ) {
           return Outcome.DRAW;
         }
 

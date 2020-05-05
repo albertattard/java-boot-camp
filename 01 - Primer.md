@@ -20,6 +20,7 @@
     1. [How does this work?](#how-does-this-work)
     1. [More than Just Containers](#more-than-just-containers)
     1. [Setup Docker](#setup-docker)
+    1. [Working with Docker](#working-with-docker)
     1. [Dockerize the Application](#dockerize-the-application)
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
 1. [Java Language Specification](#java-language-specification)
@@ -1006,43 +1007,472 @@ Docker provides more than just the correct configuration.
 
     ![Docker Desktop](assets/images/Docker%20Desktop%20Tray%20Icon.png)
 
-### Dockerize the Application
 
-1. Built the project
+### Working with Docker
 
-    ```bash
-    ./gradlew clean build
-    ```
+1. A docker hub account is required.  [Create an account](https://hub.docker.com/signup/) if you do not have one yet.
 
-1. Create file `Dockerfile`
+1. Work with an existing docker image (created by someone else)
 
-    ```dockerfile
-    FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
-    WORKDIR /opt/app
-    COPY ./build/libs/demo.jar ./application.jar
-    CMD ["java", "-jar", "application.jar"]
-    ```
-
-    The above docker file relies on the JAR file
-
-    ```
-    build/libs/demo.jar
-    ```
-
-    This needs to be an executable JAR
-
-1. Build the Java image
+    This [docker image `bash:5.0.17`](https://hub.docker.com/_/bash) is a basic linux OS that has bash support.
 
     ```bash
-    $ docker build . -t demo:local
+    $ docker pull bash:5.0.17
+    ```
+
+    Alternative, we can run the image immediately using `run` instead of `pull`.
+
+    You need to be logged in, otherwise you will get an error similar ot the following.
+
+    ```bash
+    Error response from daemon: Get https://registry-1.docker.io/v2/library/bash/manifests/5.0.17: unauthorized: incorrect username or password
+    ```
+
+    Login
+
+    ```bash
+    $ docker login --username <YOUR-USERNAME>
+    Login Succeeded
     ```
 
 1. Run the docker image
 
     ```bash
-    $ docker run -it demo:local
-    Hello world.
+    $ docker run -it bash:5.0.17
     ```
+
+    Now you are in the `bash:5.0.17` docker container
+
+    ```bash
+    bash-5.0#
+    ```
+
+    The [`-i` option](https://docs.docker.com/engine/reference/run/#foreground) indicates that we need to interact with the docker container.  Without it we will not be able to interact with the docker container.  This is very useful while debugging.
+
+1. Open another terminal and run
+
+    ```bash
+    $ docker ps
+    ```
+
+    This will show the running docker containers
+
+    ```bash
+    CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+    110810b3d472        bash:5.0.17         "docker-entrypoint.s…"   53 minutes ago      Up 53 minutes                           brave_payne
+    ```
+
+    Some of the information, such as the `CONTAINER ID` and the `NAMES`, will be different.
+
+1. Try out some commands
+
+    1. `pwd`
+
+        ```bash
+        bash-5.0# pwd
+        /
+        ```
+
+    1. `ls -la`
+
+        ```bash
+        bash-5.0# ls -la
+        total 64
+        drwxr-xr-x    1 root     root          4096 May  5 09:54 .
+        drwxr-xr-x    1 root     root          4096 May  5 09:54 ..
+        -rwxr-xr-x    1 root     root             0 May  5 09:54 .dockerenv
+        drwxr-xr-x    1 root     root          4096 Apr 24 22:51 bin
+        drwxr-xr-x    5 root     root           360 May  5 09:54 dev
+        drwxr-xr-x    1 root     root          4096 May  5 09:54 etc
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 home
+        drwxr-xr-x    1 root     root          4096 Apr 24 22:51 lib
+        drwxr-xr-x    5 root     root          4096 Apr 23 06:25 media
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 mnt
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 opt
+        dr-xr-xr-x  188 root     root             0 May  5 09:54 proc
+        drwx------    2 root     root          4096 Apr 23 06:25 root
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 run
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 sbin
+        drwxr-xr-x    2 root     root          4096 Apr 23 06:25 srv
+        dr-xr-xr-x   13 root     root             0 May  5 09:54 sys
+        drwxrwxrwt    1 root     root          4096 Apr 24 22:51 tmp
+        drwxr-xr-x    1 root     root          4096 Apr 24 22:51 usr
+        drwxr-xr-x    1 root     root          4096 Apr 24 22:51 var
+        ```
+
+    1. `echo`
+
+        ```bash
+        bash-5.0# echo "Hello Docker"
+        Hello Docker
+        ```
+
+    1. `env`
+
+        ```bash
+        bash-5.0# env
+        HOSTNAME=110810b3d472
+        PWD=/
+        _BASH_GPG_KEY=7C0135FB088AAF6C66C650B9BB5869F064EA74AB
+        HOME=/root
+        _BASH_VERSION=5.0
+        _BASH_PATCH_LEVEL=0
+        _BASH_LATEST_PATCH=17
+        TERM=xterm
+        SHLVL=1
+        PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        _=/usr/bin/env
+        ```
+
+1. Add [curl](https://curl.haxx.se/)
+
+    `curl` is not available on the image we are using.  We can use a different image that already contains it, or install it ourselves.
+
+    ```bash
+    bash-5.0# curl http://www.google.com
+    bash: curl: command not found
+    ```
+
+    Use the package manager available to the OS you are using.  Alpine, the OS we are using, uses the [`apk` package manager](https://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management).  A list of available packages is available [here](https://pkgs.alpinelinux.org/packages).
+
+    ```bash
+    bash-5.0# apk add curl
+    fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/APKINDEX.tar.gz
+    fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/community/x86_64/APKINDEX.tar.gz
+    (1/4) Installing ca-certificates (20191127-r1)
+    (2/4) Installing nghttp2-libs (1.40.0-r0)
+    (3/4) Installing libcurl (7.67.0-r0)
+    (4/4) Installing curl (7.67.0-r0)
+    Executing busybox-1.31.1-r9.trigger
+    Executing ca-certificates-20191127-r1.trigger
+    OK: 8 MiB in 21 packages
+    ```
+
+    Now we have `curl` installed
+
+    ```bash
+    bash-5.0# curl http://www.google.com
+    <!doctype html><html itemscope="" ...
+    ```
+
+    Note that `curl` is not part of the image.  Only this container has `curl` installed.  The `curl` will not be available on any other container for the same image.
+
+    1. Stop the container
+
+        ```bash
+        bash-5.0# exit
+        $ exit
+        ```
+
+    1. Start a new container
+
+        ```bash
+        $ docker run -it bash:5.0.17
+        bash-5.0#
+        ```
+
+    1. Try the `curl` command
+
+        ```bash
+        bash-5.0# curl http://www.google.com
+        bash: curl: command not found
+        ```
+
+    **Any changes made to a container are lost once the container is stopped**.
+
+1. How can we run a Java application within a container?
+
+    The `bash:5.0.17`  image does not include Java.
+
+    ```bash
+    $ docker run -it bash:5.0.17
+    bash-5.0# java -version
+    bash: java: command not found
+    ```
+
+    We can use an image which have the Java we need already installed, such as the [`adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` image](https://hub.docker.com/r/adoptopenjdk/openjdk14).
+
+    ```bash
+    $ docker run -it adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+    ```
+
+    Note that some examples may also append the command to be executed when the container starts, such as
+
+    ```bash
+    $ docker run -it adoptopenjdk/openjdk14:jre-14.0.1_7-alpine /bin/sh
+    ```
+
+    The above is instructing docker to open a shell terminal.  Note that the image `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` does not have `bash` installed.  We can use the `sh` instead.  That is why we are running the `/bin/sh` command instead.
+
+    Check the Java version installed
+
+    ```bash
+    # java -version
+    openjdk version "14.0.1" 2020-04-14
+    OpenJDK Runtime Environment AdoptOpenJDK (build 14.0.1+7)
+    OpenJDK 64-Bit Server VM AdoptOpenJDK (build 14.0.1+7, mixed mode, sharing)
+    ```
+
+    This docker image comes with Java 14 already setup.
+
+    How do we get our application in the docker container?  The application needs to be dockerize, [described in the Dockerize the Application section](#dockerize-the-application).
+
+### Dockerize the Application
+
+1. The `Dockerfile` text file
+
+    Docker will use this text file to create our image.  The `Dockerfile` file is part of the source code and can be used by the build pipeline to build our docker images and deploy them into production environments.
+
+    1. Create the `Dockerfile`
+
+        ```bash
+        $ vi Dockerfile
+        ```
+
+1. Extend an existing docker image
+
+    We can create a docker image from scratch, but this will require lots of effort as we need to install the OS files, the packages we need and install Java.  Alternatively, we can use an existing image from the docker repository.
+
+    **⚠️ Note that many companies, have internal docker repositories and only allow images coming from these repositories**.
+
+    ```dockerfile
+    FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+    ```
+
+    The above docker file is extending one of the [adoptopenjdk](https://hub.docker.com/r/adoptopenjdk/openjdk14) images as defined by the [`FROM` instruction](https://docs.docker.com/engine/reference/builder/#from).
+
+    Fragments of the image [adoptopenjdk/openjdk14:jre-14.0.1_7-alpine](https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/14/jre/alpine/Dockerfile.hotspot.releases.full) are shown next.
+
+    ```dockerfile
+    FROM alpine:3.11
+
+    ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
+    RUN apk add --no-cache --virtual .build-deps curl binutils \
+        && GLIBC_VER="2.31-r0" \
+        && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
+        && GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-9.1.0-2-x86_64.pkg.tar.xz" \
+        && GCC_LIBS_SHA256="91dba90f3c20d32fcf7f1dbe91523653018aa0b8d2230b00f822f6722804cf08" \
+
+    ...
+
+    ENV JAVA_HOME=/opt/java/openjdk \
+        PATH="/opt/java/openjdk/bin:$PATH"
+    ```
+
+    Please note that the above is incomplete for brevity.
+
+    The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` installs the [Adopt OpenJDK 14](https://adoptopenjdk.net/releases.html) and set the environemnt.  The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` docker image is build on top of another image, the [alpine:3.11](https://github.com/alpinelinux/docker-alpine/blob/c5510d5b1d2546d133f7b0938690c3c1e2cd9549/x86_64/Dockerfile).
+
+    ```dockerfile
+    FROM scratch
+    ADD alpine-minirootfs-3.11.6-x86_64.tar.gz /
+    CMD ["/bin/sh"]
+    ```
+
+    The `alpine:3.11` does not depend on anything (`FROM scratch`) and creates a basic and small Linux OS.
+
+    If we want to create a docker image from scratch we need to merge both docker images and the files they are referring to.
+
+    1. Import from `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` in the `Dockerfile`
+
+        ```dockerfile
+        FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+        ```
+
+    1. Build the new docker image
+
+        ```bash
+        $ docker build . -t demo:local
+        Sending build context to Docker daemon  166.9kB
+        Step 1/1 : FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+         ---> 82f70d1be68e
+        Successfully built 82f70d1be68e
+        Successfully tagged demo:local
+        ```
+
+    1. Run the newly built docker image
+
+        ```bash
+        $ docker run -it demo:local /bin/sh
+        #
+        ```
+
+    1. Verify the Java version
+
+        ```bash
+        # java -version
+        openjdk version "14.0.1" 2020-04-14
+        OpenJDK Runtime Environment AdoptOpenJDK (build 14.0.1+7)
+        OpenJDK 64-Bit Server VM AdoptOpenJDK (build 14.0.1+7, mixed mode, sharing)
+        ```
+
+    1. Check the working directory
+
+        ```bash
+        # pwd
+        /
+        ```
+
+1. Set the working directory
+
+    ```dockerfile
+    WORKDIR /opt/app
+    ```
+
+    The [`WORKDIR` instruction](https://docs.docker.com/engine/reference/builder/#workdir) is the directory where our application will be running from.
+
+    The working directory of our image was `/` (the root folder).  Now we changed it to be `/opt/app`.  The directory does not need to exists and will be created automatically.
+
+    1. Add the working directory to the `Dockerfile`
+
+        ```dockerfile
+        WORKDIR /opt/app
+        ```
+
+    1. Build the new docker image
+
+        ```bash
+        $ docker build . -t demo:local
+        Sending build context to Docker daemon  166.9kB
+        Step 1/2 : FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+         ---> 82f70d1be68e
+        Step 2/2 : WORKDIR /opt/app
+         ---> Using cache
+         ---> e5738c7ba12f
+        Successfully built e5738c7ba12f
+        Successfully tagged demo:local
+        ```
+
+    1. Run the image and print the current working directory
+
+        ```bash
+        $ docker run -it demo:local /bin/sh
+        # pwd
+        /opt/app
+        ```
+
+1. Copy our application to docker
+
+    We need to copy our JAR file from the local filesystem to the docker image using the [`COPY` instruction](https://docs.docker.com/engine/reference/builder/#copy).
+
+    ```dockerfile
+    COPY ./build/libs/demo.jar ./application.jar
+    ```
+
+    When docker builds the image, it will copy the file `./build/libs/demo.jar` to the docker image being created.
+
+    1. Built the project
+
+        ```bash
+        ./gradlew clean build
+        ```
+
+        The JAR file produced by the build task will be used to create the docker image.  The docker image relies on the fat JAR file
+
+        ```
+        build/libs/demo-all.jar
+        ```
+
+        This needs to be an executable (fat) JAR containing all dependencies.  The JAR file needs to be able to run using just
+
+        ```bash
+        $ java -jar build/libs/demo.jar
+        ```
+
+        This is how docker will run our application
+
+    1. Add the `COPY` instruction to the `Dockerfile`
+
+        ```dockerfile
+        COPY ./build/libs/demo-all.jar ./application.jar
+        ```
+
+    1. Build the new docker image
+
+        ```bash
+        $ docker build . -t demo:local
+        Sending build context to Docker daemon  14.77MB
+        Step 1/3 : FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+         ---> 82f70d1be68e
+        Step 2/3 : WORKDIR /opt/app
+         ---> Using cache
+         ---> e5738c7ba12f
+        Step 3/3 : COPY ./build/libs/demo-all.jar ./application.jar
+         ---> b5ff637e4e91
+        Successfully built b5ff637e4e91
+        Successfully tagged demo:local
+        ```
+
+    1. Manually run the application
+
+        ```bash
+        $ docker run -it demo:local /bin/sh
+        # pwd
+        /opt/app
+        # ls -l
+        -rw-r--r-- application.jar
+        ```
+
+        ```bash
+        # java -jar application.jar
+        Hello world.
+        ```
+
+    Note that our application was copied into docker, but we have to manually start it.
+
+1. Make the application to run on startup
+
+    ```dockerfile
+    CMD ["java", "-jar", "application.jar"]
+    ```
+
+    The [`CMD` instruction](https://docs.docker.com/engine/reference/builder/#run) instructs docker container to run the given command when the container starts.
+
+    1. Add the `CMD` instruction to the `Dockerfile`
+
+        ```dockerfile
+        CMD ["java", "-jar", "application.jar"]
+        ```
+
+    1. Build the new docker image
+
+        ```bash
+        $ docker build . -t demo:local
+        Sending build context to Docker daemon  14.77MB
+        Step 1/4 : FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+         ---> 82f70d1be68e
+        Step 2/4 : WORKDIR /opt/app
+         ---> Using cache
+         ---> e5738c7ba12f
+        Step 3/4 : COPY ./build/libs/demo-all.jar ./application.jar
+         ---> Using cache
+         ---> b5ff637e4e91
+        Step 4/4 : CMD ["java", "-jar", "application.jar"]
+         ---> Running in cd66c5b54493
+        Removing intermediate container cd66c5b54493
+         ---> efab5e9092f4
+        Successfully built efab5e9092f4
+        Successfully tagged demo:local
+        ```
+
+    1. Run the docker image
+
+        ```bash
+        $ docker run -t demo:local
+        Hello world.
+        ```
+
+        Note that we are not using the `-i` flag anymore.  Docker know what needs to be done and we do not need to interact with it unless we need to debug something.  This is how docker will actually run our container.,
+
+The complete `Dockerfile` is shown next
+
+```dockerfile
+FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
+WORKDIR /opt/app
+COPY ./build/libs/demo.jar ./application.jar
+CMD ["java", "-jar", "application.jar"]
+```
 
 ### Multi-Stage Docker Build
 
