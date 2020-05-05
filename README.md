@@ -22,7 +22,7 @@ Boot Camp for developers interested to learn Java.
 1. [Docker](01%20-%20Primer.md#docker)
     1. [What is Docker?](01%20-%20Primer.md#what-is-docker)
     1. [How does this work?](01%20-%20Primer.md#how-does-this-work)
-    1. [More than Just Containers](01%20-%20Primer.md#more-than-just-containers)
+    1. [More than just Containers](01%20-%20Primer.md#more-than-just-containers)
     1. [Setup Docker](01%20-%20Primer.md#setup-docker)
     1. [Working with Docker](01%20-%20Primer.md#working-with-docker)
     1. [Dockerize the Application](01%20-%20Primer.md#dockerize-the-application)

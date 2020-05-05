@@ -18,7 +18,7 @@
 1. [Docker](#docker)
     1. [What is Docker?](#what-is-docker)
     1. [How does this work?](#how-does-this-work)
-    1. [More than Just Containers](#more-than-just-containers)
+    1. [More than just Containers](#more-than-just-containers)
     1. [Setup Docker](#setup-docker)
     1. [Working with Docker](#working-with-docker)
     1. [Dockerize the Application](#dockerize-the-application)
@@ -962,7 +962,7 @@ A docker container is a running version of the docker image.  If the application
 
 A docker container can start and stop like any OS and it will preserve state.  With that said, **do not rely on the container state in production**.
 
-### More than Just Containers
+### More than just Containers
 
 Docker provides more than just the correct configuration.
 
@@ -1223,6 +1223,8 @@ Docker provides more than just the correct configuration.
 
     Docker will use this text file to create our image.  The `Dockerfile` file is part of the source code and can be used by the build pipeline to build our docker images and deploy them into production environments.
 
+    **Steps**:
+
     1. Create the `Dockerfile`
 
         ```bash
@@ -1274,6 +1276,8 @@ Docker provides more than just the correct configuration.
 
     If we want to create a docker image from scratch we need to merge both docker images and the files they are referring to.
 
+    **Steps**:
+
     1. Import from `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` in the `Dockerfile`
 
         ```dockerfile
@@ -1324,6 +1328,8 @@ Docker provides more than just the correct configuration.
 
     The working directory of our image was `/` (the root folder).  Now we changed it to be `/opt/app`.  The directory does not need to exists and will be created automatically.
 
+    **Steps**:
+
     1. Add the working directory to the `Dockerfile`
 
         ```dockerfile
@@ -1361,6 +1367,8 @@ Docker provides more than just the correct configuration.
     ```
 
     When docker builds the image, it will copy the file `./build/libs/demo.jar` to the docker image being created.
+
+    **Steps**:
 
     1. Built the project
 
@@ -1428,6 +1436,8 @@ Docker provides more than just the correct configuration.
     ```
 
     The [`CMD` instruction](https://docs.docker.com/engine/reference/builder/#run) instructs docker container to run the given command when the container starts.
+
+    **Steps**:
 
     1. Add the `CMD` instruction to the `Dockerfile`
 
