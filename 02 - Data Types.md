@@ -377,7 +377,7 @@ public class RockPaperScissors {
     return switch ( player1 ) {
       case PAPER -> player2 == ROCK ? WIN_PLAYER_1 : WIN_PLAYER_2;
       case SCISSORS -> player2 == PAPER ? WIN_PLAYER_1 : WIN_PLAYER_2;
-      default -> player1 == SCISSORS ? WIN_PLAYER_1 : WIN_PLAYER_2;
+      default -> player2 == SCISSORS ? WIN_PLAYER_1 : WIN_PLAYER_2;
     };
   }
 }
