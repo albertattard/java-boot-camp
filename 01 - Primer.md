@@ -5,6 +5,7 @@
 1. [Java](#java)
     1. [What is Java?](#what-is-java)
     1. [How do we develop Java Applications?](#how-do-we-develop-java-applications)
+1. [Java Language Specification](#java-language-specification)
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
     1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
@@ -29,7 +30,6 @@
     1. [Dockerize the Application](#dockerize-the-application)
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
 1. [Managing Docker Containers](#managing-docker-containers)
-1. [Java Language Specification](#java-language-specification)
 
 ## Java
 
@@ -42,8 +42,10 @@ Java is fast, secure, and reliable.  From smartcards to datacentres, game consol
 Java is an overloaded term.  Sometimes the term Java is used to refer to the programming language while other times it is used to refer to the Java Virtual Machine.
 
 1. The Java Programming Language
+1. The Java Language Specification
 1. The Java Standard Library
 1. The Java Virtual Machine (JVM)
+1. The Java Virtual Machine Specification
 1. The Java Development Kit (JDK)
 1. The Java Runtime Environment (JRE) sometimes also referred to as Platform
 1. The Java Standard Edition (JSE)
@@ -61,6 +63,19 @@ The source code is compiled into Bytecode.  Bytecode is a form of instruction se
 **The Bytecode is machine independent and it does not matter on which OS the Bytecode is generated**.  The source code can be compiled into Bytecode on a Windows machine and then used on a Mac or vice versa.  The JIT takes the Bytecode and then convert this into machine dependent code.
 
 It is important to note that to develop and compile Java source code you need to have a JDK installed.  To run a Java application (including all programming languages that run on the JVM) you need to have the JRE installed.  Note that a JDK also includes the JRE and no need to install a separate JRE when you have a JDK installed.
+
+## Java Language Specification
+
+The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the specification.  
+
+The specifications also define what type of comments are supported by the Java programming language.
+
+1. /* comment */
+1. // comment
+
+These are defined in [section 3.7 of the specification](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.7).
+
+These specifications are not always easy to read and not meant as a beginner's tutorial.
 
 ### Recommended Reading
 
@@ -813,6 +828,8 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
 ### Make use of third-party libraries
 
+It is not recommended to reinvent the wheel and in many cases a library already exists which does exactly what you need.
+
 1. Import the third-party library (dependency)
 
     The application also contains the Guava dependency.
@@ -823,11 +840,11 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     }
     ```
 
-    Classes that are part of this library (referred to as dependency as our project depends on this library).
+    Classes that are part of this library (referred to as dependency as our project depends on this library) can now be used by our program.
 
 1. Use the third-party library
 
-    One of the most popular classes with the Guava library is the `Preconditions` class.  This class contains useful methods that can be used to check parameters to make sure that these adhere to the contract.  For example a function may only accept positive numbers.  The  `Preconditions` class has methods to validate such parameters.
+    One of the most popular classes with the Guava library is the [`Preconditions` class](https://github.com/google/guava/wiki/PreconditionsExplained).  This class contains useful methods that can be used to check parameters to make sure that these adhere to the method contract.  For example, a function may only accept positive numbers.  The `Preconditions` class has methods to validate such parameters.
 
     ```java
     package demo;
@@ -846,6 +863,8 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     }
     ```
 
+    The above is a naïve example use of the `Preconditions` class.
+
 1. Build the project
 
     ```bash
@@ -858,7 +877,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     $ java -jar build/libs/demo.jar
     ```
 
-    Note that this time the application will not run
+    Note that this time the application will not run and will produce a `NoClassDefFoundError` error as shown next.
 
     ```bash
     Exception in thread "main" java.lang.NoClassDefFoundError: com/google/common/base/Preconditions
@@ -870,11 +889,11 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
         ... 1 more
     ```
 
-Our program is making use of a class that is not part of the Java standard library.  Also, this class in not part of our code.  Java has no way to locate this class and use it in our program.
+Our program is making use of a class that is not part of the Java standard library and it is not part of our code.  Java has no way to locate this class and use it in our program.  Not that our JAR file only contains two files.  The `Preconditions` class is not part of our JAR file.
 
 #### The Classpath
 
-Java searches for classes that are on the classpath.  When using the `jar` option, all classes within that JAR file are automatically included as part of the class path.
+Java searches for classes that are on the [classpath](https://docs.oracle.com/javase/8/docs/technotes/tools/findingclasses.html).  When using the `-jar` option, all classes within that JAR file are automatically included as part of the classpath.
 
 Instead of using the `-jar` option, we can use the `-cp` to set the claspath, similar to what is shown below
 
@@ -882,13 +901,15 @@ Instead of using the `-jar` option, we can use the `-cp` to set the claspath, si
 $ java -cp path/to/lib-a.jar:path/to/lib-b.jar path.to.mainclass
 ```
 
-One or more JAR files can be included in a class path.  We need to include two JAR files for our applicaiton to run.
+One or more JAR files can be included in a classpath separated by a colon (`:`) on a Mac or semicolon (`;`) on a Windows OS.  We need to include two JAR files for our application to run.
 
 1. Our application JAR file, found at
 
     ```bash
     ./build/libs/demo.jar
     ```
+
+    The above JAR is built and produced by Gradle
 
 1. The Guava JAR file.
 
@@ -898,11 +919,13 @@ One or more JAR files can be included in a class path.  We need to include two J
     /Users/albertattard/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/28.2-jre/8ec9ed76528425762174f0011ce8f74ad845b756/guava-28.2-jre.jar
     ```
 
-    You can locate the Guava library used by our applicaiton using the following command
+    You can locate the Guava library, used by our application, using the following command
 
     ```bash
     $ find -L ~/.gradle/caches -name "guava-28.2-jre.jar"
     ```
+
+    Note that if you have not yet built the application Gradle may have not yet downloaded the Guava library into the local cache.
 
 1. Run the application using the `-cp` option
 
@@ -918,7 +941,11 @@ One or more JAR files can be included in a class path.  We need to include two J
     Hello world.
     ```
 
-This is quite inconvenient as together with our application we need to also include the libraries this application needs.  Also, running the application is not as simple as when e used the `-jar` option.  A better way is to make use of a fat JAR, discussed next.
+This is quite inconvenient as together with our application we need to also include the libraries this application needs.  In this case, we only needed one library, but a typical program makes use many libraries.  Together with the libraries our program uses, we also need to include the transitive libraries (libraries used by the libraries we are using and so on and so forth).
+
+This can be a nightmare for large project as Java will only fail at runtime, when that particular library is required.  A missing library can go unnoticed for some time, until the functionality that requires it is executed at runtime.
+
+Running the application is not as simple as before, when we used the `-jar` option.  A better way is to make use of a fat JAR where all classes are packaged in one fat JAR.
 
 ### Make a fat JAR
 
@@ -963,7 +990,7 @@ There are several ways how to create a fat JAR
       inflating: temp/com/google/j2objc/annotations/WeakOuter.class
     ```
 
-    The JAR file now contains runtime dependencies.
+    The JAR file now contains runtime dependencies (dependencies with scope `implementation`).  Note that no JUnit related classes are included as this dependency has a test scope (`testImplementation`).
 
 1. Create custom task
 
@@ -984,7 +1011,7 @@ There are several ways how to create a fat JAR
     }
     ```
 
-    List the available gradle tasks (some tasks may bot be visible but still be available).
+    List the available Gradle tasks (some tasks may not be visible but still be available).
 
     ```bash
     $ ./gradlew tasks
@@ -1012,7 +1039,7 @@ There are several ways how to create a fat JAR
     $ ./gradlew fatJar
     ```
 
-    The JAR file: `build/libs/fat-jar.jar` will be created containing the application together with it's runtime dependencies.
+    The JAR file: `build/libs/fat-jar.jar` will be created containing the application together with its runtime dependencies.
 
     Run the application.
 
@@ -1021,9 +1048,11 @@ There are several ways how to create a fat JAR
     Hello world.
     ```
 
-   For more information about tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
+   For more information about Gradle tasks, please refer to the [tasks user guide](https://docs.gradle.org/current/userguide/tutorial_using_tasks.html).
 
 1. Use a plugin
+
+    **This is the preferred approach as we are reusing an existing Gradle plugin rather than adding a new Gradle task ourselves**.
 
     The [shadowJar](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow) plugin is a very popular plugin.
 
@@ -1090,6 +1119,8 @@ There are several ways how to create a fat JAR
     Hello world.
     ```
 
+Irrespective from which approach we use, running the application as a fat JAR is simpler than running the application using the `-cp` option.  It also makes it simpler to distribute as all we need to share is one JAR file.
+
 ## Docker
 
 ### What is Docker?
@@ -1101,31 +1132,32 @@ Another team builds another application, this time using [NodeJS 12](https://nod
 This raises the following questions
 
 1. Who will be managing this?
-1. Who will make sure that the correct version of libraries/frameworks are installed?
+1. Who will make sure that the correct version of libraries/frameworks platforms are installed?
+1. How can we manage multiple version of libraries/frameworks/platforms running at the same time?
 1. How can we ensure that the application works as expected on the production environment?
 1. How will we save the configuration such that we can scale it to hundreds or thousands of servers?
 
-Gradle helps us building and packaging all application dependencies into one fat JAR, but it falls short in setting up the operating system.  That's outside its scope.
+Gradle helps us building and packaging all application's dependencies into one fat JAR, but it falls short in setting up the operating system.  That's outside its scope.
 
 [Docker](https://docs.docker.com/) is a tool that we can use to bridge this gap and have an environment ready for our application to run on.
 
 ### How does this work?
 
-In a nutshell, an application is packaged into a [Docker Image](https://docs.docker.com/get-started/overview/#docker-objects).  For example, if OpenJDK 14 is needed to run the application, we set up Docker to have OpenJDK 14 installed.
+In a nutshell, an application is packaged into a [Docker Image](https://docs.docker.com/get-started/overview/#docker-objects).  For example, if OpenJDK 14 is needed to run the application, we set up Docker image to have OpenJDK 14 installed.  If another application requires Oracle JRE 8, we setup a separate Docker image for the second application.
 
-Similar to Java JAR files, docker creates images, which are the unit of work for docker.  Similar to Java, an image can be started using a command similar to the following.
+Similar to Java JAR files, docker creates images, which are the unit of work for docker.  A docker image can be started using a command similar to the following.
 
 ```bash
 $ docker run my-app
 ```
 
-Docker takes the image named `my-app` and runs it as a docker container.  Docker also starts our application and kick off any initialisation tasks if needed.
+Docker takes the image named `my-app` and runs it as a docker container.  **Note that here we switched from docker image to docker container**.
 
 **An instance of a docker image is called a docker container**.
 
 A docker container is a running version of the docker image.  If the application produces logs files, these logs files will be in the docker container (not in the docker image).
 
-A docker container can start and stop like any OS and it will preserve state.  With that said, **do not rely on the container state in production**.
+A docker container can start and stop like any OS.  The state of a docker container may or may not be preserved between different runs.  With that said, **do not rely on the container state in production**.  [Docker Volumes](https://docs.docker.com/storage/volumes/) can be used to address this issue, but this goes way beyond the scope of this literature.
 
 ### More than just Containers
 
@@ -1172,14 +1204,13 @@ Docker provides more than just the correct configuration.
 
     ![Docker Desktop](assets/images/Docker%20Desktop%20Tray%20Icon.png)
 
-
 ### Working with Docker
 
 1. A docker hub account is required.  [Create an account](https://hub.docker.com/signup/) if you do not have one yet.
 
 1. Work with an existing docker image (created by someone else)
 
-    This [docker image `bash:5.0.17`](https://hub.docker.com/_/bash) is a basic linux OS that has bash support.
+    This [docker image `bash:5.0.17`](https://hub.docker.com/_/bash) is a basic Linux OS that has `bash` support.
 
     ```bash
     $ docker pull bash:5.0.17
@@ -1187,7 +1218,7 @@ Docker provides more than just the correct configuration.
 
     Alternative, we can run the image immediately using `run` instead of `pull`.
 
-    You need to be logged in, otherwise you will get an error similar ot the following.
+    You need to be logged in, otherwise you will get an error similar to the following.
 
     ```bash
     Error response from daemon: Get https://registry-1.docker.io/v2/library/bash/manifests/5.0.17: unauthorized: incorrect username or password
@@ -1212,7 +1243,7 @@ Docker provides more than just the correct configuration.
     bash-5.0#
     ```
 
-    The [`-i` option](https://docs.docker.com/engine/reference/run/#foreground) indicates that we need to interact with the docker container.  Without it we will not be able to interact with the docker container.  This is very useful while debugging.
+    The [`-i` option](https://docs.docker.com/engine/reference/run/#foreground) indicates that we need to interact with the docker container.  Without it, we will not be able to interact with the docker container.  This is very useful while debugging.
 
 1. Open another terminal and run
 
@@ -1227,7 +1258,7 @@ Docker provides more than just the correct configuration.
     110810b3d472        bash:5.0.17         "docker-entrypoint.s…"   53 minutes ago      Up 53 minutes                           brave_payne
     ```
 
-    Some of the information, such as the `CONTAINER ID` and the `NAMES`, will be different.
+    Some of the information, such as the `CONTAINER ID` and the `NAMES`, will be different.  Note that rerunning the image will create a new container which will have different and independent state from any other containers, even containers for the same image.
 
 1. Try out some commands
 
@@ -1291,7 +1322,9 @@ Docker provides more than just the correct configuration.
 
 1. Add [curl](https://curl.haxx.se/)
 
-    `curl` is not available on the image we are using.  We can use a different image that already contains it, or install it ourselves.
+    `curl` is not available on the image we are using.  We can use a different image that already contains `curl`, or install it ourselves.
+
+    **⚠️ Note that we are working inside a container and all changes we make to this container will be lost once this container is stopped.**
 
     ```bash
     bash-5.0# curl http://www.google.com
@@ -1347,7 +1380,7 @@ Docker provides more than just the correct configuration.
 
 1. How can we run a Java application within a container?
 
-    The `bash:5.0.17`  image does not include Java.
+    The `bash:5.0.17` image does not include Java.
 
     ```bash
     $ docker run -it bash:5.0.17
@@ -1367,7 +1400,7 @@ Docker provides more than just the correct configuration.
     $ docker run -it adoptopenjdk/openjdk14:jre-14.0.1_7-alpine /bin/sh
     ```
 
-    The above is instructing docker to open a shell terminal.  Note that the image `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` does not have `bash` installed.  We can use the `sh` instead.  That is why we are running the `/bin/sh` command instead.
+    The above is instructing docker to open a shell terminal.  Note that the image `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` does not have `bash` installed.  We can use the `sh` instead.  That is why we are running the `/bin/sh` command instead of `/bin/bash`.
 
     Check the Java version installed
 
@@ -1378,7 +1411,7 @@ Docker provides more than just the correct configuration.
     OpenJDK 64-Bit Server VM AdoptOpenJDK (build 14.0.1+7, mixed mode, sharing)
     ```
 
-    This docker image comes with Java 14 already setup.
+    This docker image comes with Java 14 already setup.  A more important observation is that given that we are using a specific version of the image, we will always have the same version of Java installed.
 
     How do we get our application in the docker container?  The application needs to be dockerize, [described in the Dockerize the Application section](#dockerize-the-application).
 
@@ -1386,7 +1419,7 @@ Docker provides more than just the correct configuration.
 
 1. The `Dockerfile` text file
 
-    Docker will use this text file to create our image.  The `Dockerfile` file is part of the source code and can be used by the build pipeline to build our docker images and deploy them into production environments.
+    Docker will use a text file named `Dockerfile` to create our image.  The `Dockerfile` file is part of the source code and can be used by the build pipeline to build our docker images and deploy them into production environments.
 
     **Steps**:
 
@@ -1398,9 +1431,9 @@ Docker provides more than just the correct configuration.
 
 1. Extend an existing docker image
 
-    We can create a docker image from scratch, but this will require lots of effort as we need to install the OS files, the packages we need and install Java.  Alternatively, we can use an existing image from the docker repository.
+    We can create a docker image from scratch, but this will require lots of effort as we need to install the OS files, the packages we need (such as `curl` for example) and install the correct version of Java.  Alternatively, we can use an existing image from the docker repository that does this for us.
 
-    **⚠️ Note that many companies, have internal docker repositories and only allow images coming from these repositories**.
+    **⚠️ Note that many companies, have internal docker repositories and only allow images coming from these repositories for security purposes**.  Such docker repositories scan the images and make sure that these docker images are secure and do not contain any funny business.
 
     ```dockerfile
     FROM adoptopenjdk/openjdk14:jre-14.0.1_7-alpine
@@ -1408,7 +1441,7 @@ Docker provides more than just the correct configuration.
 
     The above docker file is extending one of the [adoptopenjdk](https://hub.docker.com/r/adoptopenjdk/openjdk14) images as defined by the [`FROM` instruction](https://docs.docker.com/engine/reference/builder/#from).
 
-    Fragments of the image [adoptopenjdk/openjdk14:jre-14.0.1_7-alpine](https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/14/jre/alpine/Dockerfile.hotspot.releases.full) are shown next.
+    Fragments of the docker image [adoptopenjdk/openjdk14:jre-14.0.1_7-alpine](https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/14/jre/alpine/Dockerfile.hotspot.releases.full) are shown next.
 
     ```dockerfile
     FROM alpine:3.11
@@ -1427,9 +1460,9 @@ Docker provides more than just the correct configuration.
         PATH="/opt/java/openjdk/bin:$PATH"
     ```
 
-    Please note that the above is incomplete for brevity.
+    Please note that the above is incomplete for brevity and the full example can be found [here]( https://github.com/AdoptOpenJDK/openjdk-docker/blob/master/14/jre/alpine/Dockerfile.hotspot.releases.full).
 
-    The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` installs the [Adopt OpenJDK 14](https://adoptopenjdk.net/releases.html) and set the environemnt.  The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` docker image is build on top of another image, the [alpine:3.11](https://github.com/alpinelinux/docker-alpine/blob/c5510d5b1d2546d133f7b0938690c3c1e2cd9549/x86_64/Dockerfile).
+    The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` installs the [Adopt OpenJDK 14](https://adoptopenjdk.net/releases.html) and set the environment.  The `adoptopenjdk/openjdk14:jre-14.0.1_7-alpine` docker image is built on top of another image, the [alpine:3.11](https://github.com/alpinelinux/docker-alpine/blob/c5510d5b1d2546d133f7b0938690c3c1e2cd9549/x86_64/Dockerfile), shown next.
 
     ```dockerfile
     FROM scratch
@@ -1437,9 +1470,9 @@ Docker provides more than just the correct configuration.
     CMD ["/bin/sh"]
     ```
 
-    The `alpine:3.11` does not depend on anything (`FROM scratch`) and creates a basic and small Linux OS.
+    The `alpine:3.11` does not depend on anything (as indicated by the [`FROM scratch` instruction]( https://docs.docker.com/develop/develop-images/baseimages/)) and is referred to as base image.
 
-    If we want to create a docker image from scratch we need to merge both docker images and the files they are referring to.
+    If we want to create a docker image from scratch, we need to merge both docker images, and the files they are referring to, into our docker file.  Note that this is necessary in our case, and will simply extend an existing image.
 
     **Steps**:
 
@@ -1489,9 +1522,15 @@ Docker provides more than just the correct configuration.
     WORKDIR /opt/app
     ```
 
-    The [`WORKDIR` instruction](https://docs.docker.com/engine/reference/builder/#workdir) is the directory where our application will be running from.
+    The [`WORKDIR` instruction](https://docs.docker.com/engine/reference/builder/#workdir) defines directory where our application will be running from.
 
-    The working directory of our image was `/` (the root folder).  Now we changed it to be `/opt/app`.  The directory does not need to exists and will be created automatically.
+    Why do we need to change the working directory?
+
+        1. Putting our application in a specific directory helps us organise our application better.  In some cases, we have more than one single file.  For example, a web application may contain several files and other web assets.  Having such application in the root directory is a bit messy.  Furthermore, the application itself may expose some files found on the OS and return these to the caller.  We do not want to return a sensitive file by mistake, just because we deployed our application in the root folder.
+
+        1. Putting our application in a specific directory allows us to limit the access rights for the users that will be used to run our application to just this directory.  This will prevent an attacker, accessing anywhere else in the docker container by simply taking advantage of a vulnerability within our application.
+
+    The working directory of our docker image was `/` (the root folder).  We will change this it to be `/opt/app`.  The directory does not need to exist and will be created automatically.
 
     **Steps**:
 
@@ -1515,6 +1554,8 @@ Docker provides more than just the correct configuration.
         Successfully tagged demo:local
         ```
 
+    Note that now we have two steps, one for every line in the `Dockerfile`
+
     1. Run the image and print the current working directory
 
         ```bash
@@ -1528,10 +1569,10 @@ Docker provides more than just the correct configuration.
     We need to copy our JAR file from the local filesystem to the docker image using the [`COPY` instruction](https://docs.docker.com/engine/reference/builder/#copy).
 
     ```dockerfile
-    COPY ./build/libs/demo.jar ./application.jar
+    COPY ./build/libs/demo-all.jar ./application.jar
     ```
 
-    When docker builds the image, it will copy the file `./build/libs/demo.jar` to the docker image being created.
+    When docker builds the image, it will copy the file `./build/libs/demo-all.jar` to the docker image being created.  Here we are also renaming the JAR file to `application.jar`.
 
     **Steps**:
 
@@ -1577,7 +1618,11 @@ Docker provides more than just the correct configuration.
         Successfully tagged demo:local
         ```
 
+        Note that now we have three steps, one for every instruction we have in the `Dockefile`.
+
     1. Manually run the application
+
+        Run the newly built docker image and list the files in the current directory.
 
         ```bash
         $ docker run -it demo:local /bin/sh
@@ -1587,6 +1632,8 @@ Docker provides more than just the correct configuration.
         -rw-r--r-- application.jar
         ```
 
+        Run the application using the same `java -jar` command passing `application.jar` as the JAR file
+
         ```bash
         # java -jar application.jar
         Hello world.
@@ -1594,7 +1641,7 @@ Docker provides more than just the correct configuration.
 
     Note that our application was copied into docker, but we have to manually start it.
 
-1. Make the application to run on startup
+1. Make the application to run on start-up
 
     ```dockerfile
     CMD ["java", "-jar", "application.jar"]
@@ -1631,6 +1678,8 @@ Docker provides more than just the correct configuration.
         Successfully tagged demo:local
         ```
 
+        Note that now we have four steps, one for every instruction we have in the `Dockefile`.
+
     1. Run the docker image
 
         ```bash
@@ -1638,7 +1687,7 @@ Docker provides more than just the correct configuration.
         Hello world.
         ```
 
-        Note that we are not using the `-i` flag anymore.  Docker know what needs to be done and we do not need to interact with it unless we need to debug something.  This is how docker will actually run our container.,
+        Note that we are not using the `-i` flag anymore.  Docker knows what needs to be done and we do not need to interact with it unless we need to debug something.  This is how docker will actually run our container.
 
 The complete `Dockerfile` is shown next
 
@@ -1652,6 +1701,10 @@ CMD ["java", "-jar", "application.jar"]
 ### Multi-Stage Docker Build
 
 The docker file depends on the JAR file to be generated before it runs.  Docker can be used to first build the executable JAR and then creates the image.
+
+For docker to be able to build the application it now needs the source code and any other artefacts required to run `./gradlew build`.  We can copy all files, but that's considered as bad practice as ideally docker build a clean image and should not reuse anything else but the source files from our local filesystem.  **Docker should be able to build the image by simply checking out the source from the repository and the execute `docker build`**.
+
+We have two options to selectively copy the files required by the `./gradlew build` to successfully run.
 
 1. Create [.dockerignore](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file
 
@@ -1685,13 +1738,19 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     COPY ./src ./src
     ```
 
+    I personally prefer this option as I intentionally include the file and folders I need to copy.  If the IDE generates new files, these are not automatically copied as I forgot to include them to the `.dockerignore`. 
+
 1. Clean the project
 
     ```bash
     $ ./gradlew clean
     ```
 
+    This is not required, but I prefer to remove any artefacts from the local filesystem to iron out any chances that built artefacts are copied by mistake.
+
 1. Update the `dockerfile` making it a multi-stage docker file
+
+    Example using `.dockerignore`
 
     ```dockerfile
     FROM adoptopenjdk/openjdk14:jdk-14.0.1_7-alpine-slim AS builder
@@ -1705,7 +1764,7 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     CMD ["java", "-jar", "application.jar"]
     ```
 
-    Alternatively, copy individual files and folders.
+    Alternatively, copy individual files and folders (preferred option).
 
     ```dockerfile
     FROM adoptopenjdk/openjdk14:jdk-14.0.1_7-alpine-slim AS builder
@@ -1723,7 +1782,11 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     CMD ["java", "-jar", "application.jar"]
     ```
 
-    This time docker will build the JAR and then package it.  Unfortunately it does not take advantage of any caching and makes it a bit slower.  **While this is slow for development purposes, it ensures that the build is not relying on caches.**
+    The [`RUN` instruction](https://docs.docker.com/engine/reference/builder/#run) can be used to run command, such as install packages that we need (like `curl`) or build the project as we did here.
+
+    We do not need to include the `clean` Gradle task here as we only copied the sources without any built artefacts.  Therefore, there is nothing to clean as the `build` directory was not copied.
+
+    This time docker will build the JAR and then package it.  Unfortunately, it does not take advantage of any caching and makes it a bit slower.  **While this is slow for development purposes, it ensures that the build is not relying on caches.**
 
 1. Run the docker image
 
@@ -1732,7 +1795,9 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     Hello world.
     ```
 
-For more details, please refer to: [https://docs.docker.com/develop/develop-images/multistage-build/](https://docs.docker.com/develop/develop-images/multistage-build/)
+For more details, please refer to: [https://docs.docker.com/develop/develop-images/multistage-build/](https://docs.docker.com/develop/develop-images/multistage-build/).
+
+Multi-stage docker images are not very common as this feature is not supported by some providers.  Furthermore, the functionality provided by the Multi-stage docker built is also provided by the Pipeline tools such as [Jenkins](https://www.jenkins.io/) and [GoCD](https://www.gocd.org/) and developers/dev-ops prefer to use this as they tend to provide more than just build the project.
 
 ## Managing Docker Containers
 
@@ -1754,10 +1819,10 @@ Consider the following:
 1. How will we monitor our application?
 1. How can we access the logs of our application?
 
-There are many more things to consider when running an application irrespective from docker.  Docker enables developers to take advantage of tools that can help us with the above concerns.  Following are **some** tools and services we can use to manage our docker containers.
+There are many more things to consider when running an application irrespective from docker.  Docker enables developers to take advantage of tools that can help us with the above concerns and more as discussed before (such as security).  Following are **some** (not complete) tools and services we can use to manage our docker containers in a production environment.
 
 1. [AWS](https://aws.amazon.com/)
-1. [Google Compute](https://cloud.google.com/)
+1. [Google Cloud](https://cloud.google.com/)
 1. [Microsoft Azure](https://azure.microsoft.com/)
 1. [Digital Ocean](https://www.digitalocean.com/)
 1. [Kubernetes](https://kubernetes.io/)
@@ -1775,14 +1840,3 @@ Some of the above services are able work with JAR files directly and we do not n
  ([O'Reilly Video Series](https://learning.oreilly.com/videos/docker-dockerfile-and/9781800206847))
 1. Kubernetes in Action ([O'Reilly Books](https://learning.oreilly.com/library/view/kubernetes-in-action/9781617293726/))
 1. Kubernetes: Up and Running, 2nd Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/kubernetes-up-and/9781492046523/))
-
-## Java Language Specification
-
-The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.
-
-For examples, Java supports the following comments styles
-
-1. /* comment */
-1. // comment
-
-These are defined in [section 3.7 of the specification](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.7).
