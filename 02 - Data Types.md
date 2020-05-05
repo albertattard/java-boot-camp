@@ -350,10 +350,16 @@ int i     10
 
 ## Enumerations
 
+Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_paper_scissors).
+
+![Rock Paper Scissors](https://en.wikipedia.org/wiki/Rock_paper_scissors#/media/File:Rock-paper-scissors.svg)
+
+Example
+
 ```java
 package demo;
 
-public class PaperScissorsRock {
+public class RockPaperScissors {
 
   public static final int PAPER = 1;
   public static final int SCISSORS = 2;
@@ -377,6 +383,8 @@ public class PaperScissorsRock {
 }
 ```
 
+The above example uses `int` as constants to identify what is what.  This was a common practice in the past.
+
 ```java
 package demo;
 
@@ -384,16 +392,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static demo.PaperScissorsRock.DRAW;
-import static demo.PaperScissorsRock.PAPER;
-import static demo.PaperScissorsRock.ROCK;
-import static demo.PaperScissorsRock.SCISSORS;
-import static demo.PaperScissorsRock.WIN_PLAYER_1;
-import static demo.PaperScissorsRock.WIN_PLAYER_2;
-import static demo.PaperScissorsRock.determineOutcome;
+import static demo.RockPaperScissors.DRAW;
+import static demo.RockPaperScissors.PAPER;
+import static demo.RockPaperScissors.ROCK;
+import static demo.RockPaperScissors.SCISSORS;
+import static demo.RockPaperScissors.WIN_PLAYER_1;
+import static demo.RockPaperScissors.WIN_PLAYER_2;
+import static demo.RockPaperScissors.determineOutcome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PaperScissorsRockTest {
+public class RockPaperScissorsTest {
 
   @ValueSource( ints = { PAPER, SCISSORS, ROCK } )
   @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
@@ -415,87 +423,190 @@ public class PaperScissorsRockTest {
 }
 ```
 
-Refactor Outcome
+Java 5 introduced Enums which simplifies the above problem.
 
-```java
-import static demo.PaperScissorsRock.DRAW;
-import static demo.PaperScissorsRock.WIN_PLAYER_1;
-import static demo.PaperScissorsRock.WIN_PLAYER_2;
-```
+1. **Refactor Outcome**
 
-```java
-import static demo.PaperScissorsRock.Outcome.DRAW;
-import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_1;
-import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_2;
-```
+    Replace the imports in the `RockPaperScissorsTest` class
 
-```java
-package demo;
+    ```java
+    import static demo.RockPaperScissors.DRAW;
+    import static demo.RockPaperScissors.WIN_PLAYER_1;
+    import static demo.RockPaperScissors.WIN_PLAYER_2;
+    ```
 
-public class PaperScissorsRock {
+    with
 
-  public enum Outcome {
-    DRAW,
-    WIN_PLAYER_1,
-    WIN_PLAYER_2;
-  }
+    ```java
+    import static demo.RockPaperScissors.Outcome.DRAW;
+    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_1;
+    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_2;
+    ```
 
-  public enum Hand {
-    PAPER,
-    SCISSORS,
-    ROCK;
-  }
+    The above will not compile until we use the enum.
 
-  public static Outcome determineOutcome( Hand player1, Hand player2 ) {
-    if ( player1 == player2 ) {
-      return Outcome.DRAW;
+    Replace the outcome constants with an enum
+
+    ```java
+    package demo;
+
+    public class RockPaperScissors {
+
+      public enum Outcome {
+        DRAW,
+        WIN_PLAYER_1,
+        WIN_PLAYER_2;
+      }
+
+      public enum Hand {
+        PAPER,
+        SCISSORS,
+        ROCK;
+      }
+
+      public static Outcome determineOutcome( Hand player1, Hand player2 ) {
+        if ( player1 == player2 ) {
+          return Outcome.DRAW;
+        }
+
+        return switch ( player1 ) {
+          case PAPER -> player2 == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case SCISSORS -> player2 == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case ROCK -> player2 == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        };
+      }
     }
+    ```
 
-    return switch ( player1 ) {
-      case PAPER -> player2 == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-      case SCISSORS -> player2 == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-      case ROCK -> player2 == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-    };
-  }
-}
-```
+1. **Refactor Hand**
 
-```java
-package demo;
+    Use the `@EnumSource( Hand.class )` to test against all instances of the `Hand` enum
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.EnumSource;
+    ```java
+      @EnumSource( Hand.class )
+      @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+      void shouldReturnDraw( RockPaperScissors.Hand hand ) {
+        assertEquals( DRAW, determineOutcome( hand, hand ) );
+      }
+    ```
 
-import static demo.PaperScissorsRock.Hand;
-import static demo.PaperScissorsRock.Outcome.DRAW;
-import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_1;
-import static demo.PaperScissorsRock.Outcome.WIN_PLAYER_2;
-import static demo.PaperScissorsRock.determineOutcome;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+    Use the enum name as input to the `@CsvSource`
 
-public class PaperScissorsRockTest {
+    ```java
+      @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
+      @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+      void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
+        assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
+      }
+    ```
 
-  @EnumSource( Hand.class )
-  @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
-  void shouldReturnDraw( PaperScissorsRock.Hand hand ) {
-    assertEquals( DRAW, determineOutcome( hand, hand ) );
-  }
+    Complete example
 
-  @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
-  @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
-  void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
-    assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
-  }
+    ```java
+    package demo;
 
-  @CsvSource( { "ROCK,PAPER", "PAPER,SCISSORS", "SCISSORS,ROCK" } )
-  @ParameterizedTest( name = "should return WIN_PLAYER_2 (2) when player1 plays {0} and player 2 plays {1}" )
-  void shouldReturnWinPlayer2( Hand player1, Hand player2 ) {
-    assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
-  }
-}
-```
+    import org.junit.jupiter.params.ParameterizedTest;
+    import org.junit.jupiter.params.provider.CsvSource;
+    import org.junit.jupiter.params.provider.EnumSource;
 
+    import static demo.RockPaperScissors.Hand;
+    import static demo.RockPaperScissors.Outcome.DRAW;
+    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_1;
+    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_2;
+    import static demo.RockPaperScissors.determineOutcome;
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+
+    public class RockPaperScissorsTest {
+
+      @EnumSource( Hand.class )
+      @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+      void shouldReturnDraw( RockPaperScissors.Hand hand ) {
+        assertEquals( DRAW, determineOutcome( hand, hand ) );
+      }
+
+      @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
+      @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+      void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
+        assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
+      }
+
+      @CsvSource( { "ROCK,PAPER", "PAPER,SCISSORS", "SCISSORS,ROCK" } )
+      @ParameterizedTest( name = "should return WIN_PLAYER_2 (2) when player1 plays {0} and player 2 plays {1}" )
+      void shouldReturnWinPlayer2( Hand player1, Hand player2 ) {
+        assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
+      }
+    }
+    ```
+
+    Replace the hand `int` constants with the `Hand` enum
+
+    ```java
+    package demo;
+
+    public class PaperScissorsRock {
+
+      public enum Outcome {
+        DRAW,
+        WIN_PLAYER_1,
+        WIN_PLAYER_2;
+      }
+
+      public enum Hand {
+        PAPER,
+        SCISSORS,
+        ROCK;
+      }
+
+      public static Outcome determineOutcome( final Hand player1, final Hand player2 ) {
+        if ( player1 == other ) {
+          return Outcome.DRAW;
+        }
+
+        return switch ( player1 ) {
+          case PAPER -> player2 == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case SCISSORS -> player2 == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case ROCK -> player2 == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        };
+      }
+    }
+    ```
+
+1. **Enums in Java can have methods**
+
+    ```java
+    package demo;
+
+    public class RockPaperScissors {
+
+      public enum Outcome {
+        DRAW,
+        WIN_PLAYER_1,
+        WIN_PLAYER_2;
+      }
+
+      public enum Hand {
+        PAPER,
+        SCISSORS,
+        ROCK;
+
+        public Outcome determineOutcome( final Hand other ) {
+          if ( this == other ) {
+            return Outcome.DRAW;
+          }
+
+          return switch ( this ) {
+            case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+            case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+            case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          };
+        }
+      }
+
+      public static Outcome determineOutcome( final Hand player1, final Hand player2 ) {
+        return player1.determineOutcome( player2 );
+      }
+    }
+    ```
 
 ## Imports and Packages
 
