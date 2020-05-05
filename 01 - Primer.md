@@ -1647,7 +1647,7 @@ Docker provides more than just the correct configuration.
     CMD ["java", "-jar", "application.jar"]
     ```
 
-    The [`CMD` instruction](https://docs.docker.com/engine/reference/builder/#run) instructs docker container to run the given command when the container starts.
+    The [`CMD` instruction](https://docs.docker.com/engine/reference/builder/#cmd) instructs docker container to run the given command when the container starts.
 
     **Steps**:
 
