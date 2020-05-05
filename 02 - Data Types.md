@@ -352,7 +352,7 @@ int i     10
 
 Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_paper_scissors).
 
-![Rock Paper Scissors](https://en.wikipedia.org/wiki/Rock_paper_scissors#/media/File:Rock-paper-scissors.svg)
+**⚠️ MAKE REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
 
 Example
 
