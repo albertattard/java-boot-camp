@@ -13,10 +13,12 @@
 1. [Create a project using Gradle](#create-a-project-using-gradle)
     1. [Create Project](#create-project)
     1. [Explore Project](#explore-project)
-1. [Hello World Application (packaged as an executable application)](#hello-world-application-packaged-as-an-executable-application)
+1. [Hello World Application (from source to executable application)](#hello-world-application-from-source-to-executable-application)
     1. [Gradle Task Dependency Tree](#gradle-task-dependency-tree)
     1. [Project Dependencies](#project-dependencies)
     1. [Package Project](#package-project)
+    1. [Make use of third-party libraries](#make-use-of-third-party-libraries)
+        1. [The Classpath](#the-classpath)
     1. [Make a fat JAR](#make-a-fat-jar)
 1. [Docker](#docker)
     1. [What is Docker?](#what-is-docker)
@@ -33,13 +35,14 @@
 
 ### What is Java?
 
-Java is a general purpose programming language and computing platform first released by Sun Microsystems in 1995.
+Java is a general-purpose programming language and computing platform first released by Sun Microsystems in 1995.
 
-Java is fast, secure, and reliable. From laptops to datacenters, game consoles to scientific supercomputers, cell phones to the Internet, Java is everywhere!
+Java is fast, secure, and reliable.  From smartcards to datacentres, game consoles to scientific supercomputers, cell phones to the Internet, Java is everywhere!
 
-Java is an overloaded term.  Some times the term Java is used to refer to the programming language while other times it is used to refer to the Java Virtual Machine.
+Java is an overloaded term.  Sometimes the term Java is used to refer to the programming language while other times it is used to refer to the Java Virtual Machine.
 
 1. The Java Programming Language
+1. The Java Standard Library
 1. The Java Virtual Machine (JVM)
 1. The Java Development Kit (JDK)
 1. The Java Runtime Environment (JRE) sometimes also referred to as Platform
@@ -53,11 +56,11 @@ An application running on the Java platform starts from source code written in o
 
 ![Java from Development to Runtime](assets/images/Java%20from%20Development%20to%20Runtime.png)
 
-The source code is compiled into Bytecode.  Bytecode is a form of instruction set designed for efficient execution by the Java JIT compiler.  Each bytecode is composed of one byte that represents the `opcode`, along with zero or more bytes for operands.  Of the 256 possible byte-long `opcodes`, 202 are in use.
+The source code is compiled into Bytecode.  Bytecode is a form of instruction set designed for efficient execution by the Java JIT compiler.  Each Bytecode is composed of one byte that represents the [opcode](https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-7.html), along with zero or more bytes for operands.  Of the 256 possible byte-long `opcodes`, 202 are currently in use.
 
-**The bytecode is machine independent and it does not matter on which OS the bytecode is generated**.  The source code can be compiled on a Windows machine and then used on a Mac or vice versa.  The JIT takes the bytecode and then convert this into machine dependent code.
+**The Bytecode is machine independent and it does not matter on which OS the Bytecode is generated**.  The source code can be compiled into Bytecode on a Windows machine and then used on a Mac or vice versa.  The JIT takes the Bytecode and then convert this into machine dependent code.
 
-It is important to note that to develop and compile code you need to have a JDK installed.  To run a Java application (including all programming languages that run on the JVM) you need to have the JRE installed.  Note that a JDK also includes the JRE and no need to install a separate JRE when you have a JDK installed.
+It is important to note that to develop and compile Java source code you need to have a JDK installed.  To run a Java application (including all programming languages that run on the JVM) you need to have the JRE installed.  Note that a JDK also includes the JRE and no need to install a separate JRE when you have a JDK installed.
 
 ### Recommended Reading
 
@@ -69,6 +72,8 @@ It is important to note that to develop and compile code you need to have a JDK 
 1. Introduction to Java 8 ([O'Reilly Video Series](https://learning.oreilly.com/videos/introduction-to-java/9781491907795))
 
 ## Setup Environment (SDKMAN)
+
+SDKMAN is a command line tool that allows us to install different versions of Java, Gradle, Maven and more.  SDKMAN also takes care of setting environment variables for you. Installing SDKMAN.
 
 1. Install
 
@@ -166,7 +171,7 @@ It is important to note that to develop and compile code you need to have a JDK 
 
     Note that the aliases will need to be updated when different versions of Java are added or removed.
 
-    Two switch between versions just use `java11` and `java14`.
+    To switch between versions just use `java11` and `java14`.
 
     ```bash
     $ java14
@@ -205,7 +210,7 @@ For more details, please refer to: [https://sdkman.io/install](https://sdkman.io
 
 ## Gradle and Maven
 
-Gradle and Maven are build automation tool that are designed to be flexible enough to build almost any type of software, ranging from mobile application to web applications and command line applications.
+Gradle and Maven are *build automation tools* that are designed to be flexible enough to build almost any type of software, ranging from mobile application to web applications and command line applications.
 
 1. Gradle ([https://gradle.org/](https://gradle.org/))
 1. Maven ([http://maven.apache.org/](http://maven.apache.org/))
@@ -227,7 +232,7 @@ According to [Google Trends](https://trends.google.com/trends/explore?q=maven,gr
 
 1. **Better Dependency Management**
 
-   Maven allows one to override a dependency, but only by their version. Gradle provides customizable dependency selection and substitution rules that can be declared once and handle unwanted dependencies project-wide. This substitution mechanism enables Gradle to build multiple source projects together to create composite builds ([reference](https://gradle.org/maven-vs-gradle/)).
+   Maven allows one to override a dependency, but only by their version. Gradle provides customizable dependency selection and substitution rules that can be declared once and handle unwanted dependencies project-wide.  This substitution mechanism enables Gradle to build multiple source projects together to create composite builds ([reference](https://gradle.org/maven-vs-gradle/)).
 
 ### Install Gradle
 
@@ -279,7 +284,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Plugins
     1. [Nyan Progress Bar](https://plugins.jetbrains.com/plugin/8575-nyan-progress-bar)
-    1. [jclasslib Bytecode viewer](https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer)
+    1. [jclasslib Bytecode viewer](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer)
     1. [Lombok](https://plugins.jetbrains.com/plugin/6317-lombok)
     1. [Rainbow Brackets](https://plugins.jetbrains.com/plugin/10080-rainbow-brackets)
     1. [FindBugs-IDEA](https://plugins.jetbrains.com/plugin/3847-findbugs-idea)
@@ -322,6 +327,8 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
     **All command will be executed from within the `demo` directory unless otherwise stated.**
 
 1. Create the project
+
+    The following command is using the version of Gradle that is available at the OS level.
 
     ```bash
     $ gradle init
@@ -402,23 +409,23 @@ Demo
     ... content of the .gradle directory removed for brevity
     ├── build.gradle
     ├── gradle
-    │   └── wrapper
-    │       ├── gradle-wrapper.jar
-    │       └── gradle-wrapper.properties
+    │   └── wrapper
+    │       ├── gradle-wrapper.jar
+    │       └── gradle-wrapper.properties
     ├── gradlew
     ├── gradlew.bat
     ├── settings.gradle
     └── src
-        ├── main
-        │   ├── java
-        │   │   └── demo
-        │   │       └── App.java
-        │   └── resources
-        └── test
-            ├── java
-            │   └── demo
-            │       └── AppTest.java
-            └── resources
+        ├── main
+        │   ├── java
+        │   │   └── demo
+        │   │       └── App.java
+        │   └── resources
+        └── test
+            ├── java
+            │   └── demo
+            │       └── AppTest.java
+            └── resources
     ```
 
 1. [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
@@ -436,7 +443,7 @@ Demo
     drwxr-xr-x src
     ```
 
-    A gradle wrapper was included by the `gradle init` process as this is the preferred way to run gradle ([reference](https://docs.gradle.org/current/userguide/gradle_wrapper.html)).
+    A Gradle wrapper was included by the `gradle init` process as this is the preferred way to work ([reference](https://docs.gradle.org/current/userguide/gradle_wrapper.html)).  Other developers do not require Gradle to be installed when working with the Gradle Wrapper.  Build Pipelines, such as [Jenkins](https://www.jenkins.io/) and [GoCD](https://www.gocd.org/), do not need to have Gradle installed as they can use the Gradle wrapper included with the project.
 
     ```bash
     drwxr-xr-x gradle
@@ -444,7 +451,9 @@ Demo
     -rw-r--r-- gradlew.bat
     ```
 
-    Instead of using `gradle`, now we can use `./gradlew` (or `./gradlew.bat` on Windows).  **Using the wrapper, we do not require to have gradle installed**.
+    Instead of using `gradle`, now we can use `./gradlew` (or `./gradlew.bat` on Windows).  As mentioned before, **when using the wrapper, we do not require to have Gradle installed**.
+
+    **It is imperative to include the Gradle wrapper files and folder in the project repository**.
 
 1. Open the project in IDE
 
@@ -472,7 +481,7 @@ Demo
 
     The list of releases is found at: [releases](https://gradle.org/releases/) page.
 
-    We can configure gradle's properties to be used by the project from this file, including the version of gradle.  This ensures that everyone on the project make use of the same configuration (and version) of gradle.
+    We can configure Gradle's properties to be used by the project from this file, including the version of Gradle.  This ensures that everyone on the project make use of the same configuration (and version) of Gradle.
 
 1. Open the `build.gradle` file
 
@@ -503,7 +512,7 @@ Demo
     }
     ```
 
-    [Plugins](https://docs.gradle.org/current/userguide/plugins.html) enable more features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) gradle tasks.
+    [Plugins](https://docs.gradle.org/current/userguide/plugins.html) enable more Gradle features.  For example, the following plugin will enable [Spring Boot](https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/) Gradle tasks.
 
     ```groovy
     plugins {
@@ -572,7 +581,7 @@ Demo
 
         ![Output](assets/images/IntelliJ%20App%20Run%20Output.png)
 
-## Hello World Application (packaged as an executable application)
+## Hello World Application (from source to executable application)
 
 ### Gradle Task Dependency Tree
 
@@ -593,7 +602,7 @@ Demo
     1. [processResources](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_tasks)
     1. [classes](https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_tasks)
 
-    Using the `-i` (or `--info`) [logging option](https://docs.gradle.org/current/userguide/logging.html#logging), gradle will produce more information.
+    Using the `-i` (or `--info`) [logging option](https://docs.gradle.org/current/userguide/logging.html#logging), Gradle will produce more information.
 
     ```bash
     $ ./gradlew run -i
@@ -640,6 +649,8 @@ Demo
 ![Display Task Dependency Tree](assets/gifs/Display%20Task%20Dependency%20Tree.gif)
 
 ### Project Dependencies
+
+Gradle tasks add functionality to Gradle.  Dependencies add functionality to the project.  Instead of re-inventing the wheel, we can leverage code developed by others and just focus on the task at hand.
 
 1. List project dependencies
 
@@ -707,32 +718,32 @@ Demo
      inflating: temp/demo/App.class
     ```
 
-    The `temp` dir contains two folders and each folder will contain one file.
+    The `temp` directory contains two folders and each folder will contain one file.
 
     ```
     $ tree temp
     temp
     ├── META-INF
-    │   └── MANIFEST.MF
+    │   └── MANIFEST.MF
     └── demo
         └── App.class
 
     2 directories, 2 files
     ```
 
-    The `temp/META-INF/MANIFEST.MF` file is a text file
+    The `temp/META-INF/MANIFEST.MF` file is a text file created by one of the Gradle tasks.
 
     ```bash
     $ cat temp/META-INF/MANIFEST.MF
     Manifest-Version: 1.0
     ```
 
-    The `demo/App.class` file is the compiled version of the source file: `src/main/java/demo/App.java`.
+    The `demo/App.class` file is the compiled version (Bytecode) of the source file: `src/main/java/demo/App.java`.
 
     ![What does a modern JVM look like](assets/images/What%20does%20a%20modern%20JVM%20look%20like.png)
     Image copied from: [Theory: JVM Subsystems](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323884)
 
-    The bytecode produced when compiling this class can be viewed using the [Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-bytecode-viewer).
+    The Bytecode produced when compiling this class can be viewed using the [Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer).
 
     Click on `View > Show Bytecode with Jclasslib`
 
@@ -751,7 +762,7 @@ Demo
     no main manifest attribute, in build/libs/demo.jar
     ```
 
-    This JAR is not yet an executable JAR.  The `MANIFEST.MF` is missing the `Main-Class` attribute.
+    This JAR is not yet an executable JAR.  The `MANIFEST.MF` is missing the `Main-Class` attribute.  Java does not know where to go and which class to execute.  Note that a project may contain hundreds if not thousands to classes.  Java will look into the `MANIFEST.MF` for the `Main-Class` attribute and will execute that.
 
 1. Configure the `jar` task
 
@@ -764,6 +775,8 @@ Demo
       }
     }
     ```
+
+    Note that the above fragment is referring to another value defined elsewhere.
 
     Build the project
 
@@ -778,7 +791,7 @@ Demo
     $ unzip build/libs/demo.jar -d temp
     ```
 
-    The manifest will now contain the `Main-Class`
+    The manifest now contains the `Main-Class` attribute.
 
     ```bash
     $ cat temp/META-INF/MANIFEST.MF
@@ -786,7 +799,7 @@ Demo
     Main-Class: demo.App
     ```
 
-    Run the application
+    Run the application.
 
     ```bash
     $ java -jar build/libs/demo.jar
@@ -797,6 +810,115 @@ Demo
     ```bash
     Hello world.
     ```
+
+### Make use of third-party libraries
+
+1. Import the third-party library (dependency)
+
+    The application also contains the Guava dependency.
+
+    ```groovy
+    dependencies {
+      implementation 'com.google.guava:guava:28.2-jre'
+    }
+    ```
+
+    Classes that are part of this library (referred to as dependency as our project depends on this library).
+
+1. Use the third-party library
+
+    One of the most popular classes with the Guava library is the `Preconditions` class.  This class contains useful methods that can be used to check parameters to make sure that these adhere to the contract.  For example a function may only accept positive numbers.  The  `Preconditions` class has methods to validate such parameters.
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+
+    public class App {
+      public String getGreeting() {
+        return "Hello world.";
+      }
+
+      public static void main( String[] args ) {
+        String greeting = Preconditions.checkNotNull( new App().getGreeting() );
+        System.out.println( greeting );
+      }
+    }
+    ```
+
+1. Build the project
+
+    ```bash
+    $ ./gradlew clean build
+    ```
+
+1. Run the project
+
+    ```bash
+    $ java -jar build/libs/demo.jar
+    ```
+
+    Note that this time the application will not run
+
+    ```bash
+    Exception in thread "main" java.lang.NoClassDefFoundError: com/google/common/base/Preconditions
+        at demo.App.main(App.java:11)
+    Caused by: java.lang.ClassNotFoundException: com.google.common.base.Preconditions
+        at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:602)
+        at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+        ... 1 more
+    ```
+
+Our program is making use of a class that is not part of the Java standard library.  Also, this class in not part of our code.  Java has no way to locate this class and use it in our program.
+
+#### The Classpath
+
+Java searches for classes that are on the classpath.  When using the `jar` option, all classes within that JAR file are automatically included as part of the class path.
+
+Instead of using the `-jar` option, we can use the `-cp` to set the claspath, similar to what is shown below
+
+```
+$ java -cp path/to/lib-a.jar:path/to/lib-b.jar path.to.mainclass
+```
+
+One or more JAR files can be included in a class path.  We need to include two JAR files for our applicaiton to run.
+
+1. Our application JAR file, found at
+
+    ```bash
+    ./build/libs/demo.jar
+    ```
+
+1. The Guava JAR file.
+
+    Gradle downloaded this library at
+
+    ```bash
+    /Users/albertattard/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/28.2-jre/8ec9ed76528425762174f0011ce8f74ad845b756/guava-28.2-jre.jar
+    ```
+
+    You can locate the Guava library used by our applicaiton using the following command
+
+    ```bash
+    $ find -L ~/.gradle/caches -name "guava-28.2-jre.jar"
+    ```
+
+1. Run the application using the `-cp` option
+
+    ```bash
+    $ java -cp ./build/libs/demo.jar:/Users/albertattard/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/28.2-jre/8ec9ed76528425762174f0011ce8f74ad845b756/guava-28.2-jre.jar demo.App
+    ```
+
+    **The above command needs to be updated according to the location where your Guava library is found**.
+
+    The application should now be able to run and output
+
+    ```bash
+    Hello world.
+    ```
+
+This is quite inconvenient as together with our application we need to also include the libraries this application needs.  Also, running the application is not as simple as when e used the `-jar` option.  A better way is to make use of a fat JAR, discussed next.
 
 ### Make a fat JAR
 
