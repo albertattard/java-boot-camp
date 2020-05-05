@@ -23,6 +23,7 @@
     1. [Working with Docker](#working-with-docker)
     1. [Dockerize the Application](#dockerize-the-application)
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
+1. [Managing Docker Containers](#managing-docker-containers)
 1. [Java Language Specification](#java-language-specification)
 
 ## Setup Environment (SDKMAN)
@@ -1568,6 +1569,38 @@ The docker file depends on the JAR file to be generated before it runs.  Docker 
     ```
 
 For more details, please refer to: [https://docs.docker.com/develop/develop-images/multistage-build/](https://docs.docker.com/develop/develop-images/multistage-build/)
+
+## Managing Docker Containers
+
+Once an application is built and packaged into a container, this needs to be executed.  We ran our application by using the `run` command
+
+```bash
+$ docker run -it demo:local
+```
+
+That all great for development.
+
+Consider the following:
+
+1. What happens if our application becomes unresponsive or crashes?
+1. What happens if our application experiences more load and new instances need to be started?
+1. How will we reduce the number of instances running when our application is not being used?
+1. How will we deploy new versions of our application?
+1. Can we have red/green deployments?
+1. How will we monitor our application?
+1. How can we access the logs of our application?
+
+There are many more things to consider when running an application irrespective from docker.  Docker enables developers to take advantage of tools that can help us with the above concerns.  Following are **some** tools and services we can use to manage our docker containers.
+
+1. [AWS](https://aws.amazon.com/)
+1. [Google Compute](https://cloud.google.com/)
+1. [Microsoft Azure](https://azure.microsoft.com/)
+1. [Digital Ocean](https://www.digitalocean.com/)
+1. [Kubernetes](https://kubernetes.io/)
+1. [Portainer](https://www.portainer.io/)
+1. [Rancher](https://rancher.com/)
+
+Some of the above services are able work with JAR files directly and we do not need to create a docker container.  For example, using [AWS Elastic Beanstalk](https://aws.amazon.com/elasticbeanstalk/)  we can deploy the JAR file and have AWS handling the rest.
 
 ### Recommended Reading
 
