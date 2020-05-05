@@ -1526,9 +1526,9 @@ Docker provides more than just the correct configuration.
 
     Why do we need to change the working directory?
 
-        1. Putting our application in a specific directory helps us organise our application better.  In some cases, we have more than one single file.  For example, a web application may contain several files and other web assets.  Having such application in the root directory is a bit messy.  Furthermore, the application itself may expose some files found on the OS and return these to the caller.  We do not want to return a sensitive file by mistake, just because we deployed our application in the root folder.
+    1. Putting our application in a specific directory helps us organise our application better.  In some cases, we have more than one single file.  For example, a web application may contain several files and other web assets.  Having such application in the root directory is a bit messy.  Furthermore, the application itself may expose some files found on the OS and return these to the caller.  We do not want to return a sensitive file by mistake, just because we deployed our application in the root folder.
 
-        1. Putting our application in a specific directory allows us to limit the access rights for the users that will be used to run our application to just this directory.  This will prevent an attacker, accessing anywhere else in the docker container by simply taking advantage of a vulnerability within our application.
+    1. Putting our application in a specific directory allows us to limit the access rights for the users that will be used to run our application to just this directory.  This will prevent an attacker, accessing anywhere else in the docker container by simply taking advantage of a vulnerability within our application.
 
     The working directory of our docker image was `/` (the root folder).  We will change this it to be `/opt/app`.  The directory does not need to exist and will be created automatically.
 
