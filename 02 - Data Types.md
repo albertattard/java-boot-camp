@@ -6,12 +6,16 @@
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
     1. [Primitive Types](#primitive-types)
-    1. [Object Types (the rest)](#object-types-the-rest)
+    1. [Reference Types (the rest)](#reference-types-the-rest)
     1. [Variables and their Values](#variables-and-their-values)
 1. [Stack and Heap](#stack-and-heap)
     1. [OS Process Memory](#os-process-memory)
-    1. [What goes in the Stack?](#what-goes-in-the-stack)
-    1. [What goes in the Heap?](#what-goes-in-the-heap)
+    1. [What goes in the Java stack?](#what-goes-in-the-java-stack)
+    1. [What goes in the Java Heap?](#what-goes-in-the-java-heap)
+    1. [Variables without a value](#variables-without-a-value)
+    1. [Can we have a reference variable without the equivalent object in the Java heap (null)?](#can-we-have-a-reference-variable-without-the-equivalent-object-in-the-java-heap-null)
+        1. [What happens if we try to call a method on a null object?](#what-happens-if-we-try-to-call-a-method-on-a-null-object)
+        1. [What is NullPointerException?](#what-is-nullpointerexception)
     1. [String or new String?](#string-or-new-string)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
@@ -331,15 +335,15 @@ The primitive types in Java, are all in lower case.  It is an `int` and not `Int
 
 Note that the String type is not in the above list.
 
-### Object Types (the rest)
+### Reference Types (the rest)
 
-The `String` type, like anything else apart from the above primitives, is an object.
+The `String` type, like anything else apart from the above primitives, is a reference type.
 
-We can create as many new object types as we need and this is covered in [Classes, Methods and Control Flow section](03%20-%20Classes,%20Methods%20and%20Control%20Flow.md).
+We can create as many new reference types as we need and this is covered in [Classes, Methods and Control Flow section](03%20-%20Classes,%20Methods%20and%20Control%20Flow.md).
 
-By convention, object types start with a capital letter.  It is a `String` and not a `string`.  Nothing stops us from create our own object type in lower-case, but this is discouraged.
+By convention, reference types start with a capital letter.  It is a `String` and not a `string`.  Nothing stops us from create our own reference type using lower-case, but this is discouraged.
 
-One of the main differences between primitives and object types, is that the latter support functionality.
+One of the main differences between primitives and reference types, is that the latter support functionality (methods).
 
 Consider the following example.
 
@@ -357,7 +361,7 @@ public class App {
 }
 ```
 
-The string has a method called `length()`, which returns the number of bytes (not necessary letters) the string is consuming.  The above program prints.
+The `String` type has a method called `length()`, which returns the number of bytes (not necessary letters) the string requires to store our string in memory.  The above program prints.
 
 ```bash
 The string 'Hello 🌎' is 8 bytes (not necessary letters) long
@@ -369,30 +373,53 @@ It is important to make the distinction between variables, types and values.
 
 ![Variables and their Values](assets/images/Variables%20and%20values.png)
 
+Observations:
+1. Variables must have a type
+1. Variables' type does not change throughout their existence
+1. Variables can contain values of the same type (or a type can be safely stored by the variable)
+
 ## Stack and Heap
 
 ### OS Process Memory
 
-Process memory is divided into four part:
+The OS process memory is divided into four segments:
 
-1. The **text** part comprises the compiled program code
-1. The **data** part stores global and static variables, allocated and initialized prior to executing main
-1. The **heap** is used for dynamic memory allocation
-1. The **stack** is used for local variables
+1. The **text** segment comprises the compiled program code (**Not our Java code, but the JVM**)
+1. The **data** part stores global and static variables, allocated and initialized prior to executing main (**Used by the JVM and not our Java code**)
+1. The **heap** is used for dynamic memory allocation (**The JVM maintains very something similar**)
+1. The **stack** is used for local variables (**The JVM maintains very something similar**)
 
 ![Process Memory Model](assets/images/Process%20Memory%20Model.png)
 
-Note that the stack and the heap start at opposite ends of the process's free space and grow towards each other.  If they should ever meet, then either a stack overflow error will occur.
+The *text* and *data* segments are fixed and their size does not change during the program's lifetime.
 
-When working with Java we mainly work with the stack and the heap.
+The *stack* and the *heap* segments start at opposite ends of the process's free space and grow towards each other.  If they should ever meet, then either a stack overflow or out of memory error will occur.
 
-### What goes in the Stack?
+When working with Java we mainly work with the *Java stack* and the *Java heap*.  It is important to note that the OS process memory and the memory we work with within the JVM behave similarly but are different things.
 
-When our Java program starts it calls our `main()` method.  When it does so, it adds an entry in the stack.  Every time a method is called, Java adds an entry in the stack, and it removes this entry once the method is complete.
+Consider the following command, used to start our application.
 
-Once the stack is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the stack and the program completes.  We will revise this once we discuss [threads and concurrency](11%20-%20Concurrency.md).
+```bash
+$ java -jar application.jar
+```
 
-All variables created and used within the method are stored in the stack.  Consider the following example.
+The `java` is an executable file and when executed the JVM is started.  The `java` command starts an instance of the JVM.  We can have many JVM instances running, each on a separate OS process.
+
+The JVM uses the OS process memory, shown above, to run and execute our code.  Our code runs within the JVM - a program (our code) runs within another program (JVM).  The JVM executable code (**not our code**) is loaded into the *text* OS process memory and the constants and process level variables of the JVM are stored in the *data* segment of the memory.
+
+Internally, the JVM maintains its own *stack* and *heap* (which we will refer to the *Java stack* and *Java heap*), which while these behave similar to the OS process memory, they are different.
+
+**We will only focus on the *Java stack* and *Java heap* from this point onwards**.
+
+### What goes in the Java stack?
+
+When our Java program starts Java calls our `main()` method.  When Java does so, it adds an entry in the *Java stack*.  Every time a method is called, Java adds an entry in the *Java stack*, and it removes this entry once the method completes.
+
+Once the *Java stack* is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the *Java stack* and the program completes.  We will revise and elaborates this when we discuss [threads and concurrency](11%20-%20Concurrency.md).
+
+All variables created and used within a method are stored in the *Java stack*.
+
+Consider the following example.
 
 ```java
 package demo;
@@ -406,51 +433,54 @@ public class App {
 }
 ```
 
-The `main()` is
+The `main()` method is
 1. receiving the command line arguments
+    (`String[] args`)
 1. creating a local variable
+    (`int a = 7;`)
 1. calling another method to print a simple message
+    (`System.out.printf( "The value of a is %d%n", a );`)
 
-The stack entry that was created for the `main()` method and made space for two variables, amongst other things.  Then the `main()` calls the `printf()` method.  Java will create a new stack entry for the `printf()`.
+A *Java stack* entry is created for the `main()` method, which will contain two variables, amongst other things.  Then the `main()` method calls (or invokes) the `printf()` method.  Java will create a new *Java stack* entry for the `printf()` method.
 
 ![Stack - main() calls printf()](assets/images/Stack%20-%20main()%20calls%20printf().png)
 
-Every time a method is called, Java adds a new entry in the stack.
+Every time a method is called, Java adds a new entry in the *Java stack*.
 
 Consider the following example
 
 ![Stack - showing 4 methods](assets/images/Stack%20-%20showing%204%20methods.png)
 
 Based on the above image, we see that
-1. The `main()` method called method `a()`, which in turn called method `b()`, which called method `d()`.
-1. The size of stack entry for each method depends on the number of variables this method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` create lots of variables.
-1. The method `c()` is the current method.  Java is currently executing this method.
+1. The `main()` method called method `a()`, which in turn called method `b()`, which called method `c()`.
+1. The size of *Java stack* entry for each method depends on the number of variables each method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` has lots of variables.
+1. Method `c()` is the current active method.  Java is currently executing this method.  The method at the top of the *Java stack*, is the active method.
 
-Java has two types of variables
-1. primitives
-1. objects
+Java has [two types of variables](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12)
+1. [primitive types](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.1)
+1. [reference types (also referred to as objects)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.2)
 
-Primitives variables are stored in the heap.  Consider the following variable
+The primitives variables are stored in the *Java stack*.  Consider the following variable.
 
 ```java
 int a = 7;
 ```
 
-The variable `a` is a primitive type and in this case, the value `7` is saved in the heap.
+The variable named `a` is a primitive type.  The value of the primitive variables, `7` in this case, is stored in the *Java stack*.
 
-Object type variables, are stored in two places on the memory.
-1. The variable itself, is saved in the stack
-1. The actual object is **not saved** in the stack and is saved in the heap.
+Reference type variables are stored in two places in the memory.
+1. The variable itself, is stored in the *Java stack*
+1. The actual object is **not stored** in the *Java stack*.  It is stored in the *Java heap*.
 
-### What goes in the Heap?
+### What goes in the Java Heap?
 
-The heap contains all our objects.
+The *Java heap* contains all our objects.
 
 ```java
 String s = "my object type";
 ```
 
-The variable `s` is saved in the stack while the actual object `"my object type"` is saved in the heap.  The variable `s` will have an object reference (we do not use the term pointer like in C/C++ but it behaves very similarly) to the object in the heap.
+The reference type variable `s` is stored in the *Java stack* while the actual object `"my object type"` is stored in the *Java heap*.  The reference type variable `s` will have a reference, hence the name reference type, to the object in the *Java heap*.  Note that we do not use the term *pointer*, like in C/C++, in Java, despite these behave in a similar way.
 
 Consider the following two variables
 
@@ -461,7 +491,11 @@ String s = "my object type";
 
 ![Stack and Heap](assets/images/Stack%20and%20Heap.png)
 
-The variables are only found in the stack, and objects are only found in the heap.  The more variables we have the more we consume from the stack.  Having large objects, will not affect the stack as all objects data is saved in the heap.
+The variables (both types) are only found in the *Java stack*, while the objects are only found in the *Java heap*.  The size of the *Java stack* entry for our method is directly proportional to the amount of variables our method has.
+
+The size of the method itself, like the number of lines of code, is not part of the *Java stack* and is stored elsewhere.
+
+Having large objects, will not affect the *Java stack* as all objects data is stored in the *Java heap*.
 
 Consider the following example
 
@@ -473,9 +507,144 @@ String s2 = s;
 String s3 = s;
 ```
 
-In the above code we have 5 variables, one primitive type and one object type.
+In the above code we have 5 variables, one primitive type and four reference types, and an object.
 
 ![Many Variables One Object](assets/images/Many%20Variables%20One%20Object.png)
+
+All reference type variables are pointing to the same object in the *Java heap*.
+
+This is quite an important thing to note as if the object in the heap is modified through one of the variables, all the other variables will be affected.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Create an object */
+    Point a = new Point( 5, 5 );
+    Point b = a;
+    Point c = a;
+
+    /* Modify the object through one of the variables */
+    b.x = 7;
+    c.y = 3;
+
+    System.out.printf( "Point - x:%d, y:%d%n", a.x, a.y );
+  }
+}
+```
+
+The Java API have a class called `Point` that represents a point on a cartesian space.
+
+1. Three variables, `a`, `b` and `c` are created and assigned the same object
+
+    ![One Point Three Variables](assets/images/One%20Point%20Three%20Variables%20-%20A.png)
+
+1. The `x` coordinate is modified through variable `b`
+
+    ![One Point Three Variables](assets/images/One%20Point%20Three%20Variables%20-%20B.png)
+
+1. The `y` coordinate is modified through variable `c`
+
+    ![One Point Three Variables](assets/images/One%20Point%20Three%20Variables%20-%20C.png)
+
+The above program will print
+
+```bash
+Point - x:7, y:3
+```
+
+### Variables without a value
+
+A variable can be declared but not initialised.  Such variable cannot be used before it is initialised.
+
+**⚠️ THE FOLLOWING DOES NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    int a;
+    System.out.printf( "%d%n", a );
+  }
+}
+```
+
+When compiling the above code, we will get an error similar to the following.
+
+```bash
+$ ./gradlew clean build
+
+> Task :compileJava FAILED
+src/main/java/demo/App.java:7: error: variable a might not have been initialized
+    System.out.printf( "%d%n", a );
+                               ^
+```
+
+The variable will apprear on the *Java stack* once a value is assigned to it.  There are cases, where a default value is assigned to variables, but this does not apply to local variables.
+
+### Can we have a reference variable without the equivalent object in the Java heap (null)?
+
+Yes.  We can have reference type variables that do not yet have an equivalent object in the *Java heap*.  As mentioned in the [previous section](#variables-without-a-value), we cannot use variables that do not have a value.
+
+Reference types may be assigned `null`.
+
+Consider the following example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    String a = null;
+    System.out.printf( "a = %s%n", a );
+  }
+}
+```
+
+The variable `a` is assigned the special value `null`.  This is a special value which points to a special place in memory, referred to the [Zero page](https://en.wikipedia.org/wiki/Zero_page).
+
+![nulls](assets/images/null,%20stack%20and%20heap.png)
+
+#### What happens if we try to call a method on a null object?
+
+The `String` class has the `length()` which returns the number of bytes the string requires in the *Java heap*.
+
+In this case we are not consuming anything in the *Java heap*, thus one may assume that the `length()` should return `0`.  Unfortunately, it does not work like that.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    String a = null;
+    int length = a.length();
+    System.out.printf( "The length of string is %d%n", length );
+  }
+}
+```
+
+The (reference type) variable `a` is set to the special value `null`.  The above code compiles, but fails with the following error.
+
+```bash
+Exception in thread "main" java.lang.NullPointerException
+	at demo.App.main(App.java:7)
+```
+
+#### What is NullPointerException?
+
+The error `NullPointerException` is one of the most common errors in Java.  This is cause when we try to invoke methods on a `null` object.  It is quite simple, yet drives people crazy and [caused billions to the industry](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
 
 ### String or new String?
 
