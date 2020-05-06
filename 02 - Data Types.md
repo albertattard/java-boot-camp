@@ -446,8 +446,6 @@ Java 5 introduced Enums which simplifies the above problem.
 
 1. **Refactor Outcome**
 
-    **⚠️ THE FOLLOWING EXAMPLE MAKES REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
-
     Replace the imports in the `RockPaperScissorsTest` class
 
     ```java
@@ -562,7 +560,7 @@ Java 5 introduced Enums which simplifies the above problem.
     ```java
     package demo;
 
-    public class PaperScissorsRock {
+    public class RockPaperScissors {
 
       public enum Outcome {
         DRAW,
@@ -591,6 +589,28 @@ Java 5 introduced Enums which simplifies the above problem.
     ```
 
 1. **Enums in Java can have methods**
+
+    ````java
+      public enum Hand {
+        PAPER,
+        SCISSORS,
+        ROCK;
+
+        public Outcome determineOutcome( final Hand other ) {
+          if ( this == other ) {
+            return Outcome.DRAW;
+          }
+
+          return switch ( this ) {
+            case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+            case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+            case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          };
+        }
+      }
+    ````
+
+    Complete example
 
     ```java
     package demo;
