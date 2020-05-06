@@ -357,8 +357,6 @@ int i     10
 
 ## Enumerations
 
-Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_paper_scissors).
-
 **⚠️ THE FOLLOWING EXAMPLE MAKES REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
 
 The tests require [Junit5](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter)
@@ -368,6 +366,10 @@ dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
 }
 ```
+
+Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_paper_scissors).
+
+![Rock Paper Scissors Game Rules](assets/images/Rock%20Paper%20Scissors.png)
 
 Example
 
