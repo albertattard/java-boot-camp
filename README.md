@@ -51,6 +51,7 @@ Boot Camp for developers interested to learn Java.
         1. [What happens if we try to call a method on a null object?](02%20-%20Data%20Types.md#what-happens-if-we-try-to-call-a-method-on-a-null-object)
         1. [What is NullPointerException?](02%20-%20Data%20Types.md#what-is-nullpointerexception)
     1. [String or new String?](02%20-%20Data%20Types.md#string-or-new-string)
+    1. [What happens to a variable when it goes out of scope?](02%20-%20Data%20Types.md#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](02%20-%20Data%20Types.md#operators)
 1. [Autoboxing](02%20-%20Data%20Types.md#autoboxing)
 1. [Enumerations](02%20-%20Data%20Types.md#enumerations)
