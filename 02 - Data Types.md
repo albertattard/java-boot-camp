@@ -110,6 +110,8 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     a ==> 7
     ```
 
+    **⚠️ Note that while the semicolon is optional in JShell, this is required in a Java program.  The program will not compile if we ignore the semicolon**.
+
     Enter the variable name to print its value
 
     ```jshelllanguage
@@ -166,6 +168,46 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
 
 1. Use existing functionality
 
+    JShell imports automatically classes and functionality from the following packages
+
+    ```jshelllanguage
+    jshell> /imports
+    |    import java.io.*
+    |    import java.math.*
+    |    import java.net.*
+    |    import java.nio.file.*
+    |    import java.util.*
+    |    import java.util.concurrent.*
+    |    import java.util.function.*
+    |    import java.util.prefs.*
+    |    import java.util.regex.*
+    |    import java.util.stream.*
+    ```
+
+    For example, we can use the `Random` class found in the `java.util` package.
+
+    ```jshelllanguage
+    jshell> var r = new Random()
+    r ==> java.util.Random@533ddba
+
+    jshell> r.nextInt(10)
+    $3 ==> 8
+    ```
+
+    JShell has tab completion.  Type `Math.` and then press the `[tab]` key
+
+    ```jshelllanguage
+    jshell> Math.
+    E                 IEEEremainder(    PI                abs(              acos(             addExact(         asin(             atan(             atan2(            cbrt(             ceil(             class             copySign(
+    cos(              cosh(             decrementExact(   exp(              expm1(            floor(            floorDiv(         floorMod(         fma(              getExponent(      hypot(            incrementExact(   log(
+    log10(            log1p(            max(              min(              multiplyExact(    multiplyFull(     multiplyHigh(     negateExact(      nextAfter(        nextDown(         nextUp(           pow(              random()
+    rint(             round(            scalb(            signum(           sin(              sinh(             sqrt(             subtractExact(    tan(              tanh(             toDegrees(        toIntExact(       toRadians(
+    ulp(
+    jshell> Math.
+    ```
+
+    You will see all methods (functionality) available to the `Math` class.
+
     ```jshelllanguage
     jshell> int a = 7
     jshell> int b = 3
@@ -173,13 +215,16 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     $5 ==> 7
     ```
 
-    We can import the `max()` method so that we can invoke it by its name.
+    We can import all methods available in the `Math` class so that we can invoke these methods by their name.
 
     ```jshelllanguage
     jshell> import static java.lang.Math.*
 
     jshell> max(a, b)
     $5 ==> 7
+
+    jshell> PI
+    PI ==> 3.141592653589793
     ```
 
     A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
@@ -269,7 +314,7 @@ When working with Java we mainly work with the stack and the heap.
 
 When our Java program starts it calls our `main()` method.  When it does so, it adds an entry in the stack.  Every time a method is called, Java adds an entry in the stack, and it removes this entry once the method is complete.
 
-Once the stack is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the stack and the program completes.  We will revise this once we discuss [threads and concurrency](../11%20-%20Concurrency.md).
+Once the stack is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the stack and the program completes.  We will revise this once we discuss [threads and concurrency](11%20-%20Concurrency.md).
 
 All variables created and used within the method are stored in the stack.  Consider the following example.
 
