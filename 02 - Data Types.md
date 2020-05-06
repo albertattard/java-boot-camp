@@ -4,7 +4,7 @@
 
 1. [Setup](#setup)
 1. [JShell](#jshell)
-1. [Numbers and Strings (Variables)](#numbers-and-strings-variables)
+1. [Numbers and Strings (Variables & Scope)](#numbers-and-strings-variables-scope)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Enumerations](#enumerations)
@@ -24,7 +24,7 @@
 
 ## JShell
 
-The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm) is an interactive tool for learning the Java programming language and prototyping Java code.  JShell is a Read-Evaluate-Print Loop (REPL), which evaluates declarations, statements, and expressions as they are entered and immediately shows the results.  The tool is run from the command line.
+The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm) is an interactive tool for learning the Java programming language and prototyping Java code.  JShell is a Read-Evaluate-Print Loop (REPL), which evaluates declarations, statements, and expressions as they are entered and immediately shows the results.
 
 1. Open JShell
 
@@ -32,7 +32,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     $ jshell
     ```
 
-    The following error maybe shown instead
+    The following error maybe shown
 
     ```bash
     Unable to locate an executable at "~/.sdkman/candidates/java/current/bin/jshell" (-1)
@@ -80,6 +80,13 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     a ==> 7
     ```
 
+    Alternatively, a semicolon can be added at the end indicating the end of statement (as defined by the [JLS 14.8](https://docs.oracle.com/javase/specs/jls/se7/html/jls-14.html#jls-14.8)).
+
+    ```jshelllanguage
+    jshell> int a = 7;
+    a ==> 7
+    ```
+
     Enter the variable name to print its value
 
     ```jshelllanguage
@@ -124,7 +131,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
 
     A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
 
-## Numbers and Strings (Variables)
+## Numbers and Strings (Variables & Scope)
 
 Example
 
@@ -352,7 +359,15 @@ int i     10
 
 Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_paper_scissors).
 
-**⚠️ MAKE REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
+**⚠️ THE FOLLOWING EXAMPLE MAKES REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
+
+The tests require [Junit5](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter)
+
+```groovy
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+}
+```
 
 Example
 
@@ -361,13 +376,15 @@ package demo;
 
 public class RockPaperScissors {
 
-  public static final int PAPER = 1;
-  public static final int SCISSORS = 2;
-  public static final int ROCK = 3;
-
+  /* Outcome constants */
   public static final int DRAW = 0;
   public static final int WIN_PLAYER_1 = 1;
   public static final int WIN_PLAYER_2 = 2;
+
+  /* Hand constants */
+  public static final int PAPER = 1;
+  public static final int SCISSORS = 2;
+  public static final int ROCK = 3;
 
   public static int determineOutcome( int player1, int player2 ) {
     if ( player1 == player2 ) {
@@ -427,6 +444,8 @@ Java 5 introduced Enums which simplifies the above problem.
 
 1. **Refactor Outcome**
 
+    **⚠️ THE FOLLOWING EXAMPLE MAKES REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
+
     Replace the imports in the `RockPaperScissorsTest` class
 
     ```java
@@ -458,21 +477,19 @@ Java 5 introduced Enums which simplifies the above problem.
         WIN_PLAYER_2;
       }
 
-      public enum Hand {
-        PAPER,
-        SCISSORS,
-        ROCK;
-      }
+      public static final int PAPER = 1;
+      public static final int SCISSORS = 2;
+      public static final int ROCK = 3;
 
-      public static Outcome determineOutcome( Hand player1, Hand player2 ) {
+      public static Outcome determineOutcome( int player1, int player2 ) {
         if ( player1 == player2 ) {
           return Outcome.DRAW;
         }
 
         return switch ( player1 ) {
-          case PAPER -> player2 == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-          case SCISSORS -> player2 == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-          case ROCK -> player2 == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case PAPER -> player2 == ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          case SCISSORS -> player2 == PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+          default -> player2 == SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
         };
       }
     }
