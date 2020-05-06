@@ -4,7 +4,7 @@
 
 1. [Setup](#setup)
 1. [JShell](#jshell)
-1. [Numbers and Strings (Variables & Scope)](#numbers-and-strings-variables-scope)
+1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Enumerations](#enumerations)
@@ -131,7 +131,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
 
     A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
 
-## Numbers and Strings (Variables & Scope)
+## Numbers and Strings (Variables and Scope)
 
 Example
 

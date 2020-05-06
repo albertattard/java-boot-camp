@@ -38,7 +38,7 @@ Boot Camp for developers interested to learn Java.
 ### [Data Types](02%20-%20Data%20Types.md)
 
 1. [JShell](02%20-%20Data%20Types.md#jshell)
-1. [Numbers and Strings (Variables & Scope)](02%20-%20Data%20Types.md#numbers-and-strings-variables-scope)
+1. [Numbers and Strings (Variables and Scope)](02%20-%20Data%20Types.md#numbers-and-strings-variables-and-scope)
 1. [Operators](02%20-%20Data%20Types.md#operators)
 1. [Autoboxing](02%20-%20Data%20Types.md#autoboxing)
 1. [Enumerations](02%20-%20Data%20Types.md#enumerations)
