@@ -56,16 +56,20 @@ Output
 
 **Observations**
 
-1. The output messages have the format:
+1. The `main()` method is cluttered and cannot easily say what's happening
 
-    ```java
-    System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
-    ```
-
-1. The roll of die logic cannot be reused
+1. Cannot understand what the following is doing by simply reading the code
 
     ```java
     int a = r.nextInt( 6 ) + 1;
+    ```
+
+    We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement
+
+1. All output messages have the same format:
+
+    ```java
+    System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
     ```
 
 **Refactoring**
@@ -189,7 +193,7 @@ Output
 
 ## Properties (static no OOP)
 
-Example
+Consider the following program
 
 ```java
 package demo;
@@ -199,23 +203,92 @@ import java.util.Random;
 public class App {
 
   public static void main( String[] args ) {
-    int a = rollDice();
-    System.out.printf( "You rolled %d%n", a );
+    Random random = new Random();
+    int a = random.nextInt( 6 ) + 1;
+    int b = random.nextInt( 6 ) + 1;
+    System.out.printf( "You rolled %d and %d%n", a, b );
   }
-
-  public static int rollDice() {
-    return random.nextInt( 6 ) + 1;
-  }
-
-  public static Random random = new Random();
 }
 ```
 
 Output
 
 ```bash
-You rolled a 1
+You rolled 1 and 6
 ```
+
+**Observation**
+
+1. Even though the code is small and simple it is a bit cluttered
+
+1. Cannot understand what the following is doing by simply reading the code
+
+    ```java
+    int a = r.nextInt( 6 ) + 1;
+    ```
+
+    We can deduct that this is related to rolling of dice based on the log messages following this statement
+
+**Refactoring**
+
+1. The dice rolling can be refactored into a separate method, making the code more readable
+
+    ```java
+    package demo;
+
+    import java.util.Random;
+
+    public class App {
+
+      public static void main( String[] args ) {
+        int a = rollDice();
+        int b = rollDice();
+        System.out.printf( "You rolled %d and %d%n", a, b );
+      }
+
+      public static int rollDice() {
+        Random random = new Random();
+        return random.nextInt( 6 ) + 1;
+      }
+    }
+    ```
+
+    The `main` method is more readable now as you can read the code.  The following method calls tells the reader what's happening.
+
+    ```java
+    int a = rollDice();
+    ```
+
+    Cannot say the same for the previous version
+
+    ```java
+    int a = random.nextInt( 6 ) + 1;
+    ```
+
+1. The new change is creating an instance of `Random` everytime it is called.
+
+    Can we reuse the same instance?
+
+    ```java
+    package demo;
+
+    import java.util.Random;
+
+    public class App {
+
+      public static void main( String[] args ) {
+        int a = rollDice();
+        int b = rollDice();
+        System.out.printf( "You rolled %d and %d%n", a, b );
+      }
+
+      public static int rollDice() {
+        return random.nextInt( 6 ) + 1;
+      }
+
+      public static Random random = new Random();
+    }
+    ```
 
 ## Mutable and Immutable
 
