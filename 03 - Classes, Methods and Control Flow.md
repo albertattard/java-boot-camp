@@ -6,13 +6,18 @@
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
 1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [Mutable and Immutable](#mutable-and-immutable)
+    1. [The final keyword](#the-final-keyword)
 1. [Access Control](#access-control)
 1. [Control Flow and Loops](#control-flow-and-loops)
-    1. [If (if/else) Statement](#if-ifelse-statement)
-        1. [If Statement](#if-statement)
-        1. [If/else Statement](#ifelse-statement)
-        1. [If/else-if/else Statement](#ifelse-ifelse-statement)
-    1. [Switch Statement](#switch-statement)
+    1. [If (if/else) Control Flow Statement](#if-ifelse-control-flow-statement)
+        1. [If Example](#if-example)
+        1. [If/else Example](#ifelse-example)
+        1. [If/else-if/else Example](#ifelse-ifelse-example)
+    1. [Switch Control Flow Statement](#switch-control-flow-statement)
+        1. [Switch Example](#switch-example)
+        1. [Switch Fallthrough Example](#switch-fallthrough-example)
+        1. [Switch Default Example](#switch-default-example)
+        1. [Switch Expressions](#switch-expressions)
     1. [Loop and Control Flow Example](#loop-and-control-flow-example)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
@@ -258,7 +263,7 @@ You rolled 1 and 6
     }
     ```
 
-    The `main` method is more readable now as you can read the code.  The following method calls tells the reader what's happening.
+    The `main()` method is more readable now as you can read the code.  The following method calls tells the reader what's happening.
 
     ```java
     int a = rollDice();
@@ -270,7 +275,7 @@ You rolled 1 and 6
     int a = random.nextInt( 6 ) + 1;
     ```
 
-1. The new change is creating an instance of `Random` everytime it is called.
+1. The new change is creating an instance of `Random` every time it is called.
 
     Can we reuse the same instance?
 
@@ -312,7 +317,7 @@ public class App {
     /* Immutable */
     final int b = 3;
 
-    /* Immutable (initialised after declared)*/
+    /* Immutable (initialised after declared) */
     final int c;
     c = 3;
 
@@ -330,6 +335,12 @@ a = 3
 b = 3
 c = 3
 ```
+
+### The final keyword
+
+The `final` keyword marks a variable as immutable.  This means that the variable, **not its value** cannot be changed.  This means that the stack value, **and not the heap value**, cannot be modified.
+
+**The `final` keyword affects the variable and not its value**.
 
 ## Access Control
 
@@ -373,9 +384,9 @@ More information about [access control can be found in this tutorial](https://do
 
 ## Control Flow and Loops
 
-### If (if/else) Statement
+### If (if/else) Control Flow Statement
 
-The following program simulates a player playing a dice game.  Two dice are rolled and their sum, referred to a sthe score is printed.
+The following program simulates a player playing a dice game.  Two dice are rolled and their sum, referred to as the score, is printed.
 
 ```java
 package demo;
@@ -400,9 +411,9 @@ public class App {
 }
 ```
 
-#### If Statement
+#### If Example
 
-The player will win the game if the player rolls `10` or higher.  Change the program such that it only print the following message when the player wins.
+The player will win the game if the player rolls `10` or higher.  Change the program, such that, it only prints the following message when the player wins.
 
 ```bash
 You won!! You scored 10
@@ -490,7 +501,7 @@ public class App {
     }
     ```
 
-#### If/else Statement
+#### If/else Example
 
 After trying the program, it was notices that nothing is shown on the screen when the player loses.
 
@@ -545,7 +556,7 @@ public class App {
 }
 ```
 
-#### If/else-if/else Statement
+#### If/else-if/else Example
 
 Improve the program such that if a player scores `12`, then the program displays a message
 
@@ -559,7 +570,7 @@ If a player scores between `10` and `11` (both inclusive), the program shows the
 You won!! You scored 11
 ```
 
-If the player score below `10`, the program shows the original message.
+If the player scores below `10`, the program shows the original message.
 
 ```bash
 Better luck next time!! You scored too low (9)
@@ -618,37 +629,240 @@ public class App {
 
 **Tip**
 
-The `Random` produces a sequence based on its seed.  For example if we seed `Random` with the seed `63`, then the player will score `12` and wins with bonus.
+The `Random` produces a sequence based on its seed.  For example, if we seed `Random` with the seed `63`, then the player will score `12` and wins with bonus.
 
 ```java
 private static final Random random = new Random( 63 );
 ```
 
-The following table list some seeds that can be used to produce a deterministic results.
+The following table list some seeds that can be used to produce a deterministic result.
 
-|`seed`|`a`|`b`|
-|-----:|--:|--:|
-|   17 | 1 | 1 |
-|   36 | 2 | 2 |
-|    3 | 3 | 3 |
-|   33 | 4 | 4 |
-|    8 | 5 | 5 |
-|   34 | 5 | 6 |
-|    5 | 6 | 5 |
-|   63 | 6 | 6 |
+|`seed`|`a`|`b`|`score`|
+|-----:|--:|--:|------:|
+|   17 | 1 | 1 |     2 |
+|   36 | 2 | 2 |     4 |
+|    3 | 3 | 3 |     6 |
+|   33 | 4 | 4 |     8 |
+|    8 | 5 | 5 |    10 |
+|   34 | 5 | 6 |    11 |
+|    5 | 6 | 5 |    11 |
+|   63 | 6 | 6 |    12 |
 
-Random number generation is a hard er problem than it looks and in some cases, [hardware random number generators](https://en.wikipedia.org/wiki/Hardware_random_number_generator) are required for security purposes.
+Random number generation is a hard problem and in some cases [hardware random number generators](https://en.wikipedia.org/wiki/Hardware_random_number_generator) are required for security or legislative purposes.
 
-### Switch Statement
+### Switch Control Flow Statement
 
-Example
+Consider an application that prints a menu to the console and preforms the action selected by the user.
 
 ```java
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
-    int a = 2;
+
+  public static void main( final String[] args ) {
+    System.out.println( "---------------------" );
+    System.out.println( "Menu" );
+    System.out.println( "---------------------" );
+    System.out.println( " a c    Add Data" );
+    System.out.println( " u      Update Data" );
+    System.out.println( " x      Delete Data" );
+    System.out.println( "---------------------" );
+
+    final char input = 'a';
+    System.out.printf( "User selected %s%n", input );
+  }
+
+  private static void addData() { /* add */ }
+
+  private static void updateData() { /* update */ }
+
+  private static void deleteData() { /* delete */ }
+}
+```
+
+#### Switch Example
+
+The `if/else-if/else` can be used to solve this problem, but the `switch` statement is a better fit
+
+```java
+switch ( input ) {
+  case 'a':
+    addData();
+    break;
+}
+```
+
+Complete solution
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    System.out.println( "---------------------" );
+    System.out.println( "Menu" );
+    System.out.println( "---------------------" );
+    System.out.println( " a c    Add Data" );
+    System.out.println( " u      Update Data" );
+    System.out.println( " x      Delete Data" );
+    System.out.println( "---------------------" );
+
+    final char input = 'a';
+
+    switch ( input ) {
+      case 'a':
+        addData();
+        break;
+      case 'c':
+        addData();
+        break;
+      case 'u':
+        updateData();
+        break;
+      case 'x':
+        deleteData();
+        break;
+    }
+  }
+
+  private static void addData() { /* add */ }
+
+  private static void updateData() { /* update */ }
+
+  private static void deleteData() { /* delete */ }
+}
+```
+
+#### Switch Fallthrough Example
+
+Both 'a' and 'c' call the `addData()` function.  The `switch` statement supports fallthrough which enables the switch to continue from the first match until this is stopped or reaches the end of the switch.
+
+```java
+switch ( input ) {
+  case 'a':
+  case 'c':
+    addData();
+    break;
+}
+```
+
+Complete solution
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    System.out.println( "---------------------" );
+    System.out.println( "Menu" );
+    System.out.println( "---------------------" );
+    System.out.println( " a c    Add Data" );
+    System.out.println( " u      Update Data" );
+    System.out.println( " x      Delete Data" );
+    System.out.println( "---------------------" );
+
+    final char input = 'a';
+
+    switch ( input ) {
+      case 'a':
+      case 'c':
+        addData();
+        break;
+      case 'u':
+        updateData();
+        break;
+      case 'x':
+        deleteData();
+        break;
+    }
+  }
+
+  private static void addData() { /* add */ }
+
+  private static void updateData() { /* update */ }
+
+  private static void deleteData() { /* delete */ }
+}
+```
+
+Fallthrough is a discouraged practice by some because it can lead to issues.  For example, if we forget the break between the cases, we may end up executing all cases.  I use the fallthrough option whenever I see fit as it.  With that said, one needs to be aware of the potential problem.
+
+#### Switch Default Example
+
+When the user input an invalid option, the program simple exits.  Improve the program such that it displays a message indicating that the input is invalid.
+
+```bash
+Invalid input provided!!
+```
+
+The `switch` statement provides the `default` block which captures any other cases.  The `default` block needs to be the last block, thus `break` statement is not required.
+
+```java
+switch ( input ) {
+  case 'x':
+    deleteData();
+    break;
+  default:
+    System.out.println( "Invalid input provided!!" );
+}
+```
+
+Complete solution
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    System.out.println( "---------------------" );
+    System.out.println( "Menu" );
+    System.out.println( "---------------------" );
+    System.out.println( " a c    Add Data" );
+    System.out.println( " u      Update Data" );
+    System.out.println( " x      Delete Data" );
+    System.out.println( "---------------------" );
+
+    final char input = 'z';
+
+    switch ( input ) {
+      case 'a':
+      case 'c':
+        addData();
+        break;
+      case 'u':
+        updateData();
+        break;
+      case 'x':
+        deleteData();
+        break;
+      default:
+        System.out.println( "Invalid input provided!!" );
+    }
+  }
+
+  private static void addData() { /* add */ }
+
+  private static void updateData() { /* update */ }
+
+  private static void deleteData() { /* delete */ }
+}
+```
+
+#### Switch Expressions
+
+Java 14 introduced [switch expressions (JEP 361)](https://openjdk.java.net/jeps/361)
+
+Consider the following example
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int a = 2;
 
     switch ( a ) {
       case 1:
@@ -665,16 +879,18 @@ public class App {
 }
 ```
 
-Java 14 introduced [switch expressions (JEP 361)](https://openjdk.java.net/jeps/361)
+The switch statement is printing a `String` based on the value if variable `a`.
+
+This can be converted such that the `switch` statement becomes and expression that evaluates to a value, `String` this time.
 
 ```java
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
-    int a = 2;
+  public static void main( final String[] args ) {
+    final int a = 2;
 
-    String result = switch ( a ) {
+    final String result = switch ( a ) {
       case 1, 3 -> "Options 1 or 3";
       case 2 -> "Option 2";
       default -> "Anything other than 1, 2 or 3";
@@ -684,6 +900,8 @@ public class App {
   }
 }
 ```
+
+Both examples will output
 
 ```bash
 Option 2
