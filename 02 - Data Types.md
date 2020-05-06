@@ -73,7 +73,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     |  ^
     ```
 
-    In Java, variables require a type
+    **In Java, variables require a type**
 
     ```jshelllanguage
     jshell> int a = 7
