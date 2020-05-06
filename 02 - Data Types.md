@@ -5,11 +5,14 @@
 1. [Setup](#setup)
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
+    1. [Primitive Types](#primitive-types)
+    1. [Object Types (the rest)](#object-types-the-rest)
+    1. [Variables and their Values](#variables-and-their-values)
 1. [Stack and Heap](#stack-and-heap)
     1. [OS Process Memory](#os-process-memory)
     1. [What goes in the Stack?](#what-goes-in-the-stack)
     1. [What goes in the Heap?](#what-goes-in-the-heap)
-    1. [String from String](#string-from-string)
+    1. [String or new String?](#string-or-new-string)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Enumerations](#enumerations)
@@ -229,6 +232,22 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
 
     A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
 
+1. Add new functionality (a method)
+
+    ```jshelllanguage
+    jshell>  int sum(int a, int b) {
+       ...> return a+b;
+       ...> }
+    |  created method sum(int,int)
+    ```
+
+    Created a method named `sum()` which takes two integers and returns their sum.
+
+    ```jshelllanguage
+    jshell> sum(4,5)
+    $7 ==> 9
+    ```
+
 For more information about JSHell, please refer to: [JShell documentation](https://docs.oracle.com/javase/10/jshell/JSHEL.pdf).
 
 ## Numbers and Strings (Variables and Scope)
@@ -293,6 +312,63 @@ My char    J
 My String  Hello, this is my string
 ```
 
+### Primitive Types
+
+Java has eight primitive types and **no more can be added**.
+
+| Type    | Size             | Example               | Range                 |
+|---------|------------------|-----------------------|-----------------------|
+| byte    | 1 byte           | 123 0173 0x7B         | -128 .. +127          |
+| short   | 2 bytes          | 32000 0173 0x5000     | -32768 .. +32767      |
+| int     | 4 bytes          | 70000 010000 0xFFFFFF | +- 2147483647         |
+| long    | 8 bytes          | 1L 0173L 0x7BL        | +-9223372036854775807 |
+| char    | Unicode: 2 bytes | 'A' '\t' '\u0065'     | '\u0000'..'\uFFFF'    |
+| float   | 4 bytes          | 123.0F 1.23E2F        | 3.40282347E+38F       |
+| double  | 8 bytes          | 123.0 1.23E2          | 1.79769313E+308       |
+| boolean | 1 byte           | true false            | true - false          |
+
+The primitive types in Java, are all in lower case.  It is an `int` and not `Int`.
+
+Note that the String type is not in the above list.
+
+### Object Types (the rest)
+
+The `String` type, like anything else apart from the above primitives, is an object.
+
+We can create as many new object types as we need and this is covered in [Classes, Methods and Control Flow section](03%20-%20Classes,%20Methods%20and%20Control%20Flow.md).
+
+By convention, object types start with a capital letter.  It is a `String` and not a `string`.  Nothing stops us from create our own object type in lower-case, but this is discouraged.
+
+One of the main differences between primitives and object types, is that the latter support functionality.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    String s = "Hello 🌎";
+    int length = s.length();
+
+    System.out.printf( "The string '%s' is %d bytes (not necessary letters) long%n", s, length );
+  }
+}
+```
+
+The string has a method called `length()`, which returns the number of bytes (not necessary letters) the string is consuming.  The above program prints.
+
+```bash
+The string 'Hello 🌎' is 8 bytes (not necessary letters) long
+```
+
+### Variables and their Values
+
+It is important to make the distinction between variables, types and values.
+
+![Variables and their Values](assets/images/Variables%20and%20values.png)
+
 ## Stack and Heap
 
 ### OS Process Memory
@@ -347,18 +423,63 @@ Consider the following example
 
 Based on the above image, we see that
 1. The `main()` method called method `a()`, which in turn called method `b()`, which called method `d()`.
-1. The size of stack entry for each method dependes on the number of variables this method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` create lots of variables.
+1. The size of stack entry for each method depends on the number of variables this method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` create lots of variables.
 1. The method `c()` is the current method.  Java is currently executing this method.
+
+Java has two types of variables
+1. primitives
+1. objects
+
+Primitives variables are stored in the heap.  Consider the following variable
+
+```java
+int a = 7;
+```
+
+The variable `a` is a primitive type and in this case, the value `7` is saved in the heap.
+
+Object type variables, are stored in two places on the memory.
+1. The variable itself, is saved in the stack
+1. The actual object is **not saved** in the stack and is saved in the heap.
 
 ### What goes in the Heap?
 
+The heap contains all our objects.
+
+```java
+String s = "my object type";
+```
+
+The variable `s` is saved in the stack while the actual object `"my object type"` is saved in the heap.  The variable `s` will have an object reference (we do not use the term pointer like in C/C++ but it behaves very similarly) to the object in the heap.
+
+Consider the following two variables
+
+```java
+int a = 7;
+String s = "my object type";
+```
+
+![Stack and Heap](assets/images/Stack%20and%20Heap.png)
+
+The variables are only found in the stack, and objects are only found in the heap.  The more variables we have the more we consume from the stack.  Having large objects, will not affect the stack as all objects data is saved in the heap.
+
+Consider the following example
+
+```java
+int a = 7;
+String s = "my object type";
+String s1 = s;
+String s2 = s;
+String s3 = s;
+```
+
+In the above code we have 5 variables, one primitive type and one object type.
+
+![Many Variables One Object](assets/images/Many%20Variables%20One%20Object.png)
+
+### String or new String?
+
 **Pending...**
-
-### String from String
-
-**Pending...**
-
-
 
 ## Operators
 
