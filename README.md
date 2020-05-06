@@ -53,7 +53,12 @@ Boot Camp for developers interested to learn Java.
 1. [Mutable and Immutable](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#mutable-and-immutable)
 1. [Access Control](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#access-control)
 1. [Control Flow and Loops](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#control-flow-and-loops)
-    1. [Switch](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#switch)
+    1. [If (if/else) Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#if-ifelse-statement)
+        1. [If Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#if-statement)
+        1. [If/else Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#ifelse-statement)
+        1. [If/else-if/else Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#ifelse-ifelse-statement)
+    1. [Switch Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#switch-statement)
+    1. [Loop and Control Flow Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#loop-and-control-flow-example)
 1. [Exceptions](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#exceptions)
 1. [Java Single File Execution](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#java-single-file-execution)
 

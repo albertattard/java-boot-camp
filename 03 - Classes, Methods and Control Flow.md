@@ -1,4 +1,4 @@
-#
+# Classes, Methods and Control Flow
 
 ## TOC
 
@@ -8,7 +8,12 @@
 1. [Mutable and Immutable](#mutable-and-immutable)
 1. [Access Control](#access-control)
 1. [Control Flow and Loops](#control-flow-and-loops)
-    1. [Switch](#switch)
+    1. [If (if/else) Statement](#if-ifelse-statement)
+        1. [If Statement](#if-statement)
+        1. [If/else Statement](#ifelse-statement)
+        1. [If/else-if/else Statement](#ifelse-ifelse-statement)
+    1. [Switch Statement](#switch-statement)
+    1. [Loop and Control Flow Example](#loop-and-control-flow-example)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
 
@@ -336,7 +341,7 @@ package demo;
 import java.util.Random;
 
 class Dice {
-  private static Random random = new Random();
+  private static final Random random = new Random();
 
   static int roll() {
     return random.nextInt( 6 ) + 1;
@@ -351,8 +356,8 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
-    int a = Dice.roll();
+  public static void main( final String[] args ) {
+    final int a = Dice.roll();
     System.out.printf( "You rolled a %d%n", a );
   }
 }
@@ -364,7 +369,327 @@ Output
 You rolled a 5
 ```
 
+More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
+
 ## Control Flow and Loops
+
+### If (if/else) Statement
+
+The following program simulates a player playing a dice game.  Two dice are rolled and their sum, referred to a sthe score is printed.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int a = rollDice();
+    final int b = rollDice();
+    final int score = a + b;
+
+    System.out.printf( "You scored %d%n", score );
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+}
+```
+
+#### If Statement
+
+The player will win the game if the player rolls `10` or higher.  Change the program such that it only print the following message when the player wins.
+
+```bash
+You won!! You scored 10
+```
+
+The `if` statement can be used
+
+```java
+if ( score >= 10 ) {
+  System.out.printf( "You won!! You scored %d%n", score );
+}
+```
+
+Complete solution
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int a = rollDice();
+    final int b = rollDice();
+    final int score = a + b;
+
+    if ( score >= 10 ) {
+      System.out.printf( "You won!! You scored %d%n", score );
+    }
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+}
+```
+
+**Refactoring**
+
+1. Create a function that returns `true` if the score is high enough, `false` otherwise
+
+    ```java
+      private static boolean hasWon( final int score ) {
+        return score >= 10;
+      }
+    ```
+
+1. Use the `hasWon()` function instead
+
+    ```java
+        if ( hasWon( score ) ) {
+    ```
+
+    Complete example
+
+    ```java
+    package demo;
+
+    import java.util.Random;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        final int a = rollDice();
+        final int b = rollDice();
+        final int score = a + b;
+
+        if ( hasWon( score ) ) {
+          System.out.printf( "You won!! You scored %d%n", score );
+        }
+      }
+
+      public static boolean hasWon( final int score ) {
+        return score >= 10;
+      }
+
+      public static int rollDice() {
+        return random.nextInt( 6 ) + 1;
+      }
+
+      public static final Random random = new Random();
+    }
+    ```
+
+#### If/else Statement
+
+After trying the program, it was notices that nothing is shown on the screen when the player loses.
+
+Display the follow message whenever the player scores lower than `10`.
+
+```bash
+Better luck next time!! You scored too low 9
+```
+
+The `else` statement can be added to the existing `if` statement
+
+```java
+if ( hasWon( score ) ) {
+  System.out.printf( "You won!! You scored %d%n", score );
+} else {
+  System.out.printf( "Better luck next time!! You scored too low (%d)%n", score );
+}
+```
+
+**Note that an `else` cannot exists without an `if` as is always the last block**.
+
+Complete example
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int a = rollDice();
+    final int b = rollDice();
+    final int score = a + b;
+
+    if ( hasWon( score ) ) {
+      System.out.printf( "You won!! You scored %d%n", score );
+    } else {
+      System.out.printf( "Better luck next time!! You scored too low (%d)%n", score );
+    }
+  }
+
+  public static boolean hasWon( final int score ) {
+    return score >= 10;
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+}
+```
+
+#### If/else-if/else Statement
+
+Improve the program such that if a player scores `12`, then the program displays a message
+
+```bash
+Max score. You won a bonus!!  Well done.
+```
+
+If a player scores between `10` and `11` (both inclusive), the program shows the original message.
+
+```bash
+You won!! You scored 11
+```
+
+If the player score below `10`, the program shows the original message.
+
+```bash
+Better luck next time!! You scored too low (9)
+```
+
+The `if/else-if/else` statement can be used in this case
+
+```java
+if ( hasWonWithBonus( score ) ) {
+  System.out.println( "Max score. You won a bonus!!  Well done." );
+} else if ( hasWon( score ) ) {
+  System.out.printf( "You won!! You scored %d%n", score );
+} else {
+  System.out.printf( "Better luck next time!! You scored too low (%d)%n", score );
+}
+```
+
+Complete solution
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int a = rollDice();
+    final int b = rollDice();
+    final int score = a + b;
+
+    if ( hasWonWithBonus( score ) ) {
+      System.out.println( "Max score. You won a bonus!!  Well done." );
+    } else if ( hasWon( score ) ) {
+      System.out.printf( "You won!! You scored %d%n", score );
+    } else {
+      System.out.printf( "Better luck next time!! You scored too low (%d)%n", score );
+    }
+  }
+
+  public static boolean hasWonWithBonus( final int score ) {
+    return score == 12;
+  }
+
+  public static boolean hasWon( final int score ) {
+    return score >= 10;
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+}
+```
+
+**Tip**
+
+The `Random` produces a sequence based on its seed.  For example if we seed `Random` with the seed `63`, then the player will score `12` and wins with bonus.
+
+```java
+private static final Random random = new Random( 63 );
+```
+
+The following table list some seeds that can be used to produce a deterministic results.
+
+|`seed`|`a`|`b`|
+|-----:|--:|--:|
+|   17 | 1 | 1 |
+|   36 | 2 | 2 |
+|    3 | 3 | 3 |
+|   33 | 4 | 4 |
+|    8 | 5 | 5 |
+|   34 | 5 | 6 |
+|    5 | 6 | 5 |
+|   63 | 6 | 6 |
+
+Random number generation is a hard er problem than it looks and in some cases, [hardware random number generators](https://en.wikipedia.org/wiki/Hardware_random_number_generator) are required for security purposes.
+
+### Switch Statement
+
+Example
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int a = 2;
+
+    switch ( a ) {
+      case 1:
+      case 3:
+        System.out.println( "Options 1 or 3" );
+        break;
+      case 2:
+        System.out.println( "Option 2" );
+        break;
+      default:
+        System.out.println( "Anything other than 1, 2 or 3" );
+    }
+  }
+}
+```
+
+Java 14 introduced [switch expressions (JEP 361)](https://openjdk.java.net/jeps/361)
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int a = 2;
+
+    String result = switch ( a ) {
+      case 1, 3 -> "Options 1 or 3";
+      case 2 -> "Option 2";
+      default -> "Anything other than 1, 2 or 3";
+    };
+
+    System.out.println( result );
+  }
+}
+```
+
+```bash
+Option 2
+```
+
+### Loop and Control Flow Example
 
 Example
 
@@ -415,56 +740,6 @@ You rolled 1 and 3
 Not enough, please try again.
 You rolled 5 and 6
 You won!!
-```
-
-### Switch
-
-Example
-
-```java
-package demo;
-
-public class App {
-  public static void main( String[] args ) {
-    int a = 2;
-
-    switch ( a ) {
-      case 1:
-      case 3:
-        System.out.println( "Options 1 or 3" );
-        break;
-      case 2:
-        System.out.println( "Option 2" );
-        break;
-      default:
-        System.out.println( "Anything other than 1, 2 or 3" );
-    }
-  }
-}
-```
-
-Java 14 introduced [switch expressions (JEP 361)](https://openjdk.java.net/jeps/361)
-
-```java
-package demo;
-
-public class App {
-  public static void main( String[] args ) {
-    int a = 2;
-
-    String result = switch ( a ) {
-      case 1, 3 -> "Options 1 or 3";
-      case 2 -> "Option 2";
-      default -> "Anything other than 1, 2 or 3";
-    };
-
-    System.out.println( result );
-  }
-}
-```
-
-```bash
-Option 2
 ```
 
 ## Exceptions

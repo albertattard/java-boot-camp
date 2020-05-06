@@ -159,6 +159,7 @@ public class Links {
 
   private static String headingToHashLink( final String header ) {
     return header.toLowerCase()
+      .replaceAll( "/", "" )
       .replaceAll( "[^\\p{IsAlphabetic}\\p{IsDigit}]+", "-" )
       .replaceAll( "-+", "-" )
       .replaceAll( "-$", "" )
