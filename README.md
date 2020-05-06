@@ -39,6 +39,11 @@ Boot Camp for developers interested to learn Java.
 
 1. [JShell](02%20-%20Data%20Types.md#jshell)
 1. [Numbers and Strings (Variables and Scope)](02%20-%20Data%20Types.md#numbers-and-strings-variables-and-scope)
+1. [Stack and Heap](02%20-%20Data%20Types.md#stack-and-heap)
+    1. [OS Process Memory](02%20-%20Data%20Types.md#os-process-memory)
+    1. [What goes in the Stack?](02%20-%20Data%20Types.md#what-goes-in-the-stack)
+    1. [What goes in the Heap?](02%20-%20Data%20Types.md#what-goes-in-the-heap)
+    1. [String from String](02%20-%20Data%20Types.md#string-from-string)
 1. [Operators](02%20-%20Data%20Types.md#operators)
 1. [Autoboxing](02%20-%20Data%20Types.md#autoboxing)
 1. [Enumerations](02%20-%20Data%20Types.md#enumerations)

@@ -5,6 +5,11 @@
 1. [Setup](#setup)
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
+1. [Stack and Heap](#stack-and-heap)
+    1. [OS Process Memory](#os-process-memory)
+    1. [What goes in the Stack?](#what-goes-in-the-stack)
+    1. [What goes in the Heap?](#what-goes-in-the-heap)
+    1. [String from String](#string-from-string)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Enumerations](#enumerations)
@@ -25,6 +30,8 @@
 ## JShell
 
 The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduction-jshell.htm) is an interactive tool for learning the Java programming language and prototyping Java code.  JShell is a Read-Evaluate-Print Loop (REPL), which evaluates declarations, statements, and expressions as they are entered and immediately shows the results.
+
+**⚠️ JShell aims for simplicity and it relaxed some of the rules that apply to the Java language.  While the JShell is great to practice, code that works in JShell may not work in Java.**
 
 1. Open JShell
 
@@ -62,6 +69,22 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     jshell> /exit
     ```
 
+1. Help
+
+    ```jshelllanguage
+    jshell> /help
+    |  Type a Java language expression, statement, or declaration.
+    |  Or type one of the following commands:
+    |  /list [<name or id>|-all|-start]
+    |  	list the source you have typed
+    |  /edit <name or id>
+    |  	edit a source entry
+    |  /drop <name or id>
+    ...
+    |  rerun
+    |  	a description of ways to re-evaluate previously entered snippets
+    ```
+
 1. Create a variable
 
     ```jshelllanguage
@@ -73,7 +96,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     |  ^
     ```
 
-    **In Java, variables require a type**
+    **In Java, variables require a type**.  [Java is a statically typed language](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html).
 
     ```jshelllanguage
     jshell> int a = 7
@@ -103,6 +126,27 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
 
     For more information about Local Variable Type Inference please refer to the [style guidelines](http://openjdk.java.net/projects/amber/LVTIstyle.html).
 
+    Note that once a variable is created, it cannot change its type.  Once we create an int, that variable will stay an int and cannot accept anything else.
+
+    ```jshelllanguage
+    jshell> int x = 7
+    jshell> x = 7.7
+    |  Error:
+    |  incompatible types: possible lossy conversion from double to int
+    |  x = 7.7
+    |      ^-^
+    ```
+
+    Different from many other languages, [Java is a statically typed language](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html) and we cannot compare the integer `1` to the boolean `true`
+
+    ```jshelllanguage
+    jshell> 1 == true
+    |  Error:
+    |  incomparable types: int and boolean
+    |  1 == true
+    |  ^-------^
+    ```
+
 1. Arithmetic Operations
 
     ```jshelllanguage
@@ -113,14 +157,23 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     $4 ==> 10
     ```
 
-    The result is stored in a new variable `$4` which can be accessed as any other variable.
+    The result is stored in a new artificially temporary variable `$4` (crated by JShell) which can be accessed as any other variable.
 
     ```jshelllanguage
     jshell> $4
     $4 ==> 10
     ```
 
-1. Use libraries
+1. Use existing functionality
+
+    ```jshelllanguage
+    jshell> int a = 7
+    jshell> int b = 3
+    jshell> Math.max(a, b)
+    $5 ==> 7
+    ```
+
+    We can import the `max()` method so that we can invoke it by its name.
 
     ```jshelllanguage
     jshell> import static java.lang.Math.*
@@ -130,6 +183,8 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     ```
 
     A list of functions available in the Math class can be found [here](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Math.html).
+
+For more information about JSHell, please refer to: [JShell documentation](https://docs.oracle.com/javase/10/jshell/JSHEL.pdf).
 
 ## Numbers and Strings (Variables and Scope)
 
@@ -192,6 +247,73 @@ My double  123456,1235
 My char    J
 My String  Hello, this is my string
 ```
+
+## Stack and Heap
+
+### OS Process Memory
+
+Process memory is divided into four part:
+
+1. The **text** part comprises the compiled program code
+1. The **data** part stores global and static variables, allocated and initialized prior to executing main
+1. The **heap** is used for dynamic memory allocation
+1. The **stack** is used for local variables
+
+![Process Memory Model](assets/images/Process%20Memory%20Model.png)
+
+Note that the stack and the heap start at opposite ends of the process's free space and grow towards each other.  If they should ever meet, then either a stack overflow error will occur.
+
+When working with Java we mainly work with the stack and the heap.
+
+### What goes in the Stack?
+
+When our Java program starts it calls our `main()` method.  When it does so, it adds an entry in the stack.  Every time a method is called, Java adds an entry in the stack, and it removes this entry once the method is complete.
+
+Once the stack is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the stack and the program completes.  We will revise this once we discuss [threads and concurrency](../11%20-%20Concurrency.md).
+
+All variables created and used within the method are stored in the stack.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    int a = 7;
+    System.out.printf( "The value of a is %d%n", a );
+  }
+}
+```
+
+The `main()` is
+1. receiving the command line arguments
+1. creating a local variable
+1. calling another method to print a simple message
+
+The stack entry that was created for the `main()` method and made space for two variables, amongst other things.  Then the `main()` calls the `printf()` method.  Java will create a new stack entry for the `printf()`.
+
+![Stack - main() calls printf()](assets/images/Stack%20-%20main()%20calls%20printf().png)
+
+Every time a method is called, Java adds a new entry in the stack.
+
+Consider the following example
+
+![Stack - showing 4 methods](assets/images/Stack%20-%20showing%204%20methods.png)
+
+Based on the above image, we see that
+1. The `main()` method called method `a()`, which in turn called method `b()`, which called method `d()`.
+1. The size of stack entry for each method dependes on the number of variables this method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` create lots of variables.
+1. The method `c()` is the current method.  Java is currently executing this method.
+
+### What goes in the Heap?
+
+**Pending...**
+
+### String from String
+
+**Pending...**
+
+
 
 ## Operators
 
