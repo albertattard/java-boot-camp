@@ -24,52 +24,24 @@
 
 ## Classes and methods (static no OOP)
 
-Example (`Dice.java`)
-
-```java
-package demo;
-
-import java.util.Random;
-
-public class Dice {
-  public static int roll() {
-    Random r = new Random();
-    return r.nextInt( 6 ) + 1;
-  }
-}
-```
-
-Example (`App.java`)
+Consider the following example
 
 ```java
 package demo;
 
 import java.time.LocalTime;
+import java.util.Random;
 
 public class App {
   public static void main( String[] args ) {
-    printStartGameMessage();
+    System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
+    System.out.printf( "[%tH:%<tM:%<tS] Please roll the \uD83C\uDFB2%n", LocalTime.now() );
 
-    int a = Dice.roll();
-    int b = Dice.roll();
-    displayf( "You rolled %d and %d", a, b );
-  }
+    Random r = new Random();
+    int a = r.nextInt( 6 ) + 1;
+    int b = r.nextInt( 6 ) + 1;
 
-  public static void printStartGameMessage() {
-    System.out.println( "Game started.  Please roll the \uD83C\uDFB2" );
-  }
-
-  public static void display( String message ) {
-    System.out.println( format( message ) );
-  }
-
-  public static void displayf( String format, Object... values ) {
-    String formatted = String.format( format, values );
-    display( formatted );
-  }
-
-  public static String format( String message ) {
-    return String.format( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+    System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
   }
 }
 ```
@@ -77,9 +49,143 @@ public class App {
 Output
 
 ```bash
-Game started.  Please roll the 🎲
-[21:32:38] You rolled 5 and 2
+[12:34:56] Game started
+[12:34:56] Please roll the 🎲
+[12:34:56] You rolled 2 and 1
 ```
+
+**Observations**
+
+1. The output messages have the format:
+
+    ```java
+    System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
+    ```
+
+1. The roll of die logic cannot be reused
+
+    ```java
+    int a = r.nextInt( 6 ) + 1;
+    ```
+
+**Refactoring**
+
+1. Move the dice logic to a separate class
+
+    Create a file called `Dice.java`
+
+    ```java
+    package demo;
+
+    import java.util.Random;
+
+    public class Dice {
+
+      public static int roll() {
+        Random r = new Random();
+        return r.nextInt( 6 ) + 1;
+      }
+    }
+    ```
+
+1. Use the new method `roll()` defined in the `Dice` class
+
+    ```java
+    package demo;
+
+    import java.time.LocalTime;
+
+    public class App {
+      public static void main( String[] args ) {
+        System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
+        System.out.printf( "[%tH:%<tM:%<tS] Please roll the \uD83C\uDFB2%n", LocalTime.now() );
+
+        int a = Dice.roll();
+        int b = Dice.roll();
+
+        System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
+      }
+    }
+    ```
+
+1. Move the messaging logic to a separate class
+
+    Create a file called `Display.java`
+
+    ```java
+    package demo;
+
+    import java.time.LocalTime;
+
+    public class Display {
+      public static void print( String message ) {
+        System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+      }
+    }
+    ```
+
+1. Use the new method `print()` defined in the `Display` class
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        Display.print( "Game started" );
+        Display.print( "Please roll the \uD83C\uDFB2" );
+
+        int a = Dice.roll();
+        int b = Dice.roll();
+
+        /* We still had to format the string */
+        Display.print( String.format( "You rolled %d and %d", a, b ) );
+      }
+    }
+    ```
+
+1. Add formatting support to the `Display` class
+
+    ```java
+      public static void printf( String pattern, Object... parameters ) {
+        print( String.format( pattern, parameters ) );
+      }
+    ```
+
+    Full example
+
+    ```java
+    package demo;
+
+    import java.time.LocalTime;
+
+    public class Display {
+      public static void printf( String pattern, Object... parameters ) {
+        print( String.format( pattern, parameters ) );
+      }
+
+      public static void print( String message ) {
+        System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+      }
+    }
+    ```
+
+1. Use the new `printf()` method
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        Display.print( "Game started" );
+        Display.print( "Please roll the \uD83C\uDFB2" );
+
+        int a = Dice.roll();
+        int b = Dice.roll();
+
+        Display.printf( "You rolled %d and %d", a, b );
+      }
+    }
+    ```
 
 ## Properties (static no OOP)
 
