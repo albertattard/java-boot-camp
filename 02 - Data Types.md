@@ -979,7 +979,142 @@ Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_
 
 ![Rock Paper Scissors Game Rules](assets/images/Rock%20Paper%20Scissors.png)
 
+How can we represent the hand played (*rock*, *paper* or *scissors*) and the game outcome (*draw*, *player 1 wins* or * player 2 wins*).
+
+A common approach, before Java 1.5, was to create a constant table where an `int` value will represent a state.
+
+1. Hand constants
+
+    | Hand     | Value |
+    |----------|------:|
+    | Paper    |     1 |
+    | Scissors |     2 |
+    | Rock     |     3 |
+
+1. Outcome constants
+
+    | Outcome      | Value |
+    |--------------|------:|
+    | Draw         |     0 |
+    | Player 1 Win |     1 |
+    | Player 2 Win |     2 |
+
+This simplifies coding as we can compare `int`s
+
+| Player 1 | Player 2 | Result |
+|---------:|---------:|-------:|
+|        1 |        1 |      0 |
+|        1 |        2 |      2 |
+|        1 |        3 |      1 |
+|        2 |        1 |      1 |
+|        2 |        2 |      0 |
+|        2 |        3 |      2 |
+|        3 |        1 |      2 |
+|        3 |        2 |      1 |
+|        3 |        3 |      0 |
+
 Example
+
+```java
+package demo;
+
+public class RockPaperScissors {
+
+  public static int determineOutcome( int player1, int player2 ) {
+    if ( player1 == player2 ) {
+      return 0;
+    }
+
+    return switch ( player1 ) {
+      case 1 -> player2 == 3 ? 1 : 2;
+      case 2 -> player2 == 1 ? 1 : 2;
+      default -> player2 == 2 ? 1 : 2;
+    };
+  }
+}
+```
+
+The following tests confirms that our implementation is correct
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static demo.RockPaperScissors.determineOutcome;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class RockPaperScissorsTest {
+
+  @ValueSource( ints = { 1, 2, 3 } )
+  @ParameterizedTest( name = "should return 0 when both players play the same hand {0}" )
+  void shouldReturnDraw( int hand ) {
+    assertEquals( 0, determineOutcome( hand, hand ) );
+  }
+
+  @CsvSource( { "2,1", "3,2", "1,3" } )
+  @ParameterizedTest( name = "should return 1 when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer1( int player1, int player2 ) {
+    assertEquals( 1, determineOutcome( player1, player2 ) );
+  }
+
+  @CsvSource( { "1,2", "2,3", "3,1" } )
+  @ParameterizedTest( name = "should return 2 when player1 plays {0} and player 2 plays {1}" )
+  void shouldReturnWinPlayer2( int player1, int player2 ) {
+    assertEquals( 2, determineOutcome( player1, player2 ) );
+  }
+}
+```
+
+The above is very hard to read.  By just looking the table, it is hard to understand what is what.
+
+| Player 1 | Player 2 | Result |
+|---------:|---------:|-------:|
+|        1 |        1 |      0 |
+|        1 |        2 |      2 |
+|        1 |        3 |      1 |
+|        2 |        1 |      1 |
+|        2 |        2 |      0 |
+|        2 |        3 |      2 |
+|        3 |        1 |      2 |
+|        3 |        2 |      1 |
+|        3 |        3 |      0 |
+
+A better option (always before Java 1.5) is to use `int` constants
+
+1. Hand constants
+
+    | Hand     | Constant | Value |
+    |----------|----------|------:|
+    | Paper    | PAPER    |     1 |
+    | Scissors | SCISSORS |     2 |
+    | Rock     | ROCK     |     3 |
+
+1. Outcome constants
+
+    | Outcome      | Constant     | Value |
+    |--------------|--------------|------:|
+    | Draw         | DRAW         |     0 |
+    | Player 1 Win | WIN_PLAYER_1 |     1 |
+    | Player 2 Win | WIN_PLAYER_2 |     2 |
+
+The table is now can be easily read and understood
+
+| Player 1 | Player 2 | Result       |
+|----------|----------|--------------|
+| PAPER    | PAPER    | DRAW         |
+| PAPER    | SCISSORS | WIN_PLAYER_2 |
+| PAPER    | ROCK     | WIN_PLAYER_1 |
+| SCISSORS | PAPER    | WIN_PLAYER_1 |
+| SCISSORS | SCISSORS | DRAW         |
+| SCISSORS | ROCK     | WIN_PLAYER_2 |
+| ROCK     | PAPER    | WIN_PLAYER_2 |
+| ROCK     | SCISSORS | WIN_PLAYER_1 |
+| ROCK     | ROCK     | DRAW         |
+
+Refactored the code to use the `int` constants instead.
 
 ```java
 package demo;
@@ -1010,7 +1145,7 @@ public class RockPaperScissors {
 }
 ```
 
-The above example uses `int` as constants to identify what is what.  This was a common practice in the past.
+Update the tests to make use of the `int` contants instead.
 
 ```java
 package demo;
@@ -1050,7 +1185,9 @@ public class RockPaperScissorsTest {
 }
 ```
 
-Java 5 introduced Enums which simplifies the above problem.
+[Java 5 introduced Enums](https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html) which simplifies the above problem.
+
+Refactor the current solution into using enums
 
 1. **Refactor Outcome**
 
@@ -1070,7 +1207,7 @@ Java 5 introduced Enums which simplifies the above problem.
     import static demo.RockPaperScissors.Outcome.WIN_PLAYER_2;
     ```
 
-    The above will not compile until we use the enum.
+    The above will not compile until we add the enum to the `RockPaperScissors` class.
 
     Replace the outcome constants with an enum
 
