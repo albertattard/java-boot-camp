@@ -477,7 +477,7 @@ Consider the following example.
 
 ```java
 int a = 7;
-a=3;
+a = 3;
 ```
 
 1. Variable `a` starts with the value of `7`
