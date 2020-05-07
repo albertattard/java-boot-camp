@@ -225,4 +225,9 @@ Boot Camp for developers interested to learn Java.
 ### [Recommended Reading](13%20-%20Recommended%20Reading.md)
 
 1. [Java](13%20-%20Recommended%20Reading.md#java)
-    1. [Gradle](13%20-%20Recommended%20Reading.md#gradle)
+1. [Gradle](13%20-%20Recommended%20Reading.md#gradle)
+1. [Docker](13%20-%20Recommended%20Reading.md#docker)
+1. [Kubernetes](13%20-%20Recommended%20Reading.md#kubernetes)
+1. [JUnit](13%20-%20Recommended%20Reading.md#junit)
+1. [Mockito](13%20-%20Recommended%20Reading.md#mockito)
+1. [Miscellaneous](13%20-%20Recommended%20Reading.md#miscellaneous)
