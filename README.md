@@ -221,3 +221,7 @@ Boot Camp for developers interested to learn Java.
     1. [Strategy Pattern](12%20-%20Common%20Design%20Patterns.md#strategy-pattern)
     1. [Template Pattern](12%20-%20Common%20Design%20Patterns.md#template-pattern)
     1. [Visitor Pattern](12%20-%20Common%20Design%20Patterns.md#visitor-pattern)
+
+### [Recommended Reading](13%20-%20Recommended%20Reading.md)
+
+1. [Java](13%20-%20Recommended%20Reading.md#java)
