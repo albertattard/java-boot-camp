@@ -10,12 +10,14 @@
     1. [Variables and their Values](#variables-and-their-values)
 1. [Stack and Heap](#stack-and-heap)
     1. [OS Process Memory](#os-process-memory)
-    1. [What goes in the Java stack?](#what-goes-in-the-java-stack)
+    1. [What goes in the Java Stack?](#what-goes-in-the-java-stack)
     1. [What goes in the Java Heap?](#what-goes-in-the-java-heap)
     1. [Variables without a value](#variables-without-a-value)
     1. [Can we have a reference variable without the equivalent object in the Java heap (null)?](#can-we-have-a-reference-variable-without-the-equivalent-object-in-the-java-heap-null)
         1. [What happens if we try to call a method on a null object?](#what-happens-if-we-try-to-call-a-method-on-a-null-object)
         1. [What is NullPointerException?](#what-is-nullpointerexception)
+    1. [The new operator and the Java Heap](#the-new-operator-and-the-java-heap)
+    1. [Garbage Collection](#garbage-collection)
     1. [String or new String?](#string-or-new-string)
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
@@ -412,7 +414,7 @@ Internally, the JVM maintains its own *stack* and *heap* (referred to here as th
 
 **We will only focus on the *Java stack* and *Java heap* from this point onwards**.
 
-### What goes in the Java stack?
+### What goes in the Java Stack?
 
 When our Java program starts, Java calls our `main()` method.  When Java does so, it adds an entry in the *Java stack*.  Every time a method is called, Java adds an entry in the *Java stack*, and it removes this entry once the method completes.
 
@@ -666,14 +668,138 @@ Exception in thread "main" java.lang.NullPointerException
 
 The error `NullPointerException` is one of the most common errors in Java.  This is cause when we try to invoke methods on a `null` object.  It is quite simple, yet drives people crazy and [caused billions to the industry](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).
 
+### The new operator and the Java Heap
+
+Objects are created using the [`new` operator](https://docs.oracle.com/javase/tutorial/java/javaOO/objectcreation.html).
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+  public static void main( String[] args ) {
+    Point p = new Point( 1, 2 );
+    System.out.printf( "My point is %s%n", p );
+  }
+}
+```
+
+An object of type `Point` is created and assigned to the variable of the same type, `p`.
+
+There are some exceptions to this rule.  Some types of objects can be created without using the `new` operator.
+
+1. Strings can be created by assigning string literals
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        String s = "my string";
+        System.out.println( s );
+      }
+    }
+    ```
+
+1. Arrays ([discussed later on, together with collections](07%20-%20Collections.md#arrays)) can be created without using the `new` operator
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        int[] a = { 1, 2, 3, 4, 5 };
+        System.out.printf( "The array has %d elements%n", a.length );
+      }
+    }
+    ```
+
+1. Lambda function ([discussed in great depth later on](08%20-%20Lambda.md)) can be created without using the `new` operator as shown next
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( String[] args ) {
+        Runnable r = () -> {
+          System.out.println( "I'm running in a lambda" );
+        };
+        r.run();
+      }
+    }
+    ```
+
+Every time the `new` operator is used, a new object is created and added to the *Java heap*.  There is no escape.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+  public static void main( String[] args ) {
+    new Point( 1, 2 );
+    new Point( 3, 4 );
+    new Point( 5, 6 );
+  }
+}
+```
+
+Three objects of type `Point` are created and none are assigned to a variable.
+
+![Objects in Java Heap without a Variable in the Java Stack](assets/images/Objects%20in%20Java%20Heap%20without%20a%20Variable%20in%20the%20Java%20Stack.png)
+
+**Is this a memory leak?**
+
+No.  Java is immune from memory leaks and the above objects will be cleaned by the garbage collector.
+
+### Garbage Collection
+
+Java is a managed language, which means that the programmers does not need to worry about the memory.  The following the image shows the main components of the JVM.
+
+![Key Hotspot JVM Components](assets/images/Key%20Hotspot%20JVM%20Components.png)
+([Reference](https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html))
+
+The garbage collector, featuring in the above image, is responsible from removing any objects in the *Java heap* which are not required anymore.  In a nutshell, the garbage collector scans the *Java heap* and removes any dangling objects.  Note that while the garbage collector is running, the JVM is paused.  This is a critical aspect of performance tuning.  A badly tuned system may spend most of its time paused, while the garbage collector cleans the *Java heap*.
+
+Note that the garbage collector only cleans the *Java heap*.  The garbage collector does not clean the *Java stack*.
+
+The main point here is that the garbage collector is not a free lunch.  With that said, **do not optimise prematurely**.  Remember, "*Premature optimization is the root of all evil*".
+
+#### Recommended Reading
+
+1. Optimizing Java ([O'Reilly Video Series](https://learning.oreilly.com/videos/optimizing-java/9781492044673))
+
 ### String or new String?
 
-**Pending...**
+Consider the following.
 
+```java
+String s = new String( "my string" );
+```
+
+How may `String` objects do we have?
+
+The correct answer is 2.
+1. An object is used to store the literal
+1. Another object is created when the `new` operator is used
+
+**The above is discouraged as unnecessary objects are created in memory**.  Prefer the following instead.
+
+```java
+String s = "my string";
+```
 
 ### What happens to a variable when it goes out of scope?
 
-**Pending...**
+Objects that are not required anymore are cleaned by the [garbage collector](#garbage-collection).  The garbage collector clean the objects and not the variables.
+
+Variables are stored in the *Java stack* and are removed automatically once the variables go out of scope.  Once a variable goes out of scope, the variable is removed from the *Java stack*.
 
 ## Operators
 

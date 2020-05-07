@@ -20,6 +20,7 @@
 | Java: The Complete Reference, Eleventh Edition, 11th Edition       |           |[Book](https://learning.oreilly.com/library/view/java-the-complete/9781260440249/)             |
 | Java Cookbook, 4th Edition                                         |           |[Book](https://learning.oreilly.com/library/view/java-cookbook-4th/9781492072577/)             |
 | Introduction to Java 8                                             |           |[Video](https://learning.oreilly.com/videos/introduction-to-java/9781491907795)                |
+| Optimizing Java                                                    | Ben Evans |[Video](https://learning.oreilly.com/videos/optimizing-java/9781492044673)                     |
 
 ## Gradle
 
