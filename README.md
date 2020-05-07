@@ -225,3 +225,4 @@ Boot Camp for developers interested to learn Java.
 ### [Recommended Reading](13%20-%20Recommended%20Reading.md)
 
 1. [Java](13%20-%20Recommended%20Reading.md#java)
+    1. [Gradle](13%20-%20Recommended%20Reading.md#gradle)
