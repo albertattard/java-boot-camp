@@ -416,9 +416,9 @@ Internally, the JVM maintains its own *stack* and *heap* (referred to here as th
 
 When our Java program starts, Java calls our `main()` method.  When Java does so, it adds an entry in the *Java stack*.  Every time a method is called, Java adds an entry in the *Java stack*, and it removes this entry once the method completes.
 
-Once the *Java stack* is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry in the *Java stack* and the program completes.  We will revise and elaborates this point when we discuss [threads and concurrency](11%20-%20Concurrency.md).
+Once the *Java stack* is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry from the *Java stack* and the program completes.  We will revise and elaborates this point when we discuss [threads and concurrency](11%20-%20Concurrency.md).
 
-All variables created and used within a method are stored in the *Java stack*.
+All variables created and used within a method are stored in the method's entry in the *Java stack*.
 
 Consider the following example.
 
@@ -442,7 +442,7 @@ The `main()` method is
 1. calling another method to print a simple message
     (`System.out.printf( "The value of a is %d%n", a );`)
 
-A *Java stack* entry is created for the `main()` method, which will contain two variables, amongst other things.  The `main()` method calls (or invokes) the `printf()` method.  Java will create a new *Java stack* entry for the `printf()` method.
+A *Java stack* entry is created for the `main()` method, which will contain two variables, amongst other things.  The `main()` method calls (or invokes) the `printf()` method.  Java will create a new *Java stack* entry for the `printf()` method.  Any variables used by the `printf()` method will be stored in the `printf()`'s entry in the *Java stack*.
 
 ![Stack - main() calls printf()](assets/images/Stack%20-%20main()%20calls%20printf().png)
 
@@ -457,17 +457,21 @@ Based on the above image, we see that
 1. The size of *Java stack* entry of each method depends on the number of variables each method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` has lots of variables.
 1. Method `c()` is the current active method.  Java is currently executing this method.  The method at the top of the *Java stack*, is the active method.
 
-Java has [two types of variables](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12)
+Java has [two types of variables](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12):
 1. [primitive types](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.1)
-1. [reference types (also referred to as objects)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.2)
+1. [reference types (also referred to as *objects* or *object types*)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.2)
 
-The primitive type variables are stored in the *Java stack*.  Consider the following variable.
+The primitive type variables are stored in the *Java stack*.  
+
+Consider the following variable.
 
 ```java
 int a = 7;
 ```
 
-The variable named `a` is a primitive type.  The value of the primitive variables, `7` in this case, is stored in the *Java stack*.
+The variable named `a` is of primitive type.  The `int` value of the primitive variables, `7` in this case, is stored in the *Java stack*.
+
+![Primitive Variable stored in the Java Stack](assets/images/Primitive%20Variable%20stored%20in%20the%20Java%20Stack.png)
 
 Reference type variables are stored in two places in the memory.
 1. The variable itself, is stored in the *Java stack*
@@ -508,7 +512,7 @@ String s2 = s;
 String s3 = s;
 ```
 
-In the above code we have 5 variables, one primitive type and four reference types, and an object.
+The above code fragment has 5 variables, one primitive type and four reference types, and an object.
 
 ![Many Variables One Object](assets/images/Many%20Variables%20One%20Object.png)
 
