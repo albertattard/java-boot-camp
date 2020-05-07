@@ -461,7 +461,7 @@ Java has [two types of variables](https://docs.oracle.com/javase/specs/jls/se14/
 1. [primitive types](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.1)
 1. [reference types (also referred to as *objects* or *object types*)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12.2)
 
-The primitive type variables are stored in the *Java stack*.  
+The primitive type variables are stored in the *Java stack*.
 
 Consider the following variable.
 
@@ -472,6 +472,21 @@ int a = 7;
 The variable named `a` is of primitive type.  The `int` value of the primitive variables, `7` in this case, is stored in the *Java stack*.
 
 ![Primitive Variable stored in the Java Stack](assets/images/Primitive%20Variable%20stored%20in%20the%20Java%20Stack.png)
+
+Consider the following example.
+
+```java
+int a = 7;
+a=3;
+```
+
+1. Variable `a` starts with the value of `7`
+
+![Variable a starts with value 7](assets/images/Primitive%20Variable%20stored%20in%20the%20Java%20Stack.png)
+
+1. Then it is changed to `3` using the assignment operator (`=`)
+
+![Variable a changed its value to 3](assets/images/Java%20Stack%20and%20Assignment%20Operator.png)
 
 Reference type variables are stored in two places in the memory.
 1. The variable itself, is stored in the *Java stack*
@@ -498,7 +513,7 @@ String s = "my object type";
 
 The variables (both types) are only found in the *Java stack*, while the objects are only found in the *Java heap*.  The size of the *Java stack* entry for our method is directly proportional to the number of variables our method has.
 
-The size of the method itself (the number of lines of code) is not part of the *Java stack* and is stored elsewhere.
+The size of the method itself (such as the number of lines of code or the complex algorithms) does not affect the *Java stack* as methods are stored elsewhere.
 
 Having large objects, will not affect the *Java stack* as all objects' data is stored in the *Java heap*.
 
