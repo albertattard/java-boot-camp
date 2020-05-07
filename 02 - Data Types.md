@@ -529,7 +529,7 @@ String s2 = s;
 String s3 = s;
 ```
 
-The above code fragment has 5 variables, one primitive type and four reference types, and an object.
+The above code fragment has five variables, one primitive type and four reference types, and an object.
 
 ![Many Variables One Object](assets/images/Many%20Variables%20One%20Object.png)
 
@@ -797,7 +797,7 @@ String s = "my string";
 
 ### What happens to a variable when it goes out of scope?
 
-Objects that are not required anymore are cleaned by the [garbage collector](#garbage-collection).  The garbage collector clean the objects and not the variables.
+Objects that are not required anymore are cleaned by the [garbage collector](#garbage-collection).  The garbage collector cleans the objects and not the variables.
 
 Variables are stored in the *Java stack* and are removed automatically once the variables go out of scope.  Once a variable goes out of scope, the variable is removed from the *Java stack*.
 
@@ -1145,7 +1145,7 @@ public class RockPaperScissors {
 }
 ```
 
-Update the tests to make use of the `int` contants instead.
+Update the tests to make use of the `int` constants instead.
 
 ```java
 package demo;
@@ -1240,13 +1240,15 @@ Refactor the current solution into using enums
     }
     ```
 
+    Note that the transition between `int` constants and enums is quite simple.  Kept the same names, and simply moved them inside the enum.
+
 1. **Refactor Hand**
 
     Use the `@EnumSource( Hand.class )` to test against all instances of the `Hand` enum
 
     ```java
       @EnumSource( Hand.class )
-      @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+      @ParameterizedTest( name = "should return DRAW when both players play the same hand {0}" )
       void shouldReturnDraw( RockPaperScissors.Hand hand ) {
         assertEquals( DRAW, determineOutcome( hand, hand ) );
       }
@@ -1256,7 +1258,7 @@ Refactor the current solution into using enums
 
     ```java
       @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
-      @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+      @ParameterizedTest( name = "should return WIN_PLAYER_1 when player1 plays {0} and player 2 plays {1}" )
       void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
         assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
       }
@@ -1281,19 +1283,19 @@ Refactor the current solution into using enums
     public class RockPaperScissorsTest {
 
       @EnumSource( Hand.class )
-      @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
+      @ParameterizedTest( name = "should return DRAW when both players play the same hand {0}" )
       void shouldReturnDraw( RockPaperScissors.Hand hand ) {
         assertEquals( DRAW, determineOutcome( hand, hand ) );
       }
 
       @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
-      @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
+      @ParameterizedTest( name = "should return WIN_PLAYER_1 when player1 plays {0} and player 2 plays {1}" )
       void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
         assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
       }
 
       @CsvSource( { "ROCK,PAPER", "PAPER,SCISSORS", "SCISSORS,ROCK" } )
-      @ParameterizedTest( name = "should return WIN_PLAYER_2 (2) when player1 plays {0} and player 2 plays {1}" )
+      @ParameterizedTest( name = "should return WIN_PLAYER_2 when player1 plays {0} and player 2 plays {1}" )
       void shouldReturnWinPlayer2( Hand player1, Hand player2 ) {
         assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
       }
