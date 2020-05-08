@@ -23,6 +23,7 @@
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
+1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](#enums-ordinal)
@@ -985,6 +986,29 @@ int g     10
 -- Auto-Boxing -
 Integer h 10
 int i     10
+```
+
+## Autoboxing is an easy target for NullPointerException
+
+**⚠️ THE FOLLOWING EXAMPLE COMPILES BUT PRODUCES A NULLPOINTEREXCEPTION!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    Integer a = null;
+    int b = a;
+    System.out.printf( "The autoboxed value of null is %d%n", b );
+  }
+}
+```
+
+Running this program will throw a `NullPointerException`.
+
+```bash
+Exception in thread "main" java.lang.NullPointerException
+	at demo.App.main(App.java:6)
 ```
 
 ## Enumerations
