@@ -495,9 +495,16 @@ class B {
 }
 ```
 
-Both classes are defined in the same file, `A.java`, yet these are two different classes within the same package.
+Both classes are defined in the same source file, `A.java`, yet these are two different classes within the same package.
 
-![One Source File Produces Two Class Files](assets/images/One%20Source%20File%20Produces%20Two%20Class%20Files.png)
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── A.class
+        └── B.class
+```
 
 There is one exception to this rule.  Consider the following example.
 
@@ -519,7 +526,7 @@ public class App {
 }
 ```
 
-An inner anonymous class is created within the `App` class.
+An inner anonymous class ([discussed in more depth when we cover objects](05%20-%20Objects.md#outer-inner-and-anonymous-classes)) is created within the `App` class.
 
 ```java
 Runnable r = new Runnable() {
