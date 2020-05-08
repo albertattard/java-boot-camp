@@ -20,6 +20,10 @@
         1. [Switch Fallthrough Example](#switch-fallthrough-example)
         1. [Switch Default Example](#switch-default-example)
         1. [Switch Expressions](#switch-expressions)
+    1. [For Loop](#for-loop)
+    1. [While Loop](#while-loop)
+    1. [Do/While Loop](#dowhile-loop)
+    1. [Foreach Loop](#foreach-loop)
     1. [Loop and Control Flow Example](#loop-and-control-flow-example)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
@@ -1075,6 +1079,279 @@ Both examples will output
 ```bash
 Option 2
 ```
+
+### For Loop
+
+A children's school asked us to write a small program than they can use to print the table for a given number.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    printTableOf( 3 );
+  }
+
+  public static void printTableOf( int number ) {  }
+}
+
+```
+
+The above program should print something like the following
+
+```bash
+----------------
+ The table of 3
+----------------
+ [ 1 × 3]     3
+ [ 2 × 3]     6
+ [ 3 × 3]     9
+ [ 4 × 3]    12
+ [ 5 × 3]    15
+ [ 6 × 3]    18
+ [ 7 × 3]    21
+ [ 8 × 3]    24
+ [ 9 × 3]    27
+ [10 × 3]    30
+----------------
+```
+
+One solution would be to print the table for a given number as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    printTableOf( 3 );
+  }
+
+  public static void printTableOf( int number ) {
+    System.out.println( "----------------" );
+    System.out.printf( " The table of %d%n", number );
+    System.out.println( "----------------" );
+
+    System.out.printf( " [%2s × %d] %5s%n", 1, number, number * 1 );
+    System.out.printf( " [%2s × %d] %5s%n", 2, number, number * 2 );
+    System.out.printf( " [%2s × %d] %5s%n", 3, number, number * 3 );
+    System.out.printf( " [%2s × %d] %5s%n", 4, number, number * 4 );
+    System.out.printf( " [%2s × %d] %5s%n", 5, number, number * 5 );
+    System.out.printf( " [%2s × %d] %5s%n", 6, number, number * 6 );
+    System.out.printf( " [%2s × %d] %5s%n", 7, number, number * 7 );
+    System.out.printf( " [%2s × %d] %5s%n", 8, number, number * 8 );
+    System.out.printf( " [%2s × %d] %5s%n", 9, number, number * 9 );
+    System.out.printf( " [%2s × %d] %5s%n", 10, number, number * 10 );
+
+    System.out.println( "----------------" );
+  }
+}
+```
+
+The above example has lots of repetition.  Another limitation the above code has is that we cannot adjust the number of rows to display.  The school may want to show the table of a number past 10.
+
+The above code can be improved by using loops instead.
+
+```java
+for ( int i = 1, n = number; i <= 10; i++, n += number ) {
+  System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+}
+```
+
+Complete example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    printTableOf( 3 );
+  }
+
+  public static void printTableOf( int number ) {
+    System.out.println( "----------------" );
+    System.out.printf( " The table of %d%n", number );
+    System.out.println( "----------------" );
+
+    for ( int i = 1, n = number; i <= 10; i++, n += number ) {
+      System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+    }
+
+    System.out.println( "----------------" );
+  }
+}
+```
+
+### While Loop
+
+The same example used in the for loop can be written with a while loop instead.
+
+```java
+int i = 1, n = number;
+while ( i <= 10 ) {
+  System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+
+  i++;
+  n += number;
+}
+```
+
+Complete example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    printTableOf( 3 );
+  }
+
+  public static void printTableOf( int number ) {
+    System.out.println( "----------------" );
+    System.out.printf( " The table of %d%n", number );
+    System.out.println( "----------------" );
+
+    int i = 1, n = number;
+    while ( i <= 10 ) {
+      System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+
+      i++;
+      n += number;
+    }
+
+    System.out.println( "----------------" );
+  }
+}
+```
+
+Note that different from the for loop, the variables `i` and `n` are available within the while loop and also outside the loop.  I personally prefer the for loop over the while loop just because of that.
+
+### Do/While Loop
+
+Another, not so popular loop is the do/while loop.  The same example can be written with the do/while loop.
+
+```java
+int i = 1, n = number;
+do {
+  System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+
+  i++;
+  n += number;
+} while ( i <= 10 );
+```
+
+Complete example
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    printTableOf( 3 );
+  }
+
+  public static void printTableOf( int number ) {
+    System.out.println( "----------------" );
+    System.out.printf( " The table of %d%n", number );
+    System.out.println( "----------------" );
+
+    int i = 1, n = number;
+    do {
+      System.out.printf( " [%2s × %d] %5s%n", i, number, n );
+
+      i++;
+      n += number;
+    } while ( i <= 10 );
+
+    System.out.println( "----------------" );
+  }
+}
+```
+
+Note that in the do/while the body of the loop is at least executed once, even if the condition is `false`.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    do {
+      System.out.println( "The body of the do/while is always executed at least once" );
+    } while ( false );
+  }
+}
+```
+
+The above example will print
+
+```bash
+The body of the do/while is always executed at least once
+```
+
+### Foreach Loop
+
+Java 5 introduced may new features to the Java language, one of which was the foreach loop.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int[] a = { 1, 2, 3, 4, 5 };
+    for ( int i : a ) {
+      System.out.println( i );
+    }
+  }
+}
+```
+
+One of the advantage of the foreach loop is that you do not need to worry about the end of the array.  A common mistake when looping an array is exceeding the array's length as shown next.
+
+**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS ArrayIndexOutOfBoundsException!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int[] a = { 1, 2, 3, 4, 5 };
+    for ( int i = 0; i <= a.length; i++ ) {
+      System.out.println( a[i] );
+    }
+  }
+}
+```
+
+```bash
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+	at demo.App.main(App.java:7)
+```
+
+The foreach loop is immune to this problem, but it comes short to provide the current array index.  When iterating with a foreach loop, you do not have access to the array index as this is handled internally by the foreach loop.
+
+The foreach loop returns the array's values and hides the array.  This means that we cannot work on the array.  For example, we cannot modify the contents of an array using a foreach loop.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( String[] args ) {
+    int[] a = { 1, 2, 3, 4, 5 };
+    for ( int i = 0; i < a.length; i++ ) {
+      a[i]++;
+    }
+
+    System.out.println( Arrays.toString( a ) );
+  }
+}
+```
+
+The above cannot be achieved using a foreach loop.
 
 ### Loop and Control Flow Example
 

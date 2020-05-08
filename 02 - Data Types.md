@@ -990,7 +990,7 @@ int i     10
 
 ### Autoboxing is an easy target for NullPointerException
 
-**⚠️ THE FOLLOWING EXAMPLE COMPILES BUT PRODUCES A NULLPOINTEREXCEPTION!!**
+**⚠️ THE FOLLOWING EXAMPLE COMPILES BUT PRODUCES A NullPointerException!!**
 
 ```java
 package demo;
@@ -1467,6 +1467,58 @@ The first enum constant, `CLUBS` has an ordinal of `0`.  The above example will 
 
 ```bash
 The enum DIAMONDS has an ordinal of 1
+```
+
+The previous example, the rock paper scissors example, can take advantage from the ordinal as shown next.
+
+```java
+public enum Hand {
+  PAPER,
+  SCISSORS,
+  ROCK;
+
+  public Outcome determineOutcome( final Hand other ) {
+    if ( this == other ) {
+      return Outcome.DRAW;
+    }
+
+    return beatenBy() == other ? Outcome.WIN_PLAYER_2 : Outcome.WIN_PLAYER_1;
+  }
+
+  public Hand beatenBy() {
+    final Hand[] hands = Hand.values();
+    return hands[( ordinal() + 1 ) % hands.length];
+  }
+}
+```
+
+Alternatively, the beaten by can be stored in a field and only computed once as shown next.
+
+```java
+public enum Hand {
+  PAPER,
+  SCISSORS,
+  ROCK;
+
+  private final Hand beatenBy;
+
+  Hand() {
+    final Hand[] hands = Hand.values();
+    beatenBy = hands[( ordinal() + 1 ) % hands.length];
+  }
+
+  public Outcome determineOutcome( final Hand other ) {
+    if ( this == other ) {
+      return Outcome.DRAW;
+    }
+
+    return beatenBy() == other ? Outcome.WIN_PLAYER_2 : Outcome.WIN_PLAYER_1;
+  }
+
+  public Hand beatenBy() {
+    return beatenBy;
+  }
+}
 ```
 
 ### Enums in Java can have state
