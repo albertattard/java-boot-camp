@@ -102,6 +102,8 @@ Output
     }
     ```
 
+    **Note that a class which is declared `public` should be in a file of the same name**, otherwise it will not compile.  The public class `Dice` must be in a file with the same name, `Dice.java`.
+
 1. Use the new method `roll()` defined in the `Dice` class
 
     ```java
@@ -338,13 +340,82 @@ c = 3
 
 ### The final keyword
 
-The `final` keyword marks a variable as immutable.  This means that the variable, **not its value** cannot be changed.  This means that the stack value, **and not the heap value**, cannot be modified.
+The `final` keyword marks a variable as immutable.  This means that the variable's value, be it the primitive value itself or the reference, cannot be changed.  This means that the *Java stack* value, **and not the *Java heap* value**, cannot be modified.
 
-**The `final` keyword affects the variable and not its value**.
+**The `final` keyword affects the *Java stack* and not the *Java heap* contents**.
 
 ## Access Control
 
-Example (`Dice.java`)
+We know that the `Random` class created a pseudo random sequence.  This means that we can predict the next number to be drawn after making several observations.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+class Dice {
+  static final Random random = new Random(1);
+
+  static int roll() {
+    return random.nextInt( 6 ) + 1;
+  }
+}
+```
+
+The `Random` object is initialised with a seed to simplify the example.  Both the `roll()` method and the `random` static field can be accessed.  An attacker can take advantage of that and force the next dice roll to be a `6`.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Skip some numbers */
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.random.nextInt();
+    }
+
+    /* This will always roll a 6 */
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
+  }
+}
+```
+
+Observations
+
+1. The attacker first called the `nextInt()` method `19` times.
+
+    ```java
+        for ( int i = 0; i < 19; i++ ) {
+          Dice.random.nextInt();
+        }
+    ```
+
+   The attacker knows that the 20th roll will yield a `6`.
+
+1. The attacker then rolled the dice normally
+
+    ```java
+        int a = Dice.roll();
+        System.out.printf( "I rolled a %s%n", a );
+    ```
+
+    and obtained the expected the attacker wanted.
+
+    ```bash
+    I rolled a 6
+    ```
+
+    The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
+
+Using access modifies, access to classes and their members can be restricted.
+
+Making the static field `random` `private` will not allow an attacker to access the static field directly.
 
 ```java
 package demo;
@@ -360,24 +431,32 @@ class Dice {
 }
 ```
 
-Example (`App.java`)
+The attacker cannot now access the `random` field.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
 ```java
 package demo;
 
 public class App {
 
-  public static void main( final String[] args ) {
-    final int a = Dice.roll();
-    System.out.printf( "You rolled a %d%n", a );
+  public static void main( String[] args ) {
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.random.nextInt();
+    }
+
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
   }
 }
 ```
 
-Output
+The following error will be produced
 
 ```bash
-You rolled a 5
+src/main/java/demo/App.java:7: error: random has private access in Dice
+      Dice.random.nextInt();
+          ^
 ```
 
 More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
