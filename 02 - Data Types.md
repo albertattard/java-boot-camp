@@ -441,11 +441,11 @@ Internally, the JVM maintains its own *stack* and *heap* (referred to here as th
 
 ### What goes in the Java Stack?
 
-When our Java program starts, Java calls our `main()` method.  When Java does so, it adds an entry in the *Java stack*.  Every time a method is called, Java adds an entry in the *Java stack*, and it removes this entry once the method completes.
+When our Java program starts, Java calls our `main()` method.  When Java does so, it adds a new frame in the *Java stack*.  Every time a method is called, Java adds a new frame in the *Java stack*, and it removes this frame once the method completes.
 
-Once the *Java stack* is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last entry from the *Java stack* and the program completes.  We will revise and elaborates this point when we discuss [threads and concurrency](11%20-%20Concurrency.md).
+Once the *Java stack* is empty, our program completes.  Once the `main()` method finishes execution, Java will remove the last frame from the *Java stack* and the program completes.  We will revise and elaborates this point when we discuss [threads and concurrency](11%20-%20Concurrency.md).
 
-All variables created and used within a method are stored in the method's entry in the *Java stack*.
+All variables created and used within a method are stored in the method's frame in the *Java stack*.
 
 Consider the following example.
 
@@ -469,11 +469,11 @@ The `main()` method is
 1. calling another method to print a simple message
     (`System.out.printf( "The value of a is %d%n", a );`)
 
-A *Java stack* entry is created for the `main()` method, which will contain two variables, amongst other things.  The `main()` method calls (or invokes) the `printf()` method.  Java will create a new *Java stack* entry for the `printf()` method.  Any variables used by the `printf()` method will be stored in the `printf()`'s entry in the *Java stack*.
+A new *Java stack* frame is created for the `main()` method, which will contain two variables, amongst other things.  The `main()` method calls (or invokes) the `printf()` method.  Java will create a new *Java stack* frame for the `printf()` method.  Any variables used by the `printf()` method will be stored in the `printf()`'s frame in the *Java stack*.
 
 ![Stack - main() calls printf()](assets/images/Stack%20-%20main()%20calls%20printf().png)
 
-Every time a method is called, Java adds a new entry in the *Java stack*.
+Every time a method is called, Java adds a new frame in the *Java stack*.
 
 Consider the following example
 
@@ -481,7 +481,7 @@ Consider the following example
 
 Based on the above image, we see that
 1. The `main()` method called method `a()`, which in turn called method `b()`, which called method `c()`.
-1. The size of *Java stack* entry of each method depends on the number of variables each method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` has lots of variables.
+1. The size of *Java stack* frame of each method depends on the number of variables each method contains.  It is clear that method `b()` is quite big when compared with the others.  This means that method `b()` has lots of variables.
 1. Method `c()` is the current active method.  Java is currently executing this method.  The method at the top of the *Java stack*, is the active method.
 
 Java has [two types of variables](https://docs.oracle.com/javase/specs/jls/se14/html/jls-4.html#jls-4.12):
@@ -538,7 +538,7 @@ String s = "my object type";
 
 ![Stack and Heap](assets/images/Stack%20and%20Heap.png)
 
-The variables (both types) are only found in the *Java stack*, while the objects are only found in the *Java heap*.  The size of the *Java stack* entry for our method is directly proportional to the number of variables our method has.
+The variables (both types) are only found in the *Java stack*, while the objects are only found in the *Java heap*.  The size of the *Java stack* frame for our method is directly proportional to the number of variables our method has.
 
 The size of the method itself (such as the number of lines of code or the complex algorithms) does not affect the *Java stack* as methods are stored elsewhere.
 
