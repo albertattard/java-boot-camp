@@ -5,6 +5,7 @@
 1. [Setup](#setup)
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
+    1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
     1. [Reference Types (the rest)](#reference-types-the-rest)
     1. [Variables and their Values](#variables-and-their-values)
@@ -317,6 +318,26 @@ My float   5,99
 My double  123456,1235
 My char    J
 My String  Hello, this is my string
+```
+
+### Multiline Strings
+
+As of Java 15, Java will start supporting multiline Strings as defined by [JEP-378](https://openjdk.java.net/jeps/378).
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    String s = """
+                “This is the day upon which
+                 we are reminded of what we
+                 are on the other 364.”
+                 —Mark Twain
+               """;
+    System.out.println(s);
+  }
+}
 ```
 
 ### Primitive Types
