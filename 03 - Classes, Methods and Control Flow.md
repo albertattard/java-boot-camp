@@ -8,6 +8,8 @@
 1. [Mutable and Immutable](#mutable-and-immutable)
     1. [The final keyword](#the-final-keyword)
 1. [Access Control](#access-control)
+    1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
+    1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
 1. [Control Flow and Loops](#control-flow-and-loops)
     1. [If (if/else) Control Flow Statement](#if-ifelse-control-flow-statement)
         1. [If Example](#if-example)
@@ -458,6 +460,87 @@ src/main/java/demo/App.java:7: error: random has private access in Dice
       Dice.random.nextInt();
           ^
 ```
+
+### Classes Access Modifiers Table
+
+| Access Modifier | Accessible From |
+|-----------------|-----------------|
+| `public`        | Anywhere        |
+| (no modifier)   | same package    |
+
+### Class Members Access Modifiers Table
+
+| Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
+|-----------------|:---------------:|:-----------------:|:-------------:|:-------------:|
+| `public`        |       Yes       |       Yes         |      Yes      |      Yes      |
+| `protected`     |       Yes       |       Yes         |      Yes      |       No      |
+| (no modifier)   |       Yes       |       Yes         |       No      |       No      |
+| `private`       |       Yes       |        No         |       No      |       No      |
+
+Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class A {
+  public static void printIt() {
+    System.out.printf( "The value of c is %d%n", B.c );
+  }
+}
+
+class B {
+  private static int c = 7;
+}
+```
+
+Both classes are defined in the same file, `A.java`, yet these are two different classes within the same package.
+
+![One Source File Produces Two Class Files](assets/images/One%20Source%20File%20Produces%20Two%20Class%20Files.png)
+
+There is one exception to this rule.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  private static int c = 7;
+
+  public static void main( String[] args ) {
+    Runnable r = new Runnable() {
+      @Override public void run() {
+        System.out.printf( "The value of c is %d%n", c );
+      }
+    };
+    r.run();
+  }
+}
+```
+
+An inner anonymous class is created within the `App` class.
+
+```java
+Runnable r = new Runnable() {
+  @Override public void run() {
+    System.out.printf( "The value of c is %d%n", c );
+  }
+};
+```
+
+This is compiled as  separate class file, `App$1.class`.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1.class
+        └── App.class
+```
+
+Despite being a different class within the same package, the inner anonymous class is still allowed to access `private` members within the parent class.
 
 More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
 

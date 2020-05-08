@@ -73,6 +73,8 @@ Boot Camp for developers interested to learn Java.
 1. [Mutable and Immutable](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#mutable-and-immutable)
     1. [The final keyword](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#the-final-keyword)
 1. [Access Control](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#access-control)
+    1. [Classes Access Modifiers Table](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#classes-access-modifiers-table)
+    1. [Class Members Access Modifiers Table](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#class-members-access-modifiers-table)
 1. [Control Flow and Loops](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#control-flow-and-loops)
     1. [If (if/else) Control Flow Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#if-ifelse-control-flow-statement)
         1. [If Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#if-example)
