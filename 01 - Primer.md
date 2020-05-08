@@ -66,7 +66,7 @@ It is important to note that to develop and compile Java source code you need to
 
 ## Java Language Specification
 
-The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the specification.  
+The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the specification.
 
 The specifications also define what type of comments are supported by the Java programming language.
 
@@ -758,7 +758,37 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     ![What does a modern JVM look like](assets/images/What%20does%20a%20modern%20JVM%20look%20like.png)
     Image copied from: [Theory: JVM Subsystems](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323884)
 
-    The Bytecode produced when compiling this class can be viewed using the [Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer).
+    The Bytecode produced when compiling this class can be viewed using the `javap` command as shown next.
+
+    ```bash
+    $ ./gradlew build
+    $ javap -c build/classes/java/main/demo/App.class
+    Compiled from "App.java"
+    public class demo.App {
+      public demo.App();
+        Code:
+           0: aload_0
+           1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+           4: return
+
+      public java.lang.String getGreeting();
+        Code:
+           0: ldc           #7                  // String Hello world.
+           2: areturn
+
+      public static void main(java.lang.String[]);
+        Code:
+           0: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
+           3: new           #15                 // class demo/App
+           6: dup
+           7: invokespecial #17                 // Method "<init>":()V
+          10: invokevirtual #18                 // Method getGreeting:()Ljava/lang/String;
+          13: invokevirtual #22                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+          16: return
+    }
+    ```
+
+    Alternatively, we can use the [IntelliJ Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer).
 
     Click on `View > Show Bytecode with Jclasslib`
 
@@ -1738,7 +1768,7 @@ We have two options to selectively copy the files required by the `./gradlew bui
     COPY ./src ./src
     ```
 
-    I personally prefer this option as I intentionally include the file and folders I need to copy.  If the IDE generates new files, these are not automatically copied as I forgot to include them to the `.dockerignore`. 
+    I personally prefer this option as I intentionally include the file and folders I need to copy.  If the IDE generates new files, these are not automatically copied as I forgot to include them to the `.dockerignore`.
 
 1. Clean the project
 

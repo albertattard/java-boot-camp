@@ -1492,35 +1492,6 @@ public enum Hand {
 }
 ```
 
-Alternatively, the beaten by can be stored in a field and only computed once as shown next.
-
-```java
-public enum Hand {
-  PAPER,
-  SCISSORS,
-  ROCK;
-
-  private final Hand beatenBy;
-
-  Hand() {
-    final Hand[] hands = Hand.values();
-    beatenBy = hands[( ordinal() + 1 ) % hands.length];
-  }
-
-  public Outcome determineOutcome( final Hand other ) {
-    if ( this == other ) {
-      return Outcome.DRAW;
-    }
-
-    return beatenBy() == other ? Outcome.WIN_PLAYER_2 : Outcome.WIN_PLAYER_1;
-  }
-
-  public Hand beatenBy() {
-    return beatenBy;
-  }
-}
-```
-
 ### Enums in Java can have state
 
 ```java

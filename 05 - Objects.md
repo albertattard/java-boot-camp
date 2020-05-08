@@ -28,6 +28,7 @@
 1. [Outer, Inner and Anonymous Classes](#outer-inner-and-anonymous-classes)
 1. [Annotations](#annotations)
 1. [Generics](#generics)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -1062,3 +1063,65 @@ A class that is marked `final` cannot be extended.  Therefore, a `final` class c
 ## Generics
 
 **Pending...**
+
+Are not 100% Erased
+
+```java
+package demo;
+
+import java.util.concurrent.Callable;
+
+public class PiCallable implements Callable<Double> {
+
+  @Override public Double call() {
+    return Math.PI;
+  }
+}
+```
+
+```bash
+$ ./gradlew clean build
+```
+
+```bash
+javap build/classes/java/main/demo/PiCallable.class
+Compiled from "PiCallable.java"
+public class demo.PiCallable implements java.util.concurrent.Callable<java.lang.Double> {
+  public demo.PiCallable();
+  public java.lang.Double call();
+  public java.lang.Object call() throws java.lang.Exception;
+}
+```
+
+Some generic information is retained for linking purposes, otherwise the compiler will not be able to determine whether this is the correct generic.
+
+```java
+public void readDouble(Callable<Double> callable) { /**/ }
+```
+
+Generics need to be backward compatible and need to support raw types.  That's why we have two versions of the `call()` method.
+
+```java
+public void linkToRawType(Callable callable) { /**/ }
+```
+
+## Miscellaneous
+
+Objects have two words headers
+
+1. Mark word
+    1. For locking object
+        1. Unlocked
+        1. Biased
+        1. Lightweight Locked
+        1. Heavyweight Locked
+    1. During Garbage Collection
+1. Klass word
+    A pointer to where the class metadata is located.  Before Java 8, this was the *permgem* (within the *Java Heap*).  In Java 8 this was migrated to *metaspace*, outside the *Java Heap*.
+    
+    Note that this pointer is not pointing to an object.
+
+Arrays have three words
+    1. Mark word
+    1. Klass word
+    1. The length of the array.

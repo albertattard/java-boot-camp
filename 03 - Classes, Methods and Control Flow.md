@@ -4,6 +4,7 @@
 
 1. [Setup](#setup)
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
+    1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [Mutable and Immutable](#mutable-and-immutable)
     1. [The final keyword](#the-final-keyword)
@@ -24,6 +25,10 @@
     1. [While Loop](#while-loop)
     1. [Do/While Loop](#dowhile-loop)
     1. [Foreach Loop](#foreach-loop)
+    1. [Nested Loops](#nested-loops)
+    1. [Break, Continue, Labels and Return](#break-continue-labels-and-return)
+        1. [Break](#break)
+    1. [Label](#label)
     1. [Loop and Control Flow Example](#loop-and-control-flow-example)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
@@ -208,6 +213,12 @@ Output
       }
     }
     ```
+
+### Is void a type?
+
+No.  The keyword `void` indicates that the method returns nothing.
+
+This quite unique and other language, always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
 
 ## Properties (static no OOP)
 
@@ -1353,7 +1364,142 @@ public class App {
 
 The above cannot be achieved using a foreach loop.
 
+### Nested Loops
+
+**Pending...**
+
+### Break, Continue, Labels and Return
+
+#### Break
+
+Consider the following code example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( int i = 0; i < 5; i++ ) {
+      for ( int j = 0; j < 5; j++ ) {
+        if ( j == 4 ) {
+          display( i, j );
+          break;
+        }
+      }
+    }
+  }
+
+  private static void display( int i, int j ) {
+    System.out.printf( "i=%d and j=%d%n", i, j );
+  }
+}
+```
+
+The above code will print the following.
+
+```bash
+i=0 and j=4
+i=1 and j=4
+i=2 and j=4
+i=3 and j=4
+i=4 and j=4
+```
+
+The `break` keyword breaks the inner loop but the outer loop is uneffected.  Use [labels section](#label) to control which loop to break.
+### Label
+
+Blocks can be labelled
+
+```java
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    outerLoop:
+    for ( int i = 0; i < 5; i++ ) {
+      for ( int j = 0; j < 5; j++ ) {
+        if ( j == 4 ) {
+          display( i, j );
+          break outerLoop;
+        }
+      }
+    }
+  }
+
+  private static void display( int i, int j ) {
+    System.out.printf( "i=%d and j=%d%n", i, j );
+  }
+}
+```
+
+```bash
+i=0 and j=4
+```
+
+
+
+
+
+Write a small program that counts the number of times it takes to roll a 6, using an unseeded instance of `Random`.
+
+Example
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( int i = 1; ; i++ ) {
+      int r = rollDice();
+      if ( r == 6 ) {
+        System.out.printf( "Rolled a 6 after %d tries%n", i );
+        break;
+      }
+    }
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
+}
+```
+
+
 ### Loop and Control Flow Example
+
+Using `Random` as a source of input, write a simple game where the player is given three chances to roll `10` or above.  If the players rolls then or above, the program should print the following.
+
+```bash
+You won!!
+```
+
+If the player does not beat the game within three chances, the program should print.
+
+```bash
+Better luck next time
+```
+
+that rolls two dice and prints `"You won!!"` if the sum of the dice is `10` or above.  If the sum of the rolled dice is less than `10`, then the program should print the following and try again.
+
+```bash
+Not enough, please try again.
+```
+
+Everytime the dice are rolled the program should print the numbers rolled.
+
+```bash
+You rolled 1 and 2
+```
 
 Example
 
@@ -1371,21 +1517,33 @@ public class App {
     for ( int i = 0; i < 3; i++ ) {
       final int a = rollDice();
       final int b = rollDice();
-      System.out.printf( "You rolled %d and %d%n", a, b );
+      displayf( "You rolled %d and %d%n", a, b );
 
-      if ( a + b >= 10 ) {
+      if ( hasWon( a, b ) ) {
         won = true;
         break;
       }
 
-      System.out.println( "Not enough, please try again." );
+      display( "Not enough, please try again." );
     }
 
     if ( won ) {
-      System.out.println( "You won!!" );
+      display( "You won!!" );
     } else {
-      System.out.println( "Better luck next time" );
+      display( "Better luck next time" );
     }
+  }
+
+  private static void displayf( String pattern, Object... parameters ) {
+    display( String.format( pattern, parameters ) );
+  }
+
+  private static void display( String message ) {
+    System.out.println( message );
+  }
+
+  private static boolean hasWon( int a, int b ) {
+    return a + b >= 10;
   }
 
   private static int rollDice() {
@@ -1393,7 +1551,52 @@ public class App {
   }
 
   private static final Random random = new Random();
+}
+```
 
+The following example shows an alternative approach using the `return` instead of `break`.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( int i = 0; i < 3; i++ ) {
+      final int a = rollDice();
+      final int b = rollDice();
+      displayf( "You rolled %d and %d%n", a, b );
+
+      if ( hasWon( a, b ) ) {
+        display( "You won!!" );
+        return;
+      }
+
+      display( "Not enough, please try again." );
+    }
+
+    display( "Better luck next time" );
+  }
+
+  private static void displayf( String pattern, Object... parameters ) {
+    display( String.format( pattern, parameters ) );
+  }
+
+  private static void display( String message ) {
+    System.out.println( message );
+  }
+
+  private static boolean hasWon( int a, int b ) {
+    return a + b >= 10;
+  }
+
+  private static int rollDice() {
+    return random.nextInt( 6 ) + 1;
+  }
+
+  private static final Random random = new Random();
 }
 ```
 
@@ -1496,3 +1699,4 @@ Hello World!!
 ```
 
 The [gist x_init](https://gist.github.com/albertattard/3f9a66faf2a90dc2bf6376d37c7c6052) shows a more elaborated example.
+

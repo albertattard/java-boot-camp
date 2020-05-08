@@ -69,6 +69,7 @@ Boot Camp for developers interested to learn Java.
 ### [Classes, Methods and Control Flow](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md)
 
 1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#classes-and-methods-static-no-oop)
+    1. [Is void a type?](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#is-void-a-type)
 1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#properties-static-no-oop)
 1. [Mutable and Immutable](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#mutable-and-immutable)
     1. [The final keyword](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#the-final-keyword)
@@ -89,6 +90,10 @@ Boot Camp for developers interested to learn Java.
     1. [While Loop](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#while-loop)
     1. [Do/While Loop](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#dowhile-loop)
     1. [Foreach Loop](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#foreach-loop)
+    1. [Nested Loops](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#nested-loops)
+    1. [Break, Continue, Labels and Return](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break-continue-labels-and-return)
+        1. [Break](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break)
+    1. [Label](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#label)
     1. [Loop and Control Flow Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#loop-and-control-flow-example)
 1. [Exceptions](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#exceptions)
 1. [Java Single File Execution](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#java-single-file-execution)
@@ -139,6 +144,7 @@ Boot Camp for developers interested to learn Java.
 1. [Outer, Inner and Anonymous Classes](05%20-%20Objects.md#outer-inner-and-anonymous-classes)
 1. [Annotations](05%20-%20Objects.md#annotations)
 1. [Generics](05%20-%20Objects.md#generics)
+1. [Miscellaneous](05%20-%20Objects.md#miscellaneous)
 
 ### [SOLID](06%20-%20SOLID.md)
 
