@@ -1027,7 +1027,7 @@ Consider the [rock paper scissors hand game](https://en.wikipedia.org/wiki/Rock_
 
 ![Rock Paper Scissors Game Rules](assets/images/Rock%20Paper%20Scissors.png)
 
-How can we represent the hand played (*rock*, *paper* or *scissors*) and the game outcome (*draw*, *player 1 wins* or * player 2 wins*).
+How can we represent the hand played (*rock*, *paper* or *scissors*) and the game outcome (*draw*, *player 1 wins* or *player 2 wins*).
 
 A common approach, before Java 1.5, was to create a constant table where an `int` value will represent a state.
 
