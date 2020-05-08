@@ -24,6 +24,9 @@
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
 1. [Enumerations](#enumerations)
+    1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
+    1. [Enum's Ordinal](#enums-ordinal)
+    1. [Enums in Java can have state](#enums-in-java-can-have-state)
 1. [Imports and Packages](#imports-and-packages)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
@@ -1356,64 +1359,141 @@ Refactor the current solution into using enums
     }
     ```
 
-1. **Enums in Java can have methods**
+### Enums in Java can have methods
 
-    ````java
-      public enum Hand {
-        PAPER,
-        SCISSORS,
-        ROCK;
+````java
+  public enum Hand {
+    PAPER,
+    SCISSORS,
+    ROCK;
 
-        public Outcome determineOutcome( final Hand other ) {
-          if ( this == other ) {
-            return Outcome.DRAW;
-          }
-
-          return switch ( this ) {
-            case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-            case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-            case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-          };
-        }
-      }
-    ````
-
-    Complete example
-
-    ```java
-    package demo;
-
-    public class RockPaperScissors {
-
-      public enum Outcome {
-        DRAW,
-        WIN_PLAYER_1,
-        WIN_PLAYER_2;
+    public Outcome determineOutcome( final Hand other ) {
+      if ( this == other ) {
+        return Outcome.DRAW;
       }
 
-      public enum Hand {
-        PAPER,
-        SCISSORS,
-        ROCK;
-
-        public Outcome determineOutcome( final Hand other ) {
-          if ( this == other ) {
-            return Outcome.DRAW;
-          }
-
-          return switch ( this ) {
-            case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-            case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-            case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
-          };
-        }
-      }
-
-      public static Outcome determineOutcome( final Hand player1, final Hand player2 ) {
-        return player1.determineOutcome( player2 );
-      }
+      return switch ( this ) {
+        case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+      };
     }
-    ```
+  }
+````
+
+Complete example
+
+```java
+package demo;
+
+public class RockPaperScissors {
+
+  public enum Outcome {
+    DRAW,
+    WIN_PLAYER_1,
+    WIN_PLAYER_2;
+  }
+
+  public enum Hand {
+    PAPER,
+    SCISSORS,
+    ROCK;
+
+    public Outcome determineOutcome( final Hand other ) {
+      if ( this == other ) {
+        return Outcome.DRAW;
+      }
+
+      return switch ( this ) {
+        case PAPER -> other == Hand.ROCK ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        case SCISSORS -> other == Hand.PAPER ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+        case ROCK -> other == Hand.SCISSORS ? Outcome.WIN_PLAYER_1 : Outcome.WIN_PLAYER_2;
+      };
+    }
+  }
+
+  public static Outcome determineOutcome( final Hand player1, final Hand player2 ) {
+    return player1.determineOutcome( player2 );
+  }
+}
+```
+
+### Enum's Ordinal
+
+Each enum in Java is associated with a number, referred to as the ordinal.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( String[] args ) {
+    Suit s = Suit.DIAMONDS;
+    System.out.printf( "The enum %s has an ordinal of %d%n", s, s.ordinal() );
+  }
+}
+```
+
+The first enum constant, `CLUBS` has an ordinal of `0`.  The above example will print.
+
+```bash
+The enum DIAMONDS has an ordinal of 1
+```
+
+### Enums in Java can have state
+
+```java
+package demo;
+
+public class App {
+
+  enum Colour {
+    RED( "Red" ),
+    BLACK( "Blank" );
+
+    private final String label;
+
+    Colour( final String label ) {
+      this.label = label;
+    }
+
+    @Override public String toString() {
+      return label;
+    }
+  }
+
+  enum Suit {
+    CLUBS( "♣️", Colour.BLACK ),
+    DIAMONDS( "♦️", Colour.RED ),
+    HEARTS( "♥️", Colour.RED ),
+    SPADES( "♠️", Colour.BLACK );
+
+    private final String icon;
+    private final Colour colour;
+
+    Suit( final String icon, final Colour colour ) {
+      this.icon = icon;
+      this.colour = colour;
+    }
+
+    @Override public String toString() {
+      return icon;
+    }
+  }
+
+  public static void main( String[] args ) {
+    Suit s = Suit.DIAMONDS;
+    System.out.printf( "The suit %s has a colour of %s%n", s, s.colour );
+  }
+}
+```
+
+**Note that the enum state cannot be modified as otherwise you may get unexpected behaviour**.
 
 ## Imports and Packages
 
