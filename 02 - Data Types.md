@@ -23,7 +23,7 @@
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
 1. [Autoboxing](#autoboxing)
-1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
+    1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](#enums-ordinal)
@@ -988,7 +988,7 @@ Integer h 10
 int i     10
 ```
 
-## Autoboxing is an easy target for NullPointerException
+### Autoboxing is an easy target for NullPointerException
 
 **⚠️ THE FOLLOWING EXAMPLE COMPILES BUT PRODUCES A NULLPOINTEREXCEPTION!!**
 
