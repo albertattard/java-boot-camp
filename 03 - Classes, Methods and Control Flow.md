@@ -1366,7 +1366,81 @@ The above cannot be achieved using a foreach loop.
 
 ### Nested Loops
 
-**Pending...**
+The children's school liked our program and would like to create another program that prints the whole table, starting from `1` until `10`, as shown next.
+
+```bash
+   |    1   2   3   4   5   6   7   8   9  10
+---+-----------------------------------------
+ 1 |    1   2   3   4   5   6   7   8   9  10
+ 2 |    2   4   6   8  10  12  14  16  18  20
+ 3 |    3   6   9  12  15  18  21  24  27  30
+ 4 |    4   8  12  16  20  24  28  32  36  40
+ 5 |    5  10  15  20  25  30  35  40  45  50
+ 6 |    6  12  18  24  30  36  42  48  54  60
+ 7 |    7  14  21  28  35  42  49  56  63  70
+ 8 |    8  16  24  32  40  48  56  64  72  80
+ 9 |    9  18  27  36  45  54  63  72  81  90
+10 |   10  20  30  40  50  60  70  80  90 100
+```
+
+Nested loops can solve this problem.
+
+```java
+private static void printTable() {
+  for ( int i = 1; i <= 10; i++ ) {
+    System.out.printf( "%2s | ", i );
+
+    for ( int j = 1; j <= 10; j++ ) {
+      System.out.printf( " %3s", i * j );
+    }
+
+    System.out.println();
+  }
+}
+```
+
+Full example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    printHeader();
+    printSeparator();
+    printTable();
+  }
+
+  private static void printHeader() {
+    System.out.printf( "   | " );
+    for ( int i = 1; i <= 10; i++ ) {
+      System.out.printf( " %3s", i );
+    }
+    System.out.println();
+  }
+
+  private static void printSeparator() {
+    for ( int i = 0; i < 45; i++ ) {
+      final String s = i == 3 ? "+" : "-";
+      System.out.print( s );
+    }
+    System.out.println();
+  }
+
+  private static void printTable() {
+    for ( int i = 1; i <= 10; i++ ) {
+      System.out.printf( "%2s | ", i );
+
+      for ( int j = 1; j <= 10; j++ ) {
+        System.out.printf( " %3s", i * j );
+      }
+
+      System.out.println();
+    }
+  }
+}
+```
 
 ### Break, Continue, Labels and Return
 
@@ -1412,7 +1486,35 @@ The `break` keyword breaks the inner loop but the outer loop is uneffected.  Use
 Blocks can be labelled
 
 ```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    blockLabel:
+    {
+      System.out.println( "a. Code, within the block, before the break" );
+
+      if ( true ) {
+        break blockLabel;
+      }
+
+      System.out.println( "b. Code, within the block, but after the break" );
+    }
+
+    System.out.println( "c. Code, right after the block" );
+  }
+}
 ```
+
+The above will print.
+
+```bash
+a. Code, within the block, before the break
+c. Code, right after the block
+```
+
+Labels can be used with loops too.
 
 ```java
 package demo;
@@ -1437,17 +1539,19 @@ public class App {
 }
 ```
 
+The above will print
+
 ```bash
 i=0 and j=4
 ```
 
+### Loop and Control Flow Examples
 
-
-
+#### How many rolls it takes to roll a 6?
 
 Write a small program that counts the number of times it takes to roll a 6, using an unseeded instance of `Random`.
 
-Example
+Solution
 
 ```java
 package demo;
@@ -1475,9 +1579,9 @@ public class App {
 ```
 
 
-### Loop and Control Flow Example
+#### A simple game with dice and random numbers
 
-Using `Random` as a source of input, write a simple game where the player is given three chances to roll `10` or above.  If the players rolls then or above, the program should print the following.
+Using `Random` as a source of input, write a simple game where the player is given three chances to roll `10` or above.  If the players rolls `10` or above, the program should print the following.
 
 ```bash
 You won!!
@@ -1489,19 +1593,19 @@ If the player does not beat the game within three chances, the program should pr
 Better luck next time
 ```
 
-that rolls two dice and prints `"You won!!"` if the sum of the dice is `10` or above.  If the sum of the rolled dice is less than `10`, then the program should print the following and try again.
+If the sum of the rolled dice is less than `10`, then the program should print the following and try again.
 
 ```bash
 Not enough, please try again.
 ```
 
-Everytime the dice are rolled the program should print the numbers rolled.
+Every time the dice are rolled, the program should print the numbers rolled.
 
 ```bash
 You rolled 1 and 2
 ```
 
-Example
+Solution
 
 ```java
 package demo;
