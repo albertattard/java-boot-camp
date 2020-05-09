@@ -29,7 +29,9 @@
     1. [Nested Loops](#nested-loops)
     1. [Break, Continue, Labels and Return](#break-continue-labels-and-return)
         1. [Break](#break)
-    1. [Label](#label)
+        1. [Label](#label)
+        1. [Continue](#continue)
+        1. [Return](#return)
     1. [Loop and Control Flow Examples](#loop-and-control-flow-examples)
         1. [How many rolls it takes to roll a 6?](#how-many-rolls-it-takes-to-roll-a-6)
         1. [A simple game with dice and random numbers](#a-simple-game-with-dice-and-random-numbers)
@@ -221,7 +223,7 @@ Output
 
 No.  The keyword `void` indicates that the method returns nothing.
 
-This quite unique and other language, always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
+This quite unique to Java as other languages always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
 
 ## Properties (static no OOP)
 
@@ -554,7 +556,7 @@ Runnable r = new Runnable() {
 };
 ```
 
-This is compiled as  separate class file, `App$1.class`.
+This is compiled as a separate class file, `App$1.class`.
 
 ```bash
 $ tree build/classes/java
@@ -839,7 +841,7 @@ Random number generation is a hard problem and in some cases [hardware random nu
 
 #### Java Ternary Operator
 
-Java has one ternary operator, defined by [JLS-15.25](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.25).
+Java has one ternary operator.
 
 ```java
 package demo;
@@ -863,7 +865,7 @@ The above program will print.
 The number 8 is an even number
 ```
 
-The ternary operator has one catch that takes many by surprise.  Consider the following example.
+The ternary operator has one catch that takes many by surprise.  Consider the following example, where the second and third statements are of different types.
 
 ```java
 package demo;
@@ -1217,7 +1219,7 @@ public class App {
 }
 ```
 
-The above example has lots of repetition.  Another limitation the above code has is that we cannot adjust the number of rows to display.  The school may want to show the table of a number past 10.
+The above example has lots of repetition.  Another limitation the above code has is that we cannot adjust the number of rows to display.  The school may want to show the table of a number past `10`.
 
 The above code can be improved by using loops instead.
 
@@ -1374,7 +1376,7 @@ public class App {
 }
 ```
 
-One of the advantage of the foreach loop is that you do not need to worry about the end of the array.  A common mistake when looping an array is exceeding the array's length as shown next.
+One of the advantages of the foreach loop is that you do not need to worry about the end of the array.  A common mistake when looping an array is exceeding the array's length as shown next.
 
 **⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS ArrayIndexOutOfBoundsException!!**
 
@@ -1537,8 +1539,9 @@ i=3 and j=4
 i=4 and j=4
 ```
 
-The `break` keyword breaks the inner loop but the outer loop is uneffected.  Use [labels section](#label) to control which loop to break.
-### Label
+The `break` keyword breaks the inner loop but the outer loop is unaffected.  Use [labels section](#label) to control which loop to break.
+
+#### Label
 
 Blocks can be labelled
 
@@ -1602,11 +1605,19 @@ The above will print
 i=0 and j=4
 ```
 
+#### Continue
+
+**Pending...**
+
+#### Return
+
+**Pending...**
+
 ### Loop and Control Flow Examples
 
 #### How many rolls it takes to roll a 6?
 
-Write a small program that counts the number of times it takes to roll a 6, using an unseeded instance of `Random`.
+Write a small program that counts the number of times it takes to roll a `6`, using an unseeded instance of `Random`.
 
 Solution
 
@@ -1833,7 +1844,7 @@ Java 11 introduced Java Single File Execution ([JEP-330](https://openjdk.java.ne
 $ vi hello
 ```
 
-The script file name dose not need to match the class name.
+The script file name does not need to match the class name.
 
 ```jshelllanguage
 #!/usr/bin/java --source 11
@@ -1860,4 +1871,3 @@ Hello World!!
 ```
 
 The [gist x_init](https://gist.github.com/albertattard/3f9a66faf2a90dc2bf6376d37c7c6052) shows a more elaborated example.
-
