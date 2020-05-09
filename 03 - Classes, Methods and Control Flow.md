@@ -16,6 +16,7 @@
         1. [If Example](#if-example)
         1. [If/else Example](#ifelse-example)
         1. [If/else-if/else Example](#ifelse-ifelse-example)
+        1. [Java Ternary Operator](#java-ternary-operator)
     1. [Switch Control Flow Statement](#switch-control-flow-statement)
         1. [Switch Example](#switch-example)
         1. [Switch Fallthrough Example](#switch-fallthrough-example)
@@ -29,7 +30,9 @@
     1. [Break, Continue, Labels and Return](#break-continue-labels-and-return)
         1. [Break](#break)
     1. [Label](#label)
-    1. [Loop and Control Flow Example](#loop-and-control-flow-example)
+    1. [Loop and Control Flow Examples](#loop-and-control-flow-examples)
+        1. [How many rolls it takes to roll a 6?](#how-many-rolls-it-takes-to-roll-a-6)
+        1. [A simple game with dice and random numbers](#a-simple-game-with-dice-and-random-numbers)
 1. [Exceptions](#exceptions)
 1. [Java Single File Execution](#java-single-file-execution)
 
@@ -833,6 +836,60 @@ The following table list some seeds that can be used to produce a deterministic 
 |   63 | 6 | 6 |    12 |
 
 Random number generation is a hard problem and in some cases [hardware random number generators](https://en.wikipedia.org/wiki/Hardware_random_number_generator) are required for security or legislative purposes.
+
+#### Java Ternary Operator
+
+Java has one ternary operator, defined by [JLS-15.25](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.25).
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( String[] args ) {
+    final Random r = new Random();
+    final int a = r.nextInt( 10 );
+    final String s = a % 2 == 0 ? "even" : "odd";
+    System.out.printf( "The number %d is an %s number%n", a, s );
+  }
+}
+```
+
+The above program will print.
+
+```bash
+The number 8 is an even number
+```
+
+The ternary operator has one catch that takes many by surprise.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    char x = 'X';
+    int i = 0;
+    System.out.print( true ? x : 0 );
+    System.out.print( false ? i : x );
+  }
+}
+```
+
+Will print.
+
+```bash
+X88
+```
+
+This example was taken from [PUZZLE 8: DOS EQUIS in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_The answer lies in a dark corner of the specification for the conditional operator [JLS 15.25](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.25).  Note that the types of the second and third operands are different from each other in both of the conditional expressions: `x` is of type `char`, whereas `0` and `i` are both of type `int`.  Mixed-type computation can be confusing.  Nowhere is this more apparent than in conditional expressions.  You might think that the result types of the two conditional expressions in this program would be identical, as their operand types are identical, though reversed, but it isn’t so._"
+
+1. "_Putting the `final` modifier on the declaration for `i` would turn `i` into a constant expression, causing the program to print `XX`, but it would still be confusing.  To eliminate the confusion, it is best to change the type of `i` from `int` to `char`, avoiding the mixed-type computation._"
 
 ### Switch Control Flow Statement
 

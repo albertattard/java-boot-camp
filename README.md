@@ -81,6 +81,7 @@ Boot Camp for developers interested to learn Java.
         1. [If Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#if-example)
         1. [If/else Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#ifelse-example)
         1. [If/else-if/else Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#ifelse-ifelse-example)
+        1. [Java Ternary Operator](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#java-ternary-operator)
     1. [Switch Control Flow Statement](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#switch-control-flow-statement)
         1. [Switch Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#switch-example)
         1. [Switch Fallthrough Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#switch-fallthrough-example)
@@ -94,7 +95,9 @@ Boot Camp for developers interested to learn Java.
     1. [Break, Continue, Labels and Return](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break-continue-labels-and-return)
         1. [Break](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break)
     1. [Label](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#label)
-    1. [Loop and Control Flow Example](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#loop-and-control-flow-example)
+    1. [Loop and Control Flow Examples](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#loop-and-control-flow-examples)
+        1. [How many rolls it takes to roll a 6?](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#how-many-rolls-it-takes-to-roll-a-6)
+        1. [A simple game with dice and random numbers](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#a-simple-game-with-dice-and-random-numbers)
 1. [Exceptions](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#exceptions)
 1. [Java Single File Execution](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#java-single-file-execution)
 
