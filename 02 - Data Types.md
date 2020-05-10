@@ -26,7 +26,11 @@
     1. [String or new String?](#string-or-new-string)
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
+    1. [Puzzle (Tweedledum)](#puzzle-tweedledum)
     1. [Puzzle (Oddity)](#puzzle-oddity)
+    1. [Puzzle (Swap Meat)](#puzzle-swap-meat)
+1. [Casting](#casting)
+    1. [Puzzle (Multicast)](#puzzle-multicast)
 1. [Autoboxing](#autoboxing)
     1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
@@ -1057,6 +1061,26 @@ true || false = true
 !true = false
 ```
 
+### Puzzle (Tweedledum)
+
+Provide declarations for the variables `x` and `i` such that this is a legal statement:
+
+```java
+x += i;
+```
+
+but this is not:
+
+```java
+x = x + i;
+```
+
+This example was taken from [PUZZLE 9: TWEEDLEDUM in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_Many programmers think that the first statement in this puzzle (`x += i`) is simply a shorthand for the second (`x = x + i`).  **This isn't quite true**.  Both of these statements are assignment expressions ([JLS 15.26](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26)).  The second statement uses the simple assignment operator (`=`), whereas the first uses a compound assignment operator.  The compound assignment operators are `+=`, `-=`, `*=`, `/=`, `%=`, `<<=`, `>>=`, `>>>=`, `&=`, `^=`, and `|=`.  The Java language specification says that the compound assignment `E1 op= E2` is equivalent to the simple assignment `E1 = (T) ((E1) op (E2))`, where `T` is the type of `E1`, except that `E1` is evaluated only once ([JLS 15.26.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26.2))._"
+
+1. "_In other words, compound assignment expressions automatically cast the result of the computation they perform to the type of the variable on their left-hand side.  If the type of the result is identical to the type of the variable, the cast has no effect.  If, however, the type of the result is wider than that of the variable, the compound assignment operator performs a silent narrowing primitive conversion ([JLS 5.1.3](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.3)).  Attempting to perform the equivalent simple assignment would generate a compilation error, with good reason._"
+
 ### Puzzle (Oddity)
 
 Consider the following example.
@@ -1106,6 +1130,79 @@ AppTest > should return true when given the odd value -1 FAILED
 This example was taken from [PUZZLE 1: ODDITY in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
 
 1. "_If you divide `a` by `b`, multiply the result by `b`, and add the remainder, you are back where you started [JLS 15.17.3](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.17.3).  This identity makes perfect sense, but in combination with Java’s truncating integer division operator [JLS 15.17.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.17.2), it implies that when the remainder operation returns a nonzero result, it has the same sign as its left operand._"
+
+### Puzzle (Swap Meat)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    cleverSwap();
+  }
+
+  public static void cleverSwap() {
+    int x = 1984;  // (0x7c0)
+    int y = 2001;  // (0x7d1)
+    x ^= y ^= x ^= y;
+    System.out.printf( "x = %d; y = %d%n", x, y );
+  }
+}
+```
+
+Unfortunately the above swap variables trick does not work in Java.
+
+```bash
+x = 0; y = 1984
+```
+
+This example was taken from [PUZZLE 7: SWAP MEAT in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_Long ago, when central processing units had few registers, it was discovered that one could avoid the use of a temporary variable by taking advantage of the property of the exclusive OR operator (`^`) that `(x ^ y ^ x) == y`_"
+
+1. "_This idiom was used in the C programming language and from there made its way into C++ but is not guaranteed to work in either of these languages.  **It is guaranteed not to work in Java**. The Java language specification says that operands of operators are evaluated from left to right ([JLS 15.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.7)).  To evaluate the expression `x ^= expr`, the value of `x` is sampled before expr is evaluated, and the exclusive OR of these two values is assigned to the variable `x` ([JLS 15.26.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26.2)).  In the `cleverSwap()` function, the variable `x` is sampled twice—once for each appearance in the expression—but both samplings occur before any assignments._"
+
+## Casting
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    byte a = 7;
+    byte b = 3;
+    byte c = (byte) ( a + b );
+
+    System.out.printf( "c = %d%n", c );
+  }
+}
+```
+
+### Puzzle (Multicast)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.println( (int) (char) (byte) -1 );
+  }
+}
+```
+
+What do you think the above example, will print?
+
+```bash
+65535
+```
+
+This example was taken from [PUZZLE 6: MULTICAST in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_The cast from `byte` to `char` is trickier because `byte` is a signed type and `char` unsigned.  It is usually possible to convert from one integral type to a wider one while preserving numerical value, but it is impossible to represent a negative `byte` value as a `char`.  Therefore, the conversion from `byte` to `char` is not considered a widening primitive conversion ([JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2)), but a widening and narrowing primitive conversion ([JLS 5.1.4]((https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.4))): The `byte` is converted to an `int` and the `int` to a `char`._"
 
 ## Autoboxing
 
