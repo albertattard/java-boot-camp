@@ -25,6 +25,11 @@
     1. [For Loop](#for-loop)
         1. [Puzzles (In the Loop)](#puzzles-in-the-loop)
     1. [While Loop](#while-loop)
+        1. [Puzzle (Shifty i's)](#puzzle-shifty-is)
+        1. [Puzzles (Looper)](#puzzles-looper)
+        1. [Puzzle (Bride of Looper)](#puzzle-bride-of-looper)
+        1. [Puzzle (Son of Looper)](#puzzle-son-of-looper)
+        1. [Puzzle (Ghost of Looper)](#puzzle-ghost-of-looper)
     1. [Do/While Loop](#dowhile-loop)
     1. [Foreach Loop](#foreach-loop)
     1. [Nested Loops](#nested-loops)
@@ -1324,6 +1329,95 @@ public class App {
 ```
 
 Note that different from the for loop, the variables `i` and `n` are available within the while loop and also outside the loop.  I personally prefer the for loop over the while loop just because of that.
+
+#### Puzzle (Shifty i's)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    int i = 0;
+    while ( -1 << i != 0 )
+      i++;
+    System.out.println( i );
+  }
+}
+```
+
+Will this program print something, or will it loop until the end of times?
+
+This example was taken from [PUZZLE 27: SHIFTY I’S in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_The problem is that (`-1 << 32`) is equal to `−1` rather than `0`, because shift operators use only the five low-order bits of their right operand as the shift distance, or six bits if the left operand is a long ([JLS 15.19](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.19)).  This applies to all three shift operators: `<<`, `>>`, and `>>>`.  The shift distance is always between `0` and `31`, or `0` and `63` if the left operand is a `long`.  It is calculated mod `32`, or mod `64` if the left operand is a `long`.  Attempting to shift an `int` value `32` bits or a long value `64` bits just returns the value itself.  There is no shift distance that discards all `32` bits of an `int` value or all `64` bits of a `long` value._"
+
+#### Puzzles (Looper)
+
+What declaration turns this loop into an infinite loop?
+
+```java
+while (i == i + 1) {
+}
+```
+
+This example was taken from [PUZZLE 28: LOOPER in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_Looking at the while loop, it really seems as though it ought to terminate immediately.  A number is never equal to itself plus `1`, right?  Well, what if the number is infinity?  Java mandates the use of IEEE 754 floating-point arithmetic ([IEEE-754](https://en.wikipedia.org/wiki/IEEE_754)), which lets you represent infinity as a `double` or `float`.  As we learned in school, infinity plus `1` is still infinity.  If `i` is initialized to infinity before the loop starts, the termination test (`i == i + 1`) evaluates to `true`, and the loop never terminates._"
+
+    "_In fact, you don't have to initialize `i` to infinity to make the loop spin forever.  Any sufficiently large floating-point value will do; for example: `double i = 1.0e40;`_"
+
+#### Puzzle (Bride of Looper)
+
+Provide a declaration for i that turns this loop into an infinite loop:
+
+```java
+while (i != i) {
+}
+```
+
+This example was taken from [PUZZLE 29: BRIDE OF LOOPER in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_A number is always equal to itself, right?_"
+
+    "_Right, but IEEE 754 floating-point arithmetic reserves a special value to represent a quantity that is not a number ([IEEE-754](https://en.wikipedia.org/wiki/IEEE_754)).  This value, known as `NaN` (short for "Not a Number"), is the value of all floating-point computations that do not have well-defined numeric values, such as `0.0 / 0.0`.  The specification says that `NaN` is not equal to any floating-point value, including itself ([JLS 15.21.1](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.21.1)). Therefore, if `i` is initialized to `NaN` before the loop starts, the termination test (`i != i`) evaluates to `true`, and the loop never terminates._"
+
+#### Puzzle (Son of Looper)
+
+Provide a declaration for `i` that turns this loop into an infinite loop:
+
+```java
+while (i != i + 0) {
+}
+```
+
+Unlike previous loopers, you must not use floating-point in your answer. In other words, you must not declare `i` to be of type `double` or `float`.
+
+This example was taken from [PUZZLE 30: SON OF LOOPER in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_The inescapable conclusion is that the type of `i` must be non-numeric, and therein lies the solution.  The only non-numeric type for which the `+` operator is defined is `String`.  The `+` operator is overloaded: For the `String` type, it performs not addition but string concatenation.  If one operand in the concatenation is of some type other than `String`, that operand is converted to a string prior to concatenation ([JLS 15.18.1](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.18.1))._"
+
+#### Puzzle (Ghost of Looper)
+
+Provide a declaration for `i` that turns this loop into an infinite loop:
+
+```java
+while (i != 0)
+    i >>>= 1;
+```
+
+This example was taken from [PUZZLE 31: GHOST OF LOOPER in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_How could you possibly turn this into an infinite loop?  The key to solving this puzzle is that `>>>=` is a compound assignment operator. (The compound assignment operators are `*=`, `/=`, `%=`, `+=`, `−=`, `<<=`, `>>=`, `>>>=`, `&=`, `^=`, and `|=`.)  An unfortunate fact about the compound assignment operators is that they can silently perform narrowing primitive conversions ([JLS 15.26.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26.2)), which are conversions from one numeric type to a less expressive numeric type. **Narrowing primitive conversions can lose information about the magnitude or precision of numeric values** ([JLS 5.1.3](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.3))._"
+
+    "_To make this concrete, suppose that you precede the loop with the following declaration:
+
+    ```java
+    short i = -1;
+    ```
+
+    "_Because the initial value of `i` (`(short)0xffff`) is nonzero, the body of the loop is executed.  The first step in the execution of the shift operation is that the value of `i` is promoted to an `int`.  All arithmetic operations do this to operands of type `short`, `byte`, or `char`.  This promotion is a widening primitive conversion, so no information is lost. This promotion performs sign extension, so the resulting int value is `0xffffffff`.  This value is then shifted to the right by one bit without sign extension to yield the int value `0x7fffffff`.  Finally, this value is stored back into `i`.  In order to store the `int` value into the `short` variable, Java performs the dreaded narrowing primitive conversion, which simply lops off the high-order `16` bits of the value.  This leaves `(short)0xffff`, and we are back where we started.  The second and successive iterations of the loop behave identically, so the loop never terminates._"
 
 ### Do/While Loop
 
