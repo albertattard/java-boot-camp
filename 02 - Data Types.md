@@ -7,6 +7,7 @@
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
     1. [Puzzle (Time for a change)](#puzzle-time-for-a-change)
     1. [Puzzle (Long Division)](#puzzle-long-division)
+    1. [Puzzle (It's Elementary)](#puzzle-its-elementary)
     1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
     1. [Reference Types (the rest)](#reference-types-the-rest)
@@ -390,6 +391,30 @@ The program should print `1000`, but unfortunately, it prints `5`. What exactly 
 This example was taken from [PUZZLE 3: LONG DIVISION in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
 
 1. "_The problem is that the computation of the constant `microsPerDay` does overflow.  Although the result of the computation fits in a `long` with room to spare, it doesn't fit in an `int`.  The computation is performed entirely in `int` arithmetic, and only after the computation completes is the result promoted to a `long`.  By then, it's too late: The computation has already overflowed, returning a value that is too low by a factor of `200`.  The promotion from `int` to `long` is a widening primitive conversion [JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2), which preserves the (incorrect) numerical value.  This value is then divided by `millisPerDay`, which was computed correctly because it does fit in an `int`.  The result of this division is `5`._"
+
+### Puzzle (It's Elementary)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.println( 12345 + 5432l );
+  }
+}
+```
+
+What do you think the above will print?
+
+```bash
+17777
+```
+
+This example was taken from [PUZZLE 4: IT'S ELEMENTARY in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_Things are seldom what they seem.  Take this program, for instance.  It doesn't say what you think it does.  Take a careful look at the two operands of the `+` operator.  We are adding the `int` value `12345` to the `long` value `5432l`.  Note the subtle difference in shape between the digit `1` at the beginning of the left operand and the lowercase letter *el* at the end of the right operand._"
 
 ### Multiline Strings
 
