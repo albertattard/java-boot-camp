@@ -40,6 +40,7 @@ Boot Camp for developers interested to learn Java.
 1. [JShell](02%20-%20Data%20Types.md#jshell)
 1. [Numbers and Strings (Variables and Scope)](02%20-%20Data%20Types.md#numbers-and-strings-variables-and-scope)
     1. [Puzzle (Time for a change)](02%20-%20Data%20Types.md#puzzle-time-for-a-change)
+    1. [Puzzle (Long Division)](02%20-%20Data%20Types.md#puzzle-long-division)
     1. [Multiline Strings](02%20-%20Data%20Types.md#multiline-strings)
     1. [Primitive Types](02%20-%20Data%20Types.md#primitive-types)
     1. [Reference Types (the rest)](02%20-%20Data%20Types.md#reference-types-the-rest)

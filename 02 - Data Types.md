@@ -6,6 +6,7 @@
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
     1. [Puzzle (Time for a change)](#puzzle-time-for-a-change)
+    1. [Puzzle (Long Division)](#puzzle-long-division)
     1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
     1. [Reference Types (the rest)](#reference-types-the-rest)
@@ -362,7 +363,33 @@ This example was taken from [PUZZLE 2: TIME FOR A CHANGE in Java™ Puzzlers: Tr
 
 1. "_The problem is that the number `1.1` can't be represented exactly as a `double`, so it is represented by the closest `double` value.  The program subtracts this value from `2`.  Unfortunately, the result of this calculation is not the closest `double` value to `0.9`.  The shortest representation of the resulting `double` value is the hideous number that you see printed._"
 
-1. "_ Binary floating-point is particularly ill-suited to monetary calculations, as it is impossible to represent `0.1`—or any other negative power of `10`—exactly as a finite-length binary fraction ([Effective Java - Item 60: Avoid float and double if exact answers are required](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch9.xhtml#lev60))._"
+1. "_Binary floating-point is particularly ill-suited to monetary calculations, as it is impossible to represent `0.1`—or any other negative power of `10`—exactly as a finite-length binary fraction ([Effective Java - Item 60: Avoid float and double if exact answers are required](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch9.xhtml#lev60))._"
+
+### Puzzle (Long Division)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    long microsPerDay = 24 * 60 * 60 * 1000 * 1000;
+    long millisPerDay = 24 * 60 * 60 * 1000;
+    System.out.println( microsPerDay / millisPerDay );
+  }
+}
+```
+
+The program should print `1000`, but unfortunately, it prints `5`. What exactly is going on here?
+
+```bash
+5
+```
+
+This example was taken from [PUZZLE 3: LONG DIVISION in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_The problem is that the computation of the constant `microsPerDay` does overflow.  Although the result of the computation fits in a `long` with room to spare, it doesn't fit in an `int`.  The computation is performed entirely in `int` arithmetic, and only after the computation completes is the result promoted to a `long`.  By then, it's too late: The computation has already overflowed, returning a value that is too low by a factor of `200`.  The promotion from `int` to `long` is a widening primitive conversion [JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2), which preserves the (incorrect) numerical value.  This value is then divided by `millisPerDay`, which was computed correctly because it does fit in an `int`.  The result of this division is `5`._"
 
 ### Multiline Strings
 
