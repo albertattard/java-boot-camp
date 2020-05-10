@@ -41,6 +41,8 @@
     1. [Puzzle (Oddity)](#puzzle-oddity)
     1. [Puzzle (Swap Meat)](#puzzle-swap-meat)
     1. [Puzzle (Escape Rout)](#puzzle-escape-rout)
+    1. [Puzzle (A Big Delight in Every Byte)](#puzzle-a-big-delight-in-every-byte)
+    1. [Puzzle (Inclement Increment)](#puzzle-inclement-increment)
 1. [Casting](#casting)
     1. [Puzzle (Multicast)](#puzzle-multicast)
 1. [Autoboxing](#autoboxing)
@@ -1494,6 +1496,64 @@ What would it print?
 This example was taken from [PUZZLE 14: ESCAPE ROUT in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
 
 1. "_The key to understanding this puzzle is that Java provides no special treatment for Unicode escapes within string literals.  The compiler translates Unicode escapes into the characters they represent before it parses the program into tokens, such as strings literals ([JLS 3.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.2)).  Therefore, the first Unicode escape in the program closes a one-character string literal (`"a"`), and the second one opens a one-character string literal (`"b"`).  The program prints the value of the expression `"a".length() + "b".length()`, or `2`._"
+
+### Puzzle (A Big Delight in Every Byte)
+
+Consider the follow example.
+
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOOR LOOP STATEMENT, DISCUSSED LATER ON**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( byte b = Byte.MIN_VALUE; b < Byte.MAX_VALUE; b++ ) {
+      if ( b == 0x90 )
+        System.out.println( "Joy!" );
+    }
+  }
+}
+```
+
+How many times the above program prints `Joy`?  Never?
+
+This example was taken from [PUZZLE 24: A BIG DELIGHT IN EVERY BYTE in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_Simply put, `0x90` is an `int` constant that is outside the range of `byte` values.  This is counterintuitive because `0x90` is a two-digit hexadecimal literal.  Each hex digit takes up `4` bits, so the entire value takes up `8` bits, or `1` byte. The problem is that `byte` is a signed type.  The constant `0x90` is a positive `int` value of `8` bits with the highest bit set.  Legal `byte` values range from `−128` to `+127`, but the int constant `0x90` is equal to `+144`._"
+
+    "_The comparison of a `byte` to an `int` is a mixed-type comparison.  If you think of `byte` values as apples and `int` values as oranges, the program is comparing apples to oranges.  Consider the expression (`(byte)0x90 == 0x90`).  Appearances notwithstanding, it evaluates to `false`.  To compare the byte value `(byte)0x90` to the int value `0x90`, Java promotes the `byte` to an `int` with a widening primitive conversion ([JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2)) and compares the two `int` values.  Because `byte` is a signed type, the conversion performs sign extension, promoting negative `byte` values to numerically equal `int` values.  In this case, the conversion promotes `(byte)0x90` to the `int` value `-112`, which is unequal to the `int` value `0x90`, or `+144`._"
+
+### Puzzle (Inclement Increment)
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOOR LOOP STATEMENT, DISCUSSED LATER ON**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    int j = 0;
+    for ( int i = 0; i < 100; i++ )
+      j = j++;
+    System.out.println( j );
+  }
+}
+```
+
+What will be the value of `j`?
+
+```
+0
+```
+
+This example was taken from [PUZZLE 25: INCLEMENT INCREMENT in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_Presumably, the author of the statement meant for it to add `1` to the value of `j`, which is what the expression `j++` does.  Unfortunately, the author inadvertently assigned the value of this expression back to `j`.  When placed after a variable, the `++` operator functions as the postfix increment operator ([JLS 15.14.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.14.2)): The value of the expression `j++` is the original value of `j` before it was incremented.  Therefore, the preceding assignment first saves the value of `j`, then sets `j` to its value plus `1`, and, finally, resets `j` back to its original value._"
 
 ## Casting
 

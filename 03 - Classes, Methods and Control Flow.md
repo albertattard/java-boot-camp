@@ -23,6 +23,7 @@
         1. [Switch Default Example](#switch-default-example)
         1. [Switch Expressions](#switch-expressions)
     1. [For Loop](#for-loop)
+        1. [Puzzles (In the Loop)](#puzzles-in-the-loop)
     1. [While Loop](#while-loop)
     1. [Do/While Loop](#dowhile-loop)
     1. [Foreach Loop](#foreach-loop)
@@ -1253,6 +1254,32 @@ public class App {
   }
 }
 ```
+
+#### Puzzles (In the Loop)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static final int END = Integer.MAX_VALUE;
+  public static final int START = END - 100;
+
+  public static void main( String[] args ) {
+    int count = 0;
+    for ( int i = START; i <= END; i++ )
+      count++;
+    System.out.println( count );
+  }
+}
+```
+
+What will the above program prints?  Unfortunately, the program gets stuck in the for loop.
+
+This example was taken from [PUZZLE 26: IN THE LOOP in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch04.html).
+
+1. "_The problem is that the loop continues as long as the loop index (`i`) is less than or equal to `Integer.MAX_VALUE`, but all `int` variables are always less than or equal to `Integer.MAX_VALUE`.  It is, after all, defined to be the highest `int` value in existence. When `i` gets to `Integer.MAX_VALUE` and is incremented, it silently wraps around to `Integer.MIN_VALUE`._"
 
 ### While Loop
 
