@@ -8,6 +8,7 @@
     1. [Puzzle (Time for a change)](#puzzle-time-for-a-change)
     1. [Puzzle (Long Division)](#puzzle-long-division)
     1. [Puzzle (It's Elementary)](#puzzle-its-elementary)
+    1. [Puzzle (The Joy of Hex)](#puzzle-the-joy-of-hex)
     1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
     1. [Reference Types (the rest)](#reference-types-the-rest)
@@ -416,9 +417,44 @@ This example was taken from [PUZZLE 4: IT'S ELEMENTARY in Java™ Puzzlers: Trap
 
 1. "_Things are seldom what they seem.  Take this program, for instance.  It doesn't say what you think it does.  Take a careful look at the two operands of the `+` operator.  We are adding the `int` value `12345` to the `long` value `5432l`.  Note the subtle difference in shape between the digit `1` at the beginning of the left operand and the lowercase letter *el* at the end of the right operand._"
 
+### Puzzle (The Joy of Hex)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.println( Long.toHexString( 0x100000000L + 0xcafebabe ) );
+  }
+}
+```
+
+The above seems to be adding the following two Hexadecimal numbers
+
+```hex
+100000000
+ cafebabe
+```
+
+This output represents the low-order 32 bits of the correct sum, but somehow the thirty-third bit gets lost.
+
+```bash
+cafebabe
+```
+
+This example was taken from [PUZZLE 5: THE JOY OF HEX in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_Decimal literals have a nice property that is not shared by hexadecimal or octal literals: Decimal literals are all positive [JLS 3.10.1](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.10.1).  To write a negative decimal constant, you use the unary negation operator (`-`) in combination with a decimal literal.  In this way, you can write any `int` or `long` value, whether positive or negative, in decimal form, and negative decimal constants are clearly identifiable by the presence of a minus sign.  Not so for hexadecimal and octal literals.  They can take on both positive and negative values. Hex and octal literals are negative if their high-order bit is set.  In this program, the number `0xcafebabe` is an `int` constant with its high-order bit set, so it is negative.  It is equivalent to the decimal value `-889275714`._"
+
+1. "_The addition performed by the program is a mixed-type computation: The left operand is of type `long`, and the right operand is of type `int`.  To perform the computation, Java promotes the `int` value to a `long` with a widening primitive conversion [JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2) and adds the two `long` values.  Because `int` is a signed integral type, the conversion performs sign extension: It promotes the negative `int` value to a numerically equal `long` value._"
+
 ### Multiline Strings
 
 As of Java 15, Java will start supporting multiline Strings as defined by [JEP-378](https://openjdk.java.net/jeps/378).
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH JAVA 14 OR BEFORE!!**
 
 ```java
 package demo;
