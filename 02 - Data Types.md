@@ -27,8 +27,11 @@
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
     1. [Puzzle (Tweedledum)](#puzzle-tweedledum)
+    1. [Puzzle (Tweedledee)](#puzzle-tweedledee)
+    1. [Puzzle (The Last Laugh)](#puzzle-the-last-laugh)
     1. [Puzzle (Oddity)](#puzzle-oddity)
     1. [Puzzle (Swap Meat)](#puzzle-swap-meat)
+    1. [Puzzle (Escape Rout)](#puzzle-escape-rout)
 1. [Casting](#casting)
     1. [Puzzle (Multicast)](#puzzle-multicast)
 1. [Autoboxing](#autoboxing)
@@ -1081,6 +1084,51 @@ This example was taken from [PUZZLE 9: TWEEDLEDUM in Java™ Puzzlers: Traps, Pi
 
 1. "_In other words, compound assignment expressions automatically cast the result of the computation they perform to the type of the variable on their left-hand side.  If the type of the result is identical to the type of the variable, the cast has no effect.  If, however, the type of the result is wider than that of the variable, the compound assignment operator performs a silent narrowing primitive conversion ([JLS 5.1.3](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.3)).  Attempting to perform the equivalent simple assignment would generate a compilation error, with good reason._"
 
+### Puzzle (Tweedledee)
+
+Contrariwise, provide declarations for the variables `x` and `i` such that this is a legal statement:
+
+```java
+x = x + i;
+```
+
+but this is not:
+
+```java
+x += i;
+```
+
+At first glance, this puzzle might appear to be the same as the [previous one](#puzzle-tweedledum).  Rest assured, it's different.
+
+This example was taken from [PUZZLE 10: TWEEDLEDEE in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_Compound assignment operators require both operands to be primitives, such as `int`, or boxed primitives, such as `Integer`, with one exception: The `+=` operator allows its right-hand operand to be of any type if the variable on the left-hand side is of type `String`, in which case the operator performs string concatenation ([JLS 15.26.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26.2)).  The simple assignment operator (`=`) is much less picky when it comes to allowing object reference types on the left-hand side: You can use them to your heart's content so long as the expression on the right-hand side is assignment compatible with the variable on the left ([JLS 5.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.2))._"
+
+### Puzzle (The Last Laugh)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.print( "H" + "a" );
+    System.out.print( 'H' + 'a' );
+  }
+}
+```
+
+What do you think the above will print?  Will it be `HaHa`?
+
+```bash
+Ha169
+```
+
+This example was taken from [PUZZLE 11: THE LAST LAUGH in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
+
+1. "_The compiler evaluates the constant expression `'H' + 'a'` by promoting each of the char-valued operands (`'H'` and `'a'`) to `int` values through a process known as widening primitive conversion ([JLS 5.1.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2), [JLS 5.6.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6.2)).  Widening primitive conversion of a `char` to an int zero extends the 16-bit `char` value to fill the 32-bit int.  In the case of `'H'`, the `char` value is `72` and in the case of `'a'`, it is `97`, so the expression `'H' + 'a'` is equivalent to the int constant `72 + 97`, or `169`._"
+
 ### Puzzle (Oddity)
 
 Consider the following example.
@@ -1163,6 +1211,31 @@ This example was taken from [PUZZLE 7: SWAP MEAT in Java™ Puzzlers: Traps, Pit
 1. "_Long ago, when central processing units had few registers, it was discovered that one could avoid the use of a temporary variable by taking advantage of the property of the exclusive OR operator (`^`) that `(x ^ y ^ x) == y`_"
 
 1. "_This idiom was used in the C programming language and from there made its way into C++ but is not guaranteed to work in either of these languages.  **It is guaranteed not to work in Java**. The Java language specification says that operands of operators are evaluated from left to right ([JLS 15.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.7)).  To evaluate the expression `x ^= expr`, the value of `x` is sampled before expr is evaluated, and the exclusive OR of these two values is assigned to the variable `x` ([JLS 15.26.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.26.2)).  In the `cleverSwap()` function, the variable `x` is sampled twice—once for each appearance in the expression—but both samplings occur before any assignments._"
+
+### Puzzle (Escape Rout)
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    // \u0022 is the Unicode escape for double quote (")
+    System.out.println( "a\u0022.length( ) + \u0022b".length() );
+  }
+}
+```
+
+What would it print?
+
+```bash
+2
+```
+
+This example was taken from [PUZZLE 14: ESCAPE ROUT in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
+
+1. "_The key to understanding this puzzle is that Java provides no special treatment for Unicode escapes within string literals.  The compiler translates Unicode escapes into the characters they represent before it parses the program into tokens, such as strings literals ([JLS 3.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.2)).  Therefore, the first Unicode escape in the program closes a one-character string literal (`"a"`), and the second one opens a one-character string literal (`"b"`).  The program prints the value of the expression `"a".length() + "b".length()`, or `2`._"
 
 ## Casting
 

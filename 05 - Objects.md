@@ -21,6 +21,7 @@
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Final Classes](#final-classes)
 1. [The Object Class](#the-object-class)
+    1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
 1. [Interfaces](#interfaces)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
 1. [Inheritance and Composition](#inheritance-and-composition)
@@ -1027,6 +1028,32 @@ A class that is marked `final` cannot be extended.  Therefore, a `final` class c
 **Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11)
+
+### Puzzle (Animal Farm)
+
+Consider the following example
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String pig = "length: 10";
+    final String dog = "length: " + pig.length();
+    System.out.println( "Animals are equal: " + pig == dog );
+  }
+}
+```
+
+Given that both variables have the string value: `length: 10`, what would be the outcome of the above example?  Will it be `Animals are equal: true`, `Animals are equal: false` or something else?
+
+```bash
+false
+```
+
+This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
+
+1. "_If you ran the program, you found that it prints `false` and nothing else.  It doesn't print `Animals are equal: `.  How could it not print this string literal, which is right there in black and white?  The `+` operator, whether used for addition or string concatenation, binds more tightly than the `==` operator.  Therefore, the parameter of the println method is evaluated from left to right._"
 
 ## Interfaces
 
