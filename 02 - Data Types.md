@@ -5,7 +5,7 @@
 1. [Setup](#setup)
 1. [JShell](#jshell)
 1. [Numbers and Strings (Variables and Scope)](#numbers-and-strings-variables-and-scope)
-    1. [Puzzle - Time for a change](#puzzle-time-for-a-change)
+    1. [Puzzle (Time for a change)](#puzzle-time-for-a-change)
     1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
     1. [Reference Types (the rest)](#reference-types-the-rest)
@@ -23,7 +23,7 @@
     1. [String or new String?](#string-or-new-string)
     1. [What happens to a variable when it goes out of scope?](#what-happens-to-a-variable-when-it-goes-out-of-scope)
 1. [Operators](#operators)
-    1. [Puzzle - Oddity](#puzzle-oddity)
+    1. [Puzzle (Oddity)](#puzzle-oddity)
 1. [Autoboxing](#autoboxing)
     1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
@@ -338,7 +338,7 @@ My char    J
 My String  Hello, this is my string
 ```
 
-### Puzzle - Time for a change
+### Puzzle (Time for a change)
 
 Consider the following example.
 
@@ -969,7 +969,7 @@ true || false = true
 !true = false
 ```
 
-### Puzzle - Oddity
+### Puzzle (Oddity)
 
 Consider the following example.
 
