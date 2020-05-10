@@ -30,6 +30,7 @@
     1. [Break, Continue, Labels and Return](#break-continue-labels-and-return)
         1. [Break](#break)
         1. [Label](#label)
+        1. [Puzzle (Dupe of URL)](#puzzle-dupe-of-url)
         1. [Continue](#continue)
         1. [Return](#return)
     1. [Loop and Control Flow Examples](#loop-and-control-flow-examples)
@@ -1543,7 +1544,7 @@ The `break` keyword breaks the inner loop but the outer loop is unaffected.  Use
 
 #### Label
 
-Blocks can be labelled
+Blocks can be labelled, as defined by [JLS 14.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-14.html#jls-14.7).
 
 ```java
 package demo;
@@ -1604,6 +1605,32 @@ The above will print
 ```bash
 i=0 and j=4
 ```
+
+#### Puzzle (Dupe of URL)
+
+Consider the following example.
+
+```bash
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.print("chrome:");
+    http://www.google.com;
+    System.out.println(":maximize");
+  }
+}
+```
+
+Will this program compile and if it does, what will it print?
+
+```bash
+chrome::maximize
+```
+
+This example was taken from [PUZZLE 22: DUPE OF URL in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
+
+1. "_This is a bit of a trick question.  The program doesn't do anything special.  It simply prints `chrome::maximize`.  The URL that appears in the middle of the program is a statement label ([JLS 14.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-14.html#jls-14.7)) followed by an end-of-line comment ([JLS 3.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.7)).  Labels are rarely needed in Java, which thankfully lacks a goto statement.  The `"little-known feature of the Java programming language"` to which the puzzle refers is that you are allowed to put a label on any statement. This program labels an expression statement, which is legal but useless._"
 
 #### Continue
 
