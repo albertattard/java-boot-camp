@@ -118,7 +118,9 @@ public class Links {
         .filter( line ->
           false == "## TOC".equals( line )
             && line.matches( "#{2,} .+" )
-            && false == line.contains( "Recommended Reading" ) /* Multiple headings of this type*/
+            /* Multiple headings of this type */
+            && false == line.contains( "Recommended Reading" )
+            && false == line.contains( "Puzzle" )
         )
         .map( header -> header.split( " ", 2 ) )
         .map( parts -> String.format( "%s1. [%s](#%s)", hashesToPadding( parts[0] ), parts[1], headingToHashLink( parts[1] ) ) )

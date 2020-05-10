@@ -28,7 +28,7 @@
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](#enums-ordinal)
     1. [Enums in Java can have state](#enums-in-java-can-have-state)
-1. [Imports and Packages](#imports-and-packages)
+1. [Imports, Static Imports and Packages](#imports-static-imports-and-packages)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
 
@@ -41,6 +41,18 @@
     ```
 
 1. Open the repo in IDE
+
+1. **⚠️ SOME EXAMPLES MAKES REFERENCE TO TESTING WHICH IS NOT YET COVERED!!**
+
+    Make sure you have a recent version of [JUnit 5 Aggregator](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) as part of your dependencies.
+
+    ```groovy
+    dependencies {
+      testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+    }
+    ```
+
+    Testing is covered in depth in the [testing section](04%20-%20Testing.md).
 
 ## JShell
 
@@ -323,6 +335,32 @@ My double  123456,1235
 My char    J
 My String  Hello, this is my string
 ```
+
+### Puzzle - Time for a change
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    System.out.println( 2.00 - 1.10 );
+  }
+}
+```
+
+What do you think it will print?
+
+```bash
+0.8999999999999999
+```
+
+This example was taken from [PUZZLE 2: TIME FOR A CHANGE in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_The problem is that the number `1.1` can't be represented exactly as a `double`, so it is represented by the closest `double` value.  The program subtracts this value from `2`.  Unfortunately, the result of this calculation is not the closest `double` value to `0.9`.  The shortest representation of the resulting `double` value is the hideous number that you see printed._"
+
+1. "_ Binary floating-point is particularly ill-suited to monetary calculations, as it is impossible to represent `0.1`—or any other negative power of `10`—exactly as a finite-length binary fraction ([Effective Java - Item 60: Avoid float and double if exact answers are required](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch9.xhtml#lev60))._"
 
 ### Multiline Strings
 
@@ -928,6 +966,56 @@ true && false = false
 true || false = true
 !true = false
 ```
+
+### Puzzle - Oddity
+
+Consider the following example.
+
+```java
+public static boolean isOdd( int i ) {
+  return i % 2 == 1;
+}
+```
+
+Do you think that the above implementation is correct?
+
+**When in doubt, write a test**.
+
+```java
+package demo;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static demo.App.isOdd;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class AppTest {
+
+  @ParameterizedTest( name = "should return true when given the odd value {0}" )
+  @ValueSource( ints = { 1, -1 } )
+  void shouldReturnTrueWhenGivenOdd( int oddNumber ) {
+    assertTrue( isOdd( oddNumber ) );
+  }
+}
+```
+
+The above test will fail.
+
+```bash
+./gradlew test
+
+> Task :test FAILED
+
+AppTest > should return true when given the odd value 1 PASSED
+
+AppTest > should return true when given the odd value -1 FAILED
+    org.opentest4j.AssertionFailedError at AppTest.java:14
+```
+
+This example was taken from [PUZZLE 1: ODDITY in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch02.html).
+
+1. "_If you divide `a` by `b`, multiply the result by `b`, and add the remainder, you are back where you started [JLS 15.17.3](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.17.3).  This identity makes perfect sense, but in combination with Java’s truncating integer division operator [JLS 15.17.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.17.2), it implies that when the remainder operation returns a nonzero result, it has the same sign as its left operand._"
 
 ## Autoboxing
 
@@ -1542,7 +1630,7 @@ public class App {
 
 **Note that the enum state cannot be modified as otherwise you may get unexpected behaviour**.
 
-## Imports and Packages
+## Imports, Static Imports and Packages
 
 Example
 

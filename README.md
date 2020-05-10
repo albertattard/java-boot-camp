@@ -62,7 +62,7 @@ Boot Camp for developers interested to learn Java.
     1. [Enums in Java can have methods](02%20-%20Data%20Types.md#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](02%20-%20Data%20Types.md#enums-ordinal)
     1. [Enums in Java can have state](02%20-%20Data%20Types.md#enums-in-java-can-have-state)
-1. [Imports and Packages](02%20-%20Data%20Types.md#imports-and-packages)
+1. [Imports, Static Imports and Packages](02%20-%20Data%20Types.md#imports-static-imports-and-packages)
 1. [Date Time API](02%20-%20Data%20Types.md#date-time-api)
 1. [Internationalization](02%20-%20Data%20Types.md#internationalization)
 
