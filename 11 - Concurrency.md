@@ -3,11 +3,13 @@
 ## TOC
 
 1. [Setup](#setup)
+1. [Java Memory Model](#java-memory-model)
 1. [Threads](#threads)
     1. [Daemons](#daemons)
     1. [Waiting for a thread to finish (Join)](#waiting-for-a-thread-to-finish-join)
     1. [Stale Caches](#stale-caches)
     1. [Race Conditions](#race-conditions)
+    1. [Methods that should never be used.](#methods-that-should-never-be-used)
 1. [Concurrent Data Classes](#concurrent-data-classes)
     1. [Primitive Wrappers](#primitive-wrappers)
     1. [List](#list)
@@ -32,6 +34,10 @@
 
 **Pending...**
 
+## Java Memory Model
+
+**Pending...**
+
 ## Threads
 
 ![Thread Lifecycle](assets/images/Thread%20Lifecycle.png)
@@ -52,6 +58,11 @@ Image copied from: [Theory: Operating Systems and Code Execution](https://learni
 ### Race Conditions
 
 **Pending...**
+
+### Methods that should never be used.
+
+1. `stop()`
+1. `suspend()`
 
 ## Concurrent Data Classes
 

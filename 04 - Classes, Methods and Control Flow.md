@@ -41,6 +41,7 @@
         1. [How many rolls it takes to roll a 6?](#how-many-rolls-it-takes-to-roll-a-6)
         1. [A simple game with dice and random numbers](#a-simple-game-with-dice-and-random-numbers)
 1. [Exceptions](#exceptions)
+    1. [Alternative Approach](#alternative-approach)
 1. [Java Single File Execution](#java-single-file-execution)
 
 ## Setup
@@ -2033,6 +2034,19 @@ Output (for the input `Hello there`)
 Input a number: Hello there
 Cannot parse the input 'Hello there' into a number
 I am always called before the try/catch block exists
+```
+
+### Alternative Approach
+
+**Pending...**
+
+Java exceptions are an expensive operation and alternative approach should be preferred to signal failures when possible.
+
+```groovy
+dependencies {
+  implementation('io.vavr:vavr:1.0.0-alpha-3')
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+}
 ```
 
 ## Java Single File Execution
