@@ -7,7 +7,10 @@
     1. [Create Arrays](#create-arrays)
         1. [Puzzle (ABC)](#puzzle-abc)
     1. [Working with Arrays](#working-with-arrays)
+    1. [Read past the array's length](#read-past-the-arrays-length)
     1. [Multidimensional Arrays](#multidimensional-arrays)
+        1. [Two dimensional array](#two-dimensional-array)
+        1. [Irregular Arrays](#irregular-arrays)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
@@ -185,7 +188,7 @@ The above will now work and print.
 The last element of the array is 5
 ```
 
-The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
+The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function can be used to fill an array with a set of values.
 
 ```java
 package demo;
@@ -260,7 +263,38 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
     Array of int: [7, 3, 5, 4, 5]
     ```
 
-1. Iterate and modify arrays
+1. Modify all arrays's elements
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( final String[] args ) {
+        final int[] a = new int[] { 1, 2, 3, 4, 5 };
+
+        /* Increment all elements by two */
+        a[0] += 2;
+        a[1] += 2;
+        a[2] += 2;
+        a[3] += 2;
+        a[4] += 2;
+
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array of int: [3, 4, 5, 6, 7]
+    ```
+
+    The above example does not scale well.  Imagine updating an array of 100 elements.  A for-loop is a better fit for this task.
+
+    **⚠️ THE EXAMPLE MAKES REFERENCE TO FOR LOOP WHICH IS DISCUSSED LATER ON!!**
 
     ```java
     package demo;
@@ -281,111 +315,111 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
     }
     ```
 
-    Output
+    This program will produce the same result and scales better.
 
-    ```bash
-    Array of int: [3, 4, 5, 6, 7]
-    ```
+### Read past the array's length
 
-1. Read past the Array length
+Consider the following example.
 
-    ```java
-    package demo;
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ArrayIndexOutOfBoundsException!!**
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
+```java
+package demo;
 
-        /* Throws ArrayIndexOutOfBoundsException */
-        a[a.length] = 10;
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
-    Will fail
+    /* Throws ArrayIndexOutOfBoundsException */
+    a[a.length] = 10;
+  }
+}
+```
 
-    ```bash
-    Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
-        at demo.App.main(App.java:8)
-    ```
+The program will compile but then will throw an `ArrayIndexOutOfBoundsException` as the last element of the array is at index `4`.
 
-    Array's range is always between 0 (inclusive) and the array's length (exclusive)
+```bash
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out of bounds for length 5
+    at demo.App.main(App.java:8)
+```
+
+Array's range is always between `0` (inclusive) and the array's length (exclusive).
 
 ### Multidimensional Arrays
 
-1. Two dimensional array
+#### Two dimensional array
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
-        for ( int i = 0; i < a.length; i++ ) {
-          for ( int j = 0; j < a[i].length; j++ ) {
-            System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
-          }
-          System.out.println();
-        }
+    for ( int i = 0; i < a.length; i++ ) {
+      for ( int j = 0; j < a[i].length; j++ ) {
+        System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
       }
+      System.out.println();
     }
-    ```
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    a[0][0]=1
-    a[0][1]=2
-    a[0][2]=3
+```bash
+a[0][0]=1
+a[0][1]=2
+a[0][2]=3
 
-    a[1][0]=4
-    a[1][1]=5
-    a[1][2]=6
+a[1][0]=4
+a[1][1]=5
+a[1][2]=6
 
-    a[2][0]=7
-    a[2][1]=8
-    a[2][2]=9
-    ```
+a[2][0]=7
+a[2][1]=8
+a[2][2]=9
+```
 
-1. Irregular Arrays
+#### Irregular Arrays
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
 
-        for ( int i = 0; i < a.length; i++ ) {
-          for ( int j = 0; j < a[i].length; j++ ) {
-            System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
-          }
-          System.out.println();
-        }
+    for ( int i = 0; i < a.length; i++ ) {
+      for ( int j = 0; j < a[i].length; j++ ) {
+        System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
       }
+      System.out.println();
     }
-    ```
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    a[0][0]=1
-    a[0][1]=2
-    a[0][2]=3
-    a[0][3]=4
+```bash
+a[0][0]=1
+a[0][1]=2
+a[0][2]=3
+a[0][3]=4
 
-    a[1][0]=5
-    a[1][1]=6
+a[1][0]=5
+a[1][1]=6
 
-    a[2][0]=7
-    a[2][1]=8
-    a[2][2]=9
-    ```
+a[2][0]=7
+a[2][1]=8
+a[2][2]=9
+```
 
 ### Arrays are always Mutable
 
-Making and array variable `final` does not make it immutable
+**Making and array variable `final` does not make it immutable**.
 
 ```java
 package demo;
@@ -414,91 +448,138 @@ Array of int: [10, 2, 3, 4, 5]
 
 ### Defensive Copying
 
-**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS WHICH IS COVERED LATER ON.**
+**Defensive copying** is a technique which mitigates the negative effects caused by unintentional (or intentional) modifications of shared objects. Instead of sharing the original object, we share a copy of it and thus any modification made to the copy will not affect the original object.
 
-1. A data class contains an array of it
+Note that while this may sound bad, there may be valid cases when we need to modify data and no need to apply defensive copying.
 
-    ```java
-    package demo;
+**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS and TESTING WHICH IS COVERED LATER ON.**
 
-    import java.util.Arrays;
+Consider the following class.
 
-    public class Data {
+```java
+package demo;
 
-      private final int[] sample;
+import java.util.Arrays;
 
-      public Data( final int[] sample ) {
-        this.sample = sample;
-      }
+public class Data {
 
-      public int[] getSample() {
-        return sample;
-      }
+  private final int[] sample;
 
-      @Override public String toString() {
-        return String.format( "Data: %s", Arrays.toString( sample ) );
-      }
-    }
-    ```
+  public Data( final int[] sample ) {
+    this.sample = sample;
+  }
 
-1. The array of int, `sample`, within the `Data` class can be modified from outside the data objects **breaking encapsulation**.
+  public int[] getSample() {
+    return sample;
+  }
 
-    ```java
-    package demo;
+  @Override public String toString() {
+    return String.format( "Data: %s", Arrays.toString( sample ) );
+  }
+}
+```
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] source = new int[] { 1, 2, 3, 4, 5 };
-        final Data data = new Data( source );
+The `Data` class holds a set of sample measurements as an array of `int`, named `sample`.  This array of `int` can be modified from outside the data objects **breaking encapsulation**.
 
-        /* Modify the source from outside the data object */
-        source[0] = 10;
+The `Data` class should not be effected by changes made to the source past its creation.  The Data class should not be immune from side effects.
 
-        /* Modifying the sample returned by the data object */
-        int[] sample = data.getSample();
-        sample[2] = 30;
+```java
+package demo;
 
-        System.out.printf( "%s%n", data );
-      }
-    }
-    ```
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-    Output
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    ```bash
-    Data: [10, 2, 30, 4, 5]
-    ```
+class DataTest {
 
-1. This can be prevented using **Defensive Copying**.
+  @Test
+  @DisplayName( "should be immune from side effects as changes made to the sample source should not affect the data" )
+  public void shouldBeImmuneToSideEffects() {
+    final int[] source = { 1, 2, 3, 4, 5 };
+    final Data data = new Data( source );
 
-    ```java
-    package demo;
+    /* The value of the first element should be 1 */
+    assertEquals( 1, data.getSample()[0] );
 
-    import java.util.Arrays;
+    /* Modify the source and verify that the value of the first element is still 1 */
+    source[0] = 10;
+    assertEquals( 1, data.getSample()[0] );
+  }
+}
+```
 
-    public class Data {
+The above test will fail.
 
-      private final int[] sample;
+```bash
+DataTest > should be immune from side effects as changes made to the sample source should not affect the data FAILED
+    org.opentest4j.AssertionFailedError at DataTest.java:21
+```
 
-      public Data( final int[] sample ) {
-        this.sample = Arrays.copyOf( sample, sample.length );
-      }
+The array within the `Data` class was affected when the source array was modified from outside.
 
-      public int[] getSample() {
-        return Arrays.copyOf( sample, sample.length );
-      }
+```bash
+org.opentest4j.AssertionFailedError:
+Expected :1
+Actual   :10
+```
 
-      @Override public String toString() {
-        return String.format( "Data: %s", Arrays.toString( sample ) );
-      }
-    }
-    ```
+The following example demonstrate that the side effects are also observed when the sample returned by the `getSample()` is modified.
 
-    Output
+```java
+package demo;
 
-    ```bash
-    Data: [1, 2, 3, 4, 5]
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] source = new int[] { 1, 2, 3, 4, 5 };
+    final Data data = new Data( source );
+
+    /* Modify the source from outside the data object */
+    source[0] = 10;
+
+    /* Modifying the sample returned by the data object */
+    int[] sample = data.getSample();
+    sample[2] = 30;
+
+    System.out.printf( "%s%n", data );
+  }
+}
+```
+
+Output
+
+```bash
+Data: [10, 2, 30, 4, 5]
+```
+
+When in doubt always write a test, as the test will stay with the code and can be used as documentation.
+
+This can be prevented using **Defensive Copying**.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class Data {
+
+  private final int[] sample;
+
+  public Data( final int[] sample ) {
+    this.sample = Arrays.copyOf( sample, sample.length );
+  }
+
+  public int[] getSample() {
+    return Arrays.copyOf( sample, sample.length );
+  }
+
+  @Override public String toString() {
+    return String.format( "Data: %s", Arrays.toString( sample ) );
+  }
+}
+```
+
+Running the same test now, will work and will not fail.  Note that we are also creating a copy when the sample is returned by the `getSample()` method.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 50: Make defensive copies when needed](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev50)
 
