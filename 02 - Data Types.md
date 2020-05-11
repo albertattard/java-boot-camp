@@ -20,6 +20,7 @@
         1. [Puzzle (No Pain, No Gain)](#puzzle-no-pain-no-gain)
     1. [Multiline Strings](#multiline-strings)
     1. [Primitive Types](#primitive-types)
+    1. [Signed and Unsigned Integrals](#signed-and-unsigned-integrals)
     1. [Reference Types (the rest)](#reference-types-the-rest)
     1. [Variables and their Values](#variables-and-their-values)
 1. [Stack and Heap](#stack-and-heap)
@@ -759,6 +760,33 @@ Java has eight primitive types and **no more can be added**.
 The primitive types in Java, are all in lower case.  It is an `int` and not `Int`.
 
 Note that the `String` type is not in the above list.
+
+### Signed and Unsigned Integrals
+
+Java 8 introduces unsigned `int` and `long` as shown in the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    long unsignedLong = Long.parseUnsignedLong( "18446744073709551615" );
+
+    System.out.printf( "The primitive type: %d%n", unsignedLong );
+    System.out.printf( "Using the wrapper functions: %s%n", Long.toUnsignedString( unsignedLong ) );
+  }
+}
+```
+
+Note that we need to go through the respective wrapper class in order to obtain the unsigned number.  The wrapper classes have added a set of methods to handle unsigned version as shown next.
+
+1. [compareUnsigned()](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#compareUnsigned-long-long-)
+1. [divideUnsigned()](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#divideUnsigned-long-long-)
+1. [parseUnsignedLong()](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#parseUnsignedLong-java.lang.String-)
+1. [remainderUnsigned()](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#remainderUnsigned-long-long-)
+1. [toUnsignedString()](https://docs.oracle.com/javase/8/docs/api/java/lang/Long.html#toUnsignedString-long-)
+
+Note that the above methods needs to be used to perform any simple operaiton on the unsigned version of integrals.
 
 ### Reference Types (the rest)
 

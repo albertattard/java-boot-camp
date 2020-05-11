@@ -54,6 +54,7 @@ Boot Camp for developers interested to learn Java.
         1. [Puzzle (No Pain, No Gain)](02%20-%20Data%20Types.md#puzzle-no-pain-no-gain)
     1. [Multiline Strings](02%20-%20Data%20Types.md#multiline-strings)
     1. [Primitive Types](02%20-%20Data%20Types.md#primitive-types)
+    1. [Signed and Unsigned Integrals](02%20-%20Data%20Types.md#signed-and-unsigned-integrals)
     1. [Reference Types (the rest)](02%20-%20Data%20Types.md#reference-types-the-rest)
     1. [Variables and their Values](02%20-%20Data%20Types.md#variables-and-their-values)
 1. [Stack and Heap](02%20-%20Data%20Types.md#stack-and-heap)
