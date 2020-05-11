@@ -7,6 +7,7 @@
 1. [Threads](#threads)
     1. [Daemons](#daemons)
     1. [Waiting for a thread to finish (Join)](#waiting-for-a-thread-to-finish-join)
+    1. [ThreadLocal](#threadlocal)
     1. [Stale Caches](#stale-caches)
     1. [Race Conditions](#race-conditions)
     1. [Methods that should never be used.](#methods-that-should-never-be-used)
@@ -47,7 +48,13 @@ Image copied from: [Theory: Operating Systems and Code Execution](https://learni
 
 ### Daemons
 
+**Pending...**
+
 ### Waiting for a thread to finish (Join)
+
+**Pending...**
+
+### ThreadLocal
 
 **Pending...**
 
@@ -60,6 +67,8 @@ Image copied from: [Theory: Operating Systems and Code Execution](https://learni
 **Pending...**
 
 ### Methods that should never be used.
+
+**Pending...**
 
 1. `stop()`
 1. `suspend()`

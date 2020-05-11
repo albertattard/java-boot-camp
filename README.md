@@ -291,6 +291,7 @@ Boot Camp for developers interested to learn Java.
 1. [Threads](11%20-%20Concurrency.md#threads)
     1. [Daemons](11%20-%20Concurrency.md#daemons)
     1. [Waiting for a thread to finish (Join)](11%20-%20Concurrency.md#waiting-for-a-thread-to-finish-join)
+    1. [ThreadLocal](11%20-%20Concurrency.md#threadlocal)
     1. [Stale Caches](11%20-%20Concurrency.md#stale-caches)
     1. [Race Conditions](11%20-%20Concurrency.md#race-conditions)
     1. [Methods that should never be used.](11%20-%20Concurrency.md#methods-that-should-never-be-used)
