@@ -5,18 +5,28 @@
 1. [Setup](#setup)
 1. [Arrays](#arrays)
     1. [Create Arrays](#create-arrays)
+        1. [Puzzle (ABC)](#puzzle-abc)
     1. [Working with Arrays](#working-with-arrays)
     1. [Multidimensional Arrays](#multidimensional-arrays)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
     1. [Sorting and Searching](#sorting-and-searching)
-    1. [Puzzle (ABC)](#puzzle-abc)
-1. [Lists (ArrayList and Vector)](#lists-arraylist-and-vector)
+1. [Lists (Vector, ArrayList and LinkedList)](#lists-vector-arraylist-and-linkedlist)
     1. [Create Lists](#create-lists)
     1. [Types of Lists](#types-of-lists)
+        1. [Vector](#vector)
+        1. [ArrayList](#arraylist)
+        1. [LinkedList](#linkedlist)
+    1. [Double Brace Initialization](#double-brace-initialization)
     1. [Mutable and Immutable Lists](#mutable-and-immutable-lists)
-1. [Set (HashSet, linkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
+1. [Set (HashSet, LinkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
+    1. [Create Sets](#create-sets)
+    1. [Types of Sets](#types-of-sets)
+        1. [HashSet](#hashset)
+        1. [LinkedHashSet](#linkedhashset)
+        1. [TreeSet](#treeset)
+    1. [Mutable and Immutable Sets](#mutable-and-immutable-sets)
 1. [Map (HashMap, LinkedHashMap and TreeMap)](#map-hashmap-linkedhashmap-and-treemap)
 1. [Queue and Stack](#queue-and-stack)
 1. [Java Collections Framework](#java-collections-framework)
@@ -42,8 +52,8 @@
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = { 1, 2, 3, 4, 5 };
+      public static void main( final String[] args ) {
+        final int[] a = { 1, 2, 3, 4, 5 };
         System.out.printf( "Array of int: %s%n", a );
       }
     }
@@ -67,8 +77,8 @@
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = { 1, 2, 3, 4, 5 };
+      public static void main( final String[] args ) {
+        final int[] a = { 1, 2, 3, 4, 5 };
         System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
       }
     }
@@ -88,8 +98,8 @@
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = new int[] { 1, 2, 3, 4, 5 };
+      public static void main( final String[] args ) {
+        final int[] a = new int[] { 1, 2, 3, 4, 5 };
         System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
       }
     }
@@ -103,8 +113,8 @@
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = new int[5];
+      public static void main( final String[] args ) {
+        final int[] a = new int[5];
         System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
       }
     }
@@ -124,9 +134,9 @@
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = new int[5];
-        Arrays.fill( a, 1 );
+      public static void main( final String[] args ) {
+        final int[] a = new int[5];
+        final Arrays.fill( a, 1 );
         System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
       }
     }
@@ -138,6 +148,32 @@
     Array of int: [1, 1, 1, 1, 1]
     ```
 
+#### Puzzle (ABC)
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String letters = "ABC";
+    final char[] numbers = { '1', '2', '3' };
+    System.out.println( letters + " easy as " + numbers );
+  }
+}
+```
+
+```bash
+ABC easy as [C@3764951d
+```
+
+This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
+
+1. "_The string concatenation operator is defined to perform string conversion on both of its operands and then to concatenate the resulting strings.  String conversion for object references, which include arrays, is defined as follows ([JLS 15.18.1.1](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.18.1.1))._"
+
+    "_If the reference is `null`, it is converted to the string `"null"`.  Otherwise, the conversion is performed as if by an invocation of the `toString()` method of the referenced object with no arguments; but if the result of invoking the `toString()` method is `null`, then the string `"null"` is used instead._"
+
+1. "_So what is the behavior of invoking `toString()` on a non-null `char` array?  Arrays inherit the `toString()` method from `Object` ([JLS 10.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html#jls-10.7))._"
+
 ### Working with Arrays
 
 1. Access each element by its index (zero based)
@@ -148,8 +184,8 @@
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = new int[] { 1, 2, 3, 4, 5 };
+      public static void main( final String[] args ) {
+        final int[] a = new int[] { 1, 2, 3, 4, 5 };
         a[0] = 7;
         a[1]++;
         a[2] += 2;
@@ -173,8 +209,8 @@
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = new int[] { 1, 2, 3, 4, 5 };
+      public static void main( final String[] args ) {
+        final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
         /* Increment all elements by two */
         for ( int i = 0; i < a.length; i++ ) {
@@ -198,7 +234,7 @@
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
         /* Throws ArrayIndexOutOfBoundsException */
@@ -224,8 +260,8 @@
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
-        int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+      public static void main( final String[] args ) {
+        final int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
 
         for ( int i = 0; i < a.length; i++ ) {
           for ( int j = 0; j < a[i].length; j++ ) {
@@ -259,8 +295,8 @@
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
-        int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
+      public static void main( final String[] args ) {
+        final int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
 
         for ( int i = 0; i < a.length; i++ ) {
           for ( int j = 0; j < a[i].length; j++ ) {
@@ -290,7 +326,7 @@
 
 ### Arrays are always Mutable
 
-Making and array variable `final `dose not make it immutable
+Making and array variable `final` does not make it immutable
 
 ```java
 package demo;
@@ -298,7 +334,7 @@ package demo;
 import java.util.Arrays;
 
 public class App {
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final int[] a = { 1, 2, 3, 4, 5 };
     a[0] = 10;
 
@@ -313,11 +349,13 @@ Output
 Array of int: [10, 2, 3, 4, 5]
 ```
 
-Java arrays are always mutable and there is nothing preventing that.
+**Java arrays are always mutable and there is nothing preventing that**.
 
 [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28)
 
 ### Defensive Copying
+
+**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS WHICH IS COVERED LATER ON.**
 
 1. A data class contains an array of it
 
@@ -350,7 +388,7 @@ Java arrays are always mutable and there is nothing preventing that.
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         final int[] source = new int[] { 1, 2, 3, 4, 5 };
         final Data data = new Data( source );
 
@@ -415,15 +453,15 @@ Java arrays are always mutable and there is nothing preventing that.
     import java.lang.reflect.Array;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = { 1, 2, 3, 4, 5 };
-        Object b = a;
+      public static void main( final String[] args ) {
+        final int[] a = { 1, 2, 3, 4, 5 };
+        final Object b = a;
         System.out.printf( "Array of %d elements%n", Array.getLength( b ) );
       }
     }
     ```
 
-    Ouput
+    Output
 
     ```bash
     Array of 5 elements
@@ -439,8 +477,8 @@ Java arrays are always mutable and there is nothing preventing that.
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        Object[] a = new Object[5];
+      public static void main( final String[] args ) {
+        final Object[] a = new Object[5];
         a[0] = "A String";
         a[1] = 21; /* Integer */
         a[2] = 42L; /* Long */
@@ -465,8 +503,8 @@ Java arrays are always mutable and there is nothing preventing that.
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
-        Object[] a = new Long[5];
+      public static void main( final String[] args ) {
+        final Object[] a = new Long[5];
 
         /* Throws ArrayStoreException */
         a[0] = "A String";
@@ -491,12 +529,12 @@ Java arrays are always mutable and there is nothing preventing that.
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = { 9, 10, 2, 5, 12 };
+      public static void main( final String[] args ) {
+        final int[] a = { 9, 10, 2, 5, 12 };
         Arrays.sort( a );
 
-        int b = Arrays.binarySearch( a, 9 );
-        int c = Arrays.binarySearch( a, 4 );
+        final int b = Arrays.binarySearch( a, 9 );
+        final int c = Arrays.binarySearch( a, 4 );
 
         System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
         System.out.printf( "Index of 9: %d%n", b );
@@ -525,12 +563,12 @@ Java arrays are always mutable and there is nothing preventing that.
     import java.util.Arrays;
 
     public class App {
-      public static void main( String[] args ) {
-        int[] a = { 9, 10, 2, 5, 12 };
+      public static void main( final String[] args ) {
+        final int[] a = { 9, 10, 2, 5, 12 };
 
         /* Search on an unsorted array */
-        int b = Arrays.binarySearch( a, 9 );
-        int c = Arrays.binarySearch( a, 4 );
+        final int b = Arrays.binarySearch( a, 9 );
+        final int c = Arrays.binarySearch( a, 4 );
 
         System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
         System.out.printf( "Index of 9: %d%n", b );
@@ -547,35 +585,9 @@ Java arrays are always mutable and there is nothing preventing that.
     Index of 4: -4
     ```
 
-    The binary search was not able to find 9, and provided the wrong insertion point for the value 4.
+    The binary search was not able to find `9`, and provided the wrong insertion point for the value `4`.
 
-### Puzzle (ABC)
-
-```java
-package demo;
-
-public class App {
-  public static void main( final String[] args ) {
-    final String letters = "ABC";
-    final char[] numbers = { '1', '2', '3' };
-    System.out.println( letters + " easy as " + numbers );
-  }
-}
-```
-
-```bash
-ABC easy as [C@3764951d
-```
-
-This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls, and Corner Cases](https://learning.oreilly.com/library/view/javatm-puzzlers-traps/032133678X/ch03.html).
-
-1. "_The string concatenation operator is defined to perform string conversion on both of its operands and then to concatenate the resulting strings.  String conversion for object references, which include arrays, is defined as follows ([JLS 15.18.1.1](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.18.1.1))._"
-
-    "_If the reference is `null`, it is converted to the string `"null"`.  Otherwise, the conversion is performed as if by an invocation of the `toString()` method of the referenced object with no arguments; but if the result of invoking the `toString()` method is `null`, then the string `"null"` is used instead._"
-
-1. "_So what is the behavior of invoking `toString()` on a non-null `char` array?  Arrays inherit the `toString()` method from `Object` ([JLS 10.7](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html#jls-10.7))._"
-
-## Lists (ArrayList and Vector)
+## Lists (Vector, ArrayList and LinkedList)
 
 ### Create Lists
 
@@ -588,8 +600,8 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
     import java.util.List;
 
     public class App {
-      public static void main( String[] args ) {
-        List<String> a = Arrays.asList( "a", "b", "c" );
+      public static void main( final String[] args ) {
+        final List<String> a = Arrays.asList( "a", "b", "c" );
         System.out.printf( "List %s%n", a );
       }
     }
@@ -603,8 +615,8 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
     import java.util.List;
 
     public class App {
-      public static void main( String[] args ) {
-        List<String> a = List.of( "a", "b", "c" );
+      public static void main( final String[] args ) {
+        final List<String> a = List.of( "a", "b", "c" );
         System.out.printf( "List %s%n", a );
       }
     }
@@ -618,149 +630,229 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
 
 ### Types of Lists
 
-1. [Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html)
+#### Vector
 
-    ```java
-    package demo;
+[Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html)
 
-    import java.util.List;
-    import java.util.Vector;
+```java
+package demo;
 
-    public class App {
-      public static void main( String[] args ) {
-        List<String> a = new Vector<>( 3 );
-        a.add( "b" );
-        a.add( "c" );
+import java.util.List;
+import java.util.Vector;
 
-        /* Add at a given existing location */
-        a.add( 0, "a" );
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new Vector<>( 3 );
+    a.add( "b" );
+    a.add( "c" );
 
-        System.out.printf( "List %s%n", a );
-      }
-    }
-    ```
+    /* Add at a given existing location */
+    a.add( 0, "a" );
 
-    Output
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
 
-    ```bash
-    List [a, b, c]
-    ```
+Output
 
-1. [ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
+```bash
+List [a, b, c]
+```
 
-    ```java
-    package demo;
+#### ArrayList
 
-    import java.util.ArrayList;
-    import java.util.List;
+[ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
 
-    public class App {
-      public static void main( String[] args ) {
-        List<String> a = new ArrayList<>( 3 );
-        a.add( "b" );
-        a.add( "c" );
+```java
+package demo;
 
-        /* Add at a given existing location */
-        a.add( 0, "a" );
+import java.util.ArrayList;
+import java.util.List;
 
-        System.out.printf( "List %s%n", a );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new ArrayList<>( 3 );
+    a.add( "b" );
+    a.add( "c" );
 
-    Output
+    /* Add at a given existing location */
+    a.add( 0, "a" );
 
-    ```bash
-    List [a, b, c]
-    ```
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
 
-1. [LinkedList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html)
+Output
 
-    ```java
-    package demo;
+```bash
+List [a, b, c]
+```
 
-    import java.util.LinkedList;
-    import java.util.List;
+#### LinkedList
 
-    public class App {
-      public static void main( String[] args ) {
-        List<String> a = new LinkedList<>();
-        a.add( "b" );
-        a.add( "c" );
+[LinkedList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html)
 
-        /* Add at a given existing location */
-        a.add( 0, "a" );
+```java
+package demo;
 
-        System.out.printf( "List %s%n", a );
-      }
-    }
-    ```
+import java.util.LinkedList;
+import java.util.List;
 
-    Output
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new LinkedList<>();
+    a.add( "b" );
+    a.add( "c" );
 
-    ```bash
-    List [a, b, c]
-    ```
+    /* Add at a given existing location */
+    a.add( 0, "a" );
+
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+List [a, b, c]
+```
+
+### Double Brace Initialization
+
+**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS WHICH IS COVERED LATER ON.**
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new ArrayList<>() {{
+      add( "a" );
+      add( "b" );
+      add( "c" );
+    }};
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
+
+The above example makes use of double brace initialization.  An [inner anonymous class](06%20-%20Objects.md#outer-inner-and-anonymous-classes) is created and the init block is used to add the elements to the list.  The above example is similar to the following.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+
+public class MyStringList extends ArrayList<String> {
+
+  /* Initialisation block */
+  {
+    add( "a" );
+    add( "b" );
+    add( "c" );
+  }
+}
+```
+
+I've never used this pattern and prefer other constructs instead, such as [Guava.asList()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Lists.html#asList-E-E:A-).  I've added this example here as you may encounter this in code.
 
 ### Mutable and Immutable Lists
 
-1. Unmodifiable lists cannot be modified
+Unmodifiable lists cannot be modified
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT THROWS AN UnsupportedOperationException!!**
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new ArrayList<>( 3 );
+    a.add( "a" );
+    a.add( "b" );
+    a.add( "c" );
+
+    /* Cannot modify the list through b */
+    final List<String> b = Collections.unmodifiableList( a );
+
+    /* Throws UnsupportedOperationException */
+    b.add( "d" );
+  }
+}
+```
+
+Changing the unmodifiable list will throw an `UnsupportedOperationException`.
+
+```bash
+Exception in thread "main" java.lang.UnsupportedOperationException
+  at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
+  at demo.App.main(App.java:18)
+```
+
+Changes to the underlying list will also affect the immutable list
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new ArrayList<>( 3 );
+    a.add( "a" );
+    a.add( "b" );
+    a.add( "c" );
+
+    /* Cannot modify the list through b */
+    final List<String> b = Collections.unmodifiableList( a );
+
+    /* The immutable list b will be modified too */
+    a.add( "d" );
+
+    System.out.printf( "List a: %s%n", a );
+    System.out.printf( "List b: %s%n", b );
+  }
+}
+```
+
+Output
+
+```bash
+List a: [a, b, c, d]
+List b: [a, b, c, d]
+```
+
+## Set (HashSet, LinkedHashSet and TreeSet)
+
+### Create Sets
+
+1. Create sets
+
+    Java 9 added a default functions to the [Set](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html) interface [Set.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#of(E...))
 
     ```java
     package demo;
 
-    import java.util.ArrayList;
-    import java.util.Collections;
-    import java.util.List;
+    import java.util.Set;
 
     public class App {
-      public static void main( String[] args ) {
-        List<String> a = new ArrayList<>( 3 );
-        a.add( "a" );
-        a.add( "b" );
-        a.add( "c" );
-
-        /* Cannot modify the list through b*/
-        List<String> b = Collections.unmodifiableList( a );
-
-        /* Throws UnsupportedOperationException */
-        b.add( "d" );
-      }
-    }
-    ```
-
-    Changing the unmodifiable list will throw an `UnsupportedOperationException`.
-
-    ```bash
-    Exception in thread "main" java.lang.UnsupportedOperationException
-      at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
-      at demo.App.main(App.java:18)
-    ```
-
-1. Changes to the underlying list will also affect the main list
-
-    ```java
-    package demo;
-
-    import java.util.ArrayList;
-    import java.util.Collections;
-    import java.util.List;
-
-    public class App {
-      public static void main( String[] args ) {
-        List<String> a = new ArrayList<>( 3 );
-        a.add( "a" );
-        a.add( "b" );
-        a.add( "c" );
-
-        /* Cannot modify the list through b*/
-        List<String> b = Collections.unmodifiableList( a );
-
-        /* The immutable list b will be modified too */
-        a.add( "d" );
-
-        System.out.printf( "List a: %s%n", a );
-        System.out.printf( "List b: %s%n", b );
+      public static void main( final String[] args ) {
+        final Set<String> a = Set.of( "a", "b", "c" );
+        System.out.printf( "Set %s%n", a );
       }
     }
     ```
@@ -768,13 +860,231 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
     Output
 
     ```bash
-    List a: [a, b, c, d]
-    List b: [a, b, c, d]
+    Set [a, b, c]
     ```
 
-## Set (HashSet, linkedHashSet and TreeSet)
+### Types of Sets
 
-**Pending...**
+#### HashSet
+
+[HashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html)
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>( 3 );
+    a.add( "b" );
+    a.add( "c" );
+    a.add( "a" );
+
+    /* Add an element that already exists */
+    a.add( "a" );
+
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+Set [a, b, c]
+```
+
+The order in which the elements are returned is not guranteed and may vary between different versions of the JVM and JRE.
+
+#### LinkedHashSet
+
+[LinkedHashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedHashSet.html)
+
+```java
+package demo;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new LinkedHashSet<>( 3 );
+    a.add( "b" );
+    a.add( "c" );
+    a.add( "a" );
+
+    /* Add an element that already exists */
+    a.add( "a" );
+
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+Set [b, c, a]
+```
+
+#### TreeSet
+
+[TreeSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html)
+
+```java
+package demo;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new TreeSet<>( Comparator.reverseOrder() );
+    a.add( "b" );
+    a.add( "c" );
+    a.add( "a" );
+
+    /* Add an element that already exists */
+    a.add( "a" );
+
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+Output
+
+```bash
+Set [c, b, a]
+```
+
+The Java `TreeSet` is based on the [Red-Black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree).  The order in which the elements are sorted is goverend by the provided comparator or by their natural ordering.
+
+Note that adding items to a list which do not support natural ordering and without providing a comparator will throw a `ClassCastException` at runtime.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A ClassCastException.**
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<Point> a = new TreeSet<>();
+    a.add( new Point( 1, 2 ) );
+
+    System.out.printf( "Points %s%n", a );
+  }
+}
+```
+
+The `Point` class does not implement the `Comparable` interface, thus this type of object does not provide natural ordering.  A comparator needs to be provided to the `TreeSet` to be able to work with the `Point` class.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class App {
+  public static void main( final String[] args ) {
+    /* Compare by point x then point y */
+    final Comparator<Point> comparator =
+      Comparator.comparing( Point::getX ).thenComparing( Point::getY );
+
+    final Set<Point> a = new TreeSet<>( comparator );
+    a.add( new Point( 1, 2 ) );
+
+    System.out.printf( "Points %s%n", a );
+  }
+}
+```
+
+The above will print.
+
+```bash
+Points [java.awt.Point[x=1,y=2]]
+```
+
+### Mutable and Immutable Sets
+
+Unmodifiable sets cannot be modified
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT THROWS AN UnsupportedOperationException!!**
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>( 3 );
+    a.add( "a" );
+    a.add( "b" );
+    a.add( "c" );
+
+    /* Cannot modify the set through b */
+    final Set<String> b = Collections.unmodifiableSet( a );
+
+    /* Throws UnsupportedOperationException */
+    b.add( "d" );
+  }
+}
+```
+
+Changing the unmodifiable set will throw an `UnsupportedOperationException`.
+
+```bash
+Exception in thread "main" java.lang.UnsupportedOperationException
+  at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
+  at demo.App.main(App.java:18)
+```
+
+Changes to the underlying set will also affect the immutable set
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>( 3 );
+    a.add( "a" );
+    a.add( "b" );
+    a.add( "c" );
+
+    /* Cannot modify the set through b */
+    final Set<String> b = Collections.unmodifiableSet( a );
+
+    /* The immutable set b will be modified too */
+    a.add( "d" );
+
+    System.out.printf( "Set a: %s%n", a );
+    System.out.printf( "Set b: %s%n", b );
+  }
+}
+```
+
+Output
+
+```bash
+Set a: [a, b, c, d]
+Set b: [a, b, c, d]
+```
 
 ## Map (HashMap, LinkedHashMap and TreeMap)
 
