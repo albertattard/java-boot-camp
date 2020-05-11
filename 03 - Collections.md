@@ -91,7 +91,9 @@ Output
 Array of int: [1, 2, 3, 4, 5]
 ```
 
-Alternative methods to create an array
+The above example did not make use of the `new` keyword, yet an object of type array is created.  This is one of the few exceptions where objects are created without using the `new` keyword.
+
+Alternative methods of array creation
 
 1. Use the `new` operator and provide the array's length
 
@@ -140,6 +142,48 @@ Alternative methods to create an array
     ```java
     final int[] a = new int[5] { 1, 2, 3, 4, 5 };
     ```
+
+When creating and passing array to a function, the `new` keyword needs to be used.
+
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int a = last( { 1, 2, 3, 4, 5 } );
+    System.out.printf( "The last element of the array is %d%n", a );
+  }
+
+  private static int last( final int[] a ) {
+    return a[a.length - 1];
+  }
+}
+```
+
+When creating arrays and passing them directly to methods as shown above, the `new` keyword needs to be used.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int a = last( new int[] { 1, 2, 3, 4, 5 } );
+    System.out.printf( "The last element of the array is %d%n", a );
+  }
+
+  private static int last( final int[] a ) {
+    return a[a.length - 1];
+  }
+}
+```
+
+The above will now work and print.
+
+```bash
+The last element of the array is 5
+```
 
 The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
 
