@@ -51,6 +51,8 @@
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](#enums-ordinal)
     1. [Enums in Java can have state](#enums-in-java-can-have-state)
+1. [Mutable and Immutable](#mutable-and-immutable)
+    1. [The final keyword](#the-final-keyword)
 1. [Imports, Static Imports and Packages](#imports-static-imports-and-packages)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
@@ -2210,6 +2212,48 @@ public class App {
 ```
 
 **Note that the enum state cannot be modified as otherwise you may get unexpected behaviour**.
+
+## Mutable and Immutable
+
+Example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Mutable */
+    int a = 2;
+    a++;
+
+    /* Immutable */
+    final int b = 3;
+
+    /* Immutable (initialised after declared) */
+    final int c;
+    c = 3;
+
+    System.out.printf( "a = %d%n", a );
+    System.out.printf( "b = %d%n", b );
+    System.out.printf( "c = %d%n", c );
+  }
+}
+```
+
+Output
+
+```
+a = 3
+b = 3
+c = 3
+```
+
+### The final keyword
+
+The `final` keyword marks a variable as immutable.  This means that the variable's value, be it the primitive value itself or the reference, cannot be changed.  This means that the *Java stack* value, **and not the *Java heap* value**, cannot be modified.
+
+**The `final` keyword affects the *Java stack* and not the *Java heap* contents**.
 
 ## Imports, Static Imports and Packages
 

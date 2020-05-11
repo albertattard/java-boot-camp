@@ -27,37 +27,10 @@
 1. Clone Repo: [java-boot-camp-blueprint](https://github.com/albertattard/java-boot-camp-blueprint.git)
 
     ```bash
-    $ git clone https://github.com/albertattard/java-boot-camp-blueprint.git
+    $ git clone https://github.com/albertattard/java-boot-camp-blank.git
     ```
-
-    **Note that this is the blueprint repository and not the blank repository**.
 
 1. Open the repo in IDE
-
-1. Delete the `src/test/java/demo/AppTest.java`
-
-1. Modify the `src/main/java/demo/App.java`
-
-    ```java
-    package demo;
-
-    public class App {
-
-      public static void main( String[] args ) {
-        System.out.println( "Objects!!" );
-      }
-    }
-    ```
-
-1. Run the tests and build the project
-
-    ```bash
-    $ ./gradlew clean build
-
-    ...
-    BUILD SUCCESSFUL in 3s
-    13 actionable tasks: 13 executed
-    ```
 
 ## Arrays
 

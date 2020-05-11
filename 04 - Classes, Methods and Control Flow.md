@@ -6,8 +6,6 @@
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
-1. [Mutable and Immutable](#mutable-and-immutable)
-    1. [The final keyword](#the-final-keyword)
 1. [Access Control](#access-control)
     1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
     1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
@@ -330,48 +328,6 @@ You rolled 1 and 6
       public static Random random = new Random();
     }
     ```
-
-## Mutable and Immutable
-
-Example
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( String[] args ) {
-    /* Mutable */
-    int a = 2;
-    a++;
-
-    /* Immutable */
-    final int b = 3;
-
-    /* Immutable (initialised after declared) */
-    final int c;
-    c = 3;
-
-    System.out.printf( "a = %d%n", a );
-    System.out.printf( "b = %d%n", b );
-    System.out.printf( "c = %d%n", c );
-  }
-}
-```
-
-Output
-
-```
-a = 3
-b = 3
-c = 3
-```
-
-### The final keyword
-
-The `final` keyword marks a variable as immutable.  This means that the variable's value, be it the primitive value itself or the reference, cannot be changed.  This means that the *Java stack* value, **and not the *Java heap* value**, cannot be modified.
-
-**The `final` keyword affects the *Java stack* and not the *Java heap* contents**.
 
 ## Access Control
 
