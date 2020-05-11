@@ -102,6 +102,7 @@ Boot Camp for developers interested to learn Java.
     1. [Defensive Copying](03%20-%20Collections.md#defensive-copying)
     1. [Arrays of Objects](03%20-%20Collections.md#arrays-of-objects)
     1. [Sorting and Searching](03%20-%20Collections.md#sorting-and-searching)
+    1. [An Array of Characters Is Not a String](03%20-%20Collections.md#an-array-of-characters-is-not-a-string)
 1. [Lists (Vector, ArrayList and LinkedList)](03%20-%20Collections.md#lists-vector-arraylist-and-linkedlist)
     1. [Create Lists](03%20-%20Collections.md#create-lists)
     1. [Types of Lists](03%20-%20Collections.md#types-of-lists)

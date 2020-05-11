@@ -12,6 +12,7 @@
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
     1. [Sorting and Searching](#sorting-and-searching)
+    1. [An Array of Characters Is Not a String](#an-array-of-characters-is-not-a-string)
 1. [Lists (Vector, ArrayList and LinkedList)](#lists-vector-arraylist-and-linkedlist)
     1. [Create Lists](#create-lists)
     1. [Types of Lists](#types-of-lists)
@@ -92,39 +93,53 @@ Array of int: [1, 2, 3, 4, 5]
 
 Alternative methods to create an array
 
-```java
-package demo;
+1. Use the `new` operator and provide the array's length
 
-import java.util.Arrays;
+    ```java
+    package demo;
 
-public class App {
-  public static void main( final String[] args ) {
-    final int[] a = new int[] { 1, 2, 3, 4, 5 };
-    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-  }
-}
-```
+    import java.util.Arrays;
 
-or
+    public class App {
+      public static void main( final String[] args ) {
+        final int[] a = new int[5];
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
 
-```java
-package demo;
+    The array is filled with the data type default value, `0` for numbers.
 
-import java.util.Arrays;
+    ```bash
+    Array of int: [0, 0, 0, 0, 0]
+    ```
 
-public class App {
-  public static void main( final String[] args ) {
-    final int[] a = new int[5];
-    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-  }
-}
-```
+1. Use the `new` operator and provide the values too.
 
-The array is filled with the data type default value
+    ```java
+    package demo;
 
-```bash
-Array of int: [0, 0, 0, 0, 0]
-```
+    import java.util.Arrays;
+
+    public class App {
+      public static void main( final String[] args ) {
+        final int[] a = new int[] { 1, 2, 3, 4, 5 };
+        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+      }
+    }
+    ```
+
+    Output
+
+    ```bash
+    Array of int: [1, 2, 3, 4, 5]
+    ```
+
+    Note that the array's length was not included.  The following is invalid and will not compile.
+
+    ```java
+    final int[] a = new int[5] { 1, 2, 3, 4, 5 };
+    ```
 
 The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
 
@@ -136,7 +151,7 @@ import java.util.Arrays;
 public class App {
   public static void main( final String[] args ) {
     final int[] a = new int[5];
-    final Arrays.fill( a, 1 );
+    Arrays.fill( a, 1 );
     System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
   }
 }
@@ -586,6 +601,10 @@ Array of int: [10, 2, 3, 4, 5]
     ```
 
     The binary search was not able to find `9`, and provided the wrong insertion point for the value `4`.
+
+### An Array of Characters Is Not a String
+
+[JLS-10.9](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html#jls-10.9)
 
 ## Lists (Vector, ArrayList and LinkedList)
 
