@@ -36,7 +36,7 @@
     1. [Break, Continue, Labels and Return](#break-continue-labels-and-return)
         1. [Break](#break)
         1. [Label](#label)
-        1. [Puzzle (Dupe of URL)](#puzzle-dupe-of-url)
+            1. [Puzzle (Dupe of URL)](#puzzle-dupe-of-url)
         1. [Continue](#continue)
         1. [Return](#return)
     1. [Loop and Control Flow Examples](#loop-and-control-flow-examples)
@@ -442,9 +442,7 @@ Observations
 
     The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
 
-Using access modifies, access to classes and their members can be restricted.
-
-Making the static field `random` `private` will not allow an attacker to access the static field directly.
+Using access modifies, access to classes and their members can be restricted.  Making the static field `random` `private` will not allow an attacker to access the static field directly.
 
 ```java
 package demo;
@@ -1483,7 +1481,7 @@ The body of the do/while is always executed at least once
 
 ### Foreach Loop
 
-Java 5 introduced may new features to the Java language, one of which was the foreach loop.
+Java 5 introduced many new features to the Java language, one of which was the foreach loop.
 
 ```java
 package demo;
@@ -1500,7 +1498,7 @@ public class App {
 
 One of the advantages of the foreach loop is that you do not need to worry about the end of the array.  A common mistake when looping an array is exceeding the array's length as shown next.
 
-**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS ArrayIndexOutOfBoundsException!!**
+**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS AN ArrayIndexOutOfBoundsException!!**
 
 ```java
 package demo;
@@ -1727,7 +1725,7 @@ The above will print
 i=0 and j=4
 ```
 
-#### Puzzle (Dupe of URL)
+##### Puzzle (Dupe of URL)
 
 Consider the following example.
 
@@ -1755,11 +1753,101 @@ This example was taken from [PUZZLE 22: DUPE OF URL in Java™ Puzzlers: Traps, 
 
 #### Continue
 
-**Pending...**
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( int i = 1; i <= 10; i++ ) {
+      if ( isMultipleOf3( i ) ) {
+        continue;
+      }
+
+      System.out.printf( "i=%s%n", i );
+    }
+  }
+
+  public static boolean isMultipleOf3( int a ) {
+    return a % 3 == 0;
+  }
+}
+```
+
+Will skip all multiple of `3`
+
+```bash
+i=1
+i=2
+i=4
+i=5
+i=7
+i=8
+i=10
+```
+
+The `continue` keyword can be used with labels but cannot be used outside of a loop.
 
 #### Return
 
-**Pending...**
+The `return` keyword can be used from within a loop to exit from the metho and, possibly return a value.  **The `return` keyword will always exit from the current method**.
+
+Consider the following example.
+
+```java
+private static int findIndexOf( final String[] names, final String name ) {
+  for ( int i = 0; i < names.length; i++ ) {
+    if ( name.equalsIgnoreCase( names[i] ) ) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+```
+
+The function loops through the array until it finds an entry in the given array.  If the name is found in the given array, then the array index for the given name is returned, otherwise it will return `-1`.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final String name = "Mary";
+    final String[] names = { "Albert", "Mary", "Peter", "Jane" };
+    final int index = findIndexOf( names, name );
+
+    if ( index == -1 ) {
+      displayf( "The name %s was not found", name );
+    } else {
+      displayf( "The name %s was found at index: %d", name, index );
+    }
+  }
+
+  private static int findIndexOf( final String[] names, final String name ) {
+    for ( int i = 0; i < names.length; i++ ) {
+      if ( name.equalsIgnoreCase( names[i] ) ) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  private static void displayf( final String pattern, final Object... parameters ) {
+    System.out.println( String.format( pattern, parameters ) );
+  }
+}
+```
+
+The above example will print
+
+```bash
+The name Mary was found at index: 1
+```
 
 ### Loop and Control Flow Examples
 
@@ -1793,7 +1881,6 @@ public class App {
   private static final Random random = new Random();
 }
 ```
-
 
 #### A simple game with dice and random numbers
 
@@ -1944,22 +2031,30 @@ import java.nio.charset.StandardCharsets;
 public class App {
 
   public static void main( String[] args ) {
-    System.out.print( "Input a number: " );
     String input = "";
     try {
-      input = readUserInput();
+      input = readUserInput( "Input a number: " );
       final int number = Integer.parseInt( input );
-      System.out.printf( "You have entered the number %d%n", number );
+      displayf( "You have entered the number %d", number );
     } catch ( NumberFormatException e ) {
-      System.out.printf( "Cannot parse the input '%s' into a number%n", input );
+      displayf( "Cannot parse the input '%s' into a number", input );
     } catch ( IOException e ) {
-      System.out.println( "Failed to read user input due to a technical failure" );
+      display( "Failed to read user input due to a technical failure" );
     } finally {
-      System.out.println( "I am always called before the try/catch block exists" );
+      display( "I am always called before the try/catch block exists" );
     }
   }
 
-  private static String readUserInput() throws IOException {
+  private static void displayf( String pattern, Object... parameters ) {
+    display( String.format( pattern, parameters ) );
+  }
+
+  private static void display( String message ) {
+    System.out.println( message );
+  }
+
+  private static String readUserInput( String prompt ) throws IOException {
+    System.out.print( prompt );
     return reader.readLine();
   }
 
@@ -1992,7 +2087,7 @@ Java 11 introduced Java Single File Execution ([JEP-330](https://openjdk.java.ne
 $ vi hello
 ```
 
-The script file name does not need to match the class name.
+**The script file name does not need to match the class name**.
 
 ```jshelllanguage
 #!/usr/bin/java --source 11

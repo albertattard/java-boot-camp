@@ -124,7 +124,7 @@ Boot Camp for developers interested to learn Java.
     1. [Break, Continue, Labels and Return](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break-continue-labels-and-return)
         1. [Break](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#break)
         1. [Label](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#label)
-        1. [Puzzle (Dupe of URL)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#puzzle-dupe-of-url)
+            1. [Puzzle (Dupe of URL)](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#puzzle-dupe-of-url)
         1. [Continue](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#continue)
         1. [Return](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#return)
     1. [Loop and Control Flow Examples](03%20-%20Classes%2C%20Methods%20and%20Control%20Flow.md#loop-and-control-flow-examples)
