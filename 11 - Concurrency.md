@@ -4,6 +4,8 @@
 
 1. [Setup](#setup)
 1. [Threads](#threads)
+    1. [Daemons](#daemons)
+    1. [Waiting for a thread to finish (Join)](#waiting-for-a-thread-to-finish-join)
     1. [Stale Caches](#stale-caches)
     1. [Race Conditions](#race-conditions)
 1. [Concurrent Data Classes](#concurrent-data-classes)
@@ -24,6 +26,7 @@
     1. [CyclicBarrier](#cyclicbarrier)
     1. [Fork Join Framework](#fork-join-framework)
 1. [Cost of Concurrency](#cost-of-concurrency)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -33,6 +36,12 @@
 
 ![Thread Lifecycle](assets/images/Thread%20Lifecycle.png)
 Image copied from: [Theory: Operating Systems and Code Execution](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323887)
+
+**Pending...**
+
+### Daemons
+
+### Waiting for a thread to finish (Join)
 
 **Pending...**
 
@@ -113,3 +122,7 @@ Image copied from: [Theory: Operating Systems and Code Execution](https://learni
 Cost of context switching
 
 **Pending...**
+
+## Miscellaneous
+
+1. `InterruptedException`

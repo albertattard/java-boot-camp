@@ -1242,40 +1242,40 @@ Set b: [a, b, c, d]
 
 ### Create Maps
 
-**Pending..**
+**Pending...**
 
 ### Types of Maps
 
 #### Hashtable
 
-**Pending..**
+**Pending...**
 
 #### HashMap
 
-**Pending..**
+**Pending...**
 
 #### LinkedHashMap
 
-**Pending..**
+**Pending...**
 
 #### TreeMap
 
-**Pending..**
+**Pending...**
 
 ## Queue and Stack
 
 ### Queues
 
-**Pending..**
+**Pending...**
 
 ### Stacks
 
-**Pending..**
+**Pending...**
 
 ## Java Collections Framework
 
-**Pending..**
+**Pending...**
 
 ## Google Guava (Collections)
 
-**Pending..**
+**Pending...**

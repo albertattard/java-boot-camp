@@ -1031,7 +1031,7 @@ A class that is marked `final` cannot be extended.  Therefore, a `final` class c
 
 ## The Object Class
 
-**Pending..**
+**Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11)
 
@@ -1063,7 +1063,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ## Interfaces
 
-**Pending..**
+**Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev20)
 
@@ -1071,11 +1071,11 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ## instanceof and cast operators
 
-**Pending..**
+**Pending...**
 
 ## Inheritance and Composition
 
-**Pending..**
+**Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
 
@@ -1083,7 +1083,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### Overloading
 
-**Pending..**
+**Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
@@ -1093,25 +1093,25 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### Outer Class
 
-**Pending..**
+**Pending...**
 
 ### Inner Class
 
-**Pending..**
+**Pending...**
 
 ### Inner Anonymous Class
 
-**Pending..**
+**Pending...**
 
 ## Annotations
 
-**Pending..**
+**Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
 
 ## Generics
 
-**Pending..**
+**Pending...**
 
 Are not 100% Erased
 

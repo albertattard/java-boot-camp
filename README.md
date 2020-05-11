@@ -244,15 +244,19 @@ Boot Camp for developers interested to learn Java.
 1. [Interface segregation principle](07%20-%20SOLID.md#interface-segregation-principle)
 1. [Dependency inversion principle](07%20-%20SOLID.md#dependency-inversion-principle)
 
-### [Lambda](08%20-%20Lambda.md)
+### [Lambda & Streams](08%20-%20Lambda%20&%20Streams.md)
 
-1. [Lambda Expressions](08%20-%20Lambda.md#lambda-expressions)
-1. [Multiple Parameters](08%20-%20Lambda.md#multiple-parameters)
-1. [Dealing with Exceptions](08%20-%20Lambda.md#dealing-with-exceptions)
-1. [Foreach Loops](08%20-%20Lambda.md#foreach-loops)
-1. [Streams (Lambda)](08%20-%20Lambda.md#streams-lambda)
-1. [Mapping and Filtering](08%20-%20Lambda.md#mapping-and-filtering)
-1. [Collectors](08%20-%20Lambda.md#collectors)
+1. [Lambda Expressions](08%20-%20Lambda%20&%20Streams.md#lambda-expressions)
+1. [Multiple Parameters](08%20-%20Lambda%20&%20Streams.md#multiple-parameters)
+1. [Dealing with Exceptions](08%20-%20Lambda%20&%20Streams.md#dealing-with-exceptions)
+1. [Foreach Loops](08%20-%20Lambda%20&%20Streams.md#foreach-loops)
+1. [Streams (Lambda)](08%20-%20Lambda%20&%20Streams.md#streams-lambda)
+1. [Mapping and Filtering](08%20-%20Lambda%20&%20Streams.md#mapping-and-filtering)
+1. [Collectors](08%20-%20Lambda%20&%20Streams.md#collectors)
+1. [Common Uses](08%20-%20Lambda%20&%20Streams.md#common-uses)
+    1. [Sum numbers in List](08%20-%20Lambda%20&%20Streams.md#sum-numbers-in-list)
+    1. [Sum content in List based on property](08%20-%20Lambda%20&%20Streams.md#sum-content-in-list-based-on-property)
+    1. [Create Map from List](08%20-%20Lambda%20&%20Streams.md#create-map-from-list)
 
 ### [IO & Streams](09%20-%20IO%20&%20Streams.md)
 
@@ -279,6 +283,8 @@ Boot Camp for developers interested to learn Java.
 ### [Concurrency](11%20-%20Concurrency.md)
 
 1. [Threads](11%20-%20Concurrency.md#threads)
+    1. [Daemons](11%20-%20Concurrency.md#daemons)
+    1. [Waiting for a thread to finish (Join)](11%20-%20Concurrency.md#waiting-for-a-thread-to-finish-join)
     1. [Stale Caches](11%20-%20Concurrency.md#stale-caches)
     1. [Race Conditions](11%20-%20Concurrency.md#race-conditions)
 1. [Concurrent Data Classes](11%20-%20Concurrency.md#concurrent-data-classes)
@@ -299,6 +305,7 @@ Boot Camp for developers interested to learn Java.
     1. [CyclicBarrier](11%20-%20Concurrency.md#cyclicbarrier)
     1. [Fork Join Framework](11%20-%20Concurrency.md#fork-join-framework)
 1. [Cost of Concurrency](11%20-%20Concurrency.md#cost-of-concurrency)
+1. [Miscellaneous](11%20-%20Concurrency.md#miscellaneous)
 
 ### [Common Design Patterns](12%20-%20Common%20Design%20Patterns.md)
 
