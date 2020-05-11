@@ -3,8 +3,8 @@
 ## TOC
 
 1. [Setup](#setup)
-1. [Data Sources (Hikari Connection Pool)](#data-sources-hikari-connection-pool)
 1. [H2, MySQL and PostgreSQL](#h2-mysql-and-postgresql)
+1. [Data Sources (Hikari Connection Pool)](#data-sources-hikari-connection-pool)
 1. [Flyway (Database Migration)](#flyway-database-migration)
 1. [Statements, Prepared Statements, Result Sets](#statements-prepared-statements-result-sets)
 1. [Transactions](#transactions)
@@ -14,36 +14,36 @@
 
 ## Setup
 
-**Pending...**
-
-## Data Sources (Hikari Connection Pool)
-
-**Pending...**
+**Pending..**
 
 ## H2, MySQL and PostgreSQL
 
-**Pending...**
+**Pending..**
+
+## Data Sources (Hikari Connection Pool)
+
+**Pending..**
 
 ## Flyway (Database Migration)
 
-**Pending...**
+**Pending..**
 
 ## Statements, Prepared Statements, Result Sets
 
-**Pending...**
+**Pending..**
 
 ## Transactions
 
-**Pending...**
+**Pending..**
 
 ## JOOQ
 
-**Pending...**
+**Pending..**
 
 ## Query DSL
 
-**Pending...**
+**Pending..**
 
 ## JPA and Hibernate
 
-**Pending...**
+**Pending..**

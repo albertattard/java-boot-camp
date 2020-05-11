@@ -31,8 +31,16 @@
         1. [LinkedHashSet](#linkedhashset)
         1. [TreeSet](#treeset)
     1. [Mutable and Immutable Sets](#mutable-and-immutable-sets)
-1. [Map (HashMap, LinkedHashMap and TreeMap)](#map-hashmap-linkedhashmap-and-treemap)
+1. [Map (Hashtable, HashMap, LinkedHashMap and TreeMap)](#map-hashtable-hashmap-linkedhashmap-and-treemap)
+    1. [Create Maps](#create-maps)
+    1. [Types of Maps](#types-of-maps)
+        1. [Hashtable](#hashtable)
+        1. [HashMap](#hashmap)
+        1. [LinkedHashMap](#linkedhashmap)
+        1. [TreeMap](#treemap)
 1. [Queue and Stack](#queue-and-stack)
+    1. [Queues](#queues)
+    1. [Stacks](#stacks)
 1. [Java Collections Framework](#java-collections-framework)
 1. [Google Guava (Collections)](#google-guava-collections)
 
@@ -1230,19 +1238,44 @@ Set a: [a, b, c, d]
 Set b: [a, b, c, d]
 ```
 
-## Map (HashMap, LinkedHashMap and TreeMap)
+## Map (Hashtable, HashMap, LinkedHashMap and TreeMap)
 
-**Pending...**
+### Create Maps
+
+**Pending..**
+
+### Types of Maps
+
+#### Hashtable
+
+**Pending..**
+
+#### HashMap
+
+**Pending..**
+
+#### LinkedHashMap
+
+**Pending..**
+
+#### TreeMap
+
+**Pending..**
 
 ## Queue and Stack
 
-**Pending...**
+### Queues
+
+**Pending..**
+
+### Stacks
+
+**Pending..**
 
 ## Java Collections Framework
 
-**Pending...**
+**Pending..**
 
 ## Google Guava (Collections)
 
-**Pending...**
-
+**Pending..**

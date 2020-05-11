@@ -13,32 +13,32 @@
 
 ## Setup
 
-**Pending...**
+**Pending..**
 
 ## Lambda Expressions
 
-**Pending...**
+**Pending..**
 
 ## Multiple Parameters
 
-**Pending...**
+**Pending..**
 
 ## Dealing with Exceptions
 
-**Pending...**
+**Pending..**
 
 ## Foreach Loops
 
-**Pending...**
+**Pending..**
 
 ## Streams (Lambda)
 
-**Pending...**
+**Pending..**
 
 ## Mapping and Filtering
 
-**Pending...**
+**Pending..**
 
 ## Collectors
 
-**Pending...**
+**Pending..**
