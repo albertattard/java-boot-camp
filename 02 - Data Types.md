@@ -44,6 +44,8 @@
     1. [Puzzle (Escape Rout)](#puzzle-escape-rout)
     1. [Puzzle (A Big Delight in Every Byte)](#puzzle-a-big-delight-in-every-byte)
     1. [Puzzle (Inclement Increment)](#puzzle-inclement-increment)
+1. [Mutable and Immutable](#mutable-and-immutable)
+    1. [The final keyword](#the-final-keyword)
 1. [Casting](#casting)
     1. [Puzzle (Multicast)](#puzzle-multicast)
 1. [Autoboxing](#autoboxing)
@@ -52,9 +54,11 @@
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Enum's Ordinal](#enums-ordinal)
     1. [Enums in Java can have state](#enums-in-java-can-have-state)
-1. [Mutable and Immutable](#mutable-and-immutable)
-    1. [The final keyword](#the-final-keyword)
+    1. [Enums can extend functionality](#enums-can-extend-functionality)
 1. [Imports, Static Imports and Packages](#imports-static-imports-and-packages)
+    1. [Imports](#imports)
+    1. [Static Imports](#static-imports)
+    1. [Packages](#packages)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
 
@@ -1588,6 +1592,48 @@ This example was taken from [PUZZLE 25: INCLEMENT INCREMENT in Java™ Puzzlers:
 
 1. "_Presumably, the author of the statement meant for it to add `1` to the value of `j`, which is what the expression `j++` does.  Unfortunately, the author inadvertently assigned the value of this expression back to `j`.  When placed after a variable, the `++` operator functions as the postfix increment operator ([JLS 15.14.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.14.2)): The value of the expression `j++` is the original value of `j` before it was incremented.  Therefore, the preceding assignment first saves the value of `j`, then sets `j` to its value plus `1`, and, finally, resets `j` back to its original value._"
 
+## Mutable and Immutable
+
+Example
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Mutable */
+    int a = 2;
+    a++;
+
+    /* Immutable */
+    final int b = 3;
+
+    /* Immutable (initialised after declared) */
+    final int c;
+    c = 3;
+
+    System.out.printf( "a = %d%n", a );
+    System.out.printf( "b = %d%n", b );
+    System.out.printf( "c = %d%n", c );
+  }
+}
+```
+
+Output
+
+```
+a = 3
+b = 3
+c = 3
+```
+
+### The final keyword
+
+The `final` keyword marks a variable as immutable.  This means that the variable's value, be it the primitive value itself or the reference, cannot be changed.  This means that the *Java stack* value, **and not the *Java heap* value**, cannot be modified.
+
+**The `final` keyword affects the *Java stack* and not the *Java heap* contents**.
+
 ## Casting
 
 ```java
@@ -1595,9 +1641,9 @@ package demo;
 
 public class App {
   public static void main( String[] args ) {
-    byte a = 7;
-    byte b = 3;
-    byte c = (byte) ( a + b );
+    final byte a = 7;
+    final byte b = 3;
+    final byte c = (byte) ( a + b );
 
     System.out.printf( "c = %d%n", c );
   }
@@ -1612,7 +1658,7 @@ Consider the following example.
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     System.out.println( (int) (char) (byte) -1 );
   }
 }
@@ -1636,21 +1682,21 @@ Example
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     /* Objects */
-    Integer a = new Integer( 10 ); /* Deprecated */
-    Integer b = Integer.valueOf( 10 ); /* Unnecessary Boxing */
-    Integer c = Integer.valueOf( "10" );
-    Integer d = Integer.valueOf( "1010", 2 );
+    final Integer a = new Integer( 10 ); /* Deprecated */
+    final Integer b = Integer.valueOf( 10 ); /* Unnecessary Boxing */
+    final Integer c = Integer.valueOf( "10" );
+    final Integer d = Integer.valueOf( "1010", 2 );
 
     /* Primitives */
-    int e = 10;
-    int f = Integer.parseInt( "10" );
-    int g = Integer.parseInt( "1010", 2 );
+    final int e = 10;
+    final int f = Integer.parseInt( "10" );
+    final int g = Integer.parseInt( "1010", 2 );
 
     /* Auto-Boxing */
-    Integer h = e;
-    int i = a;
+    final Integer h = e;
+    final int i = a;
 
     System.out.println( "-- Objects -----" );
     System.out.printf( "Integer a %d%n", a );
@@ -1695,9 +1741,9 @@ int i     10
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
-    Integer a = null;
-    int b = a;
+  public static void main( final String[] args ) {
+    final Integer a = null;
+    final int b = a;
     System.out.printf( "The autoboxed value of null is %d%n", b );
   }
 }
@@ -1767,7 +1813,7 @@ package demo;
 
 public class RockPaperScissors {
 
-  public static int determineOutcome( int player1, int player2 ) {
+  public static int determineOutcome( final int player1, final int player2 ) {
     if ( player1 == player2 ) {
       return 0;
     }
@@ -1797,19 +1843,19 @@ public class RockPaperScissorsTest {
 
   @ValueSource( ints = { 1, 2, 3 } )
   @ParameterizedTest( name = "should return 0 when both players play the same hand {0}" )
-  void shouldReturnDraw( int hand ) {
+  void shouldReturnDraw( final int hand ) {
     assertEquals( 0, determineOutcome( hand, hand ) );
   }
 
   @CsvSource( { "2,1", "3,2", "1,3" } )
   @ParameterizedTest( name = "should return 1 when player1 plays {0} and player 2 plays {1}" )
-  void shouldReturnWinPlayer1( int player1, int player2 ) {
+  void shouldReturnWinPlayer1( final int player1, final int player2 ) {
     assertEquals( 1, determineOutcome( player1, player2 ) );
   }
 
   @CsvSource( { "1,2", "2,3", "3,1" } )
   @ParameterizedTest( name = "should return 2 when player1 plays {0} and player 2 plays {1}" )
-  void shouldReturnWinPlayer2( int player1, int player2 ) {
+  void shouldReturnWinPlayer2( final int player1, final int player2 ) {
     assertEquals( 2, determineOutcome( player1, player2 ) );
   }
 }
@@ -1878,7 +1924,7 @@ public class RockPaperScissors {
   public static final int SCISSORS = 2;
   public static final int ROCK = 3;
 
-  public static int determineOutcome( int player1, int player2 ) {
+  public static int determineOutcome( final int player1, final int player2 ) {
     if ( player1 == player2 ) {
       return DRAW;
     }
@@ -1914,13 +1960,13 @@ public class RockPaperScissorsTest {
 
   @ValueSource( ints = { PAPER, SCISSORS, ROCK } )
   @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
-  void shouldReturnDraw( int hand ) {
+  void shouldReturnDraw( final int hand ) {
     assertEquals( DRAW, determineOutcome( hand, hand ) );
   }
 
   @CsvSource( { "2,1", "3,2", "1,3" } )
   @ParameterizedTest( name = "should return WIN_PLAYER_1 (1) when player1 plays {0} and player 2 plays {1}" )
-  void shouldReturnWinPlayer1( int player1, int player2 ) {
+  void shouldReturnWinPlayer1( final int player1, final int player2 ) {
     assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
   }
 
@@ -1973,7 +2019,7 @@ Refactor the current solution into using enums
       public static final int SCISSORS = 2;
       public static final int ROCK = 3;
 
-      public static Outcome determineOutcome( int player1, int player2 ) {
+      public static Outcome determineOutcome( final int player1, final int player2 ) {
         if ( player1 == player2 ) {
           return Outcome.DRAW;
         }
@@ -1996,7 +2042,7 @@ Refactor the current solution into using enums
     ```java
       @EnumSource( Hand.class )
       @ParameterizedTest( name = "should return DRAW when both players play the same hand {0}" )
-      void shouldReturnDraw( RockPaperScissors.Hand hand ) {
+      void shouldReturnDraw( final Hand hand ) {
         assertEquals( DRAW, determineOutcome( hand, hand ) );
       }
     ```
@@ -2006,7 +2052,7 @@ Refactor the current solution into using enums
     ```java
       @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
       @ParameterizedTest( name = "should return WIN_PLAYER_1 when player1 plays {0} and player 2 plays {1}" )
-      void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
+      void shouldReturnWinPlayer1( final Hand player1, final Hand player2 ) {
         assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
       }
     ```
@@ -2031,19 +2077,19 @@ Refactor the current solution into using enums
 
       @EnumSource( Hand.class )
       @ParameterizedTest( name = "should return DRAW when both players play the same hand {0}" )
-      void shouldReturnDraw( RockPaperScissors.Hand hand ) {
+      void shouldReturnDraw( final Hand hand ) {
         assertEquals( DRAW, determineOutcome( hand, hand ) );
       }
 
       @CsvSource( { "PAPER,ROCK", "SCISSORS,PAPER", "ROCK,SCISSORS" } )
       @ParameterizedTest( name = "should return WIN_PLAYER_1 when player1 plays {0} and player 2 plays {1}" )
-      void shouldReturnWinPlayer1( Hand player1, Hand player2 ) {
+      void shouldReturnWinPlayer1( final Hand player1, final Hand player2 ) {
         assertEquals( WIN_PLAYER_1, determineOutcome( player1, player2 ) );
       }
 
       @CsvSource( { "ROCK,PAPER", "PAPER,SCISSORS", "SCISSORS,ROCK" } )
       @ParameterizedTest( name = "should return WIN_PLAYER_2 when player1 plays {0} and player 2 plays {1}" )
-      void shouldReturnWinPlayer2( Hand player1, Hand player2 ) {
+      void shouldReturnWinPlayer2( final Hand player1, final Hand player2 ) {
         assertEquals( WIN_PLAYER_2, determineOutcome( player1, player2 ) );
       }
     }
@@ -2155,7 +2201,7 @@ public class App {
     CLUBS, DIAMONDS, HEARTS, SPADES;
   }
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     Suit s = Suit.DIAMONDS;
     System.out.printf( "The enum %s has an ordinal of %d%n", s, s.ordinal() );
   }
@@ -2232,8 +2278,8 @@ public class App {
     }
   }
 
-  public static void main( String[] args ) {
-    Suit s = Suit.DIAMONDS;
+  public static void main( final String[] args ) {
+    final Suit s = Suit.DIAMONDS;
     System.out.printf( "The suit %s has a colour of %s%n", s, s.colour );
   }
 }
@@ -2241,51 +2287,13 @@ public class App {
 
 **Note that the enum state cannot be modified as otherwise you may get unexpected behaviour**.
 
-## Mutable and Immutable
+### Enums can extend functionality
 
-Example
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( String[] args ) {
-    /* Mutable */
-    int a = 2;
-    a++;
-
-    /* Immutable */
-    final int b = 3;
-
-    /* Immutable (initialised after declared) */
-    final int c;
-    c = 3;
-
-    System.out.printf( "a = %d%n", a );
-    System.out.printf( "b = %d%n", b );
-    System.out.printf( "c = %d%n", c );
-  }
-}
-```
-
-Output
-
-```
-a = 3
-b = 3
-c = 3
-```
-
-### The final keyword
-
-The `final` keyword marks a variable as immutable.  This means that the variable's value, be it the primitive value itself or the reference, cannot be changed.  This means that the *Java stack* value, **and not the *Java heap* value**, cannot be modified.
-
-**The `final` keyword affects the *Java stack* and not the *Java heap* contents**.
+** Pending...**
 
 ## Imports, Static Imports and Packages
 
-Example
+### Imports
 
 ```java
 package demo;
@@ -2309,6 +2317,14 @@ Output
 ```bash
 The number was 85
 ```
+
+### Static Imports
+
+**Pending...**
+
+### Packages
+
+**Pending...**
 
 ## Date Time API
 
