@@ -238,6 +238,7 @@ Boot Camp for developers interested to learn Java.
     1. [Inner Class](06%20-%20Objects.md#inner-class)
     1. [Inner Anonymous Class](06%20-%20Objects.md#inner-anonymous-class)
 1. [Annotations](06%20-%20Objects.md#annotations)
+    1. [Project Lombok](06%20-%20Objects.md#project-lombok)
 1. [Generics](06%20-%20Objects.md#generics)
 1. [Miscellaneous](06%20-%20Objects.md#miscellaneous)
 
@@ -262,7 +263,7 @@ Boot Camp for developers interested to learn Java.
     1. [ForEach](08%20-%20Lambda%20&%20Streams.md#foreach)
     1. [Map](08%20-%20Lambda%20&%20Streams.md#map)
     1. [FlatMap](08%20-%20Lambda%20&%20Streams.md#flatmap)
-1. [Mapping and Filtering](08%20-%20Lambda%20&%20Streams.md#mapping-and-filtering)
+    1. [Mapping and Filtering](08%20-%20Lambda%20&%20Streams.md#mapping-and-filtering)
 1. [Collectors](08%20-%20Lambda%20&%20Streams.md#collectors)
 1. [Common Uses](08%20-%20Lambda%20&%20Streams.md#common-uses)
     1. [Sum numbers in List](08%20-%20Lambda%20&%20Streams.md#sum-numbers-in-list)

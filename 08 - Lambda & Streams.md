@@ -14,7 +14,7 @@
     1. [ForEach](#foreach)
     1. [Map](#map)
     1. [FlatMap](#flatmap)
-1. [Mapping and Filtering](#mapping-and-filtering)
+    1. [Mapping and Filtering](#mapping-and-filtering)
 1. [Collectors](#collectors)
 1. [Common Uses](#common-uses)
     1. [Sum numbers in List](#sum-numbers-in-list)
@@ -69,7 +69,7 @@
 
 **Pending...**
 
-## Mapping and Filtering
+### Mapping and Filtering
 
 **Pending...**
 

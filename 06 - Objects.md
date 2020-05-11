@@ -34,6 +34,7 @@
     1. [Inner Class](#inner-class)
     1. [Inner Anonymous Class](#inner-anonymous-class)
 1. [Annotations](#annotations)
+    1. [Project Lombok](#project-lombok)
 1. [Generics](#generics)
 1. [Miscellaneous](#miscellaneous)
 
@@ -1108,6 +1109,10 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 **Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
+
+### Project Lombok
+
+**Pending...**
 
 ## Generics
 
