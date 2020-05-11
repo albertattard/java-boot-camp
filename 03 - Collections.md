@@ -46,107 +46,107 @@
 
 ### Create Arrays
 
-1. Create an integer array of 5 elements
+Create an integer array of 5 elements
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = { 1, 2, 3, 4, 5 };
-        System.out.printf( "Array of int: %s%n", a );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 1, 2, 3, 4, 5 };
+    System.out.printf( "Array of int: %s%n", a );
+  }
+}
+```
 
-    The square brackets can be placed after the variable name instead of the type
+The square brackets can be placed after the variable name instead of the type
 
-    ```java
-    int a[] = { 1, 2, 3, 4, 5 };
-    ```
+```java
+int a[] = { 1, 2, 3, 4, 5 };
+```
 
-    Output
+Output
 
-    ```bash
-    Array of int: [I@279f2327
-    ```
+```bash
+Array of int: [I@279f2327
+```
 
-1. Use [Arrays.toString()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#toString(int%5B%5D)) to convert the array to a string
+Use [Arrays.toString()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#toString(int%5B%5D)) to convert the array to a string
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = { 1, 2, 3, 4, 5 };
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 1, 2, 3, 4, 5 };
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    Array of int: [1, 2, 3, 4, 5]
-    ```
+```bash
+Array of int: [1, 2, 3, 4, 5]
+```
 
-1. Alternative methods to create an array
+Alternative methods to create an array
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = new int[] { 1, 2, 3, 4, 5 };
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-    Or
+or
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[5];
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = new int[5];
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-    The array is filled with the data type default value
+The array is filled with the data type default value
 
-    ```bash
-    Array of int: [0, 0, 0, 0, 0]
-    ```
+```bash
+Array of int: [0, 0, 0, 0, 0]
+```
 
-1. The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
+The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[5];
-        final Arrays.fill( a, 1 );
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = new int[5];
+    final Arrays.fill( a, 1 );
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    Array of int: [1, 1, 1, 1, 1]
-    ```
+```bash
+Array of int: [1, 1, 1, 1, 1]
+```
 
 #### Puzzle (ABC)
 
