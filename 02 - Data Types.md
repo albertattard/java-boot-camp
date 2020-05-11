@@ -1236,9 +1236,11 @@ public class App {
       int b = 3;
       String m = "The number is " + a + b;
       String n = "The number is " + ( a + b );
+      String o = a + b + " is the number";
       System.out.println( "-- String concatenation ----" );
       System.out.printf( "Concatenation:   %s%n", m );
       System.out.printf( "Grouping before: %s%n", n );
+      System.out.printf( "Adding before:   %s%n", o );
     }
 
     /* Basic Arithmetic */
@@ -1303,6 +1305,7 @@ Output
 -- String concatenation ----
 Concatenation:   The number is 73
 Grouping before: The number is 10
+Adding before:   10 is the number
 -- Basic Arithmetic ----------
 a = 3
 b = 3
