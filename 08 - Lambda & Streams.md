@@ -4,10 +4,16 @@
 
 1. [Setup](#setup)
 1. [Lambda Expressions](#lambda-expressions)
+    1. [Function as Parameters](#function-as-parameters)
+    1. [Constructor as Parameters](#constructor-as-parameters)
 1. [Multiple Parameters](#multiple-parameters)
 1. [Dealing with Exceptions](#dealing-with-exceptions)
 1. [Foreach Loops](#foreach-loops)
 1. [Streams (Lambda)](#streams-lambda)
+    1. [Filter](#filter)
+    1. [ForEach](#foreach)
+    1. [Map](#map)
+    1. [FlatMap](#flatmap)
 1. [Mapping and Filtering](#mapping-and-filtering)
 1. [Collectors](#collectors)
 1. [Common Uses](#common-uses)
@@ -20,6 +26,14 @@
 **Pending...**
 
 ## Lambda Expressions
+
+**Pending...**
+
+### Function as Parameters
+
+**Pending...**
+
+### Constructor as Parameters
 
 **Pending...**
 
@@ -36,6 +50,22 @@
 **Pending...**
 
 ## Streams (Lambda)
+
+**Pending...**
+
+### Filter
+
+**Pending...**
+
+### ForEach
+
+**Pending...**
+
+### Map
+
+**Pending...**
+
+### FlatMap
 
 **Pending...**
 
