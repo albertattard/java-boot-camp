@@ -10,6 +10,10 @@
 1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [How can we test functionality that makes use of static?](#how-can-we-test-functionality-that-makes-use-of-static)
     1. [What does static mean?](#what-does-static-mean)
+    1. [static Fields](#static-fields)
+1. [Access Control](#access-control)
+    1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
+    1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
 1. [Simple Objects](#simple-objects)
     1. [Basic Object](#basic-object)
     1. [Add State](#add-state)
@@ -21,9 +25,6 @@
     1. [More State](#more-state)
     1. [Mutable and Immutable](#mutable-and-immutable)
         1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
-1. [Access Control](#access-control)
-    1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
-    1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
 1. [Inheritance](#inheritance)
     1. [Light Box Example](#light-box-example)
     1. [Heavy Box Example](#heavy-box-example)
@@ -643,6 +644,237 @@ The `max()` method is `static` which means it does not work with the *Java heap*
 When the `max()` method is called in the above context, the `max()` method is simply loaded in the *Java stack* and executed and no interaction with the *Java heap* is made during this process.  When invoking an instance method, the object's state is also involved in the process, which is found in the *Java heap*.
 
 The variable `nullVariable` is of type `Math` and can access any member that this type defines.  The `Math` class has the `max()` `static` method which can be access or through the `Math` class name or through a variable of type `Math`.
+
+### static Fields
+
+**Pending...**
+
+## Access Control
+
+We know that the `Random` class created a pseudo random sequence.  This means that we can predict the next number to be drawn after making several observations.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class Dice {
+
+  public static int roll() {
+    return RANDOM_GENERATOR.nextInt( 6 ) + 1;
+  }
+
+  public static final Random RANDOM_GENERATOR = new Random(1);
+}
+```
+
+The `Random` object is initialised with a seed to simplify the example.  Both the `roll()` method and the `random` static field can be accessed from anywhere.  An attacker can take advantage of that and force the next dice roll to be a `6`.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* This method is hacked by an attacker */
+    initGame();
+
+    /* This will always roll a 6 */
+    playGame();
+  }
+
+  public static void playGame() {
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
+  }
+
+  public static void initGame() {
+    /* Skip some numbers so that the next roll, rolls a 6 */
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.RANDOM_GENERATOR.nextInt();
+    }
+  }
+}
+```
+
+Observations
+
+1. The attacker first called the `nextInt()` method `19` times.
+
+    ```java
+        for ( int i = 0; i < 19; i++ ) {
+          Dice.random.nextInt();
+        }
+    ```
+
+   The attacker knows that the 20th roll will yield a `6`.
+
+1. The attacker then rolled the dice normally
+
+    ```java
+        int a = Dice.roll();
+        System.out.printf( "I rolled a %s%n", a );
+    ```
+
+    and obtained the expected the attacker wanted.
+
+    ```bash
+    I rolled a 6
+    ```
+
+    The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
+
+1. The `Dice` class uses static fields on purpose.  Only one instance of the `static` field `RANDOM_GENERATOR` exists and anyone can access it from anywhere in the code.
+
+Using access modifies, access to classes and their members (properties, static fields and methods) can be restricted.  Making the static field `random` `private` will not allow an attacker to access the static field directly.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class Dice {
+
+  public static int roll() {
+    return RANDOM_GENERATOR.nextInt( 6 ) + 1;
+  }
+
+  private static final Random RANDOM_GENERATOR = new Random( 1 );
+}
+```
+
+The attacker cannot now access the `random` field.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* This method is hacked by an attacker */
+    initGame();
+
+    /* This will always roll a 6 */
+    playGame();
+  }
+
+  public static void playGame() {
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
+  }
+
+  public static void initGame() {
+    /* Skip some numbers */
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.RANDOM_GENERATOR.nextInt();
+    }
+  }
+}
+```
+
+The following error will be produced
+
+```bash
+src/main/java/demo/App.java:21: error: RANDOM_GENERATOR has private access in Dice
+      Dice.RANDOM_GENERATOR.nextInt();
+          ^
+```
+
+### Classes Access Modifiers Table
+
+| Access Modifier | Accessible From |
+|-----------------|-----------------|
+| `public`        | Anywhere        |
+| (no modifier)   | same package    |
+
+### Class Members Access Modifiers Table
+
+| Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
+|-----------------|:---------------:|:-----------------:|:-------------:|:-------------:|
+| `public`        |       Yes       |       Yes         |      Yes      |      Yes      |
+| `protected`     |       Yes       |       Yes         |      Yes      |       No      |
+| (no modifier)   |       Yes       |       Yes         |       No      |       No      |
+| `private`       |       Yes       |        No         |       No      |       No      |
+
+Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class A {
+  public static void printIt() {
+    System.out.printf( "The value of c is %d%n", B.c );
+  }
+}
+
+class B {
+  private static int c = 7;
+}
+```
+
+Both classes are defined in the same source file, `A.java`, yet these are two different classes within the same package.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── A.class
+        └── B.class
+```
+
+There is one exception to this rule.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  private static int c = 7;
+
+  public static void main( String[] args ) {
+    Runnable r = new Runnable() {
+      @Override public void run() {
+        System.out.printf( "The value of c is %d%n", c );
+      }
+    };
+    r.run();
+  }
+}
+```
+
+An inner anonymous class ([discussed in depth later on](#outer-inner-and-anonymous-classes)) is created within the `App` class.
+
+```java
+Runnable r = new Runnable() {
+  @Override public void run() {
+    System.out.printf( "The value of c is %d%n", c );
+  }
+};
+```
+
+This is compiled as a separate class file, `App$1.class`.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1.class
+        └── App.class
+```
+
+Despite being a different class within the same package, the inner anonymous class is still allowed to access `private` members within the parent class.
+
+More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
 
 ## Simple Objects
 
@@ -1637,212 +1869,6 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 ```
 
 **It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on](04%20-%20Collections.md#defensive-copyings)), to mitigate mutation side effects.
-
-## Access Control
-
-**Pending...**
-
-We know that the `Random` class created a pseudo random sequence.  This means that we can predict the next number to be drawn after making several observations.
-
-Consider the following example.
-
-```java
-package demo;
-
-import java.util.Random;
-
-class Dice {
-  static final Random random = new Random(1);
-
-  static int roll() {
-    return random.nextInt( 6 ) + 1;
-  }
-}
-```
-
-The `Random` object is initialised with a seed to simplify the example.  Both the `roll()` method and the `random` static field can be accessed.  An attacker can take advantage of that and force the next dice roll to be a `6`.
-
-Consider the following example.
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( String[] args ) {
-    /* Skip some numbers */
-    for ( int i = 0; i < 19; i++ ) {
-      Dice.random.nextInt();
-    }
-
-    /* This will always roll a 6 */
-    int a = Dice.roll();
-    System.out.printf( "I rolled a %s%n", a );
-  }
-}
-```
-
-Observations
-
-1. The attacker first called the `nextInt()` method `19` times.
-
-    ```java
-        for ( int i = 0; i < 19; i++ ) {
-          Dice.random.nextInt();
-        }
-    ```
-
-   The attacker knows that the 20th roll will yield a `6`.
-
-1. The attacker then rolled the dice normally
-
-    ```java
-        int a = Dice.roll();
-        System.out.printf( "I rolled a %s%n", a );
-    ```
-
-    and obtained the expected the attacker wanted.
-
-    ```bash
-    I rolled a 6
-    ```
-
-    The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
-
-Using access modifies, access to classes and their members can be restricted.  Making the static field `random` `private` will not allow an attacker to access the static field directly.
-
-```java
-package demo;
-
-import java.util.Random;
-
-class Dice {
-  private static final Random random = new Random();
-
-  static int roll() {
-    return random.nextInt( 6 ) + 1;
-  }
-}
-```
-
-The attacker cannot now access the `random` field.
-
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( String[] args ) {
-    for ( int i = 0; i < 19; i++ ) {
-      Dice.random.nextInt();
-    }
-
-    int a = Dice.roll();
-    System.out.printf( "I rolled a %s%n", a );
-  }
-}
-```
-
-The following error will be produced
-
-```bash
-src/main/java/demo/App.java:7: error: random has private access in Dice
-      Dice.random.nextInt();
-          ^
-```
-
-### Classes Access Modifiers Table
-
-| Access Modifier | Accessible From |
-|-----------------|-----------------|
-| `public`        | Anywhere        |
-| (no modifier)   | same package    |
-
-### Class Members Access Modifiers Table
-
-| Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
-|-----------------|:---------------:|:-----------------:|:-------------:|:-------------:|
-| `public`        |       Yes       |       Yes         |      Yes      |      Yes      |
-| `protected`     |       Yes       |       Yes         |      Yes      |       No      |
-| (no modifier)   |       Yes       |       Yes         |       No      |       No      |
-| `private`       |       Yes       |        No         |       No      |       No      |
-
-Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
-
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
-
-```java
-package demo;
-
-public class A {
-  public static void printIt() {
-    System.out.printf( "The value of c is %d%n", B.c );
-  }
-}
-
-class B {
-  private static int c = 7;
-}
-```
-
-Both classes are defined in the same source file, `A.java`, yet these are two different classes within the same package.
-
-```bash
-$ tree build/classes/java
-build/classes/java
-└── main
-    └── demo
-        ├── A.class
-        └── B.class
-```
-
-There is one exception to this rule.  Consider the following example.
-
-```java
-package demo;
-
-public class App {
-
-  private static int c = 7;
-
-  public static void main( String[] args ) {
-    Runnable r = new Runnable() {
-      @Override public void run() {
-        System.out.printf( "The value of c is %d%n", c );
-      }
-    };
-    r.run();
-  }
-}
-```
-
-An inner anonymous class ([discussed in more depth when we cover objects](05%20-%20Objects.md#outer-inner-and-anonymous-classes)) is created within the `App` class.
-
-```java
-Runnable r = new Runnable() {
-  @Override public void run() {
-    System.out.printf( "The value of c is %d%n", c );
-  }
-};
-```
-
-This is compiled as a separate class file, `App$1.class`.
-
-```bash
-$ tree build/classes/java
-build/classes/java
-└── main
-    └── demo
-        ├── App$1.class
-        └── App.class
-```
-
-Despite being a different class within the same package, the inner anonymous class is still allowed to access `private` members within the parent class.
-
-More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
-
 
 ## Inheritance
 
