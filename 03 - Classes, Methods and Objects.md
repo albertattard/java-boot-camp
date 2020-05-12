@@ -1081,7 +1081,26 @@ The label can be represented by the `String` data-type.
 
     The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) always represents the object.  Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is not need to bind it or do any gymnastics.
 
-1. Create custom Converter.
+1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
+
+    Following is a list of some invalid labels
+    * `null` (null)
+    * `""` (blank string)
+    * `"   "` (only whitespaces)
+
+    The [`@ValueSource` annotation](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/ValueSource.html) does not support `null`s and the following will not compile.
+
+    ```java
+    @ValueSource( strings = { "", " ", null } )
+    ```
+
+    We can pass `"null"` as a string value, as shown next, but this will be treated as string
+
+    ```java
+    @ValueSource( strings = { "", " ", "null" } )
+    ```
+
+    We can use a custom converter that help us convert the above sample.
 
     ```java
     package demo;
@@ -1101,11 +1120,9 @@ The label can be represented by the `String` data-type.
     }
     ```
 
-    Converts the text `"null"` to an actual `null`.
+    The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
 
-1. Add a test and use the `NullableConverter` converter.
-
-    The label cannot be empty and an `IllegalArgumaneException` should be thrown if an invalid value is passed.
+    Add a test and use the `NullableConverter` converter.
 
     ```java
     package demo;
@@ -1130,7 +1147,7 @@ The label can be represented by the `String` data-type.
     }
     ```
 
-    Run the test
+    Run the test.  The test should fail as we have no validations in place yet.
 
     ```bash
     $ ./gradlew test
