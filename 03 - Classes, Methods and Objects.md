@@ -9,6 +9,7 @@
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [How can we test functionality that makes use of static?](#how-can-we-test-functionality-that-makes-use-of-static)
+    1. [What does static mean?](#what-does-static-mean)
 1. [Simple Objects](#simple-objects)
     1. [Basic Object](#basic-object)
     1. [Add State](#add-state)
@@ -448,8 +449,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
         final int a = dice.roll();
         final int b = dice.roll();
 
-        /* We still had to format the string */
-        Display.print( String.format( "You rolled %d and %d", a, b ) );
+        Display.printf( "You rolled %d and %d", a, b );
       }
     }
     ```
@@ -474,8 +474,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
         final int a = dice.roll();
         final int b = dice.roll();
 
-        /* We still had to format the string */
-        Display.print( String.format( "You rolled %d and %d", a, b ) );
+        Display.printf( "You rolled %d and %d", a, b );
       }
     }
     ```
@@ -568,7 +567,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    Note that irrespective how many times we run the above test, the dice values will always be 2.  This is great for testing.
+    Note that irrespective how many times we run the above test, the dice values will always be `2`.  This is great for testing.
 
     ```bash
     [12:34:56] Game started
@@ -579,6 +578,61 @@ Note that it is hard to refactor code that does not have tests and also maintain
     The `WeightedDice` is also referred as a [test double](https://martinfowler.com/bliki/TestDouble.html).  These are covered in detail in the [testing section](06%20-%20Testing.md).
 
 We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.  This is beyond the scope of this exercise and is covered in detail in the [testing section](06%20-%20Testing.md).
+
+### What does static mean?
+
+When a class member (field or method) is marked `static`, that means that this member belongs to the class and not to any instance.  When the `roll()` was `static`, we were able to call it through the `Dice` class name.
+
+```java
+Dice.roll()
+```
+
+Methods that do not have any state, can be safely marked as `static`, but use this carefully.  As we saw above, it is hard to test functionality that depends on other static methods.
+
+The `Math` class is a good example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int a = 7;
+    final int b = 3;
+    final int m = Math.max( a, b );
+    System.out.printf( "%d is the largest between %d and %d%n", m, a, b );
+  }
+}
+```
+
+The `max()` method is stateless and thus no need to make it an instance method.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Math nullVariable = null;
+    final int m = nullVariable.max( 7, 3 );
+    System.out.printf( "%d is the largest number%n", m );
+  }
+}
+```
+
+**Will the above example throw a `NullPointerException`?**
+
+The variable `nullVariable` is of type Math and is set to `null`.  Invoking the math() method should throw a `NullPointerException` but it does not.  The above code will work.
+
+```bash
+7 is the largest number
+```
+
+**Why this works and does not throw a `NullPointerException`?**
+
+The `max()` method is `static` which means it does not work with the *Java heap*.  `static` members are part of the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  `static` methods cannot access the object state in the same way the non-static (or instance) method do, thus `static` methods do not interact with the *Java heap*.
+
+The variable `nullVariable` is of type `Math` and can access any member that this type defines.  The `Math` class has the `max()` `static` method which can be access or through the `Math` class name or through a variable of type `Math`.
 
 ## Simple Objects
 
