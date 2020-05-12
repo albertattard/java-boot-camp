@@ -8,7 +8,7 @@
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
-    1. [How can we make this example testable?](#how-can-we-make-this-example-testable)
+1. [How can we test functionality that makes use of static?](#how-can-we-test-functionality-that-makes-use-of-static)
 1. [Simple Objects](#simple-objects)
     1. [Basic Object](#basic-object)
     1. [Add State](#add-state)
@@ -225,9 +225,9 @@ Output
     }
     ```
 
-1. How did this simplified testing?
+1. How does refactoring simplify testing?
 
-    Not much.  The code is simpler to ready, but still very hard to test.  We will improve this later on.
+    Not much.  The code is simpler to ready, but still very hard to test.  We will improve this [later on](#how-can-we-test-functionality-that-makes-use-of-static).
 
     One key takeaway here is that using `static` methods, bound our `main()` method to the `Dice.roll()` and the `Display.print()` methods and this makes our method hard to test.  There are tools we can use that will allow us to test our code, but issue here is our design.
 
@@ -244,9 +244,15 @@ public static int roll() {
 }
 ```
 
-The `print()` method in the `Display` returns `void`.  Is `void` a type?
+The `print()` method in the `Display` returns `void`.
 
-No, the keyword `void` is not a type.
+```java
+public static void print( final String message ) {
+  System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+}
+```
+
+Is `void` a type?  No, the keyword `void` is not a type.
 
 Consider the following example.
 
@@ -313,7 +319,7 @@ public class Dice {
 
     Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
 
-### How can we make this example testable?
+## How can we test functionality that makes use of static?
 
 The following test invokes our game.
 
