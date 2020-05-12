@@ -430,7 +430,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` variables are written upper case and use underscore to delimit words.  Non-static variables and all methods are usually written in camelcase.
+    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` variables are written upper case and use underscore to delimit words.  Non-static properties and all methods are usually written in camelcase.
 
     Use the `Dice` object in the `playGame()` method.
 
@@ -647,7 +647,123 @@ The variable `nullVariable` is of type `Math` and can access any member that thi
 
 ### static Fields
 
-**Pending...**
+The Java API has a [`Point` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) that represents a point on a [cartesian plane](https://en.wikipedia.org/wiki/Cartesian_coordinate_system).
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Point a = new Point( 1, 2 );
+    final Point b = new Point( 3, 4 );
+
+    System.out.printf( "Point a: %s%n", a );
+    System.out.printf( "Point b: %s%n", b );
+  }
+}
+```
+
+The above example creates two points and prints their state.
+
+```bash
+Point a: java.awt.Point[x=1,y=2]
+Point b: java.awt.Point[x=3,y=4]
+```
+
+Say that we need to capture the persons' name to be then added to an online fictitious address book.  Consider the following example.
+
+```java
+package demo;
+
+public class Person {
+  public static String name;
+}
+```
+
+The `Person` class has one `static` field called `name`.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Person albert = new Person();
+    albert.name = "Albert";
+
+    System.out.printf( "Person name (albert): %s%n", albert.name );
+  }
+}
+```
+
+The above creates an instance of the `Person` class and print it.
+
+```bash
+Person name (albert): Albert
+```
+
+Works!!.  Let create a second instance of the `Person` class and print both instances.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Person albert = new Person();
+    albert.name = "Albert";
+
+    final Person mary = new Person();
+    mary.name = "Mary";
+
+    System.out.printf( "Person name (albert): %s%n", albert.name );
+    System.out.printf( "Person name (mary): %s%n", mary.name );
+  }
+}
+```
+
+The above will print the following.
+
+```bash
+Person name (albert): Mary
+Person name (mary): Mary
+```
+
+Oops!! What went wrong?  Why we are able to print two different points but not able to print two different persons?
+
+Let's compare the two classes.
+
+The `Point` class has two properties as shown next.
+
+```java
+package java.awt;
+
+/* Imports removed from brevity */
+
+public class Point extends Point2D implements java.io.Serializable {
+  public int x;
+  public int y;
+
+  /* Members removed from brevity */
+}
+```
+
+Different from our `Person`, the two properties shown above do not make use of the `static` modifier.
+
+```java
+package demo;
+
+public class Person {
+  public static String name;
+}
+```
+
+A `static` field is not part of the object as mentioned above.  Therefore, there is only one copy of the `static` field, `name`.  If one modifies a `static` field, all variables will be affected.  IntelliJ suggests refactoring the code and access the `static` field through the class name.
+
+![Access static field through class name](assets/images/Access%20static%20field%20through%20class%20name.png)
 
 ## Access Control
 
@@ -816,7 +932,7 @@ public class A {
 }
 
 class B {
-  private static int c = 7;
+  private static final int c = 7;
 }
 ```
 
