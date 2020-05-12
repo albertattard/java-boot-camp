@@ -741,7 +741,54 @@ Running the same test now, will work and will not fail.  Note that we are also c
 
 ### An Array of Characters Is Not a String
 
-[JLS-10.9](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html#jls-10.9)
+Unlike in some other programming languages, such as C, an array of `char` is not a `String` ([JLS-10.9](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html#jls-10.9)).
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String s = "Hello";
+    final char[] a = { 'H', 'e', 'l', 'l', 'o' };
+
+    System.out.printf( "Are these two equal? %s%n", s.equals( a ) );
+  }
+}
+```
+
+Strings (or char arrays) in Java are terminated by the `'\u0000'` (`NUL`) character.
+
+A `String` object is immutable but an array of `char` is mutable (as discussed in the [arrays are always mutable](#arrays-are-always-mutable) section).
+
+The [`String` class has a char array constructor](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#%3Cinit%3E(char%5B%5D)) and a [`toCharArray()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#toCharArray()) that returns an array of characters containing the same character sequence as a `String`.  Modifying the source to the constructor or the returned value will not effect the string.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final char[] source = { 'H', 'e', 'l', 'l', 'o' };
+    final String s = new String( source );
+
+    /* Modify the source array */
+    source[1] = 'E';
+
+    System.out.printf( "Source %s%n", Arrays.toString( source ) );
+    System.out.printf( "String %s%n", s );
+  }
+}
+```
+
+The above will always print.
+
+```bash
+Source [H, E, l, l, o]
+String Hello
+```
 
 ## Lists (Vector, ArrayList and LinkedList)
 
