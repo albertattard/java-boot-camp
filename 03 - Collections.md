@@ -27,6 +27,7 @@
     1. [Mutable and Immutable Lists](#mutable-and-immutable-lists)
 1. [Set (HashSet, LinkedHashSet and TreeSet)](#set-hashset-linkedhashset-and-treeset)
     1. [Create Sets](#create-sets)
+    1. [Set values MUST BE Immutable](#set-values-must-be-immutable)
     1. [Types of Sets](#types-of-sets)
         1. [HashSet](#hashset)
         1. [LinkedHashSet](#linkedhashset)
@@ -42,6 +43,9 @@
         1. [LinkedHashMap](#linkedhashmap)
         1. [TreeMap](#treemap)
         1. [Which Map to Use?](#which-map-to-use)
+    1. [Relation between Collections the Objects they contain](#relation-between-collections-the-objects-they-contain)
+        1. [List and the equals() method](#list-and-the-equals-method)
+        1. [Hash based Collections and the equals() and hashCode() methods](#hash-based-collections-and-the-equals-and-hashcode-methods)
 1. [Queue and Stack](#queue-and-stack)
     1. [Queues](#queues)
     1. [Stacks](#stacks)
@@ -1070,6 +1074,10 @@ List b: [a, b, c, d]
     Set [a, b, c]
     ```
 
+### Set values MUST BE Immutable
+
+**Pending...**
+
 ### Types of Sets
 
 #### HashSet
@@ -1327,14 +1335,56 @@ The above example will print
 Marks: {Albert=82, Jane=68, Peter=74, Mary=92}
 ```
 
-
 ### Map Keys MUST BE Immutable
 
-**Pending...**
+Consider the following example
+
+```java
+package demo;
+
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point a = new Point( 1, 1 );
+
+    final Map<Point, String> m = new HashMap<>( 3 );
+    m.put( a, "Lower left corner" );
+
+    System.out.println( "-- Before modifying the key ----" );
+    System.out.printf( "The map contains %d points%n", m.size() );
+    System.out.printf( "Is point %s in map? %s%n", a, m.containsKey( a ) );
+
+    /* Modify the key */
+    a.y = 10;
+
+    System.out.println( "-- After modifying the key -----" );
+    System.out.printf( "The map contains %d points%n", m.size() );
+    System.out.printf( "Is point %s in map? %s%n", a, m.containsKey( a ) );
+  }
+}
+```
+
+The `Point` class is mutable and thus not suitable to be used as a key in any `Map`.  Modifying the point's state, as shown above example, will break the map.  In the above example, the map is not able to locate the same key object after it is modified.
+
+```bash
+-- Before modifying the key ----
+The map contains 1 points
+Is point java.awt.Point[x=1,y=1] in map? true
+-- After modifying the key -----
+The map contains 1 points
+Is point java.awt.Point[x=1,y=10] in map? false
+```
+
+**Mutable objects are not good candidates as map keys**
 
 ### Types of Maps
 
 #### Hashtable
+
+[Hashtable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html) example.
 
 ```java
 package demo;
@@ -1370,6 +1420,8 @@ Marks: {John=91, Jane=68, Mary=92, Albert=72, Peter=74}
 
 #### HashMap
 
+[HashMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html) example.
+
 ```java
 package demo;
 
@@ -1404,6 +1456,8 @@ Marks: {John=91, Albert=72, Peter=74, Jane=68, Mary=92}
 
 #### LinkedHashMap
 
+[LinkedHashMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedHashMap.html) example.
+
 ```java
 package demo;
 
@@ -1437,6 +1491,8 @@ Marks: {Albert=72, Mary=92, Peter=74, Jane=68, John=91}
 ```
 
 #### TreeMap
+
+[TreeMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeMap.html) example.
 
 ```java
 package demo;
@@ -1481,6 +1537,134 @@ Hashmap
 
 Why HashTable doesn’t allow null and HashMap does?
 To successfully store and retrieve objects from a HashTable, the objects used as keys must implement the hashCode method and the equals method. Since null is not an object, it can’t implement these methods. HashMap is an advanced version and improvement on the Hashtable. HashMap was created later.
+
+### Relation between Collections the Objects they contain
+
+The collection classes interact with the objects they contain.  Somehow the set needs to know whether an object that it contains already exists or not.  The collections use methods defined by the [Object](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html) class.
+
+1. [equals()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object))
+1. [hashCode()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode())
+
+#### List and the equals() method
+
+**Pending...**
+
+#### Hash based Collections and the equals() and hashCode() methods
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+
+  public static class Key {
+    private final String value;
+
+    public Key( final String value ) {
+      this.value = value;
+    }
+  }
+
+  public static void main( String[] args ) {
+    final Set<Key> set = new HashSet<>();
+
+    set.add( new Key( "x" ) );
+    set.add( new Key( "x" ) );
+
+    System.out.printf( "Set contains %d elements%n", set.size() );
+  }
+}
+```
+
+The inner class `Key` has one constant field of type `String`.  The `Key` class is immutable and once created its state cannot be changed.  While this seems to be a good candidate for sets, or as a map key, the above example will not work as expected.  Despite the fact that both `Key` instances have the same value, the `Set` treats them as different objects.
+
+```bash
+Set contains 2 elements
+```
+
+This is because the `equals()` and `hashCode()` methods were not overloaded.
+
+1. Implement `equals()` method
+
+    ```bash
+    @Override
+    public boolean equals( final Object object ) {
+      if ( this == object )
+        return true;
+
+      if ( object == null || object.getClass() != getClass() )
+        return false;
+
+      final Key other = (Key) object;
+      return Objects.equals( value, other.value );
+    }
+    ```
+
+1. Implement `hashCode()` method
+
+    ```java
+    @Override
+    public int hashCode() {
+      return Objects.hash( value );
+    }
+    ```
+
+Complete example
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+public class App {
+
+  public static class Key {
+    private final String value;
+
+    public Key( final String value ) {
+      this.value = value;
+    }
+
+    @Override
+    public boolean equals( final Object object ) {
+      if ( this == object )
+        return true;
+
+      if ( object == null || object.getClass() != getClass() )
+        return false;
+
+      final Key other = (Key) object;
+      return Objects.equals( value, other.value );
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash( value );
+    }
+  }
+
+  public static void main( String[] args ) {
+    final Set<Key> set = new HashSet<>();
+
+    set.add( new Key( "x" ) );
+    set.add( new Key( "x" ) );
+
+    System.out.printf( "Set contains %d elements%n", set.size() );
+  }
+}
+```
+
+Now that both `equals()` and `hashCode()` are implements, the set and map will work as expected.
+
+```bash
+Set contains 1 elements
+```
 
 ## Queue and Stack
 
