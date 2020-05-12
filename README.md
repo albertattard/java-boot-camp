@@ -110,6 +110,7 @@ Boot Camp for developers interested to learn Java.
     1. [Multiple Instances](03%20-%20Classes%2C%20Methods%20and%20Objects.md#multiple-instances)
     1. [More State](03%20-%20Classes%2C%20Methods%20and%20Objects.md#more-state)
     1. [Mutable and Immutable](03%20-%20Classes%2C%20Methods%20and%20Objects.md#mutable-and-immutable)
+        1. [How can we create immutable objects?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-create-immutable-objects)
 1. [Inheritance](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inheritance)
     1. [Light Box Example](03%20-%20Classes%2C%20Methods%20and%20Objects.md#light-box-example)
     1. [Heavy Box Example](03%20-%20Classes%2C%20Methods%20and%20Objects.md#heavy-box-example)
