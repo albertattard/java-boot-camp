@@ -15,9 +15,15 @@
     1. [Add State](#add-state)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple Instances](#multiple-instances)
+    1. [Constructors](#constructors)
+        1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
+        1. [What are static factory methods?](#what-are-static-factory-methods)
     1. [More State](#more-state)
     1. [Mutable and Immutable](#mutable-and-immutable)
         1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
+1. [Access Control](#access-control)
+    1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
+    1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
 1. [Inheritance](#inheritance)
     1. [Light Box Example](#light-box-example)
     1. [Heavy Box Example](#heavy-box-example)
@@ -965,6 +971,250 @@ The above is a valid example.  Here a new instance of `Box` is create and then t
 
 It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
 
+### Constructors
+
+The `Box` does not contain any methods called `Box()` that take no parameters.  What method do we call when we execute `new Box()`?
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+
+  public void open() {
+    open = true;
+  }
+
+  public void close() {
+    open = false;
+  }
+
+  public boolean isOpen() {
+    return open;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "%s box", open ? "an open" : "a closed" );
+  }
+}
+```
+
+Methods that have the same name (case-sensitive) as the classes are constructors.  Constructors are special instance like methods used to initialise objects.  All Java classes (with no exception) need to have a constructor and Java provides one if none are provided.
+
+The `Box` class has no constructors defined, thus Java provided one for us.  Java provides a default (also known as the *no-args-constructor*) when no constructors are present in a class.
+
+We can define a constructor as shown in the following example.
+
+```java
+package demo;
+
+public class Box {
+
+  public Box() {
+  }
+
+  /* Members removed for brevity */
+}
+```
+
+A constructor looks similar to a method but has the following constraints
+1. The name of the constructor needs to be the same as the class name (case-sensitive)
+1. The constructor does not return anything, do not make use of `void`, and cannot use the `return` keyword to return a value.
+1. The `static` modifier cannot be used with a constructor
+
+Apart from the above, a constructor is similar to a method.
+
+#### How many constructors can a class have?
+
+**A class can have as many constructors as needs as long as each constructor has a unique signature**.
+
+Let say that we would like to have the possibility to create an instance of a `Box` and also set its state.  We can do that by using a constructor.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+
+  public Box( boolean open ) {
+    this.open = open;
+  }
+
+  public void open() {
+    open = true;
+  }
+
+  public void close() {
+    open = false;
+  }
+
+  public boolean isOpen() {
+    return open;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "%s box", open ? "an open" : "a closed" );
+  }
+}
+```
+
+The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either *open* or *closed*).
+
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    final Box a = new Box();
+  }
+}
+```
+
+This is a bit annoying as we are forcing the callers to always pass a `open` state.  We can add the second constructor and allow the caller to pick the most suitable constructor.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+
+  public Box() {
+  }
+
+  public Box( boolean open ) {
+    this.open = open;
+  }
+
+  /* Methods removed for brevity */
+}
+```
+
+Java will only provide a default constructor when no constructors are provided.
+
+#### What are static factory methods?
+
+The [first item in the Effective Java book](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev1) talks about static factory methods and recommends them over constructors.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class BoxDimensions {
+
+  private int width;
+  private int height;
+  private int depth;
+
+}
+```
+
+The class `BoxDimensions` captures the dimensions of a box.  Say that we would like to create the following constructors:
+
+1. Takes two parameters the `base` and the `height`.  The following table shows the mapping between the properties and the parameters.
+
+    | Parameter | Property |
+    |-----------|----------|
+    | `base`    | `width`  |
+    | `base`    | `depth`  |
+    | `height`  | `height` |
+
+1. Take two parameters the `side` and the `depth`.  The following table shows the mapping between the properties and the parameters.
+
+    | Parameter | Property |
+    |-----------|----------|
+    | `side`    | `width`  |
+    | `side`    | `height` |
+    | `depth`   | `depth`  |
+
+These two constructors have the same signature as shown in the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+
+```java
+package demo;
+
+public class BoxDimensions {
+
+  private int width;
+  private int height;
+  private int depth;
+
+  public BoxDimensions( int base, int height ) {
+    this.width = base;
+    this.depth = base;
+    this.height = height;
+  }
+
+  public BoxDimensions( int side, int depth ) {
+    this.width = side;
+    this.height = side;
+    this.depth = depth;
+  }
+}
+```
+
+Both constructors have the same signature, thus Java cannot tell apart.  Consider the following code fragment.
+
+```java
+new BoxDimensions(7, 3);
+```
+
+Which constructor are we referring to in the above fragment?
+
+There were several attempts to solve this problem, some of them are not that good.  A not so good approach is to use a different type to represent one of the parameters (not the object's property).
+
+```java
+public BoxDimensions( int base, float height ) { /*...*/ }
+
+public BoxDimensions( int side, int depth ) { /*...*/ }
+```
+
+The above code fragment uses `float` to differentiate between the constructors.  This will work, but we have better options and is only mentioned here so that you are aware of it.
+
+`static` methods can be used to create an instance of the same class.  These are referred to as **static factory methods**.
+
+```java
+public static BoxDimensions withBaseAndHeight( int base, int height ) {
+  return new BoxDimensions( base, height, base );
+}
+```
+
+Methods are more flexible with names compared to constructors and we can use a meaningful name.  Note that we can create an instance of any class from anywhere we need (given that we are allowed to do so).
+
+```java
+package demo;
+
+public class BoxDimensions {
+
+  private int width;
+  private int height;
+  private int depth;
+
+  public BoxDimensions( final int width, final int height, final int depth ) {
+    this.width = width;
+    this.height = height;
+    this.depth = depth;
+  }
+
+  public static BoxDimensions withBaseAndHeight( int base, int height ) {
+    return new BoxDimensions( base, height, base );
+  }
+
+  public static BoxDimensions withSideAndDepth( int side, int depth ) {
+    return new BoxDimensions( side, side, depth );
+  }
+}
+```
+
 ### More State
 
 Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
@@ -1387,6 +1637,212 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 ```
 
 **It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on](04%20-%20Collections.md#defensive-copyings)), to mitigate mutation side effects.
+
+## Access Control
+
+**Pending...**
+
+We know that the `Random` class created a pseudo random sequence.  This means that we can predict the next number to be drawn after making several observations.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+class Dice {
+  static final Random random = new Random(1);
+
+  static int roll() {
+    return random.nextInt( 6 ) + 1;
+  }
+}
+```
+
+The `Random` object is initialised with a seed to simplify the example.  Both the `roll()` method and the `random` static field can be accessed.  An attacker can take advantage of that and force the next dice roll to be a `6`.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    /* Skip some numbers */
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.random.nextInt();
+    }
+
+    /* This will always roll a 6 */
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
+  }
+}
+```
+
+Observations
+
+1. The attacker first called the `nextInt()` method `19` times.
+
+    ```java
+        for ( int i = 0; i < 19; i++ ) {
+          Dice.random.nextInt();
+        }
+    ```
+
+   The attacker knows that the 20th roll will yield a `6`.
+
+1. The attacker then rolled the dice normally
+
+    ```java
+        int a = Dice.roll();
+        System.out.printf( "I rolled a %s%n", a );
+    ```
+
+    and obtained the expected the attacker wanted.
+
+    ```bash
+    I rolled a 6
+    ```
+
+    The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
+
+Using access modifies, access to classes and their members can be restricted.  Making the static field `random` `private` will not allow an attacker to access the static field directly.
+
+```java
+package demo;
+
+import java.util.Random;
+
+class Dice {
+  private static final Random random = new Random();
+
+  static int roll() {
+    return random.nextInt( 6 ) + 1;
+  }
+}
+```
+
+The attacker cannot now access the `random` field.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( String[] args ) {
+    for ( int i = 0; i < 19; i++ ) {
+      Dice.random.nextInt();
+    }
+
+    int a = Dice.roll();
+    System.out.printf( "I rolled a %s%n", a );
+  }
+}
+```
+
+The following error will be produced
+
+```bash
+src/main/java/demo/App.java:7: error: random has private access in Dice
+      Dice.random.nextInt();
+          ^
+```
+
+### Classes Access Modifiers Table
+
+| Access Modifier | Accessible From |
+|-----------------|-----------------|
+| `public`        | Anywhere        |
+| (no modifier)   | same package    |
+
+### Class Members Access Modifiers Table
+
+| Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
+|-----------------|:---------------:|:-----------------:|:-------------:|:-------------:|
+| `public`        |       Yes       |       Yes         |      Yes      |      Yes      |
+| `protected`     |       Yes       |       Yes         |      Yes      |       No      |
+| (no modifier)   |       Yes       |       Yes         |       No      |       No      |
+| `private`       |       Yes       |        No         |       No      |       No      |
+
+Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class A {
+  public static void printIt() {
+    System.out.printf( "The value of c is %d%n", B.c );
+  }
+}
+
+class B {
+  private static int c = 7;
+}
+```
+
+Both classes are defined in the same source file, `A.java`, yet these are two different classes within the same package.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── A.class
+        └── B.class
+```
+
+There is one exception to this rule.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  private static int c = 7;
+
+  public static void main( String[] args ) {
+    Runnable r = new Runnable() {
+      @Override public void run() {
+        System.out.printf( "The value of c is %d%n", c );
+      }
+    };
+    r.run();
+  }
+}
+```
+
+An inner anonymous class ([discussed in more depth when we cover objects](05%20-%20Objects.md#outer-inner-and-anonymous-classes)) is created within the `App` class.
+
+```java
+Runnable r = new Runnable() {
+  @Override public void run() {
+    System.out.printf( "The value of c is %d%n", c );
+  }
+};
+```
+
+This is compiled as a separate class file, `App$1.class`.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1.class
+        └── App.class
+```
+
+Despite being a different class within the same package, the inner anonymous class is still allowed to access `private` members within the parent class.
+
+More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
+
 
 ## Inheritance
 
