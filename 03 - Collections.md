@@ -1547,7 +1547,191 @@ The collection classes interact with the objects they contain.  Somehow the set 
 
 #### List and the equals() method
 
-**Pending...**
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static class Person {
+    private String name;
+
+    public Person( final String name ) {
+      this.name = name;
+    }
+
+    @Override
+    public String toString() {
+      return name == null ? "Unknown" : name;
+    }
+  }
+
+  public static void main( String[] args ) {
+    final List<Person> list = new ArrayList<>();
+
+    final Person albert = new Person( "Albert" );
+    list.add( albert );
+
+    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+
+    final Person search = new Person( "Albert" );
+    System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
+  }
+}
+```
+
+The program is able to first a match for the first example, but fails on the second try.
+
+```bash
+Is Albert in the list? true
+Is Albert in the list? false
+```
+
+This is happening as the `equals()` is not overridden.  Java thus relies on the `==` operator.  In the first case, we used the same object instance that is available in the list to search.  The `==` operator returns `true` then, as that's the same object in the *Java heap*.  In the second case, we have two objects that have the same value.  Given that these are two objects in the *Java heap*, the `==` operator will return `false`.
+
+In order to address this problem we need to override the `equals()` method.
+
+```java
+@Override
+public boolean equals( final Object object ) {
+  if ( this == object )
+    return true;
+
+  if ( object == null || object.getClass() != getClass() )
+    return false;
+
+  final Person other = (Person) object;
+  return Objects.equals( name, other.name );
+}
+```
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class App {
+
+  public static class Person {
+    private String name;
+
+    public Person( final String name ) {
+      this.name = name;
+    }
+
+    @Override
+    public boolean equals( final Object object ) {
+      if ( this == object )
+        return true;
+
+      if ( object == null || object.getClass() != getClass() )
+        return false;
+
+      final Person other = (Person) object;
+      return Objects.equals( name, other.name );
+    }
+
+    @Override
+    public String toString() {
+      return name == null ? "Unknown" : name;
+    }
+  }
+
+  public static void main( String[] args ) {
+    final List<Person> list = new ArrayList<>();
+
+    final Person albert = new Person( "Albert" );
+    list.add( albert );
+
+    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+
+    final Person search = new Person( "Albert" );
+    System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
+  }
+}
+```
+
+This seems to be have fixed the problem.
+
+```bash
+Is Albert in the list? true
+Is Albert in the list? true
+```
+
+The above example is **incorrect** as we only overrode the `equals()` method.
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
+1. [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11)
+
+When we override the `equals()` we should also override the `hashCode()` method.
+
+```java
+@Override
+public int hashCode() {
+  return Objects.hash( name );
+}
+```
+
+Following is a correct example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+public class App {
+
+  public static class Person {
+    private String name;
+
+    public Person( final String name ) {
+      this.name = name;
+    }
+
+    @Override
+    public boolean equals( final Object object ) {
+      if ( this == object )
+        return true;
+
+      if ( object == null || object.getClass() != getClass() )
+        return false;
+
+      final Person other = (Person) object;
+      return Objects.equals( name, other.name );
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash( name );
+    }
+
+    @Override
+    public String toString() {
+      return name == null ? "Unknown" : name;
+    }
+  }
+
+  public static void main( String[] args ) {
+    final List<Person> list = new ArrayList<>();
+
+    final Person albert = new Person( "Albert" );
+    list.add( albert );
+
+    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+
+    final Person search = new Person( "Albert" );
+    System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
+  }
+}
+```
 
 #### Hash based Collections and the equals() and hashCode() methods
 
