@@ -705,7 +705,7 @@ The above creates an instance of the `Person` class and print it.
 Person name (albert): Albert
 ```
 
-Works!!.  Let create a second instance of the `Person` class and print both instances.
+Works!!  Let create a second instance of the `Person` class and print both instances.
 
 ```java
 package demo;
@@ -741,13 +741,12 @@ The `Point` class has two properties as shown next.
 ```java
 package java.awt;
 
-/* Imports removed from brevity */
+/* The class was heavily simplified from brevity */
 
-public class Point extends Point2D implements java.io.Serializable {
+public class Point {
   public int x;
   public int y;
 
-  /* Members removed from brevity */
 }
 ```
 
@@ -761,7 +760,9 @@ public class Person {
 }
 ```
 
-A `static` field is not part of the object as mentioned above.  Therefore, there is only one copy of the `static` field, `name`.  If one modifies a `static` field, all variables will be affected.  IntelliJ suggests refactoring the code and access the `static` field through the class name.
+A `static` field is not part of the object and thus it is not part of the *Java heap*.  The `static` fields are saved together with the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  
+
+Therefore, there is only one copy of the `static` field, `name`.  If one modifies a `static` field, all variables will be affected.  IntelliJ suggests refactoring the code and access the `static` field through the class name.
 
 ![Access static field through class name](assets/images/Access%20static%20field%20through%20class%20name.png)
 
