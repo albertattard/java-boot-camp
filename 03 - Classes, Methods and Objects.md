@@ -136,7 +136,7 @@ Output
     public class App {
       public static void main( final String[] args ) {
         System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
-        System.out.printf( "[%tH:%<tM:%<tS] Please roll the \uD83C\uDFB2%n", LocalTime.now() );
+        System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
 
         final int a = Dice.roll();
         final int b = Dice.roll();
@@ -170,7 +170,7 @@ Output
     public class App {
       public static void main( final String[] args ) {
         Display.print( "Game started" );
-        Display.print( "Please roll the \uD83C\uDFB2" );
+        Display.print( "Please roll the 🎲" );
 
         final int a = Dice.roll();
         final int b = Dice.roll();
@@ -215,7 +215,7 @@ Output
     public class App {
       public static void main( final String[] args ) {
         Display.print( "Game started" );
-        Display.print( "Please roll the \uD83C\uDFB2" );
+        Display.print( "Please roll the 🎲" );
 
         final int a = Dice.roll();
         final int b = Dice.roll();
@@ -370,15 +370,14 @@ Note that it is hard to refactor code that does not have tests and also maintain
         final int a = Dice.roll();
         final int b = Dice.roll();
 
-        /* We still had to format the string */
-        Display.print( String.format( "You rolled %d and %d", a, b ) );
+        Display.printf( "You rolled %d and %d", a, b );
       }
     }
     ```
 
-    This will not solve the problem, but its one small step in the right direction.
+    This will not solve the problem, but it's one small step in the right direction.
 
-    Later on we need to work with test doubles.  Given that we cannot change the signature of the `main()` method, we need to create a new method and use this one.
+    Later on, we need to work with test doubles.  Given that we cannot change the signature of the `main()` method, we need to create a new method and use this one.
 
     ```java
     package demo;
@@ -404,7 +403,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
 1. Make `Dice` an object
 
-    Somehow we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
+    Somehow, we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
 
     ```java
     package demo;
@@ -420,6 +419,8 @@ Note that it is hard to refactor code that does not have tests and also maintain
       public final Random randomGenerator = new Random();
     }
     ```
+
+    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` variables are written upper case and use underscore to delimit words.  Non-static variables and all methods are usually written in camelcase.
 
     Use the `Dice` object in the `playGame()` method.
 
@@ -441,7 +442,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
       public static void playGame() {
         Display.print( "Game started" );
-        Display.print( "Please roll the \uD83C\uDFB2" );
+        Display.print( "Please roll the 🎲" );
 
         final Dice dice = new Dice();
         final int a = dice.roll();
@@ -468,7 +469,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
       public static void playGame( final Dice dice ) {
         Display.print( "Game started" );
-        Display.print( "Please roll the \uD83C\uDFB2" );
+        Display.print( "Please roll the 🎲" );
 
         final int a = dice.roll();
         final int b = dice.roll();
@@ -577,7 +578,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
     The `WeightedDice` is also referred as a [test double](https://martinfowler.com/bliki/TestDouble.html).  These are covered in detail in the [testing section](06%20-%20Testing.md).
 
-We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.  This is beyond the scope of this exisrsise and is covered in detail in the [testing section](06%20-%20Testing.md).
+We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.  This is beyond the scope of this exercise and is covered in detail in the [testing section](06%20-%20Testing.md).
 
 ## Simple Objects
 
