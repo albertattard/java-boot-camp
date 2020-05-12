@@ -13,8 +13,9 @@
 1. [Simple Objects](#simple-objects)
     1. [Basic Object](#basic-object)
     1. [Add State](#add-state)
-    1. [More State](#more-state)
+    1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple Instances](#multiple-instances)
+    1. [More State](#more-state)
     1. [Mutable and Immutable](#mutable-and-immutable)
 1. [Inheritance](#inheritance)
     1. [Light Box Example](#light-box-example)
@@ -745,7 +746,8 @@ A box may be open or may be closed.  The program needs to determine whether the 
         return true;
       }
 
-      @Override public String toString() {
+      @Override
+      public String toString() {
         return "a basic box";
       }
     }
@@ -825,7 +827,8 @@ A box may be open or may be closed.  The program needs to determine whether the 
         return open;
       }
 
-      @Override public String toString() {
+      @Override
+      public String toString() {
         return String.format( "%s box", open ? "an open" : "a closed" );
       }
     }
@@ -847,9 +850,121 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
     Both tests pass
 
+### How do instance methods access the object's state?
+
+The `Box` class, shown next, has four methods, all of which access the `open` property.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+
+  public void open() {
+    open = true;
+  }
+
+  public void close() {
+    open = false;
+  }
+
+  public boolean isOpen() {
+    return open;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "%s box", open ? "an open" : "a closed" );
+  }
+}
+```
+
+When a method is invoked, the method's state is loaded on the *Java stack* as a new frame.  All method's variables are created in the method's frame in the *Java stack*.  The method can only reach within its frame and the classloader makes sure of then during the class loading process.  Instance methods have also access to the objects' properties.  In this case, all four instance methods will have access to all object's properties too.
+
+**On the other hand, `static` methods cannot access the object state**.
+
+Different from local variables, when a method modifies the object's state, then all other methods will observe these changes.  There is a small caveat on this which will be discussed in more detail when we talk about [concurrency]().
+
+### Multiple Instances
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    /* Create two boxes */
+    final Box a = new Box();
+    final Box b = new Box();
+
+    System.out.println( "-- Two boxes --------" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+
+    /* Open only one of the boxes */
+    b.open();
+
+    System.out.println( "-- Opened box b -----" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+
+    /* Close one of the boxes */
+    b.close();
+
+    System.out.println( "-- Closed box b -----" );
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+  }
+}
+```
+
+Output
+
+```bash
+-- Two boxes --------
+Box a: a closed box
+Box b: a closed box
+-- Opened box b -----
+Box a: a closed box
+Box b: an open box
+-- Closed box b -----
+Box a: a closed box
+Box b: a closed box
+```
+
+Both boxes are independent and while a box is open, the other one can be closed.  Note that the same methods are used by all instances of the object.  Instance methods need to work with an instance, and that's why a `NullPointerException` is thrown when the we try to invoke an instance method on a `null` variable.
+
+Consider the following to objects and the variables `x` and `y` of type `Box`.
+
+```java
+final Box x = new Box();
+final Box y = new Box();
+```
+
+The instance method needs to be invoked on an object or a non-null variable.  When an instance method is invoked, Java will fetch all variables for that object and makes them available to this method.
+
+Consider the following code fragment.
+
+```java
+x.open();
+```
+
+Java will fetch the object, to which the variable is pointing to, and will make all object's variables available the method.  The above method will change the object's state and will only affects the object to which variable `x` points to.  The object to which variable `y` is pointing to is not affected.
+
+Consider the following example.
+
+```java
+boolean isOpen = new Box().isOpen();
+```
+
+The above is a valid example.  Here a new instance of `Box` is create and then the method `isOpen()` is invoked against the new object.  Here the `Box` instance is not assigned to any variable and instead is used directly.  The above example will evaluate to `false`, which is the default value of the `open` property.
+
 ### More State
 
-Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label: 
+Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
 
 1. `To be processed by Dept. XYZ`
 1. `Need to be rechecked by MNO`
@@ -950,7 +1065,8 @@ The label can be represented by the `String` data-type.
         return label;
       }
 
-      @Override public String toString() {
+      @Override
+      public String toString() {
         final String openClose = open ? "an open" : "a closed";
         return String.format( "%s box labelled '%s'", openClose, label );
       }
@@ -1073,57 +1189,6 @@ The label can be represented by the `String` data-type.
 
     ...
     ```
-
-### Multiple Instances
-
-Example
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( String[] args ) {
-    /* Create two boxes */
-    Box a = new Box();
-    Box b = new Box();
-
-    System.out.println( "-- Two boxes --------" );
-    System.out.printf( "Box a: %s%n", a );
-    System.out.printf( "Box b: %s%n", b );
-
-    /* Open only one of the boxes */
-    b.open();
-
-    System.out.println( "-- Opened box b -----" );
-    System.out.printf( "Box a: %s%n", a );
-    System.out.printf( "Box b: %s%n", b );
-
-    /* Close one of the boxes */
-    b.close();
-
-    System.out.println( "-- Closed box b -----" );
-    System.out.printf( "Box a: %s%n", a );
-    System.out.printf( "Box b: %s%n", b );
-  }
-}
-```
-
-Output
-
-```bash
--- Two boxes --------
-Box a: a closed box labelled 'No Label'
-Box b: a closed box labelled 'No Label'
--- Opened box b -----
-Box a: a closed box labelled 'No Label'
-Box b: an open box labelled 'No Label'
--- Closed box b -----
-Box a: a closed box labelled 'No Label'
-Box b: a closed box labelled 'No Label'
-```
-
-This can be captured by a test, but it is too naïve.
 
 ### Mutable and Immutable
 
@@ -1510,7 +1575,8 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
 
     public class LightBox extends Box {
 
-      @Override public void setLabel( final String label ) {
+      @Override
+      public void setLabel( final String label ) {
         Preconditions.checkArgument( Strings.nullToEmpty( label ).length() <= 32 );
         super.setLabel( label );
       }
@@ -1696,7 +1762,8 @@ import java.util.concurrent.Callable;
 
 public class PiCallable implements Callable<Double> {
 
-  @Override public Double call() {
+  @Override
+  public Double call() {
     return Math.PI;
   }
 }
