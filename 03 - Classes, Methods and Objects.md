@@ -849,7 +849,12 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
 ### More State
 
-Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label: `To be processsed by Dept. XYZ` or `Need to be rechecked by MNO`.  A box always has a label which is initially set to `No label`.  **Note that the label cannot be blank/empty**.
+Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label: 
+
+1. `To be processed by Dept. XYZ`
+1. `Need to be rechecked by MNO`
+
+A box always has a label which is initially set to: `No label`.  **Note that the label cannot be blank/empty**.
 
 The label can be represented by the `String` data-type.
 
