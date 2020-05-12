@@ -622,7 +622,7 @@ public class App {
 
 **Will the above example throw a `NullPointerException`?**
 
-The variable `nullVariable` is of type Math and is set to `null`.  Invoking the math() method should throw a `NullPointerException` but it does not.  The above code will work.
+The variable `nullVariable` is of type `Math` and is set to `null`.  Invoking the `max()` method should throw a `NullPointerException` but it does not.  The above code will work.
 
 ```bash
 7 is the largest number
@@ -631,6 +631,8 @@ The variable `nullVariable` is of type Math and is set to `null`.  Invoking the 
 **Why this works and does not throw a `NullPointerException`?**
 
 The `max()` method is `static` which means it does not work with the *Java heap*.  `static` members are part of the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  `static` methods cannot access the object state in the same way the non-static (or instance) method do, thus `static` methods do not interact with the *Java heap*.
+
+When the `max()` method is called in the above context, the `max()` method is simply loaded in the *Java stack* and executed and no interaction with the *Java heap* is made during this process.  When invoking an instance method, the object's state is also involved in the process, which is found in the *Java heap*.
 
 The variable `nullVariable` is of type `Math` and can access any member that this type defines.  The `Math` class has the `max()` `static` method which can be access or through the `Math` class name or through a variable of type `Math`.
 
@@ -681,7 +683,8 @@ Let start by creating a basic object that will represent a box.  The box will no
 
     public class Box {
 
-      @Override public String toString() {
+      @Override
+      public String toString() {
         return "a basic box";
       }
     }
@@ -690,6 +693,8 @@ Let start by creating a basic object that will represent a box.  The box will no
     [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
     1. [Item 12: Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12)
     1. [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch6.xhtml#lev40)
+
+    The above example shows [overriding which is discussed in depth later on](#overriding).
 
 1. Run the program again
 
