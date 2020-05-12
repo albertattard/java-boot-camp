@@ -679,7 +679,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     /* This method is hacked by an attacker */
     initGame();
 
@@ -688,7 +688,7 @@ public class App {
   }
 
   public static void playGame() {
-    int a = Dice.roll();
+    final int a = Dice.roll();
     System.out.printf( "I rolled a %s%n", a );
   }
 
@@ -716,7 +716,7 @@ Observations
 1. The attacker then rolled the dice normally
 
     ```java
-        int a = Dice.roll();
+        final int a = Dice.roll();
         System.out.printf( "I rolled a %s%n", a );
     ```
 
@@ -756,7 +756,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     /* This method is hacked by an attacker */
     initGame();
 
@@ -765,7 +765,7 @@ public class App {
   }
 
   public static void playGame() {
-    int a = Dice.roll();
+    final int a = Dice.roll();
     System.out.printf( "I rolled a %s%n", a );
   }
 
@@ -838,10 +838,10 @@ package demo;
 
 public class App {
 
-  private static int c = 7;
+  private static final int c = 7;
 
-  public static void main( String[] args ) {
-    Runnable r = new Runnable() {
+  public static void main( final String[] args ) {
+    final Runnable r = new Runnable() {
       @Override public void run() {
         System.out.printf( "The value of c is %d%n", c );
       }
@@ -854,7 +854,7 @@ public class App {
 An inner anonymous class ([discussed in depth later on](#outer-inner-and-anonymous-classes)) is created within the `App` class.
 
 ```java
-Runnable r = new Runnable() {
+final Runnable r = new Runnable() {
   @Override public void run() {
     System.out.printf( "The value of c is %d%n", c );
   }
