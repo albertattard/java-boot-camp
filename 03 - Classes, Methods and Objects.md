@@ -94,7 +94,7 @@ Output
     final int a = r.nextInt( 6 ) + 1;
     ```
 
-    We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement
+    We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement.
 
 1. All output messages have the same format:
 
@@ -347,7 +347,7 @@ This test will print something similar to the following to the output.
 
 This is hard to verify that the two numbers shown are actually the values that were rolled.
 
-The simplest way to make this example testable is to use objects.
+The simplest way to make this example testable is to use objects.  In a nutshell we will need to create and use [test doubles](https://martinfowler.com/bliki/TestDouble.html) to control and verify that our game is behaving as expected.
 
 **Refactoring**
 
@@ -377,6 +377,8 @@ Note that it is hard to refactor code that does not have tests and also maintain
     ```
 
     This will not solve the problem, but its one small step in the right direction.
+
+    Later on we need to work with test doubles.  Given that we cannot change the signature of the `main()` method, we need to create a new method and use this one.
 
     ```java
     package demo;
