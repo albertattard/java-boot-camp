@@ -852,7 +852,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
 ### How do instance methods access the object's state?
 
-The `Box` class, shown next, has four methods, all of which access the `open` property.
+The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `open` property.
 
 ```java
 package demo;
@@ -935,16 +935,16 @@ Box a: a closed box
 Box b: a closed box
 ```
 
-Both boxes are independent and while a box is open, the other one can be closed.  Note that the same methods are used by all instances of the object.  Instance methods need to work with an instance, and that's why a `NullPointerException` is thrown when the we try to invoke an instance method on a `null` variable.
+Both boxes are independent and while one of the boxes is opened, the other one is unaffected.  The state of one box is independent from all other boxes.  Note that the same methods are used by all instances of the object, while each object maintain its state.  Instance methods need to work with an instance, and that's why a `NullPointerException` is thrown when the we try to invoke an instance method on a `null` variable.
 
-Consider the following to objects and the variables `x` and `y` of type `Box`.
+Consider the following two objects and the variables `x` and `y`, both of type `Box`.
 
 ```java
 final Box x = new Box();
 final Box y = new Box();
 ```
 
-The instance method needs to be invoked on an object or a non-null variable.  When an instance method is invoked, Java will fetch all variables for that object and makes them available to this method.
+An instance method needs to be invoked on an object or a non-null variable.  When an instance method is invoked, Java will fetch all properties for that object and make them available to the instance method.
 
 Consider the following code fragment.
 
@@ -952,7 +952,7 @@ Consider the following code fragment.
 x.open();
 ```
 
-Java will fetch the object, to which the variable is pointing to, and will make all object's variables available the method.  The above method will change the object's state and will only affects the object to which variable `x` points to.  The object to which variable `y` is pointing to is not affected.
+Java will fetch the object, to which the variable `x` is pointing to, and will make all object's properties available the instance method `open()`.  The above instance method will change the object's state and will only affects the object to which variable `x` points to.  The state of the object to which variable `y` is pointing to is not affected by the above instance method call.
 
 Consider the following example.
 
@@ -960,7 +960,9 @@ Consider the following example.
 boolean isOpen = new Box().isOpen();
 ```
 
-The above is a valid example.  Here a new instance of `Box` is create and then the method `isOpen()` is invoked against the new object.  Here the `Box` instance is not assigned to any variable and instead is used directly.  The above example will evaluate to `false`, which is the default value of the `open` property.
+The above is a valid example.  Here a new instance of `Box` is create and then the method `isOpen()` is invoked against the new instance.  Here the `Box` instance is not assigned to any variable and instead is used directly.  The above example will evaluate to `false`, which is the default value of the `open` property.
+
+It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
 
 ### More State
 
