@@ -101,6 +101,7 @@ Boot Camp for developers interested to learn Java.
 1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#classes-and-methods-static-no-oop)
     1. [Is void a type?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#is-void-a-type)
 1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#properties-static-no-oop)
+    1. [How can we make this example testable?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-make-this-example-testable)
 1. [Simple Objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md#simple-objects)
     1. [Basic Object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#basic-object)
     1. [Add State](03%20-%20Classes%2C%20Methods%20and%20Objects.md#add-state)

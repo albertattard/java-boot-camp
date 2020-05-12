@@ -8,6 +8,7 @@
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
+    1. [How can we make this example testable?](#how-can-we-make-this-example-testable)
 1. [Simple Objects](#simple-objects)
     1. [Basic Object](#basic-object)
     1. [Add State](#add-state)
@@ -62,13 +63,13 @@ import java.time.LocalTime;
 import java.util.Random;
 
 public class App {
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
-    System.out.printf( "[%tH:%<tM:%<tS] Please roll the \uD83C\uDFB2%n", LocalTime.now() );
+    System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
 
-    Random r = new Random();
-    int a = r.nextInt( 6 ) + 1;
-    int b = r.nextInt( 6 ) + 1;
+    final Random r = new Random();
+    final int a = r.nextInt( 6 ) + 1;
+    final int b = r.nextInt( 6 ) + 1;
 
     System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
   }
@@ -90,7 +91,7 @@ Output
 1. Cannot understand what the following is doing by simply reading the code
 
     ```java
-    int a = r.nextInt( 6 ) + 1;
+    final int a = r.nextInt( 6 ) + 1;
     ```
 
     We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement
@@ -100,6 +101,8 @@ Output
     ```java
     System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
     ```
+
+1. It is not easy to test the above code despite its simplicity
 
 **Refactoring**
 
@@ -115,7 +118,7 @@ Output
     public class Dice {
 
       public static int roll() {
-        Random r = new Random();
+        final Random r = new Random();
         return r.nextInt( 6 ) + 1;
       }
     }
@@ -131,12 +134,12 @@ Output
     import java.time.LocalTime;
 
     public class App {
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
         System.out.printf( "[%tH:%<tM:%<tS] Please roll the \uD83C\uDFB2%n", LocalTime.now() );
 
-        int a = Dice.roll();
-        int b = Dice.roll();
+        final int a = Dice.roll();
+        final int b = Dice.roll();
 
         System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
       }
@@ -153,7 +156,7 @@ Output
     import java.time.LocalTime;
 
     public class Display {
-      public static void print( String message ) {
+      public static void print( final String message ) {
         System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
       }
     }
@@ -165,12 +168,12 @@ Output
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         Display.print( "Game started" );
         Display.print( "Please roll the \uD83C\uDFB2" );
 
-        int a = Dice.roll();
-        int b = Dice.roll();
+        final int a = Dice.roll();
+        final int b = Dice.roll();
 
         /* We still had to format the string */
         Display.print( String.format( "You rolled %d and %d", a, b ) );
@@ -181,7 +184,7 @@ Output
 1. Add formatting support to the `Display` class
 
     ```java
-      public static void printf( String pattern, Object... parameters ) {
+      public static void printf( final String pattern, final Object... parameters ) {
         print( String.format( pattern, parameters ) );
       }
     ```
@@ -194,11 +197,11 @@ Output
     import java.time.LocalTime;
 
     public class Display {
-      public static void printf( String pattern, Object... parameters ) {
+      public static void printf( final String pattern, final Object... parameters ) {
         print( String.format( pattern, parameters ) );
       }
 
-      public static void print( String message ) {
+      public static void print( final String message ) {
         System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
       }
     }
@@ -210,21 +213,58 @@ Output
     package demo;
 
     public class App {
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         Display.print( "Game started" );
         Display.print( "Please roll the \uD83C\uDFB2" );
 
-        int a = Dice.roll();
-        int b = Dice.roll();
+        final int a = Dice.roll();
+        final int b = Dice.roll();
 
         Display.printf( "You rolled %d and %d", a, b );
       }
     }
     ```
 
+1. How did this simplified testing?
+
+    Not much.  The code is simpler to ready, but still very hard to test.  We will improve this later on.
+
+    One key takeaway here is that using `static` methods, bound our `main()` method to the `Dice.roll()` and the `Display.print()` methods and this makes our method hard to test.  There are tools we can use that will allow us to test our code, but issue here is our design.
+
+    **Always tackle the root problem and do not throw more complexity at it**.
+
 ### Is void a type?
 
-No.  The keyword `void` indicates that the method returns nothing.
+The `roll()` method in the `Dice` class returns `int`
+
+```java
+public static int roll() {
+  final Random r = new Random();
+  return r.nextInt( 6 ) + 1;
+}
+```
+
+The `print()` method in the `Display` returns `void`.  Is `void` a type?
+
+No, the keyword `void` is not a type.
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    int a;
+    void b;
+  }
+}
+```
+
+The keyword `void` is used by methods to indicate that the method returns nothing.
 
 This quite unique to Java as other languages always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
 
@@ -237,95 +277,299 @@ package demo;
 
 import java.util.Random;
 
-public class App {
+public class Dice {
 
-  public static void main( String[] args ) {
-    Random random = new Random();
-    int a = random.nextInt( 6 ) + 1;
-    int b = random.nextInt( 6 ) + 1;
-    System.out.printf( "You rolled %d and %d%n", a, b );
+  public static int roll() {
+    final Random r = new Random();
+    return r.nextInt( 6 ) + 1;
   }
 }
 ```
 
-Output
-
-```bash
-You rolled 1 and 6
-```
-
 **Observation**
 
-1. Even though the code is small and simple it is a bit cluttered
+1. Every time the `roll()` method is invoked, a new instance of `Random` is created.
 
-1. Cannot understand what the following is doing by simply reading the code
-
-    ```java
-    int a = r.nextInt( 6 ) + 1;
-    ```
-
-    We can deduct that this is related to rolling of dice based on the log messages following this statement
+    Do we need to create a new instance?
 
 **Refactoring**
 
-1. The dice rolling can be refactored into a separate method, making the code more readable
+1. The `random` variable can be moved outside the method and make it a class level variable
 
     ```java
     package demo;
 
     import java.util.Random;
 
-    public class App {
+    public class Dice {
 
-      public static void main( String[] args ) {
-        int a = rollDice();
-        int b = rollDice();
-        System.out.printf( "You rolled %d and %d%n", a, b );
+      public static int roll() {
+        return RANDOM_GENERATOR.nextInt( 6 ) + 1;
       }
 
-      public static int rollDice() {
-        Random random = new Random();
-        return random.nextInt( 6 ) + 1;
+      public static final Random RANDOM_GENERATOR = new Random();
+    }
+    ```
+
+    Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
+
+### How can we make this example testable?
+
+The following test invokes our game.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.Test;
+
+public class AppTest {
+
+  @Test
+  public void shouldDisplayTheDiceRolled() {
+    App.main( null );
+  }
+}
+```
+
+This test will print something similar to the following to the output.
+
+```bash
+[12:34:56] Game started
+[12:34:56] Please roll the 🎲
+[12:34:56] You rolled 4 and 2
+```
+
+This is hard to verify that the two numbers shown are actually the values that were rolled.
+
+The simplest way to make this example testable is to use objects.
+
+**Refactoring**
+
+Note that it is hard to refactor code that does not have tests and also maintaining the code functionality intact.
+
+1. Move the game into a separate method `playGame()`.
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( final String[] args ) {
+        playGame();
+      }
+
+      public static void playGame() {
+        Display.print( "Game started" );
+        Display.print( "Please roll the 🎲" );
+
+        final int a = Dice.roll();
+        final int b = Dice.roll();
+
+        /* We still had to format the string */
+        Display.print( String.format( "You rolled %d and %d", a, b ) );
       }
     }
     ```
 
-    The `main()` method is more readable now as you can read the code.  The following method calls tells the reader what's happening.
+    This will not solve the problem, but its one small step in the right direction.
 
     ```java
-    int a = rollDice();
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    public class AppTest {
+
+      @Test
+      public void shouldDisplayTheDiceRolled() {
+        App.playGame();
+      }
+    }
     ```
 
-    Cannot say the same for the previous version
+    The test will still print something to the console, which is hard to assert.
 
-    ```java
-    int a = random.nextInt( 6 ) + 1;
+    ```bash
+    [12:34:56] Game started
+    [12:34:56] Please roll the 🎲
+    [12:34:56] You rolled 3 and 3
     ```
 
-1. The new change is creating an instance of `Random` every time it is called.
+1. Make `Dice` an object
 
-    Can we reuse the same instance?
+    Somehow we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
 
     ```java
     package demo;
 
     import java.util.Random;
 
-    public class App {
+    public class Dice {
 
-      public static void main( String[] args ) {
-        int a = rollDice();
-        int b = rollDice();
-        System.out.printf( "You rolled %d and %d%n", a, b );
+      public int roll() {
+        return randomGenerator.nextInt( 6 ) + 1;
       }
 
-      public static int rollDice() {
-        return random.nextInt( 6 ) + 1;
-      }
-
-      public static Random random = new Random();
+      public final Random randomGenerator = new Random();
     }
     ```
+
+    Use the `Dice` object in the `playGame()` method.
+
+    ```java
+    final Dice dice = new Dice();
+    final int a = dice.roll();
+    final int b = dice.roll();
+    ```
+
+    Complete example.
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( final String[] args ) {
+        playGame();
+      }
+
+      public static void playGame() {
+        Display.print( "Game started" );
+        Display.print( "Please roll the \uD83C\uDFB2" );
+
+        final Dice dice = new Dice();
+        final int a = dice.roll();
+        final int b = dice.roll();
+
+        /* We still had to format the string */
+        Display.print( String.format( "You rolled %d and %d", a, b ) );
+      }
+    }
+    ```
+
+    There are easy means to provide our own copy of dice which is like the real one and also allows us to control the values rolled.  To do this we need to control the `Dice` object that the `playGame()` method uses.
+
+1. Provide a `Dice` instance to the `playGame()` method
+
+    ```java
+    package demo;
+
+    public class App {
+      public static void main( final String[] args ) {
+        final Dice dice = new Dice();
+        playGame( dice );
+      }
+
+      public static void playGame( final Dice dice ) {
+        Display.print( "Game started" );
+        Display.print( "Please roll the \uD83C\uDFB2" );
+
+        final int a = dice.roll();
+        final int b = dice.roll();
+
+        /* We still had to format the string */
+        Display.print( String.format( "You rolled %d and %d", a, b ) );
+      }
+    }
+    ```
+
+    Note that now we need to provide an instance of `Dice` in the test too.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    public class AppTest {
+
+      @Test
+      public void shouldDisplayTheDiceRolled() {
+        final Dice dice = new Dice();
+        App.playGame( dice );
+      }
+    }
+    ```
+
+1. Use weighted dice for testing
+
+    ```java
+    package demo;
+
+    public class WeightedDice {
+
+      public int roll() {
+        return nextRollValue;
+      }
+
+      public int nextRollValue = 6;
+    }
+    ```
+
+    The `WeightedDice` does not use random number generator.  Instead, it returns the value of `nextRollValue`.  Using this version of the dice will allow us to control the behaviour of the game.
+
+1. How can we us the `WeightedDice`?
+
+    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    public class AppTest {
+
+      @Test
+      public void shouldDisplayTheDiceRolled() {
+        final Dice dice = new WeightedDice();
+        App.playGame( dice );
+      }
+    }
+    ```
+
+    `Dice` and `WeightedDice` are two different types.  The `WeightedDice` class is only used for testing and can inherits from the `Dice` class.  Inheritance will be covered in depth in the [inheritance section](#inheritance).
+
+    ```java
+    package demo;
+
+    public class WeightedDice extends Dice {
+
+      @Override
+      public int roll() {
+        return nextRollValue;
+      }
+
+      public int nextRollValue = 6;
+    }
+    ```
+
+    Now the `WeightedDice` can be used instead of the `Dice`.  Now the test will work.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.Test;
+
+    public class AppTest {
+
+      @Test
+      public void shouldDisplayTheDiceRolled() {
+        final WeightedDice dice = new WeightedDice();
+        dice.nextRollValue = 2;
+
+        App.playGame( dice );
+      }
+    }
+    ```
+
+    Note that irrespective how many times we run the above test, the dice values will always be 2.  This is great for testing.
+
+    ```bash
+    [12:34:56] Game started
+    [12:34:56] Please roll the 🎲
+    [12:34:56] You rolled 2 and 2
+    ```
+
+    The `WeightedDice` is also referred as a [test double](https://martinfowler.com/bliki/TestDouble.html).  These are covered in detail in the [testing section](06%20-%20Testing.md).
+
+We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.  This is beyond the scope of this exisrsise and is covered in detail in the [testing section](06%20-%20Testing.md).
 
 ## Simple Objects
 
@@ -1424,7 +1668,7 @@ Objects have two words headers
     1. During Garbage Collection
 1. Klass word
     A pointer to where the class metadata is located.  Before Java 8, this was the *permgem* (within the *Java Heap*).  In Java 8 this was migrated to *metaspace*, outside the *Java Heap*.
-    
+
     Note that this pointer is not pointing to an object.
 
 Arrays have three words
