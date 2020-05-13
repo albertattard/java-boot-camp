@@ -2214,7 +2214,13 @@ public class App {
 }
 ```
 
-The enum's name (as a `String`) can be used to retrieve an enum.  Consider the following code.
+The above example will print.
+
+```bash
+The enum name is: DIAMONDS
+```
+
+The name of any enum is the same constant name.  The enum's name (as a `String`) can be used to retrieve the enum.  Consider the following code.
 
 ```java
 package demo;
@@ -2230,6 +2236,12 @@ public class App {
     System.out.printf( "The enum is: %s%n", s );
   }
 }
+```
+
+The above will print.
+
+```bash
+The enum is: SPADES
 ```
 
 **What happens if no enum is found matching the given name?**
@@ -2296,10 +2308,10 @@ The following table shows the ordinals for the `Suit` enum.
 
 | Enum       | Ordinal |
 |------------|--------:|
-| `CLUBS`    |       0 |
-| `DIAMONDS` |       1 |
-| `HEARTS`   |       2 |
-| `SPADES`   |       3 |
+| `CLUBS`    |     `0` |
+| `DIAMONDS` |     `1` |
+| `HEARTS`   |     `2` |
+| `SPADES`   |     `3` |
 
 The previous example, the rock paper scissors example, can take advantage from the ordinal as shown next.
 
@@ -2352,7 +2364,7 @@ The enum HEARTS has an ordinal of 2
 
 **What will happen if we use an ordinal that does not exists?**
 
-Surprisingly enough, this question belongs to arrays, [discussed later on](04%20-%20Collections.md#arrays).  The array returned by the `values()` method will have four elements.  Trying to retrieve an element from the array past the enum ordinal will throw an `ArrayIndexOutOfBoundsException`.
+Surprisingly enough, this question belongs to arrays ([discussed later on](04%20-%20Collections.md#arrays)).  The array returned by the `values()` method will have four elements.  Trying to retrieve an element from the array past the enum ordinal will throw an `ArrayIndexOutOfBoundsException`.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ArrayIndexOutOfBoundsException!!**
 
@@ -2380,6 +2392,40 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 10 ou
 ```
 
 ### Enums in Java can have state
+
+Can we add the cards' icons to the enum?  Consider the following example?
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS( "♣️" ),
+    DIAMONDS( "♦️" ),
+    HEARTS( "♥️" ),
+    SPADES( "♠️" );
+
+    private final String icon;
+
+    Suit( final String icon ) {
+      this.icon = icon;
+    }
+  }
+
+  public static void main( final String[] args ) {
+    final Suit s = Suit.DIAMONDS;
+    System.out.printf( "The suit %s has the icon: %s%n", s, s.icon );
+  }
+}
+```
+
+Enums can have state like any other object in Java.  The above will print.
+
+```bash
+The suit DIAMONDS has the icon: ♦️
+```
+
+We can make use of more elaborate state.  Consider the following example.
 
 ```java
 package demo;
@@ -2427,7 +2473,13 @@ public class App {
 }
 ```
 
-**Note that the enum state SHOULD NOT be modified as otherwise you may get unexpected behaviour**.
+A new enum, `Colour`, was added that represents the suit colour.  The above will print.
+
+```bash
+The suit ♦️ has a colour of Red
+```
+
+**Note that the enum state SHOULD NOT be modified as otherwise you may get unexpected behaviour**.  Note that enum's properties are `final` and only immutable types should be used as enum properties.  More about mutability and immutability is covered [later on](03%20-%20Classes,%20Methods%20and%20Objects.md#mutable-and-immutable).
 
 ### Considerations before Persisting Enums
 
