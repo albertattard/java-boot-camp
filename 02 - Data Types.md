@@ -2712,8 +2712,108 @@ The [SHA256 hash function](https://en.wikipedia.org/wiki/SHA-2) can be used to c
 
 #### Using a specific property as the unit of Persistence
 
-** Pending...**
+My recommended approach is to use a specific property as a persistence unit.
 
+```java
+public enum AppError {
+  NO_SUFFICIENT_CREDIT( "X_CREDIT" ),
+  INVALID_AMOUNT( "U_AMOUNT" ),
+  CREDIT_TRANSFER_EXCEEDED( "X_TRANSFER_LIMIT" );
+
+  public final String persistenceCode;
+
+  AppError( final String persistenceCode ) {
+    this.persistenceCode = persistenceCode;
+  }
+}
+```
+
+The property `persistenceCode` exists for one purpose only.
+
+**How do we convert a given `persistenceCode` to enum?**
+
+We can add a method to the `AppError` enum that given a `String`, it returns the error which `persistenceCode` is equal (case-sensitive) to the given `String`.  If no match is found, `null` is returned.
+
+```java
+public enum AppError {
+  NO_SUFFICIENT_CREDIT( "X_CREDIT" ),
+  INVALID_AMOUNT( "U_AMOUNT" ),
+  CREDIT_TRANSFER_EXCEEDED( "X_TRANSFER_LIMIT" );
+
+  public final String persistenceCode;
+
+  AppError( final String persistenceCode ) {
+    this.persistenceCode = persistenceCode;
+  }
+
+  public static AppError fromPersistenceCode( final String persistenceCode ) {
+    for ( final AppError error : values() ) {
+      if ( persistenceCode.equals( error.persistenceCode ) ) {
+        return error;
+      }
+    }
+
+    return null;
+  }
+}
+```
+
+While this approach is immutable from renaming for enums and reordering of enums, it is not failsafe either.  Enum name are unique and Java guarantees that.  Nothing stops us from using the same `persistenceCode` value more than once.
+
+```java
+public enum AppError {
+  NO_SUFFICIENT_CREDIT( "X_CREDIT" ),
+  INVALID_AMOUNT( "X_CREDIT" ),
+  CREDIT_TRANSFER_EXCEEDED( "X_CREDIT" );
+
+  /* Members removed for brevity */
+}
+```
+
+All enum constants have the same `persistenceCode`.  The above code will compile and all enums will persists the same `persistenceCode`.
+
+A test is required to make sure that the relation between the `persistenceCode` is one-to-one with the enum constants.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import static demo.App.AppError;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class AppTest {
+
+  @EnumSource( AppError.class )
+  @DisplayName( "should have the expected persistenceCode" )
+  @ParameterizedTest( name = "should return the enum {0} when retrieving the enum with the persistenceCode" )
+  public void shouldExistEnumWithName( final AppError error ) {
+    assertEquals( error, AppError.fromPersistenceCode( error.persistenceCode ) );
+  }
+}
+```
+
+Running the test when all the enum constants have the same `persistanceCode` will fail as shown next.
+
+```bash
+$ ./gradlew clean test
+
+> Task :test FAILED
+
+AppTest > should return the enum NO_SUFFICIENT_CREDIT when retrieving the enum with the persistenceCode PASSED
+
+AppTest > should return the enum INVALID_AMOUNT when retrieving the enum with the persistenceCode FAILED
+    org.opentest4j.AssertionFailedError at AppTest.java:16
+
+AppTest > should return the enum CREDIT_TRANSFER_EXCEEDED when retrieving the enum with the persistenceCode FAILED
+    org.opentest4j.AssertionFailedError at AppTest.java:16
+
+3 tests completed, 2 failed
+```
+
+This test ensures that there is a one-to-one relation between the `persistanceCode` and each enum constants.
 
 ### Enums can extend functionality
 
