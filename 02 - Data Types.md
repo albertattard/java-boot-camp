@@ -51,6 +51,7 @@
 1. [Autoboxing](#autoboxing)
     1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
+    1. [Can we create an instance of an enum?](#can-we-create-an-instance-of-an-enum)
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
     1. [Even enums have names too](#even-enums-have-names-too)
     1. [Enum's Ordinal](#enums-ordinal)
@@ -2134,6 +2135,45 @@ Refactor the current solution into using enums
     }
     ```
 
+### Can we create an instance of an enum?
+
+Java does not allow us to create new instances of any enum.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+
+  public enum Hand {
+    PAPER,
+    SCISSORS,
+    ROCK;
+  }
+
+  public static void main( final String[] args ) {
+    /* We can create instance of the point class */
+    final Point p = new Point( 1, 2 );
+
+    /* We cannot create an instance of an enum */
+    final Hand h = new Hand();
+  }
+}
+```
+
+The above will not compile as we cannot create an instance of an enum.
+
+```bash
+src/main/java/demo/App.java:18: error: enum types may not be instantiated
+    final Hand h = new Hand();
+                   ^
+```
+
+We can only use the existing enum constants and cannot create new one.
+
 ### Enums in Java can have methods
 
 The `determineOutcome()` method can be moved to the `Hand` enum as shown in the following example.
@@ -2444,7 +2484,8 @@ public class App {
       this.label = label;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return label;
     }
   }
@@ -2463,7 +2504,8 @@ public class App {
       this.colour = colour;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return icon;
     }
   }
@@ -2637,7 +2679,7 @@ public class AppTest {
   @DisplayName( "should have the expected ordinal" )
   @ParameterizedTest( name = "enum {0} should have the ordinal of {1}" )
   @CsvSource( value = { "NO_SUFFICIENT_CREDIT,0", "INVALID_AMOUNT,1", "CREDIT_TRANSFER_EXCEEDED,2" } )
-  public void shouldPreserveEnumOrder( App.AppError error, int expectedOrdinal ) {
+  public void shouldPreserveEnumOrder( final App.AppError error, final int expectedOrdinal ) {
     assertEquals( expectedOrdinal, error.ordinal() );
   }
 }
@@ -2667,7 +2709,7 @@ public class AppTest {
   @DisplayName( "should have the expected name" )
   @ParameterizedTest( name = "should exists enum with name {0}" )
   @ValueSource( strings = { "NO_SUFFICIENT_CREDIT", "INVALID_AMOUNT", "CREDIT_TRANSFER_EXCEEDED" } )
-  public void shouldExistEnumWithName( String name ) {
+  public void shouldExistEnumWithName( final String name ) {
     AppError.valueOf( name );
   }
 }
@@ -2697,18 +2739,18 @@ public class AppTest {
     , "INVALID_AMOUNT,bf0a7a01052ee64c75ed878e581c0bc5a1ea0e2c868108aefa8aa47eb53142a8"
     , "CREDIT_TRANSFER_EXCEEDED,1875c1b5559559051e814667827c260668842b699a058300bcb2e8e4a609cd00"
   } )
-  public void shouldExistEnumWithName( String name, String expectedSha256 ) {
+  public void shouldExistEnumWithName( final String name, final String expectedSha256 ) {
     assertEquals( expectedSha256, computeSha256( name ) );
     AppError.valueOf( name );
   }
 
-  private static String computeSha256( String text ) {
+  private static String computeSha256( final String text ) {
     return sha256().hashString( text, StandardCharsets.UTF_8 ).toString();
   }
 }
 ```
 
-The [SHA256 hash function](https://en.wikipedia.org/wiki/SHA-2) can be used to create a hash for the enum name.  If the enum name is changed and by mistake the IDE also renames the sample data too, the SHA256 value will not match anymore.
+The [SHA256 hash function](https://en.wikipedia.org/wiki/SHA-2) can be used to create a hash for the enum name.  If the enum name is changed and by mistake the IDE also renames the sample data too, the SHA256 value will not match anymore and the test will fail.
 
 #### Using a specific property as the unit of Persistence
 
@@ -2817,7 +2859,249 @@ This test ensures that there is a one-to-one relation between the `persistanceCo
 
 ### Enums can extend functionality
 
-** Pending...**
+**This is quite an advanced topic and all you need to understand for now is that enums can implement interfaces**.
+
+Java enums are simply special classes which we cannot instantiate.  Consider the following example.
+
+```java
+enum Task {
+  SWEEPER,
+  RUNNER;
+}
+```
+
+The above enum represents a task that can be executed by some process.  We have two tasks, that do different things.  A sweeper swipes, while a runner runs.  These two perform different tasks.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  enum Task {
+    SWEEPER,
+    RUNNER;
+
+    public void execute() {
+      System.out.println( "Executing..." );
+    }
+  }
+
+  public static void main( final String[] args ) {
+    run( Task.SWEEPER );
+    run( Task.RUNNER );
+  }
+
+  public static void run( final Task task ) {
+    task.execute();
+  }
+}
+```
+
+The `Task` enum introduced the `execute()` method that always prints the same message.
+
+```bash
+Executing...
+Executing...
+```
+
+Enums, like objects, can take advantage of [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)) ([discussed later on](03%20-%20Classes,%20Methods%20and%20Objects.md)).  Consider the following updated example.
+
+```java
+package demo;
+
+public class App {
+
+  enum Task {
+    SWEEPER() {
+      @Override
+      public void execute() {
+        System.out.println( "Swiping..." );
+      }
+    },
+    RUNNER() {
+      @Override
+      public void execute() {
+        System.out.println( "Running..." );
+      }
+    };
+
+    public abstract void execute();
+  }
+
+  public static void main( final String[] args ) {
+    run( Task.SWEEPER );
+    run( Task.RUNNER );
+  }
+
+  public static void run( final Task task ) {
+    task.execute();
+  }
+}
+```
+
+Each enum constant has it own implementation of the `execute()` method.  The above will not print a different message based on the enum being executed.
+
+```bash
+Swiping...
+Running...
+```
+
+An alternative, less recommended approach is to use a `switch` statement instead, as shown next.
+
+```java
+enum Task {
+  SWEEPER,
+  RUNNER;
+
+  public void execute() {
+    switch ( this ) {
+      case SWEEPER:
+        System.out.println( "Swiping..." );
+        break;
+      case RUNNER:
+        System.out.println( "Running..." );
+        break;
+    }
+  }
+}
+```
+
+I do not prefer this approach as we can easily forget to add a new case to the `switch` when new enum constants are added.  The first approach is immune from this problem as the compiler will produce an error.
+
+We have another type of task which runs in batches, called `BatchTask`, shown next.
+
+```java
+enum BatchTask {
+  NIGHTLY_BACKUPS() {
+    @Override
+    public void execute() {
+      System.out.println( "Backing up the data..." );
+    }
+  };
+
+  public abstract void execute();
+}
+```
+
+Like the first enum, `Task`, the `BatchTask` has a method called `execute()`.  Can we reuse the `run()` method to run the `BatchTask`?
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  enum Task {
+    SWEEPER() {
+      @Override
+      public void execute() {
+        System.out.println( "Swiping..." );
+      }
+    },
+    RUNNER() {
+      @Override
+      public void execute() {
+        System.out.println( "Running..." );
+      }
+    };
+
+    public abstract void execute();
+  }
+
+  enum BatchTask {
+    NIGHTLY_BACKUPS() {
+      @Override
+      public void execute() {
+        System.out.println( "Backing up the data..." );
+      }
+    };
+
+    public abstract void execute();
+  }
+
+  public static void main( final String[] args ) {
+    run( Task.SWEEPER );
+    run( Task.RUNNER );
+    run( BatchTask.NIGHTLY_BACKUPS );
+  }
+
+  public static void run( Task task ) {
+    task.execute();
+  }
+}
+```
+
+`Task` and `BatchTask` are different types, and like we cannot assign a `double` to an `int`, we cannot assign `BatchTask` to `Task`.  We can create an interface ([discussed in depth later on](03%20-%20Classes,%20Methods%20and%20Objects.md#interfaces)), as shown next.
+
+```java
+interface CanBeExecuted {
+  void execute();
+}
+```
+
+We can have both enums implement the new interface and use the interface as the method parameter instead, as shown next.
+
+```java
+package demo;
+
+public class App {
+
+  enum Task implements CanBeExecuted {
+    SWEEPER() {
+      @Override
+      public void execute() {
+        System.out.println( "Swiping..." );
+      }
+    },
+    RUNNER() {
+      @Override
+      public void execute() {
+        System.out.println( "Running..." );
+      }
+    };
+
+    public abstract void execute();
+  }
+
+  enum BatchTask implements CanBeExecuted {
+    NIGHTLY_BACKUPS() {
+      @Override
+      public void execute() {
+        System.out.println( "Backing up the data..." );
+      }
+    };
+
+    public abstract void execute();
+  }
+
+  interface CanBeExecuted {
+    void execute();
+  }
+
+  public static void main( final String[] args ) {
+    run( Task.SWEEPER );
+    run( Task.RUNNER );
+    run( BatchTask.NIGHTLY_BACKUPS );
+  }
+
+  public static void run( final CanBeExecuted a ) {
+    a.execute();
+  }
+}
+```
+
+The above program now runs and prints.
+
+```bash
+Swiping...
+Running...
+Backing up the data...
+```
+
+**This is quite an advanced topic and all you need to understand for now is that enums can implement interfaces**.
 
 ## Imports, Static Imports and Packages
 
