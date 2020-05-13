@@ -52,8 +52,14 @@
     1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
+    1. [Enums have names](#enums-have-names)
     1. [Enum's Ordinal](#enums-ordinal)
+        1. [Can we retrieve the enum through the ordinal?](#can-we-retrieve-the-enum-through-the-ordinal)
     1. [Enums in Java can have state](#enums-in-java-can-have-state)
+    1. [Considerations before Persisting Enums](#considerations-before-persisting-enums)
+        1. [Using the Enum's Ordinal as the unit of Persistence](#using-the-enums-ordinal-as-the-unit-of-persistence)
+        1. [Using the Enum's Name as the unit of Persistence](#using-the-enums-name-as-the-unit-of-persistence)
+        1. [Using a specific property as the unit of Persistence](#using-a-specific-property-as-the-unit-of-persistence)
     1. [Enums can extend functionality](#enums-can-extend-functionality)
 1. [Imports, Static Imports and Packages](#imports-static-imports-and-packages)
     1. [Imports](#imports)
@@ -2187,9 +2193,9 @@ public class RockPaperScissors {
 }
 ```
 
-### Enum's Ordinal
+### Enums have names
 
-Each enum in Java is associated with a number, referred to as the ordinal.
+Each enum in Java has a unique name.
 
 Consider the following example.
 
@@ -2202,7 +2208,79 @@ public class App {
   }
 
   public static void main( final String[] args ) {
-    Suit s = Suit.DIAMONDS;
+    final Suit s = Suit.DIAMONDS;
+    System.out.printf( "The enum name is: %s%n", s.name() );
+  }
+}
+```
+
+The enum's name (as a `String`) can be used to retrieve an enum.  Consider the following code.
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( final String[] args ) {
+    final String name = "SPADES";
+    final Suit s = Suit.valueOf( name );
+    System.out.printf( "The enum is: %s%n", s );
+  }
+}
+```
+
+**What happens if no enum is found matching the given name?**
+
+The [`valueOf()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Enum.html#valueOf(java.lang.Class,java.lang.String)) will thrown an `IllegalArgumentException` if the given name does not match (case-sensitive) any of the enum constants.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN IllegalArgumentException!!**
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( final String[] args ) {
+    final String name = "SPADE";
+    final Suit s = Suit.valueOf( name );
+    System.out.printf( "The enum is: %s%n", s );
+  }
+}
+```
+
+The above example will throw an `IllegalArgumentException` as shown next.
+
+```bash
+Exception in thread "main" java.lang.IllegalArgumentException: No enum constant demo.App.Suit.SPADE
+	at java.base/java.lang.Enum.valueOf(Enum.java:273)
+	at demo.App$Suit.valueOf(App.java:4)
+	at demo.App.main(App.java:10)
+```
+
+The name needs to match perfectly including the case.
+
+### Enum's Ordinal
+
+Each enum in Java is associated with a number, referred to as [the ordinal](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Enum.html#ordinal()).
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( final String[] args ) {
+    final Suit s = Suit.DIAMONDS;
     System.out.printf( "The enum %s has an ordinal of %d%n", s, s.ordinal() );
   }
 }
@@ -2213,6 +2291,15 @@ The first enum constant, `CLUBS` has an ordinal of `0`.  The above example will 
 ```bash
 The enum DIAMONDS has an ordinal of 1
 ```
+
+The following table shows the ordinals for the `Suit` enum.
+
+| Enum       | Ordinal |
+|------------|--------:|
+| `CLUBS`    |       0 |
+| `DIAMONDS` |       1 |
+| `HEARTS`   |       2 |
+| `SPADES`   |       3 |
 
 The previous example, the rock paper scissors example, can take advantage from the ordinal as shown next.
 
@@ -2235,6 +2322,61 @@ public enum Hand {
     return hands[( ordinal() + 1 ) % hands.length];
   }
 }
+```
+
+#### Can we retrieve the enum through the ordinal?
+
+Yes.  Enums can be retrieved based on their ordinal.  The enums have an [implicit method called `values()`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-8.html#jls-8.9.3) which returns an array of all enum constants.
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( final String[] args ) {
+    final Suit[] allSuits = Suit.values();
+    final Suit s = allSuits[2];
+    System.out.printf( "The enum %s has an ordinal of %d%n", s, s.ordinal() );
+  }
+}
+```
+
+The above will print.
+
+```bash
+The enum HEARTS has an ordinal of 2
+```
+
+**What will happen if we use an ordinal that does not exists?**
+
+Surprisingly enough, this question belongs to arrays, [discussed later on](04%20-%20Collections.md#arrays).  The array returned by the `values()` method will have four elements.  Trying to retrieve an element from the array past the enum ordinal will throw an `ArrayIndexOutOfBoundsException`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ArrayIndexOutOfBoundsException!!**
+
+```java
+package demo;
+
+public class App {
+  enum Suit {
+    CLUBS, DIAMONDS, HEARTS, SPADES;
+  }
+
+  public static void main( final String[] args ) {
+    final Suit[] allSuits = Suit.values();
+    final Suit s = allSuits[10];
+    System.out.printf( "The enum %s has an ordinal of %d%n", s, s.ordinal() );
+  }
+}
+```
+
+The above example will throw an `ArrayIndexOutOfBoundsException` as shown next, because the array only has `4` elements and we tried to retrieve the 11th element.  Arrays are `0` based, so the first element is at index `0`.
+
+```bash
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 10 out of bounds for length 4
+	at demo.App.main(App.java:10)
 ```
 
 ### Enums in Java can have state
@@ -2285,7 +2427,155 @@ public class App {
 }
 ```
 
-**Note that the enum state cannot be modified as otherwise you may get unexpected behaviour**.
+**Note that the enum state SHOULD NOT be modified as otherwise you may get unexpected behaviour**.
+
+### Considerations before Persisting Enums
+
+Let say that we have a simple credit transfer application that allows users to send credit to other users.  When working with the application the user can encounter one of a set of errors.
+
+1. **No Sufficient Credit**: when users try to send more credit that they have
+1. **Invalid Amount**: when users input an invalid value
+1. **Credit Transfer Exceeded**: when users exceed the credit transfer
+
+Given that the errors are fixed the following enum was created to capture them
+
+```java
+package demo;
+
+public enum AppError {
+  NO_SUFFICIENT_CREDIT,
+  INVALID_AMOUNT,
+  CREDIT_TRANSFER_EXCEEDED
+}
+```
+
+We need to capture the errors produced by the application and persist these in a database for further analysis.
+
+There are several ways to persist an enum into a database, each have their advantages and disadvantages.
+
+#### Using the Enum's Ordinal as the unit of Persistence
+
+All enums have an ordinal and this can be saved in the database as shown next.
+
+```java
+package demo;
+
+public class App {
+
+  public enum AppError {
+    NO_SUFFICIENT_CREDIT,
+    INVALID_AMOUNT,
+    CREDIT_TRANSFER_EXCEEDED
+  }
+
+  public static void main( final String[] args ) {
+    persist( AppError.INVALID_AMOUNT );
+  }
+
+  public static void persist( final AppError error ) {
+    /* Simply logging it out to the console */
+    System.out.println( error.ordinal() );
+  }
+}
+```
+
+The above example is simply printing the ordinal to the console, which prints.
+
+```bash
+1
+```
+
+The following table shows the current ordinal for the `AppError`
+
+| Enum                       | Ordinal |
+|----------------------------|--------:|
+| `NO_SUFFICIENT_CREDIT`     |        0|
+| `INVALID_AMOUNT`           |        1|
+| `CREDIT_TRANSFER_EXCEEDED` |        2|
+
+We can add a method that will read the ordinal from the database and return the enum.  Let assume that the ordinal value of `1` is saved in the database and the `read()` method is used to read the enum from the database.
+
+```java
+package demo;
+
+public class App {
+
+  public enum AppError {
+    NO_SUFFICIENT_CREDIT,
+    INVALID_AMOUNT,
+    CREDIT_TRANSFER_EXCEEDED
+  }
+
+  public static void main( final String[] args ) {
+    final AppError error = read();
+    System.out.printf( "Error with ordinal 1: %s%n", error );
+  }
+
+  public static AppError read() {
+    /* Assuming that this is the persisted value in the database */
+    final int ordinal = 1;
+    return AppError.values()[ordinal];
+  }
+}
+```
+
+The above will print.
+
+```bash
+Error with ordinal 1: INVALID_AMOUNT
+```
+
+The ordinal is based on the constant's order/position.  If someone changes the order of the constants in the enum will invalidate the ordinal saved in the database.
+
+```java
+public enum AppError {
+  INVALID_AMOUNT,
+  CREDIT_TRANSFER_EXCEEDED,
+  NO_SUFFICIENT_CREDIT
+}
+```
+
+The `INVALID_AMOUNT` is moved as the first constant.  Rerunning the program will produce a different enum.
+
+```java
+package demo;
+
+public class App {
+
+  public enum AppError {
+    INVALID_AMOUNT,
+    CREDIT_TRANSFER_EXCEEDED,
+    NO_SUFFICIENT_CREDIT
+  }
+
+  public static void main( final String[] args ) {
+    final AppError error = read();
+    System.out.printf( "Error with ordinal 1: %s%n", error );
+  }
+
+  public static AppError read() {
+    /* Assuming that this is the persisted value in the database */
+    final int ordinal = 1;
+    return AppError.values()[ordinal];
+  }
+}
+```
+
+Note that the code may change while the data persisted in the database is still the same.  We have originally saved `1` to represent the enum `INVALID_AMOUNT` in the database.  Running the above program will return a different enum.
+
+```bash
+Error with ordinal 1: CREDIT_TRANSFER_EXCEEDED
+```
+
+#### Using the Enum's Name as the unit of Persistence
+
+** Pending...**
+
+
+#### Using a specific property as the unit of Persistence
+
+** Pending...**
+
 
 ### Enums can extend functionality
 
