@@ -98,6 +98,8 @@ Boot Camp for developers interested to learn Java.
 
 ### [Classes, Methods and Objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md)
 
+1. [Anatomy of a Java Class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#anatomy-of-a-java-class)
+    1. [Terms](03%20-%20Classes%2C%20Methods%20and%20Objects.md#terms)
 1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#classes-and-methods-static-no-oop)
     1. [Is void a type?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#is-void-a-type)
 1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#properties-static-no-oop)
@@ -136,7 +138,9 @@ Boot Camp for developers interested to learn Java.
 1. [Overloading and Overriding](03%20-%20Classes%2C%20Methods%20and%20Objects.md#overloading-and-overriding)
     1. [Overloading](03%20-%20Classes%2C%20Methods%20and%20Objects.md#overloading)
     1. [Overriding](03%20-%20Classes%2C%20Methods%20and%20Objects.md#overriding)
-1. [Outer, Inner and Anonymous Classes](03%20-%20Classes%2C%20Methods%20and%20Objects.md#outer-inner-and-anonymous-classes)
+1. [Initialisation Blocks, Outer, Inner and Anonymous Classes](03%20-%20Classes%2C%20Methods%20and%20Objects.md#initialisation-blocks-outer-inner-and-anonymous-classes)
+    1. [Initialisation Block](03%20-%20Classes%2C%20Methods%20and%20Objects.md#initialisation-block)
+    1. [Static Initialisation Block](03%20-%20Classes%2C%20Methods%20and%20Objects.md#static-initialisation-block)
     1. [Outer Class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#outer-class)
     1. [Inner Class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inner-class)
     1. [Inner Anonymous Class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inner-anonymous-class)

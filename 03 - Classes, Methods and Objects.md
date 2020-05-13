@@ -5,6 +5,8 @@
 ## TOC
 
 1. [Setup](#setup)
+1. [Anatomy of a Java Class](#anatomy-of-a-java-class)
+    1. [Terms](#terms)
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
@@ -43,7 +45,9 @@
 1. [Overloading and Overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
     1. [Overriding](#overriding)
-1. [Outer, Inner and Anonymous Classes](#outer-inner-and-anonymous-classes)
+1. [Initialisation Blocks, Outer, Inner and Anonymous Classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
+    1. [Initialisation Block](#initialisation-block)
+    1. [Static Initialisation Block](#static-initialisation-block)
     1. [Outer Class](#outer-class)
     1. [Inner Class](#inner-class)
     1. [Inner Anonymous Class](#inner-anonymous-class)
@@ -61,6 +65,171 @@
     ```
 
 1. Open the repo in IDE
+
+## Anatomy of a Java Class
+
+**The scope of this section is to provide a bird's-eye view of the Java class without diving in any particular depths**.
+
+Throughout the page, there will be mentioned terms such as *property*, *`static` field*, *instance method* and the like.  The following example shows various combinations of these terms all in one place.
+
+```java
+package demo;
+
+public class AnatomyJavaClass {
+
+  private int propertyX = 7;
+
+  private static int STATIC_FIELD_X = 3;
+
+  /* Initialisation Block */
+  { /* ... */ }
+
+  /* Static Initialisation Block */
+  static { /* ... */ }
+
+  public AnatomyJavaClass() { /* ... */ }
+
+  public void instanceMethod() { /* ... */ }
+
+  public static void staticMethod() { /* ... */ }
+
+  public class InnerInstanceClass {
+
+    private int propertyY = 8;
+
+    public void innerClassInstanceMethod() { /* ... */ }
+  }
+
+  public static class InnerStaticClass {
+
+    private int propertyZ = 9;
+
+    private static int STATIC_FIELD_Z = 4;
+
+    public void innerClassInstanceMethod() { /* ... */ }
+
+    public static void innerClassStaticMethod() { /* ... */ }
+  }
+}
+
+class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
+```
+
+### Terms
+
+1. **package** is the namespace and folder path where the source file is saved
+
+    ```java
+    package demo;
+    ```
+
+1. **class** the term class always refers to the top level class that has the same name as the file.
+
+    ```java
+    public class AnatomyJavaClass {
+    ```
+
+1. **class members** anything that belongs to the class, such as (but not limited to)
+
+    * constructors
+    * properties
+    * static fields
+    * methods
+    * inner classes
+
+1. **property** are the instance fields.  In the above example we have four classes including inner classes, three of which have properties.
+
+    1. Property of class `AnatomyJavaClass`
+
+    ```java
+    private int propertyX = 7;
+    ```
+
+    1. Property of inner instance class `InnerInstanceClass`
+
+    ```java
+    private int propertyY = 8;
+    ```
+
+    1. Property of inner `static` class `InnerStaticClass`
+
+    ```java
+    private int propertyZ = 9;
+    ```
+
+1. **`static` field** are fields that belong to the class.  In the above example we have four classes including inner classes, two of which have `static` fields.
+
+    1. `static` field of class `AnatomyJavaClass`
+
+    ```java
+    private static int STATIC_FIELD_X = 3;
+    ```
+
+    1. `static` field of inner `static` class `InnerStaticClass`
+
+    ```java
+    private static int STATIC_FIELD_Z = 4;
+    ```
+
+1. **initialisation block**
+
+    ```java
+    /* Initialisation Block */
+    { /* ... */ }
+    ```
+
+1. **static initialisation block**
+
+    ```java
+    /* Static Initialisation Block */
+    static { /* ... */ }
+    ```
+
+1. **constructors** are object initialisation methods that have the same name of the class.
+
+    ```java
+    public AnatomyJavaClass() { /* ... */ }
+    ```
+
+1. **methods** both instance and `static` methods in a class
+
+    1. instance method in the `AnatomyJavaClass` class
+
+    ```java
+    public void instanceMethod() { /* ... */ }
+    ```
+
+    1. `static` method in the `AnatomyJavaClass` class
+
+    ```java
+    public static void staticMethod() { /* ... */ }
+    ```
+
+1. **instance methods**
+
+1. **`static` methods**
+
+1. **inner classes**
+
+1. **inner instance class**
+
+1. **inner anonymous class** (missing in the above)
+
+1. **`static` inner class**
+
+1. **Top Level Classes**
+
+    1. The public class with the same name as the file containg it
+
+    ```java
+    public class AnatomyJavaClass { /* ... */ }
+    ```
+
+    1. The second class that has a different name from the source file containing it
+
+    ```java
+    class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
+    ```
 
 ## Classes and methods (static no OOP)
 
@@ -760,7 +929,7 @@ public class Person {
 }
 ```
 
-A `static` field is not part of the object and thus it is not part of the *Java heap*.  The `static` fields are saved together with the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  
+A `static` field is not part of the object and thus it is not part of the *Java heap*.  The `static` fields are saved together with the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.
 
 Therefore, there is only one copy of the `static` field, `name`.  If one modifies a `static` field, all variables will be affected.  IntelliJ suggests refactoring the code and access the `static` field through the class name.
 
@@ -1056,7 +1225,7 @@ Let start by creating a basic object that will represent a box.  The box will no
 1. Run the program again
 
     ```bash
-    ./gradlew run
+    $ ./gradlew run
 
     > Task :run
     My box a basic box
@@ -1064,7 +1233,7 @@ Let start by creating a basic object that will represent a box.  The box will no
 
 ### Add State
 
-A box may be open or may be closed.  The program needs to determine whether the box is open or closed before puts things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
+A box may be open or may be closed.  The program needs to determine whether the box is open or closed before putting things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
 
 1. Create a test
 
@@ -1147,7 +1316,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
     }
     ```
 
-    Run the test.  While the open test passes, the close test fails.
+    Run the test.  While the *open* test passes, the *close* test fails.
 
     ```bash
     $ ./gradlew test
@@ -1190,7 +1359,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
     }
     ```
 
-    Made the `toString()` returning something more meaning full.
+    Updated the `toString()` to return something more meaningful.
 
 1. Run the tests
 
@@ -1236,7 +1405,7 @@ public class Box {
 }
 ```
 
-When a method is invoked, the method's state is loaded on the *Java stack* as a new frame.  All method's variables are created in the method's frame in the *Java stack*.  The method can only reach within its frame and the classloader makes sure of then during the class loading process.  Instance methods have also access to the objects' properties.  In this case, all four instance methods will have access to all object's properties too.
+When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' properties.  In this case, all four instance methods will have access to all object's properties too.
 
 **On the other hand, `static` methods cannot access the object state**.
 
@@ -2491,7 +2660,15 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### Overriding
 
-## Outer, Inner and Anonymous Classes
+## Initialisation Blocks, Outer, Inner and Anonymous Classes
+
+### Initialisation Block
+
+**Pending...**
+
+### Static Initialisation Block
+
+**Pending...**
 
 ### Outer Class
 
