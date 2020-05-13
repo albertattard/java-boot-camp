@@ -52,7 +52,7 @@
     1. [Autoboxing is an easy target for NullPointerException](#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](#enumerations)
     1. [Enums in Java can have methods](#enums-in-java-can-have-methods)
-    1. [Enums have names](#enums-have-names)
+    1. [Even enums have names too](#even-enums-have-names-too)
     1. [Enum's Ordinal](#enums-ordinal)
         1. [Can we retrieve the enum through the ordinal?](#can-we-retrieve-the-enum-through-the-ordinal)
     1. [Enums in Java can have state](#enums-in-java-can-have-state)
@@ -2136,6 +2136,8 @@ Refactor the current solution into using enums
 
 ### Enums in Java can have methods
 
+The `determineOutcome()` method can be moved to the `Hand` enum as shown in the following example.
+
 ````java
   public enum Hand {
     PAPER,
@@ -2193,7 +2195,7 @@ public class RockPaperScissors {
 }
 ```
 
-### Enums have names
+### Even enums have names too
 
 Each enum in Java has a unique name.
 
@@ -2393,7 +2395,7 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 10 ou
 
 ### Enums in Java can have state
 
-Can we add the cards' icons to the enum?  Consider the following example?
+Can we add the cards' icons to the enum?  Consider the following example.
 
 ```java
 package demo;
@@ -2473,7 +2475,7 @@ public class App {
 }
 ```
 
-A new enum, `Colour`, was added that represents the suit colour.  The above will print.
+A new enum, `Colour`, was added that represents the suit's colour.  The above will print.
 
 ```bash
 The suit ♦️ has a colour of Red
@@ -2541,9 +2543,9 @@ The following table shows the current ordinal for the `AppError`
 
 | Enum                       | Ordinal |
 |----------------------------|--------:|
-| `NO_SUFFICIENT_CREDIT`     |        0|
-| `INVALID_AMOUNT`           |        1|
-| `CREDIT_TRANSFER_EXCEEDED` |        2|
+| `NO_SUFFICIENT_CREDIT`     |     `0` |
+| `INVALID_AMOUNT`           |     `1` |
+| `CREDIT_TRANSFER_EXCEEDED` |     `2` |
 
 We can add a method that will read the ordinal from the database and return the enum.  Let assume that the ordinal value of `1` is saved in the database and the `read()` method is used to read the enum from the database.
 
@@ -2577,7 +2579,7 @@ The above will print.
 Error with ordinal 1: INVALID_AMOUNT
 ```
 
-The ordinal is based on the constant's order/position.  If someone changes the order of the constants in the enum will invalidate the ordinal saved in the database.
+The ordinal is based on the constant's order/position.  If the order of the constants in the enum is changed it will invalidate the ordinal saved in the database.
 
 ```java
 public enum AppError {
@@ -2613,16 +2615,100 @@ public class App {
 }
 ```
 
-Note that the code may change while the data persisted in the database is still the same.  We have originally saved `1` to represent the enum `INVALID_AMOUNT` in the database.  Running the above program will return a different enum.
+Note that the code may change while the data persisted in the database stays the same.  We have originally saved `1` to represent the enum `INVALID_AMOUNT` in the database.  Running the above program will return a different enum.
 
 ```bash
 Error with ordinal 1: CREDIT_TRANSFER_EXCEEDED
 ```
 
+If the enum ordinal will be used as a persistent unit, then make sure that this is captured by tests to make sure that any changes made to the order will break the test.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class AppTest {
+
+  @DisplayName( "should have the expected ordinal" )
+  @ParameterizedTest( name = "enum {0} should have the ordinal of {1}" )
+  @CsvSource( value = { "NO_SUFFICIENT_CREDIT,0", "INVALID_AMOUNT,1", "CREDIT_TRANSFER_EXCEEDED,2" } )
+  public void shouldPreserveEnumOrder( App.AppError error, int expectedOrdinal ) {
+    assertEquals( expectedOrdinal, error.ordinal() );
+  }
+}
+```
+
+Shuffling the enum's constants will break the above test and such change will not go unnoticed.
+
 #### Using the Enum's Name as the unit of Persistence
 
-** Pending...**
+Enums have names too, and a common practice is to use save the enum's name in the database instead of the ordinal.  Saving the name of the enum makes it immutable from reordering of the enum constants.  Furthermore, names are more readable and simplifies data reading.  The data becomes more meaningful for a person looking at it.  Viewing the value of `NO_SUFFICIENT_CREDIT` in a query results, one can easily understand what type of error is.
 
+While this is a common practice, one needs to be careful when using the enum's name as a persistence unit.  The enums can be refactored (renamed) in which case, it would invalidate the respective persisted data.
+
+If the enum's name is to be used as persistence unit, make sure that tests are employed to protect against renaming.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static demo.App.AppError;
+
+public class AppTest {
+
+  @DisplayName( "should have the expected name" )
+  @ParameterizedTest( name = "should exists enum with name {0}" )
+  @ValueSource( strings = { "NO_SUFFICIENT_CREDIT", "INVALID_AMOUNT", "CREDIT_TRANSFER_EXCEEDED" } )
+  public void shouldExistEnumWithName( String name ) {
+    AppError.valueOf( name );
+  }
+}
+```
+
+Please note that the IntelliJ may rename names and strings alike.  Be careful when renaming objects as we may rename the test samples and undermine the whole test. A better version (but a bit more complex) is shown next.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.nio.charset.StandardCharsets;
+
+import static com.google.common.hash.Hashing.sha256;
+import static demo.App.AppError;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class AppTest {
+
+  @DisplayName( "should have the expected name" )
+  @ParameterizedTest( name = "should exists enum with name {0}" )
+  @CsvSource( value = {
+    "NO_SUFFICIENT_CREDIT,91b5d5be922a703f9339b64f233129260c2e0e17764cf13755b682d72024a26b"
+    , "INVALID_AMOUNT,bf0a7a01052ee64c75ed878e581c0bc5a1ea0e2c868108aefa8aa47eb53142a8"
+    , "CREDIT_TRANSFER_EXCEEDED,1875c1b5559559051e814667827c260668842b699a058300bcb2e8e4a609cd00"
+  } )
+  public void shouldExistEnumWithName( String name, String expectedSha256 ) {
+    assertEquals( expectedSha256, computeSha256( name ) );
+    AppError.valueOf( name );
+  }
+
+  private static String computeSha256( String text ) {
+    return sha256().hashString( text, StandardCharsets.UTF_8 ).toString();
+  }
+}
+```
+
+The [SHA256 hash function](https://en.wikipedia.org/wiki/SHA-2) can be used to create a hash for the enum name.  If the enum name is changed and by mistake the IDE also renames the sample data too, the SHA256 value will not match anymore.
 
 #### Using a specific property as the unit of Persistence
 

@@ -86,7 +86,7 @@ Boot Camp for developers interested to learn Java.
     1. [Autoboxing is an easy target for NullPointerException](02%20-%20Data%20Types.md#autoboxing-is-an-easy-target-for-nullpointerexception)
 1. [Enumerations](02%20-%20Data%20Types.md#enumerations)
     1. [Enums in Java can have methods](02%20-%20Data%20Types.md#enums-in-java-can-have-methods)
-    1. [Enums have names](02%20-%20Data%20Types.md#enums-have-names)
+    1. [Even enums have names too](02%20-%20Data%20Types.md#even-enums-have-names-too)
     1. [Enum's Ordinal](02%20-%20Data%20Types.md#enums-ordinal)
         1. [Can we retrieve the enum through the ordinal?](02%20-%20Data%20Types.md#can-we-retrieve-the-enum-through-the-ordinal)
     1. [Enums in Java can have state](02%20-%20Data%20Types.md#enums-in-java-can-have-state)
