@@ -102,6 +102,7 @@ Boot Camp for developers interested to learn Java.
         1. [Organise Packages by Feature](02%20-%20Data%20Types.md#organise-packages-by-feature)
         1. [Organise Packages by Feature and Technology (Hybrid)](02%20-%20Data%20Types.md#organise-packages-by-feature-and-technology-hybrid)
     1. [Imports](02%20-%20Data%20Types.md#imports)
+        1. [Same class name in different packages](02%20-%20Data%20Types.md#same-class-name-in-different-packages)
     1. [Static Imports](02%20-%20Data%20Types.md#static-imports)
 1. [Date Time API](02%20-%20Data%20Types.md#date-time-api)
 1. [Internationalization](02%20-%20Data%20Types.md#internationalization)

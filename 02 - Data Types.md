@@ -68,6 +68,7 @@
         1. [Organise Packages by Feature](#organise-packages-by-feature)
         1. [Organise Packages by Feature and Technology (Hybrid)](#organise-packages-by-feature-and-technology-hybrid)
     1. [Imports](#imports)
+        1. [Same class name in different packages](#same-class-name-in-different-packages)
     1. [Static Imports](#static-imports)
 1. [Date Time API](#date-time-api)
 1. [Internationalization](#internationalization)
@@ -3302,7 +3303,7 @@ While this is very common, I do not quite like this kind of organisation.  Norma
 
 #### Organise Packages by Feature
 
-Alternatively classes can be organised by their feature.  We have two features, *orders* and *payments*.
+Alternatively, classes can be organised by their feature.  We have two features, *orders* and *payments*.
 
 ```bash
 tree src/main/java
@@ -3337,7 +3338,7 @@ JDepend works with packages and the above organisation does help with that as al
 
 #### Organise Packages by Feature and Technology (Hybrid)
 
-Luckily we can obtain the best of both worlds.  Consider the following organisation.
+Luckily, we can obtain the best of both worlds.  Consider the following organisation.
 
 ```bash
 $ tree src/main/java
@@ -3449,6 +3450,23 @@ class DependenciesTest {
 
 ### Imports
 
+Classes that are not part of the same package cannot be used just by their name.  Take for example the `Random` class shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final java.util.Random r = new java.util.Random();
+
+    final int a = r.nextInt( 100 );
+    System.out.printf( "The number was %d%n", a );
+  }
+}
+```
+
+The `Random` class is found in the `java.util` package and to use it we have to use the full qualifier name (`java.util.Random`).  Alternatively, we can import classes and then use them by their name as shown next.
+
 ```java
 package demo;
 
@@ -3456,25 +3474,127 @@ import java.util.Random;
 
 public class App {
   public static void main( String[] args ) {
-    /* We are using a seed to always get the same sequence from this pseudo random number generator. */
-    Random r = new Random( 1L );
+     final Random r = new Random();
 
-    /* Random number between 0 (inclusive) up to 100 (exclusive) */
-    int i = r.nextInt( 100 );
-    System.out.printf( "The number was %d%n", i );
+     final int a = r.nextInt( 100 );
+     System.out.printf( "The number was %d%n", a );
   }
 }
 ```
 
-Output
+Say that we want get two random numbers and then pick the largest of the two.
 
-```bash
-The number was 85
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+  public static void main( String[] args ) {
+    final Random r = new Random();
+
+    final int a = r.nextInt( 100 );
+    final int b = r.nextInt( 100 );
+
+    /* Find the max */
+    int max = Math.max( a, b );
+
+    System.out.printf( "The largest number is %d%n", max );
+  }
+}
+```
+
+Note that the `Math` class in not in our package and yet we did not import it.  All classes found in the `java.lang` package, such as the `Math` class, are available automatically and we do not have to import them.
+
+#### Same class name in different packages
+
+**How can we work with classes that have the same name but are found in a different package?**
+
+Java has two `Date` classes, one found in the `java.util` package and the other one in the `java.sql` package.  We cannot import them both.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import java.util.Date;
+import java.sql.Date;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Date utilDate = new Date();
+    final Date sqlDate = new Date(System.currentTimeMillis());
+    System.out.printf( "The util date %s%n", utilDate );
+    System.out.printf( "The sql date %s%n", sqlDate );
+  }
+}
+```
+
+The above example cannot compile as it is impossible for Java to determine which data is which.  In such cases we can only import one of the dates and then we have to use the full qualified name with the other class.
+
+```java
+package demo;
+
+import java.util.Date;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Date utilDate = new Date();
+    final java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
+    System.out.printf( "The util date %s%n", utilDate );
+    System.out.printf( "The sql date %s%n", sqlDate );
+  }
+}
+```
+
+The `var` keyword can be useful here as it will reduce the verbosity.
+
+```java
+final var sqlDate = new java.sql.Date(System.currentTimeMillis());
+```
+
+Complete example.
+
+```java
+package demo;
+
+import java.util.Date;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Date utilDate = new Date();
+    final var sqlDate = new java.sql.Date(System.currentTimeMillis());
+    System.out.printf( "The util date %s%n", utilDate );
+    System.out.printf( "The sql date %s%n", sqlDate );
+  }
+}
 ```
 
 ### Static Imports
 
-**Pending...**
+Java 5 also introduced static imports which enabled use to import static methods ([discussed later on](03%20-%20Classes,%20Methods%20and%20Objects.md#classes-and-methods-static-no-oop)).  Any static method can be imported as shown next.
+
+```java
+package demo;
+
+import java.util.Random;
+
+import static java.lang.Math.max;
+
+public class App {
+  public static void main( String[] args ) {
+    final Random r = new Random();
+
+    final int a = r.nextInt( 100 );
+    final int b = r.nextInt( 100 );
+
+    /* Find the max */
+    int max = max( a, b );
+
+    System.out.printf( "The largest number is %d%n", max );
+  }
+}
+```
 
 ## Date Time API
 
