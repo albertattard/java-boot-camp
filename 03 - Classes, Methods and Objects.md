@@ -269,7 +269,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 
 1. **Top Level Classes**
 
-    1. The public class with the same name as the file containg it
+    1. The public class with the same name as the file containing it
 
         ```java
         public class AnatomyJavaClass { /* ... */ }
