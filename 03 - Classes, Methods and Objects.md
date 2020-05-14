@@ -960,7 +960,7 @@ public class App {
 The above creates an instance of the `Person` class and print it.
 
 ```bash
-Person name (aden): Albert
+Person name (aden): Aden
 ```
 
 Works!!  Let create a second instance of the `Person` class and print both instances.
@@ -986,8 +986,8 @@ public class App {
 The above will print the following.
 
 ```bash
-Person name (aden): Mary
-Person name (jade): Mary
+Person name (aden): Jade
+Person name (jade): Jade
 ```
 
 Oops!! What went wrong?  Why we are able to print two different points but not able to print two different persons?
@@ -2885,9 +2885,9 @@ The above program will print the following.
 
 ```bash
 The person object: Unknown Person!!
-The person object: Albert
+The person object: Aden
 The person object: Attard
-The person object: Albert Attard
+The person object: Aden Attard
 ```
 
 Following are two important points about the `toString()` method
@@ -2982,10 +2982,10 @@ public class App {
     final Person b = new Person( "Jade" );
 
     final List<Person> persons = List.of( a, b );
-    boolean containsAlbert = persons.contains( new Person( "Aden" ) );
+    boolean containsAden = persons.contains( new Person( "Aden" ) );
     boolean containsPeter = persons.contains( new Person( "Peter" ) );
 
-    System.out.printf( "List contains Albert? %s%n", containsAlbert );
+    System.out.printf( "List contains Aden? %s%n", containsAden );
     System.out.printf( "List contains Peter? %s%n", containsPeter );
   }
 }
@@ -2994,7 +2994,7 @@ public class App {
 The [list](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) relies on the `equals()` method to determine whether a person exists in the list or not.  The above will print.
 
 ```bash
-List contains Albert? true
+List contains Aden? true
 List contains Peter? false
 ```
 
@@ -3013,10 +3013,10 @@ public class App {
     final Person b = new Person( "Jade" );
 
     final Set<Person> persons = new HashSet<>( List.of( a, b ) );
-    boolean containsAlbert = persons.contains( new Person( "Aden" ) );
+    boolean containsAden = persons.contains( new Person( "Aden" ) );
     boolean containsPeter = persons.contains( new Person( "Peter" ) );
 
-    System.out.printf( "List contains Albert? %s%n", containsAlbert );
+    System.out.printf( "List contains Aden? %s%n", containsAden );
     System.out.printf( "List contains Peter? %s%n", containsPeter );
   }
 }
@@ -3025,7 +3025,7 @@ public class App {
 The above example makes use of the [HashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  Running the above **may** produce the following output.
 
 ```bash
-List contains Albert? false
+List contains Aden? false
 List contains Peter? false
 ```
 

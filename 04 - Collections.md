@@ -1332,7 +1332,7 @@ public class App {
 The above example will print
 
 ```bash
-Marks: {Albert=82, Jane=68, Peter=74, Mary=92}
+Marks: {Aden=82, Jane=68, Peter=74, Jade=92}
 ```
 
 ### Map Keys MUST BE Immutable
@@ -1415,7 +1415,7 @@ public class App {
 The order in which the items are returned is not guaranteed.
 
 ```bash
-Marks: {John=91, Jane=68, Mary=92, Albert=72, Peter=74}
+Marks: {John=91, Jane=68, Jade=92, Aden=72, Peter=74}
 ```
 
 #### HashMap
@@ -1451,7 +1451,7 @@ public class App {
 The order in which the items are returned is not guaranteed.
 
 ```bash
-Marks: {John=91, Albert=72, Peter=74, Jane=68, Mary=92}
+Marks: {John=91, Aden=72, Peter=74, Jane=68, Jade=92}
 ```
 
 #### LinkedHashMap
@@ -1487,7 +1487,7 @@ public class App {
 Items will preserv the order and will be returned in the order these are added.
 
 ```bash
-Marks: {Albert=72, Mary=92, Peter=74, Jane=68, John=91}
+Marks: {Aden=72, Jade=92, Peter=74, Jane=68, John=91}
 ```
 
 #### TreeMap
@@ -1523,7 +1523,7 @@ public class App {
 The items are returned in the key's natural order.
 
 ```bash
-Marks: {Albert=72, Jane=68, John=91, Mary=92, Peter=74}
+Marks: {Aden=72, Jane=68, John=91, Jade=92, Peter=74}
 ```
 
 #### Which Map to Use?
@@ -1587,8 +1587,8 @@ public class App {
 The program is able to first a match for the first example, but fails on the second try.
 
 ```bash
-Is Albert in the list? true
-Is Albert in the list? false
+Is Aden in the list? true
+Is Aden in the list? false
 ```
 
 This is happening as the `equals()` is not overridden.  Java thus relies on the `==` operator.  In the first case, we used the same object instance that is available in the list to search.  The `==` operator returns `true` then, as that's the same object in the *Java heap*.  In the second case, we have two objects that have the same value.  Given that these are two objects in the *Java heap*, the `==` operator will return `false`.
@@ -1660,8 +1660,8 @@ public class App {
 This seems to be have fixed the problem.
 
 ```bash
-Is Albert in the list? true
-Is Albert in the list? true
+Is Aden in the list? true
+Is Aden in the list? true
 ```
 
 The above example is **incorrect** as we only overrode the `equals()` method.

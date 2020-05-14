@@ -1318,7 +1318,7 @@ public class App {
 The above example will print
 
 ```bash
-The name Mary was found at index: 1
+The name Jade was found at index: 1
 ```
 
 ### Loop and Control Flow Examples
