@@ -114,7 +114,7 @@ Boot Camp for developers interested to learn Java.
 1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#classes-and-methods-static-no-oop)
     1. [Is void a type?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#is-void-a-type)
 1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#properties-static-no-oop)
-1. [How can we test functionality that makes use of static?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-test-functionality-that-makes-use-of-static)
+1. [How can we test functionality that makes use of static methods?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does static mean?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-does-static-mean)
     1. [static Fields](03%20-%20Classes%2C%20Methods%20and%20Objects.md#static-fields)
 1. [Access Control](03%20-%20Classes%2C%20Methods%20and%20Objects.md#access-control)

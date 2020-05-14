@@ -10,7 +10,7 @@
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
-1. [How can we test functionality that makes use of static?](#how-can-we-test-functionality-that-makes-use-of-static)
+1. [How can we test functionality that makes use of static methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does static mean?](#what-does-static-mean)
     1. [static Fields](#static-fields)
 1. [Access Control](#access-control)
@@ -499,7 +499,7 @@ public class App {
 }
 ```
 
-The keyword `void` is used by methods to indicate that the method returns nothing.
+While `int` is a type and we can create a variable of type `int`, `void` is not a type.  The keyword `void` is used by methods to indicate that the method returns nothing.
 
 This quite unique to Java as other languages always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
 
@@ -525,7 +525,7 @@ public class Dice {
 
 1. Every time the `roll()` method is invoked, a new instance of `Random` is created.
 
-    Do we need to create a new instance?
+    Do we need to create a new instance, every time we invoke the `roll()` method?
 
 **Refactoring**
 
@@ -548,7 +548,9 @@ public class Dice {
 
     Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
 
-## How can we test functionality that makes use of static?
+## How can we test functionality that makes use of static methods?
+
+**The scope of this section is to highlight shortcomings of static methods and while itt refers to objects it is not a comprehensive guide to OOP.**  OOP is discussed in depth in the following sections.
 
 The following test invokes our game.
 
@@ -574,7 +576,7 @@ This test will print something similar to the following to the output.
 [12:34:56] You rolled 4 and 2
 ```
 
-This is hard to verify that the two numbers shown are actually the values that were rolled.
+It is hard to verify that the two numbers printed are actually the values that were rolled.
 
 The simplest way to make this example testable is to use objects.  In a nutshell we will need to create and use [test doubles](https://martinfowler.com/bliki/TestDouble.html) to control and verify that our game is behaving as expected.
 
@@ -630,6 +632,31 @@ Note that it is hard to refactor code that does not have tests and also maintain
     [12:34:56] You rolled 3 and 3
     ```
 
+1. Predict the next `roll()` outcome
+
+    One of the challenges we face in testing this application is that we cannot predict the next roll outcome using the current `Dice` class, as the `Dice` class uses a random number generator.
+
+1. Use weighted dice for testing
+
+    ```java
+    package demo;
+
+    public class WeightedDice {
+
+      public static int roll() {
+        return nextRollValue;
+      }
+
+      public static int NEXT_ROLL_VALUE = 6;
+    }
+    ```
+
+    The `WeightedDice` does not use random number generator.  Instead, it returns the value of `NEXT_ROLL_VALUE`.  Using this version of the dice will allow us to control the behaviour of the game.
+
+1. How can we us the `WeightedDice`?
+
+    The `playGame()` method is calling the `Dice`'s `roll()`.  If we need to swap this we need pass the `Dice` as a parameter to the `playGame()` method.  If we want to pass the `Dice` as a parameter to the `playGame()` method, then we need to convert the `Dice` to an object.
+
 1. Make `Dice` an object
 
     Somehow, we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
@@ -649,7 +676,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` variables are written upper case and use underscore to delimit words.  Non-static properties and all methods are usually written in camelcase.
+    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` fields are written upper case and use underscore to delimit words.  Properties and all methods are usually written in camelcase.
 
     Use the `Dice` object in the `playGame()` method.
 
@@ -682,7 +709,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    There are easy means to provide our own copy of dice which is like the real one and also allows us to control the values rolled.  To do this we need to control the `Dice` object that the `playGame()` method uses.
+    The above example is creating the `Dice` object.  The next step would be to pass an instance of the `Dice` class to the `playGame()` method.
 
 1. Provide a `Dice` instance to the `playGame()` method
 
@@ -724,7 +751,9 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-1. Use weighted dice for testing
+1. Convert the `WeightedDice` to an object too.
+
+    If we want to swap the `Dice` with a `WeightedDice` during testing, we need to convert the latter to an object too.
 
     ```java
     package demo;
@@ -738,8 +767,6 @@ Note that it is hard to refactor code that does not have tests and also maintain
       public int nextRollValue = 6;
     }
     ```
-
-    The `WeightedDice` does not use random number generator.  Instead, it returns the value of `nextRollValue`.  Using this version of the dice will allow us to control the behaviour of the game.
 
 1. How can we us the `WeightedDice`?
 
@@ -760,7 +787,13 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    `Dice` and `WeightedDice` are two different types.  The `WeightedDice` class is only used for testing and can inherits from the `Dice` class.  Inheritance will be covered in depth in the [inheritance section](#inheritance).
+    `Dice` and `WeightedDice` are two different types.  The `WeightedDice` class is only used for testing and can inherit from the `Dice` class.  Inheritance will be covered in depth in the [inheritance section](#inheritance).
+
+    ```java
+    public class WeightedDice extends Dice {
+    ```
+
+    Complete example
 
     ```java
     package demo;
@@ -776,7 +809,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
     }
     ```
 
-    Now the `WeightedDice` can be used instead of the `Dice`.  Now the test will work.
+    Now the `WeightedDice` can be used instead of the `Dice`.  The test will now work.
 
     ```java
     package demo;
