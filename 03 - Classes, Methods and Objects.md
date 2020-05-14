@@ -2761,6 +2761,19 @@ The `Person` class has not methods defined, yet the IDE still shows a list of me
 
 ![Methods Inherited from the Object Class](assets/images/Methods%20Inherited%20from%20the%20Object%20Class.png)
 
+The following sections will work with the following version of the `Person` class.
+
+```java
+package demo;
+
+public class Person {
+
+  public String name;
+  public String surname;
+
+}
+```
+
 ### The toString() method
 
 All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a string.
@@ -2789,25 +2802,74 @@ It is always recommended to override the `toString()` method and return somethin
 ```java
 package demo;
 
+import com.google.common.base.Strings;
+
 public class Person {
+
+  public String name;
+  public String surname;
+
   @Override
   public String toString() {
-    return "The blank person class";
+    final boolean hasName = !Strings.isNullOrEmpty( name );
+    final boolean hasSurname = !Strings.isNullOrEmpty( surname );
+
+    if ( hasName && hasSurname ) {
+      return String.format( "%s %s", name, surname );
+    }
+
+    if ( hasName ) {
+      return name;
+    }
+
+    if ( hasSurname ) {
+      return surname;
+    }
+
+    return "Unknown Person!!";
   }
 }
 ```
 
-Running the previous `App` example, will not print.
+Consider the following example.
 
 ```java
-The person object The blank person class
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person();
+    System.out.printf( "The person object: %s%n", a );
+
+    final Person b = new Person();
+    b.name = "Albert";
+    System.out.printf( "The person object: %s%n", b );
+
+    final Person c = new Person();
+    c.surname = "Attard";
+    System.out.printf( "The person object: %s%n", c );
+
+    final Person d = new Person();
+    d.name = "Albert";
+    d.surname = "Attard";
+    System.out.printf( "The person object: %s%n", d );
+  }
+}
 ```
 
-The `toString()` method is used a lot as a means of render a given object in to a friendly string.
+The above program will print the following.
 
-**Do not rely on the output of the `toString()` method as a source of structured data**.
+```bash
+The person object: Unknown Person!!
+The person object: Albert
+The person object: Attard
+The person object: Albert Attard
+```
 
-Say that we need to output our `Person` object as JSON.  Do not use the `toString()` method for that, but provide a custom method for that.
+Following are two important points about the `toString()` method
+1. **The `toString()` method should never return a `null`**.
+1. **Do not rely on the output of the `toString()` method as a source of structured input**.
+    Do not parse an object based on the `toString()` output as this may change without warning.
 
 ### The equals() and hashCode() methods
 
