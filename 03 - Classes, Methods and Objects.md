@@ -97,7 +97,7 @@ public class AnatomyJavaClass {
 
     private int propertyY = 8;
 
-    public void innerClassInstanceMethod() { /* ... */ }
+    public void innerInstanceClassInstanceMethod() { /* ... */ }
   }
 
   public static class InnerStaticClass {
@@ -106,9 +106,9 @@ public class AnatomyJavaClass {
 
     private static int STATIC_FIELD_Z = 4;
 
-    public void innerClassInstanceMethod() { /* ... */ }
+    public void innerStaticClassInstanceMethod() { /* ... */ }
 
-    public static void innerClassStaticMethod() { /* ... */ }
+    public static void innerStaticClassStaticMethod() { /* ... */ }
   }
 }
 
@@ -126,7 +126,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 1. **class** the term class always refers to the top level class that has the same name as the file.
 
     ```java
-    public class AnatomyJavaClass {
+    public class AnatomyJavaClass { /* ... */ }
     ```
 
 1. **class members** anything that belongs to the class, such as (but not limited to)
@@ -141,35 +141,35 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 
     1. Property of class `AnatomyJavaClass`
 
-    ```java
-    private int propertyX = 7;
-    ```
+        ```java
+        private int propertyX = 7;
+        ```
 
     1. Property of inner instance class `InnerInstanceClass`
 
-    ```java
-    private int propertyY = 8;
-    ```
+        ```java
+        private int propertyY = 8;
+        ```
 
     1. Property of inner `static` class `InnerStaticClass`
 
-    ```java
-    private int propertyZ = 9;
-    ```
+        ```java
+        private int propertyZ = 9;
+        ```
 
 1. **`static` field** are fields that belong to the class.  In the above example we have four classes including inner classes, two of which have `static` fields.
 
     1. `static` field of class `AnatomyJavaClass`
 
-    ```java
-    private static int STATIC_FIELD_X = 3;
-    ```
+        ```java
+        private static int STATIC_FIELD_X = 3;
+        ```
 
     1. `static` field of inner `static` class `InnerStaticClass`
 
-    ```java
-    private static int STATIC_FIELD_Z = 4;
-    ```
+        ```java
+        private static int STATIC_FIELD_Z = 4;
+        ```
 
 1. **initialisation block**
 
@@ -195,41 +195,91 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 
     1. instance method in the `AnatomyJavaClass` class
 
-    ```java
-    public void instanceMethod() { /* ... */ }
-    ```
+        ```java
+        public void instanceMethod() { /* ... */ }
+        ```
 
     1. `static` method in the `AnatomyJavaClass` class
 
-    ```java
-    public static void staticMethod() { /* ... */ }
-    ```
+        ```java
+        public static void staticMethod() { /* ... */ }
+        ```
 
 1. **instance methods**
 
+    1. instance method in the `AnatomyJavaClass` class
+
+        ```java
+        public void instanceMethod() { /* ... */ }
+        ```
+
+    1. instance method in the `InnerInstanceClass` class
+
+        ```java
+        public void innerInstanceClassInstanceMethod() { /* ... */ }
+        ```
+
+    1. instance method in the `InnerStaticClass` class
+
+        ```java
+        public void innerStaticClassInstanceMethod() { /* ... */ }
+        ```
+
 1. **`static` methods**
+
+    1. instance method in the `AnatomyJavaClass` class
+
+        ```java
+        public static void staticMethod() { /* ... */ }
+        ```
+
+    1. instance method in the `InnerStaticClass` class
+
+        ```java
+        public static void innerStaticClassStaticMethod() { /* ... */ }
+        ```
 
 1. **inner classes**
 
+    1. The `InnerInstanceClass` class
+
+        ```java
+        public class InnerInstanceClass { /* ... */ }
+        ```
+
+    1. The `InnerStaticClass` class
+
+        ```java
+        public static class InnerStaticClass { /* ... */ }
+        ```
+
 1. **inner instance class**
+
+    ```java
+    public class InnerInstanceClass { /* ... */ }
+    ```
 
 1. **inner anonymous class** (missing in the above)
 
 1. **`static` inner class**
 
+    ```java
+    public static class InnerStaticClass { /* ... */ }
+    ```
+
 1. **Top Level Classes**
 
     1. The public class with the same name as the file containg it
 
-    ```java
-    public class AnatomyJavaClass { /* ... */ }
-    ```
+        ```java
+        public class AnatomyJavaClass { /* ... */ }
+        ```
 
     1. The second class that has a different name from the source file containing it
 
-    ```java
-    class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
-    ```
+        ```java
+        class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
+        ```
 
 ## Classes and methods (static no OOP)
 
