@@ -3022,14 +3022,16 @@ public class App {
 }
 ```
 
-The above example makes use of the [HashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  Running the above **may** produce the following output.
+The above example makes use of [the `HashSet` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  Running the above **may** produce the following output.
 
 ```bash
 List contains Aden? false
 List contains Peter? false
 ```
 
-Hash based functions, like the `HashSet`, rely on the `hashCode()` together with the `equals()` method.  Following is a better version of the `Person` class.
+Hash based classes, such as the `HashSet` class or [the `HashMap` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), rely on the `hashCode()` together with the `equals()` method.  The current implemetation may work or may not work, depends on how lucky we get with the value returned by the `Object`'s version of the `hashCode()` method.
+
+Following is a better version of the `Person` class.
 
 ```java
 package demo;
