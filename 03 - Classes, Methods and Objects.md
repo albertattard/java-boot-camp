@@ -23,6 +23,7 @@
     1. [Multiple Instances](#multiple-instances)
     1. [Constructors](#constructors)
         1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
+        1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
         1. [What are static factory methods?](#what-are-static-factory-methods)
     1. [More State](#more-state)
     1. [Mutable and Immutable](#mutable-and-immutable)
@@ -33,6 +34,7 @@
     1. [The `super` keyword](#the-super-keyword)
     1. [The `final` keyword](#the-final-keyword)
     1. [Private Constructor](#private-constructor)
+    1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can final classes be abstract?](#can-final-classes-be-abstract)
@@ -1708,6 +1710,10 @@ public class Box {
 
 Java will only provide a default constructor when no constructors are provided.
 
+#### Can one constructor call another constructor in the same class?
+
+**Pending...**
+
 #### What are static factory methods?
 
 The [first item in the Effective Java book](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev1) talks about static factory methods and recommends them over constructors.
@@ -2638,6 +2644,10 @@ Constructors can be `private` and if all constructors of a class are `private`, 
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
 
+### Can a subclass invoke the constructor of a superclass?
+
+**Pending...**
+
 ## Abstraction
 
 Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the something for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
@@ -2771,6 +2781,18 @@ public class Person {
   public String name;
   public String surname;
 
+  public Person() {
+    this( null );
+  }
+
+  public Person( final String name ) {
+    this( name, null );
+  }
+
+  public Person( final String name, final String surname ) {
+    this.name = name;
+    this.surname = surname;
+  }
 }
 ```
 
@@ -2809,6 +2831,12 @@ public class Person {
   public String name;
   public String surname;
 
+  public Person() { /*...*/ }
+
+  public Person( final String name ) { /*...*/ }
+
+  public Person( final String name, final String surname ) { /*...*/ }
+
   @Override
   public String toString() {
     final boolean hasName = !Strings.isNullOrEmpty( name );
@@ -2841,17 +2869,13 @@ public class App {
     final Person a = new Person();
     System.out.printf( "The person object: %s%n", a );
 
-    final Person b = new Person();
-    b.name = "Albert";
+    final Person b = new Person( "Albert" );
     System.out.printf( "The person object: %s%n", b );
 
-    final Person c = new Person();
-    c.surname = "Attard";
+    final Person c = new Person( null, "Attard" );
     System.out.printf( "The person object: %s%n", c );
 
-    final Person d = new Person();
-    d.name = "Albert";
-    d.surname = "Attard";
+    final Person d = new Person( "Albert", "Attard" );
     System.out.printf( "The person object: %s%n", d );
   }
 }
@@ -2873,9 +2897,170 @@ Following are two important points about the `toString()` method
 
 ### The equals() and hashCode() methods
 
-**Pending...**
+Consider the following example.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11)
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Albert" );
+    final Person b = new Person( "Albert" );
+
+    final boolean areEquals = a.equals( b );
+    System.out.printf( "Are the objects equal? %s%n", areEquals );
+  }
+}
+```
+
+We have two instances which have the same content.  What will the `equals()` method return?
+
+```bash
+Are the objects equal? false
+```
+
+Despite having the same contents, the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
+
+**⚠️ THE FOLLOWING EXAMPLE IS MISSING AN IMPORTANT METHOD.  DO NOT USE IT AS IS!!**
+
+```java
+package demo;
+
+import com.google.common.base.Strings;
+
+import java.util.Objects;
+
+public class Person {
+
+  public String name;
+  public String surname;
+
+  public Person() { /*...*/ }
+
+  public Person( final String name ) { /*...*/ }
+
+  public Person( final String name, final String surname ) { /*...*/ }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object ) {
+      return true;
+    }
+
+    if ( !( object instanceof Person ) ) {
+      return false;
+    }
+
+    final Person other = (Person) object;
+    return Objects.equals( name, other.name ) &&
+      Objects.equals( surname, other.surname );
+  }
+
+  @Override
+  public String toString() { /*...*/ }
+}
+```
+
+Now the two instance we had before can be properly compared using the `equals()` method.
+
+```bash
+Are the objects equal? true
+```
+
+The `equals()` is used a lot by the Java API in conjunction to the `hashCode()` method.  The relation between these two is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
+
+Failing to override the `hashCode()` will make our class incompatible with some Java API.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Albert" );
+    final Person b = new Person( "Mary" );
+
+    final List<Person> persons = List.of( a, b );
+    boolean containsAlbert = persons.contains( new Person( "Albert" ) );
+    boolean containsPeter = persons.contains( new Person( "Peter" ) );
+
+    System.out.printf( "List contains Albert? %s%n", containsAlbert );
+    System.out.printf( "List contains Peter? %s%n", containsPeter );
+  }
+}
+```
+
+The [list](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) relies on the `equals()` method to determine whether a person exists in the list or not.  The above will print.
+
+```bash
+List contains Albert? true
+List contains Peter? false
+```
+
+Now consider the following example.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Albert" );
+    final Person b = new Person( "Mary" );
+
+    final Set<Person> persons = new HashSet<>( List.of( a, b ) );
+    boolean containsAlbert = persons.contains( new Person( "Albert" ) );
+    boolean containsPeter = persons.contains( new Person( "Peter" ) );
+
+    System.out.printf( "List contains Albert? %s%n", containsAlbert );
+    System.out.printf( "List contains Peter? %s%n", containsPeter );
+  }
+}
+```
+
+The above example makes use of the [HashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  Running the above **may** produce the following output.
+
+```bash
+List contains Albert? false
+List contains Peter? false
+```
+
+Hash based functions, like the `HashSet`, rely on the `hashCode()` together with the `equals()` method.  Following is a better version of the `Person` class.
+
+```java
+package demo;
+
+import com.google.common.base.Strings;
+
+import java.util.Objects;
+
+public class Person {
+
+  public String name;
+  public String surname;
+
+  public Person() { /*...*/ }
+
+  public Person( final String name ) { /*...*/ }
+
+  public Person( final String name, final String surname ) { /*...*/ }
+
+  @Override
+  public boolean equals( final Object object ) { /*...*/ }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash( name, surname );
+  }
+
+  @Override
+  public String toString() { /*...*/ }
+}
+```
 
 ### Puzzle (Animal Farm)
 
