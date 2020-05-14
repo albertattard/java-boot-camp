@@ -891,7 +891,7 @@ The variable `nullVariable` is of type `Math` and is set to `null`.  Invoking th
 
 **Why this works and does not throw a `NullPointerException`?**
 
-The `max()` method is `static` which means it does not work with the *Java heap*.  `static` members are part of the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  `static` methods cannot access the object state in the same way the non-static (or instance) method do, thus `static` methods do not interact with the *Java heap*.
+The `max()` method is `static` which means it does not work with the *Java heap*.  `static` members are part of the class metadata, which is not saved in the *Java heap*, but elsewhere.  The class metadata is loaded **once** (per [classloader](https://docs.oracle.com/javase/tutorial/ext/basics/load.html)), which include all `static` fields and all methods definition.  `static` methods cannot access the object's state in the same way the non-static (or instance) method do, thus `static` methods do not interact with the *Java heap*.
 
 When the `max()` method is called in the above context, the `max()` method is simply loaded in the *Java stack* and executed and no interaction with the *Java heap* is made during this process.  When invoking an instance method, the object's state is also involved in the process, which is found in the *Java heap*.
 
@@ -899,7 +899,7 @@ The variable `nullVariable` is of type `Math` and can access any member that thi
 
 ### static Fields
 
-The Java API has a [`Point` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) that represents a point on a [cartesian plane](https://en.wikipedia.org/wiki/Cartesian_coordinate_system).
+The Java API has a [`Point` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) that can be used to represent a point on a [cartesian plane](https://en.wikipedia.org/wiki/Cartesian_coordinate_system).
 
 ```java
 package demo;
@@ -1020,7 +1020,7 @@ Therefore, there is only one copy of the `static` field, `name`.  If one modifie
 
 ## Access Control
 
-We know that the `Random` class created a pseudo random sequence.  This means that we can predict the next number to be drawn after making several observations.
+We know that the `Random` class prodicess a pseudo random sequence.  This means that a skilled attacker can predict the next number to be drawn after making several observations.
 
 Consider the following example.
 
@@ -1038,6 +1038,8 @@ public class Dice {
   public static final Random RANDOM_GENERATOR = new Random(1);
 }
 ```
+
+The above example makes use of static fields to highlight other problems that may be created when having fields marked as static.
 
 The `Random` object is initialised with a seed to simplify the example.  Both the `roll()` method and the `random` static field can be accessed from anywhere.  An attacker can take advantage of that and force the next dice roll to be a `6`.
 
@@ -1162,6 +1164,8 @@ src/main/java/demo/App.java:21: error: RANDOM_GENERATOR has private access in Di
 | `public`        | Anywhere        |
 | (no modifier)   | same package    |
 
+Note that inner classes are class members and thus do not make use of the above table.  Inner classes use the table shown in the [following section](#class-members-access-modifiers-table).
+
 ### Class Members Access Modifiers Table
 
 | Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
@@ -1285,7 +1289,7 @@ Let start by creating a basic object that will represent a box.  The box will no
     My box demo.Box@2ff4acd0
     ```
 
-1. Replace the [toString()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) method, so that we can print something more meaning full.
+1. Replace the [toString()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) method, so that we can print something more meaningful.
 
     ```java
     package demo;
@@ -1665,9 +1669,9 @@ public class Box {
 
 The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either *open* or *closed*).
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
-
 ```java
+/* ⚠️ THIS EXAMPLE DOES NOT COMPILE. */
+
 package demo;
 
 public class App {
