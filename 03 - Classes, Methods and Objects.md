@@ -35,7 +35,8 @@
     1. [Private Constructor](#private-constructor)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
-    1. [Final Classes](#final-classes)
+    1. [Can final classes be abstract?](#can-final-classes-be-abstract)
+    1. [Can abstract classes have private constructors?](#can-abstract-classes-have-private-constructors)
 1. [The Object Class](#the-object-class)
     1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
 1. [Interfaces](#interfaces)
@@ -49,7 +50,8 @@
     1. [Initialisation Block](#initialisation-block)
     1. [Static Initialisation Block](#static-initialisation-block)
     1. [Outer Class](#outer-class)
-    1. [Inner Class](#inner-class)
+    1. [Inner Instance Class](#inner-instance-class)
+    1. [Inner Static Class](#inner-static-class)
     1. [Inner Anonymous Class](#inner-anonymous-class)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
@@ -1669,9 +1671,9 @@ public class Box {
 
 The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either *open* or *closed*).
 
-```java
-/* ⚠️ THIS EXAMPLE DOES NOT COMPILE. */
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
 
+```java
 package demo;
 
 public class App {
@@ -2116,7 +2118,7 @@ public class App {
 
 The above will not compile as variable `a` is marked final which means that variable `a` cannot change its value.
 
-The `Box` object is mutable, which means we can modify its state.  While variable `a` is final, the object to which variable `a` points to is mutable and thus the object can be modified.
+The `Box` object is mutable, which means we can modify its state.  While variable `a` is `final`, the object to which variable `a` points to is mutable and thus the object can be modified.
 
 #### How can we create immutable objects?
 
@@ -2148,7 +2150,7 @@ The `Item` class shown above, represents an item and its weight as a property of
 
 Note that the above example has a constructor that takes the `weight` as its parameter.  The item's weight needs to be provided when the item is created as otherwise the `weight` property will not have a value.
 
-It is important to note that the objects may point to other objects.  Consider the following example.  Consider the following class.
+It is important to note that the objects may point to other objects.  Consider the following example.
 
 ```java
 package demo;
@@ -2245,7 +2247,7 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 
 ## Inheritance
 
-There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can take more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
+There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can contain more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
 ### Light Box Example
 
@@ -2262,7 +2264,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     public class LightBoxTest {
 
       @Test
-      @DisplayName( "should be empty when no items are placed" )
+      @DisplayName( "should be empty when a new light box is created and no items are placed" )
       public void shouldBeEmpty() {
         final LightBox box = new LightBox();
         assertTrue( box.isEmpty() );
@@ -2300,7 +2302,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     The `LightBox` [inherits from (or extends)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) `Box`, which is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html).
 
-    All `LightBox`es are `Box`es.
+    **All light boxes are boxes**.
 
     ```java
     package demo;
@@ -2320,14 +2322,14 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    All methods and state available to the `Box` is not also available to the `LightBox`.
+    All methods and state available to the `Box` is also available to the `LightBox`.
 
     ```bash
     Box a: an open box
     Box b: a closed box
     ```
 
-    Note that the opposite does not hold.  In other words, not all `Box`es are `LightBox`es.  Fruit is a good analogy to this.  All apples are fruit but not all fruit are apples.
+    Note that the opposite does not hold.  In other words, **NOT all boxes are light boxes**.  Fruit is a good analogy to this.  All apples are fruit but not all fruit is apples.  Shapes are another good example.  All circles are shape, but not all shapes are circle.
 
     The following will not compile.
 
@@ -2352,7 +2354,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     public class LightBoxTest {
 
       @Test
-      @DisplayName( "should not be empty when an item is placed in the box" )
+      @DisplayName( "should not be empty after an item is placed in the box" )
       public void shouldNotBeEmpty() {
         final LightBox box = new LightBox();
         box.putItem( 1 );
@@ -2503,14 +2505,14 @@ A heavy box is a box that can take more than one item.
     public class HeavyBoxTest {
 
       @Test
-      @DisplayName( "should be empty when no items are placed" )
+      @DisplayName( "should be empty when creating a new heavy box and no items are placed" )
       public void shouldBeEmpty() {
         final HeavyBox box = new HeavyBox();
         assertTrue( box.isEmpty() );
       }
 
       @Test
-      @DisplayName( "should not be empty when an item is placed in the box" )
+      @DisplayName( "should not be empty after an item is placed in the box" )
       public void shouldNotBeEmpty() {
         final HeavyBox box = new HeavyBox();
         box.addItem( 1 );
@@ -2599,8 +2601,12 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
 
       @Override
       public void setLabel( final String label ) {
-        Preconditions.checkArgument( Strings.nullToEmpty( label ).length() <= 32 );
+        Preconditions.checkArgument( isValidLabel( label ) );
         super.setLabel( label );
+      }
+
+      public static boolean isValidLabel( final String label ) {
+        return Strings.nullToEmpty( label ).length() <= 32;
       }
 
       /* Other members removed for brevity */
@@ -2626,7 +2632,7 @@ The `LightBox` class cannot be extended.
 
 ### Private Constructor
 
-Constructors can be `private` and if all constructors of a class are `private`, then this class cannot be extended.
+Constructors can be `private` and if all constructors of a class are `private`, then this class cannot be extended by other classes, with one exception ([discussed later on](#can-abstract-classes-have-private-constructors)).
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
 
@@ -2683,9 +2689,49 @@ public abstract class Box {
     }
     ```
 
-### Final Classes
+### Can final classes be abstract?
 
-A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be abstract.
+A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be `abstract`.  Either `final` or `abstract`, but not both.
+
+### Can abstract classes have private constructors?
+
+For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
+
+```java
+package demo;
+
+public class A {
+  private A() { }
+}
+```
+
+The class is not `final`, but still cannot be extended by another class as its only constructor is `private`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class B extends A {
+}
+```
+
+There are no constructors available to class `B` in the parent class `A`, therefor the above will not compile.  Consider the following example.
+
+```java
+package demo;
+
+public class A {
+
+  public static class C extends A {
+  }
+
+  private A() {
+  }
+}
+```
+
+The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
 
 ## The Object Class
 
@@ -2761,9 +2807,116 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 **Pending...**
 
-### Inner Class
+### Inner Instance Class
 
 **Pending...**
+
+### Inner Static Class
+
+**Pending...**
+
+Consider the following example.
+
+```java
+package demo;
+
+public abstract class Temperature {
+
+  private Temperature() { }
+
+  public abstract boolean isTooCold();
+
+  public abstract boolean isTooHot();
+
+
+  public static final Temperature FAHRENHEIT = new Fahrenheit();
+
+  public static final Temperature CELSIUS = new Celsius();
+
+  public static final Temperature KELVIN = new Kelvin();
+
+
+  private static class Fahrenheit extends Temperature { /*...*/ }
+
+  private static class Celsius extends Temperature { /*...*/ }
+
+  private static class Kelvin extends Temperature { /*...*/ }
+
+}
+```
+
+According to [wikipedia](https://en.wikipedia.org/wiki/Temperature), "_*temperature* is a physical property of matter that quantitatively expresses hot and cold_".  The `Temperature` class is an abstract class that defines two methods, `isTooCold()` and `isTooHot()`.  The temperature is measured (or represented) in *Fahrenheit*, *Celsius* or other units.
+
+The above example looks a lot like enums.  And that is correct.  It can be used in a similar way enums can be used.
+
+```java
+final Temperature t = Temperature.FAHRENHEIT;
+```
+
+This was an alternative to enums, before enums where supported by Java.  Note that the above approach cannot be used with a `switch` statement.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import static demo.Temperature.FAHRENHEIT;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Temperature t = FAHRENHEIT;
+    switch ( t ) {
+      case FAHRENHEIT:
+        System.out.println( "The temperature is in Fahrenheit!!" );
+    }
+  }
+}
+```
+
+The above approached can be relaxed a bit and allows the creation of different instances of temperature that contain the temperature value and contain different state (something that cannot be achieved with enums).
+
+```java
+package demo;
+
+public abstract class Temperature {
+
+  private Temperature() { /*...*/ }
+
+  public abstract boolean isTooCold();
+
+  public abstract boolean isTooHot();
+
+
+  public static Temperature withFahrenheit( double fahrenheit ) { /*...*/ }
+
+  public static Temperature withCelsius( double celsius ) { /*...*/ }
+
+  public static Temperature withKelvin( double kelvin ) { /*...*/ }
+
+
+  private static class Fahrenheit extends Temperature { /*...*/ }
+
+  private static class Celsius extends Temperature { /*...*/ }
+
+  private static class Kelvin extends Temperature { /*...*/ }
+}
+```
+
+The static factory methods can be used to create different variations of the `Temperature` class.
+
+```java
+package demo;
+
+import static demo.Temperature.withFahrenheit;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Temperature t = withFahrenheit( 68.8 );
+  }
+}
+```
+
+The `Temperature` class cannot be extended by an external class, which prevents some funny code added to the application.
 
 ### Inner Anonymous Class
 
