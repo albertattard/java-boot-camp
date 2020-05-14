@@ -949,10 +949,10 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final Person albert = new Person();
-    albert.name = "Albert";
+    final Person aden = new Person();
+    aden.name = "Aden";
 
-    System.out.printf( "Person name (albert): %s%n", albert.name );
+    System.out.printf( "Person name (aden): %s%n", aden.name );
   }
 }
 ```
@@ -960,7 +960,7 @@ public class App {
 The above creates an instance of the `Person` class and print it.
 
 ```bash
-Person name (albert): Albert
+Person name (aden): Albert
 ```
 
 Works!!  Let create a second instance of the `Person` class and print both instances.
@@ -971,14 +971,14 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final Person albert = new Person();
-    albert.name = "Albert";
+    final Person aden = new Person();
+    aden.name = "Aden";
 
-    final Person mary = new Person();
-    mary.name = "Mary";
+    final Person jade = new Person();
+    jade.name = "Jade";
 
-    System.out.printf( "Person name (albert): %s%n", albert.name );
-    System.out.printf( "Person name (mary): %s%n", mary.name );
+    System.out.printf( "Person name (aden): %s%n", aden.name );
+    System.out.printf( "Person name (jade): %s%n", jade.name );
   }
 }
 ```
@@ -986,8 +986,8 @@ public class App {
 The above will print the following.
 
 ```bash
-Person name (albert): Mary
-Person name (mary): Mary
+Person name (aden): Mary
+Person name (jade): Mary
 ```
 
 Oops!! What went wrong?  Why we are able to print two different points but not able to print two different persons?
@@ -2869,13 +2869,13 @@ public class App {
     final Person a = new Person();
     System.out.printf( "The person object: %s%n", a );
 
-    final Person b = new Person( "Albert" );
+    final Person b = new Person( "Aden" );
     System.out.printf( "The person object: %s%n", b );
 
     final Person c = new Person( null, "Attard" );
     System.out.printf( "The person object: %s%n", c );
 
-    final Person d = new Person( "Albert", "Attard" );
+    final Person d = new Person( "Aden", "Attard" );
     System.out.printf( "The person object: %s%n", d );
   }
 }
@@ -2904,8 +2904,8 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new Person( "Albert" );
-    final Person b = new Person( "Albert" );
+    final Person a = new Person( "Aden" );
+    final Person b = new Person( "Aden" );
 
     final boolean areEquals = a.equals( b );
     System.out.printf( "Are the objects equal? %s%n", areEquals );
@@ -2919,7 +2919,7 @@ We have two instances which have the same content.  What will the `equals()` met
 Are the objects equal? false
 ```
 
-Despite having the same name (`"Albert"`) and surname (`null`), the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
+Despite having the same name (`"Aden"`) and surname (`null`), the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
 
 **⚠️ THE FOLLOWING EXAMPLE IS MISSING AN IMPORTANT METHOD.  DO NOT USE IT AS IS!!**
 
@@ -2978,11 +2978,11 @@ import java.util.List;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new Person( "Albert" );
-    final Person b = new Person( "Mary" );
+    final Person a = new Person( "Aden" );
+    final Person b = new Person( "Jade" );
 
     final List<Person> persons = List.of( a, b );
-    boolean containsAlbert = persons.contains( new Person( "Albert" ) );
+    boolean containsAlbert = persons.contains( new Person( "Aden" ) );
     boolean containsPeter = persons.contains( new Person( "Peter" ) );
 
     System.out.printf( "List contains Albert? %s%n", containsAlbert );
@@ -3009,11 +3009,11 @@ import java.util.Set;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new Person( "Albert" );
-    final Person b = new Person( "Mary" );
+    final Person a = new Person( "Aden" );
+    final Person b = new Person( "Jade" );
 
     final Set<Person> persons = new HashSet<>( List.of( a, b ) );
-    boolean containsAlbert = persons.contains( new Person( "Albert" ) );
+    boolean containsAlbert = persons.contains( new Person( "Aden" ) );
     boolean containsPeter = persons.contains( new Person( "Peter" ) );
 
     System.out.printf( "List contains Albert? %s%n", containsAlbert );

@@ -1288,8 +1288,8 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final String name = "Mary";
-    final String[] names = { "Albert", "Mary", "Peter", "Jane" };
+    final String name = "Jade";
+    final String[] names = { "Aden", "Jade", "Peter", "Jane" };
     final int index = findIndexOf( names, name );
 
     if ( index == -1 ) {

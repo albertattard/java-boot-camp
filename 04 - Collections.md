@@ -1319,8 +1319,8 @@ import java.util.Map;
 public class App {
   public static void main( final String[] args ) {
     final Map<String, Integer> a = Map.of(
-      "Albert", 82,
-      "Mary", 92,
+      "Aden", 82,
+      "Jade", 92,
       "Peter", 74,
       "Jane", 68
     );
@@ -1395,16 +1395,16 @@ import java.util.Map;
 public class App {
   public static void main( final String[] args ) {
     final Map<String, Integer> a = new Hashtable<>();
-    a.put( "Albert", 82 );
-    a.put( "Mary", 92 );
+    a.put( "Aden", 82 );
+    a.put( "Jade", 92 );
     a.put( "Peter", 74 );
     a.put( "Jane", 68 );
 
     /* Update an existing entry */
-    a.put( "Albert", 72 );
+    a.put( "Aden", 72 );
 
     /* Only added if the key is not found */
-    a.putIfAbsent( "Mary", 0 );
+    a.putIfAbsent( "Jade", 0 );
     a.putIfAbsent( "John", 91 );
 
     System.out.printf( "Marks: %s%n", a );
@@ -1431,16 +1431,16 @@ import java.util.Map;
 public class App {
   public static void main( final String[] args ) {
     final Map<String, Integer> a = new HashMap<>();
-    a.put( "Albert", 82 );
-    a.put( "Mary", 92 );
+    a.put( "Aden", 82 );
+    a.put( "Jade", 92 );
     a.put( "Peter", 74 );
     a.put( "Jane", 68 );
 
     /* Update an existing entry */
-    a.put( "Albert", 72 );
+    a.put( "Aden", 72 );
 
     /* Only added if the key is not found */
-    a.putIfAbsent( "Mary", 0 );
+    a.putIfAbsent( "Jade", 0 );
     a.putIfAbsent( "John", 91 );
 
     System.out.printf( "Marks: %s%n", a );
@@ -1467,16 +1467,16 @@ import java.util.Map;
 public class App {
   public static void main( final String[] args ) {
     final Map<String, Integer> a = new LinkedHashMap<>();
-    a.put( "Albert", 82 );
-    a.put( "Mary", 92 );
+    a.put( "Aden", 82 );
+    a.put( "Jade", 92 );
     a.put( "Peter", 74 );
     a.put( "Jane", 68 );
 
     /* Update an existing entry */
-    a.put( "Albert", 72 );
+    a.put( "Aden", 72 );
 
     /* Only added if the key is not found */
-    a.putIfAbsent( "Mary", 0 );
+    a.putIfAbsent( "Jade", 0 );
     a.putIfAbsent( "John", 91 );
 
     System.out.printf( "Marks: %s%n", a );
@@ -1503,16 +1503,16 @@ import java.util.TreeMap;
 public class App {
   public static void main( final String[] args ) {
     final Map<String, Integer> a = new TreeMap<>();
-    a.put( "Albert", 82 );
-    a.put( "Mary", 92 );
+    a.put( "Aden", 82 );
+    a.put( "Jade", 92 );
     a.put( "Peter", 74 );
     a.put( "Jane", 68 );
 
     /* Update an existing entry */
-    a.put( "Albert", 72 );
+    a.put( "Aden", 72 );
 
     /* Only added if the key is not found */
-    a.putIfAbsent( "Mary", 0 );
+    a.putIfAbsent( "Jade", 0 );
     a.putIfAbsent( "John", 91 );
 
     System.out.printf( "Marks: %s%n", a );
@@ -1573,12 +1573,12 @@ public class App {
   public static void main( String[] args ) {
     final List<Person> list = new ArrayList<>();
 
-    final Person albert = new Person( "Albert" );
-    list.add( albert );
+    final Person aden = new Person( "Aden" );
+    list.add( aden );
 
-    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+    System.out.printf( "Is %s in the list? %s%n", aden, list.contains( aden ) );
 
-    final Person search = new Person( "Albert" );
+    final Person search = new Person( "Aden" );
     System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
   }
 }
@@ -1646,12 +1646,12 @@ public class App {
   public static void main( String[] args ) {
     final List<Person> list = new ArrayList<>();
 
-    final Person albert = new Person( "Albert" );
-    list.add( albert );
+    final Person aden = new Person( "Aden" );
+    list.add( aden );
 
-    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+    System.out.printf( "Is %s in the list? %s%n", aden, list.contains( aden ) );
 
-    final Person search = new Person( "Albert" );
+    final Person search = new Person( "Aden" );
     System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
   }
 }
@@ -1722,12 +1722,12 @@ public class App {
   public static void main( String[] args ) {
     final List<Person> list = new ArrayList<>();
 
-    final Person albert = new Person( "Albert" );
-    list.add( albert );
+    final Person aden = new Person( "Aden" );
+    list.add( aden );
 
-    System.out.printf( "Is %s in the list? %s%n", albert, list.contains( albert ) );
+    System.out.printf( "Is %s in the list? %s%n", aden, list.contains( aden ) );
 
-    final Person search = new Person( "Albert" );
+    final Person search = new Person( "Aden" );
     System.out.printf( "Is %s in the list? %s%n", search, list.contains( search ) );
   }
 }
