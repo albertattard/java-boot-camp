@@ -2767,7 +2767,7 @@ public class Person extends Object {
 }
 ```
 
-The `Person` class has not methods defined, yet the IDE still shows a list of methods we can use.
+The `Person` class has no methods defined, yet the IDE still shows a list of methods we can use.
 
 ![Methods Inherited from the Object Class](assets/images/Methods%20Inherited%20from%20the%20Object%20Class.png)
 
@@ -2811,7 +2811,7 @@ public class App {
 }
 ```
 
-The above prints the following, unuseful message.
+The above prints the following, unuseful, message.
 
 ```bash
 The person object: demo.Person@58372a00
@@ -2919,7 +2919,7 @@ We have two instances which have the same content.  What will the `equals()` met
 Are the objects equal? false
 ```
 
-Despite having the same contents, the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
+Despite having the same name (`"Albert"`) and surname (`null`), the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
 
 **⚠️ THE FOLLOWING EXAMPLE IS MISSING AN IMPORTANT METHOD.  DO NOT USE IT AS IS!!**
 
