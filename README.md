@@ -142,6 +142,8 @@ Boot Camp for developers interested to learn Java.
     1. [Can final classes be abstract?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-final-classes-be-abstract)
     1. [Can abstract classes have private constructors?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors)
 1. [The Object Class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#the-object-class)
+    1. [The toString() method](03%20-%20Classes%2C%20Methods%20and%20Objects.md#the-tostring-method)
+    1. [The equals() and hashCode() methods](03%20-%20Classes%2C%20Methods%20and%20Objects.md#the-equals-and-hashcode-methods)
     1. [Puzzle (Animal Farm)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#puzzle-animal-farm)
 1. [Interfaces](03%20-%20Classes%2C%20Methods%20and%20Objects.md#interfaces)
     1. [Default methods](03%20-%20Classes%2C%20Methods%20and%20Objects.md#default-methods)

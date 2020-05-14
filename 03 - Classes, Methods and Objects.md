@@ -38,6 +38,8 @@
     1. [Can final classes be abstract?](#can-final-classes-be-abstract)
     1. [Can abstract classes have private constructors?](#can-abstract-classes-have-private-constructors)
 1. [The Object Class](#the-object-class)
+    1. [The toString() method](#the-tostring-method)
+    1. [The equals() and hashCode() methods](#the-equals-and-hashcode-methods)
     1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
 1. [Interfaces](#interfaces)
     1. [Default methods](#default-methods)
@@ -2734,6 +2736,80 @@ public class A {
 The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
 
 ## The Object Class
+
+All roads lead to rome and all classes inherit from the `Object` class.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class Person {
+}
+```
+
+The `Person` class does not use the `extends` keyword.  By default, any classes that do not use the `extends` keyword extends the `Object` class.  The following example is equivalent to the above example.
+
+```java
+package demo;
+
+public class Person extends Object {
+}
+```
+
+The `Person` class has not methods defined, yet the IDE still shows a list of methods we can use.
+
+![Methods Inherited from the Object Class](assets/images/Methods%20Inherited%20from%20the%20Object%20Class.png)
+
+### The toString() method
+
+All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a string.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person();
+    System.out.printf( "The person object: %s%n", a );
+  }
+}
+```
+
+The above prints the following, unuseful message.
+
+```bash
+The person object: demo.Person@58372a00
+```
+
+The `toString()` method is used to convert our person object into a `String`.
+
+It is always recommended to override the `toString()` method and return something more useful.  [Item 12, titled Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book talks about this too.
+
+```java
+package demo;
+
+public class Person {
+  @Override
+  public String toString() {
+    return "The blank person class";
+  }
+}
+```
+
+Running the previous `App` example, will not print.
+
+```java
+The person object The blank person class
+```
+
+The `toString()` method is used a lot as a means of render a given object in to a friendly string.
+
+**Do not rely on the output of the `toString()` method as a source of structured data**.
+
+Say that we need to output our `Person` object as JSON.  Do not use the `toString()` method for that, but provide a custom method for that.
+
+### The equals() and hashCode() methods
 
 **Pending...**
 
