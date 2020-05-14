@@ -43,7 +43,8 @@
     1. [The toString() method](#the-tostring-method)
     1. [The equals() and hashCode() methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
-    1. [The wait() methods](#the-wait-methods)
+    1. [The getClass() method](#the-getclass-method)
+    1. [The wait() and notify() methods](#the-wait-and-notify-methods)
 1. [Interfaces](#interfaces)
     1. [Default methods](#default-methods)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
@@ -3093,7 +3094,11 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 1. "_If you ran the program, you found that it prints `false` and nothing else.  It doesn't print `Animals are equal: `.  How could it not print this string literal, which is right there in black and white?  The `+` operator, whether used for addition or string concatenation, binds more tightly than the `==` operator.  Therefore, the parameter of the println method is evaluated from left to right._"
 
-### The wait() methods
+### The getClass() method
+
+**Pending...**
+
+### The wait() and notify() methods
 
 Java supported multithreading since its early days.  Each object in Java has an intrinsic lock (aka monitor lock).  When working with threads, we can use any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()) to yield a lock and wait for something.
 
@@ -3127,7 +3132,9 @@ The above will pause for two seconds.
 [22:17:49.022350] Done
 ```
 
-Multitthreading is covered in detail, [in later sections](11%20-%20Concurrency.md).
+**Pending...**
+
+Multithreading is covered in detail, [in later sections](11%20-%20Concurrency.md).
 
 ## Interfaces
 
