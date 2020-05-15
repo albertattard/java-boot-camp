@@ -46,6 +46,9 @@
     1. [The getClass() method](#the-getclass-method)
     1. [The wait(), notify() and notifyAll() methods](#the-wait-notify-and-notifyall-methods)
 1. [Interfaces](#interfaces)
+    1. [What is an interface?](#what-is-an-interface)
+    1. [How is an interface different from a class?](#how-is-an-interface-different-from-a-class)
+    1. [How can we use interfaces?](#how-can-we-use-interfaces)
     1. [Default methods](#default-methods)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
 1. [Inheritance and Composition](#inheritance-and-composition)
@@ -3098,7 +3101,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### The getClass() method
 
-An object is an instance of a class.  Thus, all objects have a class and this can be retried using the `getClass()` method.  Consider the following example.
+An object is an instance of a class.  Thus, all objects have a class and this can be retrived using the `getClass()` method.  Consider the following example.
 
 ```java
 package demo;
@@ -3161,7 +3164,7 @@ Is the object (class java.awt.Point) of type Point? true
 Is the object (class java.util.Random) of type Point? false
 ```
 
-The `getClass()` method is sometimes used in the `equals()` methods when the class does not have subtypes (and to make the comparison more efficient).
+The `getClass()` method is sometimes used in the `equals()` method when the class does not have subtypes (and to make the comparison more efficient).
 
 ### The wait(), notify() and notifyAll() methods
 
@@ -3183,8 +3186,8 @@ public class App {
     callNext( a );
   }
 
-  private static void waitInLobby( Person a ) {
-    new Thread( () -> {
+  private static void waitInLobby( final Person a ) {
+    final Thread t = new Thread( () -> {
       display( "Waiting in the lobby for my name to be called" );
       synchronized ( a ) {
         try {
@@ -3192,7 +3195,8 @@ public class App {
         } catch ( InterruptedException e ) { }
       }
       display( "My name was called!!" );
-    }, "waiting in lobby" ).start();
+    }, "waiting in lobby" );
+    t.start();
   }
 
   private static void letSomeTimePass() {
@@ -3202,18 +3206,18 @@ public class App {
     } catch ( InterruptedException e ) { }
   }
 
-  private static void callNext( Person a ) {
+  private static void callNext( final Person a ) {
     synchronized ( a ) {
       displayf( "%s, the doctor is ready to see you", a );
       a.notifyAll();
     }
   }
 
-  private static void displayf( String pattern, Object... parameters ) {
+  private static void displayf( final String pattern, final Object... parameters ) {
     display( String.format( pattern, parameters ) );
   }
 
-  private static void display( String message ) {
+  private static void display( final String message ) {
     System.out.printf( "%s [%s] %s%n", LocalTime.now(), Thread.currentThread().getName(), message );
   }
 }
@@ -3236,7 +3240,7 @@ Break down of the above example.
 1. The `waitInLobby()` method is harder to understand.
 
     ```java
-    private static void waitInLobby( Person a ) {
+    private static void waitInLobby( final Person a ) {
       final Thread t = new Thread( () -> {
         display( "Waiting in the lobby to be called" );
         synchronized ( a ) {
@@ -3274,7 +3278,7 @@ Break down of the above example.
 1. The `callNext()` method obtains the lock on the person using the `synchronized` block and then invoked the `notifyAll()` method.
 
     ```java
-    private static void callNext( Person a ) {
+    private static void callNext( final Person a ) {
       synchronized ( a ) {
         displayf( "%s, the doctor is ready to see you", a );
         a.notifyAll();
@@ -3299,9 +3303,243 @@ The approach to multithreading in Java has been revised and a new concurrency AP
 
 ## Interfaces
 
-**Pending...**
+We can extend the Java language by adding new types.  So far we have created new classes ([as shown in the Simple objects section](#simple-objects)).
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev20)
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String[] names = { "Mary", "Aden", "Peter", "Jade", "Mario" };
+    Arrays.sort( names );
+    System.out.printf( "Sorted: %s", Arrays.toString( names ) );
+  }
+}
+```
+
+The `Arrays.sort()` method sorts the names alphabetically.
+
+```bash
+Sorted: [Aden, Jade, Mario, Mary, Peter]
+```
+
+Can we sort any array like that?  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ClassCastException!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point[] points = {
+      new Point( 1, 2 ),
+      new Point( 1, 3 ),
+      new Point( 2, 1 ),
+    };
+    Arrays.sort( points );
+    System.out.printf( "Sorted: %s", Arrays.toString( points ) );
+  }
+}
+```
+
+Unfortunately, running the above program will fail with `ClassCastException`.
+
+```bash
+Exception in thread "main" java.lang.ClassCastException: class java.awt.Point cannot be cast to class java.lang.Comparable (java.awt.Point is in module java.desktop of loader 'bootstrap'; java.lang.Comparable is in module java.base of loader 'bootstrap')
+	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
+	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
+	at java.base/java.util.Arrays.sort(Arrays.java:1040)
+	at demo.App.main(App.java:13)
+```
+
+How come the program was able to sort the array of string but not the array of points?
+
+The `sort()` method makes use of [the `Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) to compare and sort the array of strings.  The `Point` does not implement this interface and thus the `sort()` method cannot compare and sort the array of points.
+
+### What is an interface?
+
+Interfaces define types and can be use in a similar way classes and enums are used.
+
+```java
+package demo;
+
+public interface MyFirstInterface {
+}
+```
+
+Like other types, we can have variables of this interface type.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final MyFirstInterface a = null;
+  }
+
+  private static void useMyInterface( final MyFirstInterface a ) { /*...*/ }
+}
+```
+
+The above example is a bit useless as the interface does not define any methods.
+
+### How is an interface different from a class?
+
+In a class we can have methods, static fields, properties, enums and inner classes.  In an interface anything like a class with the exception of properties.  **An interface cannot have properties**.
+
+```java
+package demo;
+
+public interface MyFirstInterface {
+
+  int STATIC_FIELD = 7;
+
+  int anAbstractMethod();
+
+  default void anDefaultMethod() {
+    System.out.println( "Java 8 introduced default methods" );
+  }
+
+  static void aStaticMethod() {
+    System.out.println( "Java 8 introduced static methods" );
+  }
+}
+```
+
+Note that the static field, `STATIC_FIELD`, is not a property.  Upto Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces.
+
+### How can we use interfaces?
+
+Consider the following interface.
+
+```java
+package demo;
+
+public interface CanShoot {
+
+  void shoot();
+}
+```
+
+The above interface has one method, `shoot()`.  Methods in an interface are `public abstract` as shown next.
+
+```java
+package demo;
+
+public interface CanShoot {
+
+  public abstract void shoot();
+}
+```
+
+There is no need to include the `public` and `abstract` modifiers.
+
+Any class implementing this interface will have the `shoot()` method.
+
+```java
+package demo;
+
+public class Cannon implements CanShoot {
+
+  private double calibre;
+
+  @Override
+  public void shoot() {
+    System.out.println( "Boom..." );
+  }
+}
+```
+
+The above class represents a cannon and can be used as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( String[] args ) {
+    final CanShoot a = new Cannon();
+    a.shoot();
+  }
+}
+```
+
+We can now use a `Cannon` wherever we have a `CanShoot` type is required.
+
+Consider the following two classes.
+
+1. A footballer
+
+    ```java
+    package demo;
+
+    public class Footballer implements CanShoot {
+
+      private int shirtNumber;
+
+      @Override
+      public void shoot() {
+        System.out.println( "Near the pole, shooting...GOAL!!" );
+      }
+    }
+    ```
+
+1. A photographer
+
+    ```java
+    package demo;
+
+    public class Photographer implements CanShoot {
+
+      private String name;
+
+      @Override
+      public void shoot() {
+        System.out.println( "Smile...Ka-chick" );
+      }
+    }
+    ```
+
+All three classes shown implement the `CanShoot` interface and three provide a different implementation to the `shoot()` method.  A cannot fires a shell, the photographer takes photos while the footballer shoots to score.  This means that we can use any of these types wherever the `CanShoot` is required.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    run( new Cannon() );
+    run( new Footballer() );
+    run( new Photographer() );
+  }
+
+  private static void run( final CanShoot a ) {
+    a.shoot();
+  }
+}
+```
+
+Each implementation behaves in its own way.
+
+```bash
+Boom...
+Near the pole, shooting...GOAL!!
+Smile...Ka-chick
+```
+
+This is referred to [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)), where the implementation of a method is determined at runtime.
+
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
+1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
+1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
+1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
 
 ### Default methods
 
