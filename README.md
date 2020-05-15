@@ -53,7 +53,7 @@ Boot Camp for developers interested to learn Java.
     1. [Puzzle (What's my class, Take 2)](02%20-%20Data%20Types.md#puzzle-whats-my-class-take-2)
     1. [Mutable Strings](02%20-%20Data%20Types.md#mutable-strings)
         1. [Puzzle (No Pain, No Gain)](02%20-%20Data%20Types.md#puzzle-no-pain-no-gain)
-    1. [Multiline Strings](02%20-%20Data%20Types.md#multiline-strings)
+    1. [Text blocks and multiline strings](02%20-%20Data%20Types.md#text-blocks-and-multiline-strings)
     1. [Primitive Types](02%20-%20Data%20Types.md#primitive-types)
     1. [Signed and Unsigned Integrals](02%20-%20Data%20Types.md#signed-and-unsigned-integrals)
     1. [Reference Types (the rest)](02%20-%20Data%20Types.md#reference-types-the-rest)
@@ -107,6 +107,7 @@ Boot Camp for developers interested to learn Java.
     1. [Static Imports](02%20-%20Data%20Types.md#static-imports)
 1. [Date Time API](02%20-%20Data%20Types.md#date-time-api)
 1. [Internationalization](02%20-%20Data%20Types.md#internationalization)
+1. [Miscellaneous](02%20-%20Data%20Types.md#miscellaneous)
 
 ### [Classes, Methods and Objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md)
 
@@ -179,6 +180,9 @@ Boot Camp for developers interested to learn Java.
     1. [Project Lombok](03%20-%20Classes%2C%20Methods%20and%20Objects.md#project-lombok)
 1. [Generics](03%20-%20Classes%2C%20Methods%20and%20Objects.md#generics)
 1. [Miscellaneous](03%20-%20Classes%2C%20Methods%20and%20Objects.md#miscellaneous)
+    1. [Objects have two words headers](03%20-%20Classes%2C%20Methods%20and%20Objects.md#objects-have-two-words-headers)
+    1. [Records](03%20-%20Classes%2C%20Methods%20and%20Objects.md#records)
+    1. [Others](03%20-%20Classes%2C%20Methods%20and%20Objects.md#others)
 
 ### [Collections](04%20-%20Collections.md)
 
@@ -230,6 +234,7 @@ Boot Camp for developers interested to learn Java.
     1. [Stacks](04%20-%20Collections.md#stacks)
 1. [Java Collections Framework](04%20-%20Collections.md#java-collections-framework)
 1. [Google Guava (Collections)](04%20-%20Collections.md#google-guava-collections)
+1. [Miscellaneous](04%20-%20Collections.md#miscellaneous)
 
 ### [Control Flow](05%20-%20Control%20Flow.md)
 

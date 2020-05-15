@@ -146,3 +146,4 @@ Cost of context switching
 ## Miscellaneous
 
 1. `InterruptedException`
+1. [Flow](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/Flow.html)

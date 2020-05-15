@@ -74,6 +74,9 @@
     1. [Project Lombok](#project-lombok)
 1. [Generics](#generics)
 1. [Miscellaneous](#miscellaneous)
+    1. [Objects have two words headers](#objects-have-two-words-headers)
+    1. [Records](#records)
+    1. [Others](#others)
 
 ## Setup
 
@@ -4355,7 +4358,7 @@ public void linkToRawType(Callable callable) { /**/ }
 
 ## Miscellaneous
 
-Objects have two words headers
+### Objects have two words headers
 
 1. Mark word
     1. For locking object
@@ -4373,3 +4376,17 @@ Arrays have three words
     1. Mark word
     1. Klass word
     1. The length of the array.
+
+### Records
+
+1. [https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html)
+1. [https://docs.oracle.com/javase/specs/jls/se14/preview/specs/records-jls.html](https://docs.oracle.com/javase/specs/jls/se14/preview/specs/records-jls.html)
+
+### Others
+
+1. [Properties](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Properties.html) is a bad example of inheritance.  Recent versions of Java address this issue
+1. [Stack](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html) and [Queue](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Queue.html) extend [Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html).
+1. It is bad to call instance methods from within constructors
+1. Use *this* and *that* when comparing
+1. Desctructors
+1. Should we talk about method linking?

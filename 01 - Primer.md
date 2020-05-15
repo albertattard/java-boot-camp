@@ -75,7 +75,7 @@ These specifications are not always easy to read and not meant as a beginner's t
 
 #### 🤔 Given that the specification is hard to read and understand, why should I care?
 
-With the understanding that this may be too technical and do not worry if you do not understand any of this. 
+With the understanding that this may be too technical and do not worry if you do not understand any of this.
 
 Consider the following code fragment.
 
