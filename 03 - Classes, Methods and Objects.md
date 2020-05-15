@@ -848,6 +848,8 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
 We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.  This is beyond the scope of this exercise and is covered in detail in the [testing section](06%20-%20Testing.md).
 
+Martin Fowler talks in more depth about this topic in his [StaticSubstitution article](https://martinfowler.com/bliki/StaticSubstitution.html).
+
 ### What does static mean?
 
 When a class member (field or method) is marked `static`, that means that this member belongs to the class and not to any instance.  When the `roll()` was `static`, we were able to call it through the `Dice` class name.
@@ -3096,9 +3098,73 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### The getClass() method
 
-**Pending...**
+An object is an instance of a class.  Thus, all objects have a class and this can be retried using the `getClass()` method.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Object a = new Point( 1, 2 );
+    final Object b = new Random();
+
+    printType( a );
+    printType( b );
+  }
+
+  private static void printType( Object o ) {
+    System.out.printf( "The object's is of type %s%n", o.getClass() );
+  }
+}
+```
+
+The above will print
+
+```bash
+The object's is of type class java.awt.Point
+The object's is of type class java.util.Random
+```
+
+The class of any type can be obtained from the actual class.  For example, we can obtain the class of the point class using the `Point.class` static field.  All classes have a `class` static field available.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Object a = new Point( 1, 2 );
+    final Object b = new Random();
+
+    isOfPointType( a );
+    isOfPointType( b );
+  }
+
+  private static void isOfPointType( final Object a ) {
+    final boolean isSameClass = Point.class == a.getClass();
+    System.out.printf( "Is the object (%s) of type Point? %s%n", a.getClass(), isSameClass );
+  }
+}
+```
+
+The above will print
+
+```bash
+Is the object (class java.awt.Point) of type Point? true
+Is the object (class java.util.Random) of type Point? false
+```
+
+The `getClass()` method is sometimes used in the `equals()` methods when the class does not have subtypes (and to make the comparison more efficient).
 
 ### The wait(), notify() and notifyAll() methods
+
 Java supported multithreading since its early days.  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic and wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
 The following example simulates a patient visiting the doctor and waiting for their name to be called.  The following example make use of multithreading, [an advance topic which is still be covered](11%20-%20Concurrency.md).

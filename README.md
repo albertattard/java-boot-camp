@@ -10,6 +10,7 @@ Boot Camp for developers interested to learn Java.
     1. [What is Java?](01%20-%20Primer.md#what-is-java)
     1. [How do we develop Java Applications?](01%20-%20Primer.md#how-do-we-develop-java-applications)
 1. [Java Language Specification](01%20-%20Primer.md#java-language-specification)
+    1. [Given that the specification is hard to read and understand, why should I care?](01%20-%20Primer.md#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
 1. [Setup Environment (SDKMAN)](01%20-%20Primer.md#setup-environment-sdkman)
 1. [Gradle and Maven](01%20-%20Primer.md#gradle-and-maven)
     1. [Advantages of Gradle over Maven](01%20-%20Primer.md#advantages-of-gradle-over-maven)

@@ -6,6 +6,7 @@
     1. [What is Java?](#what-is-java)
     1. [How do we develop Java Applications?](#how-do-we-develop-java-applications)
 1. [Java Language Specification](#java-language-specification)
+    1. [Given that the specification is hard to read and understand, why should I care?](#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
     1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
@@ -66,9 +67,15 @@ It is important to note that to develop and compile Java source code you need to
 
 ## Java Language Specification
 
-The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the Java language specification.
+The [Java Language Specification (JLS)](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the Java language specification.
 
-With the understanding that this may be too technical, consider the following code fragment.
+The specification is the authority on language behaviour, but it is terse and not user-friendly.  If you are ever in any doubt about the behaviour of Java code, the specification provides the definitive answer.
+
+These specifications are not always easy to read and not meant as a beginner's tutorial.
+
+### Given that the specification is hard to read and understand, why should I care?
+
+**With the understanding that this may be too technical**, consider the following code fragment.
 
 ```java
 int a = -7;
@@ -92,8 +99,6 @@ That is very misleading.  This operator's real functionality is explained in the
 "_Unary numeric promotion ([§5.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6)) is performed on the operand. The type of the unary plus expression is the promoted type of the operand. The result of the unary plus expression is not a variable, but a value, even if the result of the operand expression is a variable._"
 
 In other words, variables of types `byte`, `short` and `char` are promoted to type `int`.  The previous example will simply print `-7`.
-
-These specifications are not always easy to read and not meant as a beginner's tutorial.
 
 ### Recommended Reading
 
