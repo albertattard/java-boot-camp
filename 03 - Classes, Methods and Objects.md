@@ -44,7 +44,7 @@
     1. [The equals() and hashCode() methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The getClass() method](#the-getclass-method)
-    1. [The wait() and notify() methods](#the-wait-and-notify-methods)
+    1. [The wait(), notify() and notifyAll() methods](#the-wait-notify-and-notifyall-methods)
 1. [Interfaces](#interfaces)
     1. [Default methods](#default-methods)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
@@ -3098,11 +3098,10 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 **Pending...**
 
-### The wait() and notify() methods
+### The wait(), notify() and notifyAll() methods
+Java supported multithreading since its early days.  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic and wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
-Java supported multithreading since its early days.  Each object in Java has an intrinsic lock (aka monitor lock).  When working with threads, we can use any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()) to yield a lock and wait for something.
-
-The `wait()` methods need to be within a `synchronized` block on the same object as shown in the following example.
+The following example simulates a patient visiting the doctor and waiting for their name to be called.  The following example make use of multithreading, [an advance topic which is still be covered](11%20-%20Concurrency.md).
 
 ```java
 package demo;
@@ -3113,28 +3112,124 @@ public class App {
   public static void main( final String[] args ) {
     final Person a = new Person( "Aden" );
 
-    System.out.printf( "[%s] Waiting for 2 seconds...%n", LocalTime.now() );
-    synchronized ( a ) {
-      try {
-        a.wait( 2000 );
-      } catch ( InterruptedException e ) {
+    waitInLobby( a );
+    letSomeTimePass();
+    callNext( a );
+  }
+
+  private static void waitInLobby( Person a ) {
+    new Thread( () -> {
+      display( "Waiting in the lobby for my name to be called" );
+      synchronized ( a ) {
+        try {
+          a.wait();
+        } catch ( InterruptedException e ) { }
       }
+      display( "My name was called!!" );
+    }, "waiting in lobby" ).start();
+  }
+
+  private static void letSomeTimePass() {
+    try {
+      display("letting some time pass…");
+      Thread.sleep( 500 );
+    } catch ( InterruptedException e ) { }
+  }
+
+  private static void callNext( Person a ) {
+    synchronized ( a ) {
+      displayf( "%s, the doctor is ready to see you", a );
+      a.notifyAll();
     }
-    System.out.printf( "[%s] Done%n", LocalTime.now() );
+  }
+
+  private static void displayf( String pattern, Object... parameters ) {
+    display( String.format( pattern, parameters ) );
+  }
+
+  private static void display( String message ) {
+    System.out.printf( "%s [%s] %s%n", LocalTime.now(), Thread.currentThread().getName(), message );
   }
 }
 ```
 
-The above will pause for two seconds.
+Break down of the above example.
+
+1. The `main()` method is fairly straight forward.  An object of type `Person` is created and passed to the `waitInLobby()` method.  The `letSomeTimePass()` method is called next followed by the `callNext()` method.
+
+    ```java
+    public static void main( final String[] args ) {
+      final Person a = new Person( "Aden" );
+
+      waitInLobby( a );
+      letSomeTimePass();
+      callNext( a );
+    }
+    ```
+
+1. The `waitInLobby()` method is harder to understand.
+
+    ```java
+    private static void waitInLobby( Person a ) {
+      final Thread t = new Thread( () -> {
+        display( "Waiting in the lobby to be called" );
+        synchronized ( a ) {
+          try {
+            a.wait();
+          } catch ( InterruptedException e ) { }
+        }
+        display( "My name was called!!" );
+      }, "waiting in lobby" );
+      t.start();
+    }
+    ```
+
+    The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the `notify()` or `notifyAll()` methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
+
+    The `wait()` method need to be invoked within a `synchronized` block.  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
+
+    The `wait()` method will pause the current thread indefinitely.  The overloaded versions of this method provide a timeout to prevent threads from hanging there forever.
+
+    Like most of the concurrent operations, the `wait()` method may throw an `InterruptedException` if it is interrupted while waiting which need to be caught.  Using the `wait()` method outside a `synchronized` block will throw an `IllegalMonitorStateException`.
+
+1. The `letSomeTimePass()` pauses the current thread for 500 milliseconds.
+
+    ```java
+    private static void letSomeTimePass() {
+      try {
+        display("letting some time pass…");
+        Thread.sleep( 500 );
+      } catch ( InterruptedException e ) { }
+    }
+    ```
+
+    Similar to the `wait()` method, the thread which is sleeping may be interrupted, in which case an `InterruptedException` is thrown.
+
+1. The `callNext()` method obtains the lock on the person using the `synchronized` block and then invoked the `notifyAll()` method.
+
+    ```java
+    private static void callNext( Person a ) {
+      synchronized ( a ) {
+        displayf( "%s, the doctor is ready to see you", a );
+        a.notifyAll();
+      }
+    }
+    ```
+
+    The `notifyAll()` method notifies all threads that the object (the object to which variable `a` points to) is ready to wake up and resume operation.  This will cause the `wait()` method to stop waiting and unblocks the other thread (created in the `waitInLobby()` method).  The `notify()` method behaves similarly to the `notifyAll()` with the difference that only one thread is notified and not all threads.  If the notified thread is not the right thread (not the thread that was blocked waiting), then the notification is lost, and the blocked thread will hang waiting forever.  It is always recommended to use the `notifyAll()` method instead of the `notify()` method.
+
+The example prints the following.
 
 ```bash
-[22:17:46.994169] Waiting for 2 seconds...
-[22:17:49.022350] Done
+12:34:56.000022 [waiting in lobby] Waiting in the lobby for my name to be called
+12:34:56.000000 [main] letting some time pass…
+12:34:56.482630 [main] Aden, the doctor is ready to see you
+12:34:56.483048 [waiting in lobby] My name was called!!
 ```
 
-**Pending...**
+A small observation regarding the messages order.  Note that the second message happened before the first message by some nano seconds, yet it appears after the first message.  Note that the text within the square brackets, `waiting in lobby` and `main`, represents the thread's name from where the message is printed.  The example made use of two threads, the main thread and a second thread, named `waiting in lobby`.
 
-Multithreading is covered in detail, [in later sections](11%20-%20Concurrency.md).
+The approach to multithreading in Java has been revised and a new concurrency API was added to the language.  The new concurrency API provider better concurrency primitives and is always recommended over intrinsic locking, shown above.  Concurrency is covered in detail, [in later sections](11%20-%20Concurrency.md).
 
 ## Interfaces
 
