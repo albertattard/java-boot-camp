@@ -3098,7 +3098,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### The getClass() method
 
-An object is an instance of a class.  Thus, all objects have a class and this can be retried using the `getClass()` method.
+An object is an instance of a class.  Thus, all objects have a class and this can be retried using the `getClass()` method.  Consider the following example.
 
 ```java
 package demo;
@@ -3129,7 +3129,7 @@ The object's is of type class java.awt.Point
 The object's is of type class java.util.Random
 ```
 
-The class of any type can be obtained from the actual class.  For example, we can obtain the class of the point class using the `Point.class` static field.  All classes have a `class` static field available.
+The class, of any type, can be also obtained from the actual class.  For example, we can obtain the class of the `Point` class using the `Point.class` static field.  All classes have a static field named `class`.  The class itself is represented as a Java object in Java.
 
 ```java
 package demo;
