@@ -1719,7 +1719,7 @@ public class Box {
   public Box() {
   }
 
-  public Box( boolean open ) {
+  public Box( final boolean open ) {
     this.open = open;
   }
 
@@ -1808,7 +1808,7 @@ public MagicBox() {
 }
 ```
 
-The call `this( null )` matches both the constructors that have one reference type constructor.
+The call `this( null )` matches both the constructors that have one reference type parameter.
 
 1. The one that takes a `String`
 
@@ -1830,13 +1830,20 @@ There are several ways to address this problem.  Three of which are listed below
 
 1. The default constructor can do nothing as by default the properties will be set to `null`.
 
-1. We can cast the `null` to either `String` or `Point`
+    ```java
+    public MagicBox() {
+    }
+    ```
+
+1. We can cast the `null` to either a `String` as shown next or a `Point`
 
     ```java
     public MagicBox() {
       this( (String) null );
     }
     ```
+
+    [Casting is covered in depth later on](#instanceof-and-cast-operators).
 
 1. Alternatively the default constructor can invoke the constructor that takes two parameters.
 
@@ -1909,7 +1916,7 @@ public class BoxDimensions {
 }
 ```
 
-Both constructors have the same signature, thus Java cannot tell apart.  Consider the following code fragment.
+Both constructors have the same signature, thus the Java compiler cannot tell apart.  Consider the following code fragment.
 
 ```java
 new BoxDimensions(7, 3);
@@ -1925,9 +1932,23 @@ public BoxDimensions( int base, float height ) { /*...*/ }
 public BoxDimensions( int side, int depth ) { /*...*/ }
 ```
 
-The above code fragment uses `float` to differentiate between the constructors.  This will work, but we have better options and is only mentioned here so that you are aware of it.
+The above code fragment uses `float` to differentiate between the constructors.
 
-`static` methods can be used to create an instance of the same class.  These are referred to as **static factory methods**.
+1. Calls the *base* and *height* version of the constructor.
+
+    ```java
+    new BoxDimensions(1, 2F);
+    ```
+
+1. Calls the *side* and *depth* version of the constructor.
+
+    ```java
+    new BoxDimensions(1, 1);
+    ```
+
+This will work, but we have better options and is only mentioned here so that you are aware of it.
+
+Static methods can be used to create an instance of the same class.  These are referred to as **static factory methods**.
 
 ```java
 public static BoxDimensions withBaseAndHeight( int base, int height ) {
@@ -1935,7 +1956,7 @@ public static BoxDimensions withBaseAndHeight( int base, int height ) {
 }
 ```
 
-Methods are more flexible with names compared to constructors and we can use a meaningful name.  Note that we can create an instance of any class from anywhere we need (given that we are allowed to do so).
+Methods are more flexible with names compared to constructors and we can use a meaningful name.  Note that we can create an instance of any class from anywhere we need (given that we are [allowed to do so](#access-control)).
 
 ```java
 package demo;
@@ -1969,7 +1990,7 @@ Boxes have labels printed on the sides.  The label is a simple text identifying 
 1. `To be processed by Dept. XYZ`
 1. `Need to be rechecked by MNO`
 
-A box always has a label which is initially set to: `No label`.  **Note that the label cannot be blank/empty**.
+A box always has a label which is initially set to: `No label`.  **Note that the label cannot be blank or empty**.
 
 The label can be represented by the `String` data-type.
 
@@ -1978,10 +1999,22 @@ The label can be represented by the `String` data-type.
     ```java
     package demo;
 
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
     import static org.junit.jupiter.api.Assertions.assertEquals;
-    /* Other imports removed for brevity */
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /*...*/ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /*...*/ }
 
       @Test
       @DisplayName( "should have a default label value of 'No Label'" )
@@ -1989,8 +2022,6 @@ The label can be represented by the `String` data-type.
         final Box box = new Box();
         assertEquals( "No Label", box.getLabel() );
       }
-
-      /* Other test removed for brevity */
     }
     ```
 
@@ -2001,11 +2032,24 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
+      private boolean open;
+
+      public Box() { /*...*/ }
+
+      public Box( final boolean open ) { /*...*/ }
+
+      public void open() { /*...*/ }
+
+      public void close() { /*...*/ }
+
+      public boolean isOpen() { /*...*/ }
+
       public String getLabel() {
         return "No Label";
       }
 
-      /* Other members removed for brevity */
+      @Override
+      public String toString() { /*...*/ }
     }
     ```
 
