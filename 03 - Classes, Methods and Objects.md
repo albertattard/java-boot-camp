@@ -2368,7 +2368,7 @@ Box: a closed box labelled 'No Label'
 Box: an open box labelled 'No Label'
 ```
 
-The variable `a` is immutable and cannot be modified.  We cannot create a new `Box` and assign it to the variable `a`.
+The variable `a` is immutable and cannot be modified.  We cannot create a new `Box` and assign it to the variable `a` or set the variable `a` to `null`.
 
 ⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!
 
@@ -2613,17 +2613,24 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
 1. Add the ability to add an item's id (of type `long`) to the `LightBox`.
 
-    **The light box should not be empty (the `isEmpty()` function should return `false`) once an item is placed in the box**.
+    **The light box should not be empty (the `isEmpty()` method should return `false`) once an item is placed in the box**.
 
     Create the test
 
     ```java
     package demo;
 
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
     import static org.junit.jupiter.api.Assertions.assertFalse;
-    /* Other imports removed for brevity */
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when a new light box is created and no items are placed" )
+      public void shouldBeEmpty() { /*...*/ }
 
       @Test
       @DisplayName( "should not be empty after an item is placed in the box" )
@@ -2632,8 +2639,6 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         box.putItem( 1 );
         assertFalse( box.isEmpty() );
       }
-
-      /* Other test removed for brevity */
     }
     ```
 
@@ -2644,10 +2649,10 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class LightBox extends Box {
 
+      public boolean isEmpty() { /*...*/ }
+
       public void putItem( final long itemId ) {
       }
-
-      /* Other method removed for brevity */
     }
     ```
 
