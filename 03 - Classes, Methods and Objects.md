@@ -5,32 +5,34 @@
 ## TOC
 
 1. [Setup](#setup)
-1. [Anatomy of a Java Class](#anatomy-of-a-java-class)
+1. [Anatomy of a Java class](#anatomy-of-a-java-class)
     1. [Terms](#terms)
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
     1. [Is void a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
-1. [How can we test functionality that makes use of static methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
-    1. [What does static mean?](#what-does-static-mean)
-    1. [static Fields](#static-fields)
-1. [Access Control](#access-control)
-    1. [Classes Access Modifiers Table](#classes-access-modifiers-table)
-    1. [Class Members Access Modifiers Table](#class-members-access-modifiers-table)
-1. [Simple Objects](#simple-objects)
-    1. [Basic Object](#basic-object)
-    1. [Add State](#add-state)
+1. [How can we test functionality that makes use of `static` methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
+    1. [What does `static` mean?](#what-does-static-mean)
+    1. [`static` fields](#static-fields)
+1. [Access control](#access-control)
+    1. [Classes access modifiers table](#classes-access-modifiers-table)
+    1. [Class members access modifiers table](#class-members-access-modifiers-table)
+    1. [Which access modifier should I pick?](#which-access-modifier-should-i-pick)
+1. [Simple objects](#simple-objects)
+    1. [Basic object](#basic-object)
+    1. [Add state](#add-state)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
-    1. [Multiple Instances](#multiple-instances)
+    1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
     1. [Constructors](#constructors)
         1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
         1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
         1. [What are static factory methods?](#what-are-static-factory-methods)
-    1. [More State](#more-state)
-    1. [Mutable and Immutable](#mutable-and-immutable)
+    1. [More state](#more-state)
+        1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
+    1. [Mutable and immutable](#mutable-and-immutable)
         1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
 1. [Inheritance](#inheritance)
-    1. [Light Box Example](#light-box-example)
-    1. [Heavy Box Example](#heavy-box-example)
+    1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
+    1. [Heavy box complete example](#heavy-box-complete-example)
     1. [The `super` keyword](#the-super-keyword)
     1. [The `final` keyword](#the-final-keyword)
     1. [Private Constructor](#private-constructor)
@@ -39,12 +41,12 @@
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can final classes be abstract?](#can-final-classes-be-abstract)
     1. [Can abstract classes have private constructors?](#can-abstract-classes-have-private-constructors)
-1. [The Object Class](#the-object-class)
-    1. [The toString() method](#the-tostring-method)
-    1. [The equals() and hashCode() methods](#the-equals-and-hashcode-methods)
+1. [The `Object` class](#the-object-class)
+    1. [The `toString()` method](#the-tostring-method)
+    1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
-    1. [The getClass() method](#the-getclass-method)
-    1. [The wait(), notify() and notifyAll() methods](#the-wait-notify-and-notifyall-methods)
+    1. [The `getClass()` method](#the-getclass-method)
+    1. [The `wait()`, `notify()` and `notifyAll()` methods](#the-wait-notify-and-notifyall-methods)
 1. [Interfaces](#interfaces)
     1. [What is an interface?](#what-is-an-interface)
     1. [How is an interface different from a class?](#how-is-an-interface-different-from-a-class)
@@ -53,20 +55,20 @@
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](#what-is-the-relation-between-lambda-and-functional-interfaces)
-    1. [How can we sort the Point class?](#how-can-we-sort-the-point-class)
-    1. [Default and Static methods](#default-and-static-methods)
-1. [instanceof and cast operators](#instanceof-and-cast-operators)
-1. [Inheritance and Composition](#inheritance-and-composition)
-1. [Overloading and Overriding](#overloading-and-overriding)
+    1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
+    1. [`default` and `static` methods](#default-and-static-methods)
+1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
+1. [Inheritance and composition](#inheritance-and-composition)
+1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
     1. [Overriding](#overriding)
-1. [Initialisation Blocks, Outer, Inner and Anonymous Classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
-    1. [Initialisation Block](#initialisation-block)
-    1. [Static Initialisation Block](#static-initialisation-block)
-    1. [Outer Class](#outer-class)
-    1. [Inner Instance Class](#inner-instance-class)
-    1. [Inner Static Class](#inner-static-class)
-    1. [Inner Anonymous Class](#inner-anonymous-class)
+1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
+    1. [Initialisation block](#initialisation-block)
+    1. [`static` initialisation block](#static-initialisation-block)
+    1. [Outer class](#outer-class)
+    1. [Inner instance class](#inner-instance-class)
+    1. [Inner static class](#inner-static-class)
+    1. [Inner anonymous class](#inner-anonymous-class)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
 1. [Generics](#generics)
@@ -82,7 +84,7 @@
 
 1. Open the repo in IDE
 
-## Anatomy of a Java Class
+## Anatomy of a Java class
 
 **The scope of this section is to provide a bird's-eye view of the Java class without diving in any particular depths**.
 
@@ -564,7 +566,7 @@ public class Dice {
 
     Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
 
-## How can we test functionality that makes use of static methods?
+## How can we test functionality that makes use of `static` methods?
 
 **The scope of this section is to highlight shortcomings of static methods and while itt refers to objects it is not a comprehensive guide to OOP.**  OOP is discussed in depth in the following sections.
 
@@ -858,7 +860,7 @@ We can continue refactoring the application and provide a test double for the `D
 
 Martin Fowler talks in more depth about this topic in his [StaticSubstitution article](https://martinfowler.com/bliki/StaticSubstitution.html).
 
-### What does static mean?
+### What does `static` mean?
 
 When a class member (field or method) is marked `static`, that means that this member belongs to the class and not to any instance.  When the `roll()` was `static`, we were able to call it through the `Dice` class name.
 
@@ -915,7 +917,7 @@ When the `max()` method is called in the above context, the `max()` method is si
 
 The variable `nullVariable` is of type `Math` and can access any member that this type defines.  The `Math` class has the `max()` `static` method which can be access or through the `Math` class name or through a variable of type `Math`.
 
-### static Fields
+### `static` fields
 
 The Java API has a [`Point` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) that can be used to represent a point on a [cartesian plane](https://en.wikipedia.org/wiki/Cartesian_coordinate_system).
 
@@ -1036,9 +1038,9 @@ Therefore, there is only one copy of the `static` field, `name`.  If one modifie
 
 ![Access static field through class name](assets/images/Access%20static%20field%20through%20class%20name.png)
 
-## Access Control
+## Access control
 
-We know that the `Random` class prodicess a pseudo random sequence.  This means that a skilled attacker can predict the next number to be drawn after making several observations.
+We know that the `Random` class produces a pseudo random sequence.  This means that a skilled attacker can predict the next number to be drawn after making several observations.
 
 Consider the following example.
 
@@ -1175,7 +1177,7 @@ src/main/java/demo/App.java:21: error: RANDOM_GENERATOR has private access in Di
           ^
 ```
 
-### Classes Access Modifiers Table
+### Classes access modifiers table
 
 | Access Modifier | Accessible From |
 |-----------------|-----------------|
@@ -1184,7 +1186,7 @@ src/main/java/demo/App.java:21: error: RANDOM_GENERATOR has private access in Di
 
 Note that inner classes are class members and thus do not make use of the above table.  Inner classes use the table shown in the [following section](#class-members-access-modifiers-table).
 
-### Class Members Access Modifiers Table
+### Class members access modifiers table
 
 | Access Modifier | From Same Class | From Same Package | From Subclass | From Anywhere |
 |-----------------|:---------------:|:-----------------:|:-------------:|:-------------:|
@@ -1269,11 +1271,15 @@ Despite being a different class within the same package, the inner anonymous cla
 
 More information about [access control can be found in this tutorial](https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html).
 
-## Simple Objects
+### Which access modifier should I pick?
+
+Always start with the least visible access modifier, `private`, and then increase the visibility only if required.  Remember that once you make something `public` it may be impossible to reduce its visibility.
+
+## Simple objects
 
 The post-office is automating the packaging of letters or items into boxes and is creating a program to handles this.  There are two types of boxes, the light boxes and the heavy boxes.  The light boxes only take one item in them whereas the heavy boxes can take as many items as it can fit.
 
-### Basic Object
+### Basic object
 
 Let start by creating a basic object that will represent a box.  The box will not have any functionality.  Do not worry about light and heavy boxes just yet.
 
@@ -1332,7 +1338,7 @@ Let start by creating a basic object that will represent a box.  The box will no
     My box a basic box
     ```
 
-### Add State
+### Add state
 
 A box may be open or may be closed.  The program needs to determine whether the box is open or closed before putting things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
 
@@ -1522,7 +1528,7 @@ When a method (*instance* or `static`) is invoked, the method's state (such as l
 
 Different from local variables, when a method modifies the object's state, then all other methods will observe these changes.  There is a small caveat on this which will be discussed in more detail when we talk about [concurrency]().
 
-### Multiple Instances
+### Multiple instances of the same class
 
 Consider the following example.
 
@@ -1983,7 +1989,7 @@ public class BoxDimensions {
 }
 ```
 
-### More State
+### More state
 
 Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
 
@@ -2304,7 +2310,7 @@ The label can be represented by the `String` data-type.
         this.label = label;
       }
 
-      public static boolean isValidLabel( final String label ) {
+      private static boolean isValidLabel( final String label ) {
         return false == Strings.nullToEmpty( label ).isBlank();
       }
 
@@ -2337,7 +2343,19 @@ The label can be represented by the `String` data-type.
     ...
     ```
 
-### Mutable and Immutable
+#### Why is the `isValidLabel()` method `private` and `static`?
+
+The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
+
+```java
+private static boolean isValidLabel( final String label ) {
+  return false == Strings.nullToEmpty( label ).isBlank();
+}
+```
+
+The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
+
+### Mutable and immutable
 
 Consider the following example.
 
@@ -2521,7 +2539,7 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 
 There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can contain more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
-### Light Box Example
+### Evolving the light box class (step by step)
 
 1. Create the `LightBox` and add the `isEmpty()` method
 
@@ -2775,7 +2793,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Tests should pass now.
 
-### Heavy Box Example
+### Heavy box complete example
 
 A heavy box is a box that can take more than one item.
 
@@ -2856,51 +2874,70 @@ A heavy box is a box that can take more than one item.
 
 ### The `super` keyword
 
-While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should raise an `IllegalArgumentException`
+While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should throw an `IllegalArgumentException`.
 
-1. Tests
+```java
+package demo;
 
-    ```java
-    package demo;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-    /* Imports removed for brevity */
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    public class LightBoxTest {
+public class LightBoxTest {
 
-      @Test
-      @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
-      public void shouldThrowExceptionWhenSettingLongLabels() {
-        final LightBox box = new LightBox();
-        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( "123456789 123456789 123456789 123" ) );
-      }
+  @Test
+  @DisplayName( "should be empty when a new light box is created and no items are placed" )
+  public void shouldBeEmpty() { /*...*/ }
 
-      /* Other tests removed for brevity */
-    }
-    ```
+  @Test
+  @DisplayName( "should not be empty after an item is placed in the box" )
+  public void shouldNotBeEmpty() { /*...*/ }
 
-1. Solution
+  @Test
+  @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
+  public void shouldThrowExceptionWhenItemAlreadyExists() { /*...*/ }
 
-    ```java
-    package demo;
+  @Test
+  @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
+  public void shouldThrowExceptionWhenSettingLongLabels() {
+    final LightBox box = new LightBox();
+    assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( "123456789 123456789 123456789 123" ) );
+  }
+}
+```
 
-    import com.google.common.base.Preconditions;
-    import com.google.common.base.Strings;
+The `changeLabelTo()` method can be overridden and a new validation added as shown next.
 
-    public class LightBox extends Box {
+```java
+package demo;
 
-      @Override
-      public void changeLabelTo( final String label ) {
-        Preconditions.checkArgument( isValidLabel( label ) );
-        super.changeLabelTo( label );
-      }
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
-      public static boolean isValidLabel( final String label ) {
-        return Strings.nullToEmpty( label ).length() <= 32;
-      }
+public class LightBox extends Box {
 
-      /* Other members removed for brevity */
-    }
-    ```
+  private boolean empty;
+
+  public boolean isEmpty() { /*...*/ }
+
+  public void putItem( final long itemId ) { /*...*/ }
+
+  @Override
+  public void changeLabelTo( final String label ) {
+    Preconditions.checkArgument( isValidLabel( label ) );
+    super.changeLabelTo( label );
+  }
+
+  private static boolean isValidLabel( final String label ) {
+    return Strings.nullToEmpty( label ).length() <= 32;
+  }
+}
+```
+
+The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this belongs to the `Box` class.  A child class can access its parent's methods using the `super` keyword.  Without the `super` keyword, the above method will call itself recursively until a `StackOverflowException` is thrown.
 
 ### The `final` keyword
 
@@ -3026,7 +3063,7 @@ public class A {
 
 The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
 
-## The Object Class
+## The `Object` class
 
 All roads lead to rome and all classes inherit from the `Object` class.
 
@@ -3077,7 +3114,7 @@ public class Person {
 }
 ```
 
-### The toString() method
+### The `toString()` method
 
 All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a string.
 
@@ -3176,7 +3213,7 @@ Following are two important points about the `toString()` method
 1. **Do not rely on the output of the `toString()` method as a source of structured input**.
     Do not parse an object based on the `toString()` output as this may change without warning.
 
-### The equals() and hashCode() methods
+### The `equals()` and `hashCode()` methods
 
 Consider the following example.
 
@@ -3373,7 +3410,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 1. "_If you ran the program, you found that it prints `false` and nothing else.  It doesn't print `Animals are equal: `.  How could it not print this string literal, which is right there in black and white?  The `+` operator, whether used for addition or string concatenation, binds more tightly than the `==` operator.  Therefore, the parameter of the println method is evaluated from left to right._"
 
-### The getClass() method
+### The `getClass()` method
 
 An object is an instance of a class.  Thus, all objects have a class and this can be retrived using the `getClass()` method.  Consider the following example.
 
@@ -3440,7 +3477,7 @@ Is the object (class java.util.Random) of type Point? false
 
 The `getClass()` method is sometimes used in the `equals()` method when the class does not have subtypes (and to make the comparison more efficient).
 
-### The wait(), notify() and notifyAll() methods
+### The `wait()`, `notify()` and `notifyAll()` methods
 
 Java supported multithreading since its early days.  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic and wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
@@ -4006,7 +4043,7 @@ build/classes/java
 
 The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.
 
-### How can we sort the Point class?
+### How can we sort the `Point` class?
 
 ```java
 package demo;
@@ -4038,21 +4075,21 @@ public class App {
 1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
 1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
 
-### Default and Static methods
+### `default` and `static` methods
 
 **Pending...**
 
-## instanceof and cast operators
+## `instanceof` and `cast` operators
 
 **Pending...**
 
-## Inheritance and Composition
+## Inheritance and composition
 
 **Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
 
-## Overloading and Overriding
+## Overloading and overriding
 
 ### Overloading
 
@@ -4062,25 +4099,25 @@ public class App {
 
 ### Overriding
 
-## Initialisation Blocks, Outer, Inner and Anonymous Classes
+## Initialisation blocks, outer, inner and anonymous classes
 
-### Initialisation Block
-
-**Pending...**
-
-### Static Initialisation Block
+### Initialisation block
 
 **Pending...**
 
-### Outer Class
+### `static` initialisation block
 
 **Pending...**
 
-### Inner Instance Class
+### Outer class
 
 **Pending...**
 
-### Inner Static Class
+### Inner instance class
+
+**Pending...**
+
+### Inner static class
 
 **Pending...**
 
@@ -4187,7 +4224,7 @@ public class App {
 
 The `Temperature` class cannot be extended by an external class, which prevents some funny code added to the application.
 
-### Inner Anonymous Class
+### Inner anonymous class
 
 **Pending...**
 
