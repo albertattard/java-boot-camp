@@ -1951,7 +1951,7 @@ This will work, but we have better options and is only mentioned here so that yo
 Static methods can be used to create an instance of the same class.  These are referred to as **static factory methods**.
 
 ```java
-public static BoxDimensions withBaseAndHeight( int base, int height ) {
+public static BoxDimensions withBaseAndHeight( final int base, final int height ) {
   return new BoxDimensions( base, height, base );
 }
 ```
@@ -1973,11 +1973,11 @@ public class BoxDimensions {
     this.depth = depth;
   }
 
-  public static BoxDimensions withBaseAndHeight( int base, int height ) {
+  public static BoxDimensions withBaseAndHeight( final int base, final int height ) {
     return new BoxDimensions( base, height, base );
   }
 
-  public static BoxDimensions withSideAndDepth( int side, int depth ) {
+  public static BoxDimensions withSideAndDepth( final int side, final int depth ) {
     return new BoxDimensions( side, side, depth );
   }
 }
@@ -2060,9 +2060,26 @@ The label can be represented by the `String` data-type.
     ```java
     package demo;
 
-    /* Imports removed for brevity */
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /*...*/ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /*...*/ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() { /*...*/ }
 
       @Test
       @DisplayName( "should have the given label value" )
@@ -2071,8 +2088,6 @@ The label can be represented by the `String` data-type.
         box.setLabel( "Test Label" );
         assertEquals( "Test Label", box.getLabel() );
       }
-
-      /* Other tests removed for brevity */
     }
     ```
 
@@ -2083,10 +2098,26 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
+      private boolean open;
+
+      public Box() { /*...*/ }
+
+      public Box( final boolean open ) { /*...*/ }
+
+      public void open() { /*...*/ }
+
+      public void close() { /*...*/ }
+
+      public boolean isOpen() { /*...*/ }
+
+      public String getLabel() { /*...*/ }
+
       public void setLabel( final String label ) {
       }
 
-      /* Other members removed for brevity */
+      @Override
+      public String toString() { /*...*/ }
+
     }
     ```
 
@@ -2099,14 +2130,25 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
+      private boolean open;
       private String label = "No Label";
 
-      public void setLabel( final String label ) {
-        this.label = label;
-      }
+      public Box() { /*...*/ }
+
+      public Box( final boolean open ) { /*...*/ }
+
+      public void open() { /*...*/ }
+
+      public void close() { /*...*/ }
+
+      public boolean isOpen() { /*...*/ }
 
       public String getLabel() {
         return label;
+      }
+
+      public void setLabel( final String label ) {
+        this.label = label;
       }
 
       @Override
@@ -2114,8 +2156,6 @@ The label can be represented by the `String` data-type.
         final String openClose = open ? "an open" : "a closed";
         return String.format( "%s box labelled '%s'", openClose, label );
       }
-
-      /* Other members removed for brevity */
     }
     ```
 
