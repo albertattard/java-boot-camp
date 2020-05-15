@@ -2714,10 +2714,22 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```java
     package demo;
 
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
     import static org.junit.jupiter.api.Assertions.assertThrows;
-    /* Other imports removed for brevity */
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when a new light box is created and no items are placed" )
+      public void shouldBeEmpty() { /*...*/ }
+
+      @Test
+      @DisplayName( "should not be empty after an item is placed in the box" )
+      public void shouldNotBeEmpty() { /*...*/ }
 
       @Test
       @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
@@ -2726,8 +2738,6 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         box.putItem( 1 );
         assertThrows( IllegalArgumentException.class, () -> box.putItem( 1 ) );
       }
-
-      /* Other tests removed for brevity */
     }
     ```
 
@@ -2752,12 +2762,14 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class LightBox extends Box {
 
+      private boolean empty;
+
+      public boolean isEmpty() { /*...*/ }
+
       public void putItem( final long itemId ) {
         Preconditions.checkArgument( empty );
         empty = false;
       }
-
-      /* Other members removed for brevity */
     }
     ```
 
