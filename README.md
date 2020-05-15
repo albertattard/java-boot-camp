@@ -332,6 +332,7 @@ Boot Camp for developers interested to learn Java.
     1. [Writing to an OutputStream](09%20-%20IO%20&%20Streams.md#writing-to-an-outputstream)
 1. [Java Non-Blocking IO](09%20-%20IO%20&%20Streams.md#java-non-blocking-io)
 1. [HTTP Client (Java)](09%20-%20IO%20&%20Streams.md#http-client-java)
+1. [Miscellaneous](09%20-%20IO%20&%20Streams.md#miscellaneous)
 
 ### [Databases](10%20-%20Databases.md)
 

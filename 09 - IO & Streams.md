@@ -11,6 +11,7 @@
     1. [Writing to an OutputStream](#writing-to-an-outputstream)
 1. [Java Non-Blocking IO](#java-non-blocking-io)
 1. [HTTP Client (Java)](#http-client-java)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -47,3 +48,7 @@
 ## HTTP Client (Java)
 
 **Pending...**
+
+## Miscellaneous
+
+1.https://javaspecialists.teachable.com/courses/enrolled/225263

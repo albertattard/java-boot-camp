@@ -1885,3 +1885,8 @@ Set contains 1 elements
 1. QuickSort, [MergeSort]() and [TimSort](http://svn.python.org/projects/python/trunk/Objects/listsort.txt)
 1. Cannot use `parallel()` with all collections times.  [TreeSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html) may block forever.
 1. Include the concuccent collections
+1. Good collections libraries
+    1. https://gist.github.com/kabutz/0fd0efc2c3629e8358d209ba73f0b44e
+    1. https://github.com/JCTools/JCTools
+    1. https://www.eclipse.org/collections/
+    1. https://github.com/OpenHFT/Chronicle-Queue
