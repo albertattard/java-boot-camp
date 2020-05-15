@@ -89,7 +89,7 @@ System.out.println(b);
 
 That is very misleading.  This operator's real functionality is explained in the [Java Language Specifications, section 15.15.3. Unary Plus Operator +](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.15.3).
 
-"_Unary numeric promotion ([§5.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6)) is performed on the operand. The type of the unary plus expression is the promoted type of the operand. The result of the unary plus expression is not a variable, but a value, even if the result of the operand expression is a variable. _"
+"_Unary numeric promotion ([§5.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6)) is performed on the operand. The type of the unary plus expression is the promoted type of the operand. The result of the unary plus expression is not a variable, but a value, even if the result of the operand expression is a variable._"
 
 In other words, variables of types `byte`, `short` and `char` are promoted to type `int`.  The previous example will simply print `-7`.
 
