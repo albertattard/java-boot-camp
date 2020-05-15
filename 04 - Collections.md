@@ -931,6 +931,12 @@ List [a, b, c]
 
 **Pending...**
 
+Array based collections are faster and take less space when compare to linked list based.
+Linked list has higher overheads per item when compared to arrays based
+The only one place linked list out performs the array is FIFO queue
+Iterating is faster with arrays as items in the array are close to each other
+ArrayList is slow when we need to remove elements as we need to shift things down
+
 ### Double Brace Initialization
 
 **⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS WHICH IS COVERED LATER ON.**
@@ -1538,14 +1544,14 @@ Hashmap
 Why HashTable doesn’t allow null and HashMap does?
 To successfully store and retrieve objects from a HashTable, the objects used as keys must implement the hashCode method and the equals method. Since null is not an object, it can’t implement these methods. HashMap is an advanced version and improvement on the Hashtable. HashMap was created later.
 
-### Relation between Collections the Objects they contain
+## Relation between Collections the Objects they contain
 
 The collection classes interact with the objects they contain.  Somehow the set needs to know whether an object that it contains already exists or not.  The collections use methods defined by the [Object](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html) class.
 
 1. [equals()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object))
 1. [hashCode()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode())
 
-#### List and the equals() method
+### List and the equals() method
 
 Consider the following example.
 
@@ -1733,7 +1739,7 @@ public class App {
 }
 ```
 
-#### Hash based Collections and the equals() and hashCode() methods
+### Hash based Collections and the equals() and hashCode() methods
 
 Consider the following example.
 

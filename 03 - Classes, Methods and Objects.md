@@ -1233,7 +1233,8 @@ public class App {
 
   public static void main( final String[] args ) {
     final Runnable r = new Runnable() {
-      @Override public void run() {
+      @Override
+      public void run() {
         System.out.printf( "The value of c is %d%n", c );
       }
     };
@@ -1242,11 +1243,12 @@ public class App {
 }
 ```
 
-An inner anonymous class ([discussed in depth later on](#outer-inner-and-anonymous-classes)) is created within the `App` class.
+An inner anonymous class ([discussed in depth later on](#inner-anonymous-class)) is created within the `App` class.
 
 ```java
 final Runnable r = new Runnable() {
-  @Override public void run() {
+  @Override
+  public void run() {
     System.out.printf( "The value of c is %d%n", c );
   }
 };
@@ -1291,8 +1293,8 @@ Let start by creating a basic object that will represent a box.  The box will no
 
     public class App {
 
-      public static void main( String[] args ) {
-        Box box = new Box();
+      public static void main( final String[] args ) {
+        final Box box = new Box();
         System.out.printf( "My box %s%n", box );
       }
     }
@@ -1301,9 +1303,6 @@ Let start by creating a basic object that will represent a box.  The box will no
 1. Run the program
 
     ```bash
-    $ ./gradlew run
-
-    > Task :run
     My box demo.Box@2ff4acd0
     ```
 
@@ -1330,9 +1329,6 @@ Let start by creating a basic object that will represent a box.  The box will no
 1. Run the program again
 
     ```bash
-    $ ./gradlew run
-
-    > Task :run
     My box a basic box
     ```
 
@@ -1390,10 +1386,17 @@ A box may be open or may be closed.  The program needs to determine whether the 
     ```java
     package demo;
 
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
     import static org.junit.jupiter.api.Assertions.assertFalse;
-    /* Other imports removed for brevity */
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /*...*/ }
 
       @Test
       @DisplayName( "should not be open after the close method is called" )
@@ -1402,8 +1405,6 @@ A box may be open or may be closed.  The program needs to determine whether the 
         box.close();
         assertFalse( box.isOpen() );
       }
-
-      /* Other test removed for brevity */
     }
     ```
 
@@ -1414,10 +1415,15 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
     public class Box {
 
+      public void open() { /*...*/ }
+
       public void close() {
       }
 
-      /* Other methods removed for brevity */
+      public boolean isOpen() { /*...*/ }
+
+      @Override
+      public String toString() { /*...*/ }
     }
     ```
 
@@ -1635,10 +1641,19 @@ package demo;
 
 public class Box {
 
+  private boolean open;
+
   public Box() {
   }
 
-  /* Members removed for brevity */
+  public void open() { /*...*/ }
+
+  public void close() { /*...*/ }
+
+  public boolean isOpen() { /*...*/ }
+
+  @Override
+  public String toString() { /*...*/ }
 }
 ```
 
@@ -1694,7 +1709,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final Box a = new Box();
   }
 }
@@ -2096,7 +2111,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final Box a = new Box();
 
     System.out.println( "-- Initial State ----" );
@@ -2127,7 +2142,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final Box a = new Box();
 
     /* Cannot reassign!! */
@@ -2187,7 +2202,8 @@ public class Destination {
     this.department = department;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return String.format( "Destination: %s", department );
   }
 }
@@ -2216,7 +2232,8 @@ public class Item {
     return destination;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return String.format( "Item weighing %.4fKg, needs to go to %s", weight, destination );
   }
 }
@@ -2238,7 +2255,7 @@ package demo;
 
 public class App {
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final Destination a = new Destination();
     a.setDepartment( "Testing" );
 
@@ -2329,7 +2346,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class App {
 
-      public static void main( String[] args ) {
+      public static void main( final String[] args ) {
         final LightBox a = new LightBox();
         final Box b = new LightBox();
 
@@ -3471,7 +3488,7 @@ The above class represents a cannon and can be used as shown next.
 package demo;
 
 public class App {
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     final CanShoot a = new Cannon();
     a.shoot();
   }
