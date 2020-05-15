@@ -8,7 +8,7 @@
 1. [Anatomy of a Java class](#anatomy-of-a-java-class)
     1. [Terms](#terms)
 1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
-    1. [Is void a type?](#is-void-a-type)
+    1. [Is `void` a type?](#is-void-a-type)
 1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [How can we test functionality that makes use of `static` methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does `static` mean?](#what-does-static-mean)
@@ -19,14 +19,14 @@
     1. [Which access modifier should I pick?](#which-access-modifier-should-i-pick)
 1. [Simple objects](#simple-objects)
     1. [Basic object](#basic-object)
-    1. [Add state](#add-state)
+    1. [Add the open and close functionality to the box](#add-the-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
 1. [Constructors](#constructors)
     1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
     1. [What are static factory methods?](#what-are-static-factory-methods)
-    1. [Should utilities classes, like the `Math` class have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
+    1. [Should utilities classes, like the `Math` class, have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
 1. [Adding more state to our objects](#adding-more-state-to-our-objects)
     1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Mutable and immutable](#mutable-and-immutable)
@@ -475,13 +475,13 @@ Output
 
 1. How does refactoring simplify testing?
 
-    Not much.  The code is simpler to ready, but still very hard to test.  We will improve this [later on](#how-can-we-test-functionality-that-makes-use-of-static).
+    Not much.  The code is simpler to ready, but still very hard to test.  We will improve this [later on](#how-can-we-test-functionality-that-makes-use-of-static-methods).
 
     One key takeaway here is that using `static` methods, bound our `main()` method to the `Dice.roll()` and the `Display.print()` methods and this makes our method hard to test.  There are tools we can use that will allow us to test our code, but issue here is our design.
 
     **Always tackle the root problem and do not throw more complexity at it**.
 
-### Is void a type?
+### Is `void` a type?
 
 The `roll()` method in the `Dice` class returns `int`
 
@@ -1339,7 +1339,7 @@ Let start by creating a basic object that will represent a box.  The box will no
     My box a basic box
     ```
 
-### Add state
+### Add the open and close functionality to the box
 
 A box may be open or may be closed.  The program needs to determine whether the box is open or closed before putting things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
 
@@ -1990,11 +1990,25 @@ public class BoxDimensions {
 }
 ```
 
-### Should utilities classes, like the `Math` class have a constructor?
+### Should utilities classes, like the `Math` class, have a constructor?
 
-**Penidng...**
+There is no point to initialise stateless classes, also referred to as utilities classes, such as the `Math` class.  These classes where meant to serve a different purpose than being initialised as objects.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Math math = new Math();
+  }
+}
+```
+
+Trying to create an instance of such class does not make sense.
+
+Such classes should have `private` constructor to prevent others from initialising them by mistake.  This pattern is also mentioned in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book as [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4).
 
 ## Adding more state to our objects
 
