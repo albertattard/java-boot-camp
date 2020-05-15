@@ -102,6 +102,7 @@ These specifications are not always easy to read and not meant as a beginner's t
 1. Effective Java, 3rd Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/))
 1. Java: The Complete Reference, Eleventh Edition, 11th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-the-complete/9781260440249/))
 1. Java Cookbook, 4th Edition ([O'Reilly Books](https://learning.oreilly.com/library/view/java-cookbook-4th/9781492072577/))
+1. Java By Comparison ([O'Reilly Books](https://learning.oreilly.com/library/view/java-by-comparison/9781680505887/))
 1. Introduction to Java 8 ([O'Reilly Video Series](https://learning.oreilly.com/videos/introduction-to-java/9781491907795))
 
 ## Setup Environment (SDKMAN)
