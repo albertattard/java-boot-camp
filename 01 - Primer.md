@@ -6,7 +6,7 @@
     1. [What is Java?](#what-is-java)
     1. [How do we develop Java Applications?](#how-do-we-develop-java-applications)
     1. [Java Language Specification](#java-language-specification)
-        1. [Given that the specification is hard to read and understand, why should I care?](#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
+        1. [🤔 Given that the specification is hard to read and understand, why should I care?](#-given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
     1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
@@ -30,7 +30,7 @@
     1. [Working with Docker](#working-with-docker)
     1. [Dockerize the Application](#dockerize-the-application)
     1. [Multi-Stage Docker Build](#multi-stage-docker-build)
-1. [Managing Docker Containers](#managing-docker-containers)
+    1. [Managing Docker Containers](#managing-docker-containers)
 
 ## Java
 
@@ -73,7 +73,7 @@ The specification is the authority on language behaviour, but it is terse and no
 
 These specifications are not always easy to read and not meant as a beginner's tutorial.
 
-#### Given that the specification is hard to read and understand, why should I care?
+#### 🤔 Given that the specification is hard to read and understand, why should I care?
 
 With the understanding that this may be too technical and do not worry if you do not understand any of this. 
 
@@ -1855,7 +1855,7 @@ For more details, please refer to: [https://docs.docker.com/develop/develop-imag
 
 Multi-stage docker images are not very common as this feature is not supported by some providers.  Furthermore, the functionality provided by the Multi-stage docker built is also provided by the Pipeline tools such as [Jenkins](https://www.jenkins.io/) and [GoCD](https://www.gocd.org/) and developers/dev-ops prefer to use this as they tend to provide more than just build the project.
 
-## Managing Docker Containers
+### Managing Docker Containers
 
 Once an application is built and packaged into a container, this needs to be executed.  We ran our application by using the `run` command
 

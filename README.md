@@ -10,7 +10,7 @@ Boot Camp for developers interested to learn Java.
     1. [What is Java?](01%20-%20Primer.md#what-is-java)
     1. [How do we develop Java Applications?](01%20-%20Primer.md#how-do-we-develop-java-applications)
     1. [Java Language Specification](01%20-%20Primer.md#java-language-specification)
-        1. [Given that the specification is hard to read and understand, why should I care?](01%20-%20Primer.md#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
+        1. [🤔 Given that the specification is hard to read and understand, why should I care?](01%20-%20Primer.md#-given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
 1. [Setup Environment (SDKMAN)](01%20-%20Primer.md#setup-environment-sdkman)
 1. [Gradle and Maven](01%20-%20Primer.md#gradle-and-maven)
     1. [Advantages of Gradle over Maven](01%20-%20Primer.md#advantages-of-gradle-over-maven)
@@ -34,7 +34,7 @@ Boot Camp for developers interested to learn Java.
     1. [Working with Docker](01%20-%20Primer.md#working-with-docker)
     1. [Dockerize the Application](01%20-%20Primer.md#dockerize-the-application)
     1. [Multi-Stage Docker Build](01%20-%20Primer.md#multi-stage-docker-build)
-1. [Managing Docker Containers](01%20-%20Primer.md#managing-docker-containers)
+    1. [Managing Docker Containers](01%20-%20Primer.md#managing-docker-containers)
 
 ### [Data Types](02%20-%20Data%20Types.md)
 
