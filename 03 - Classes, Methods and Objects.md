@@ -2091,6 +2091,8 @@ The label can be represented by the `String` data-type.
     }
     ```
 
+    Note that in the above test, the name `changeLabelTo()` was used instead of `setLabel()`.  Both names are fine, but the former reads more like natural languages.  For example, we say, "_the supervisor changed the box's label_" instead of "_the supervisor set the box's label_".
+
     Add the missing method (without any special logic) just to make the program compile.
 
     ```java
@@ -2193,10 +2195,11 @@ The label can be represented by the `String` data-type.
 
     public final class NullableConverter extends SimpleArgumentConverter {
       @Override
-      protected Object convert( Object source, Class<?> targetType ) throws ArgumentConversionException {
+      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
         if ( "null".equals( source ) ) {
           return null;
         }
+
         return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
       }
     }
@@ -2204,28 +2207,51 @@ The label can be represented by the `String` data-type.
 
     The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
 
+    ```java
+    return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+    ```
+
     Add a test and use the `NullableConverter` converter.
 
     ```java
     package demo;
 
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
     import org.junit.jupiter.params.ParameterizedTest;
     import org.junit.jupiter.params.converter.ConvertWith;
     import org.junit.jupiter.params.provider.ValueSource;
 
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
     import static org.junit.jupiter.api.Assertions.assertThrows;
-    /* Other imports removed for brevity */
+    import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
 
-      @ParameterizedTest( name = "should throw an IllegalArgumentException when given and invalid label ''{0}''" )
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /*...*/ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /*...*/ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() { /*...*/ }
+
+      @Test
+      @DisplayName( "should have the given label value" )
+      public void shouldHaveTheGivenLabel() { /*...*/ }
+
       @ValueSource( strings = { "", " ", "null" } )
-      public void shouldThrowAnExceptionWhenGivenInvalidLabel( @ConvertWith( NullableConverter.class ) String invalidLabel ) {
+      @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
+      @ParameterizedTest( name = "should throw an IllegalArgumentException when given an invalid label ''{0}''" )
+      public void shouldThrowAnExceptionWhenGivenInvalidLabel( final @ConvertWith( NullableConverter.class ) String invalidLabel ) {
         final Box box = new Box();
         assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
       }
-
-      /* Other tests removed for brevity */
     }
     ```
 
@@ -2258,12 +2284,32 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      public void changeLabelTo( String label ) throws IllegalArgumentException {
-        Preconditions.checkArgument( false == Strings.nullToEmpty( label ).isBlank() );
+      private boolean open;
+      private String label = "No Label";
+
+      public Box() { /*...*/ }
+
+      public Box( final boolean open ) { /*...*/ }
+
+      public void open() { /*...*/ }
+
+      public void close() { /*...*/ }
+
+      public boolean isOpen() { /*...*/ }
+
+      public String getLabel() { /*...*/ }
+
+      public void changeLabelTo( final String label ) {
+        Preconditions.checkArgument( isValidLabel( label ) );
         this.label = label;
       }
 
-      /* Other members removed for brevity */
+      public static boolean isValidLabel( final String label ) {
+        return false == Strings.nullToEmpty( label ).isBlank();
+      }
+
+      @Override
+      public String toString() { /*...*/ }
     }
     ```
 
