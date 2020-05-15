@@ -52,7 +52,7 @@
     1. [Can we create an instance of an interface?](#can-we-create-an-instance-of-an-interface)
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
-        1. [What is the relation between lambda and functional interfaces? ](#what-is-the-relation-between-lambda-and-functional-interfaces)
+        1. [What is the relation between lambda and functional interfaces?](#what-is-the-relation-between-lambda-and-functional-interfaces)
     1. [How can we sort the Point class?](#how-can-we-sort-the-point-class)
     1. [Default and Static methods](#default-and-static-methods)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
@@ -1677,26 +1677,18 @@ public class Box {
 
   private boolean open;
 
-  public Box( boolean open ) {
+  public Box( final boolean open ) {
     this.open = open;
   }
 
-  public void open() {
-    open = true;
-  }
+  public void open() { /*...*/ }
 
-  public void close() {
-    open = false;
-  }
+  public void close() { /*...*/ }
 
-  public boolean isOpen() {
-    return open;
-  }
+  public boolean isOpen() { /*...*/ }
 
   @Override
-  public String toString() {
-    return String.format( "%s box", open ? "an open" : "a closed" );
-  }
+  public String toString() { /*...*/ }
 }
 ```
 
@@ -1731,7 +1723,14 @@ public class Box {
     this.open = open;
   }
 
-  /* Methods removed for brevity */
+  public void open() { /*...*/ }
+
+  public void close() { /*...*/ }
+
+  public boolean isOpen() { /*...*/ }
+
+  @Override
+  public String toString() { /*...*/ }
 }
 ```
 
@@ -1739,7 +1738,113 @@ Java will only provide a default constructor when no constructors are provided.
 
 #### Can one constructor call another constructor in the same class?
 
-**Pending...**
+Yes, and that's quite a common practice.  Consider the following class.
+
+```java
+package demo;
+
+public class Person {
+
+  public String name;
+  public String surname;
+
+  public Person() {
+    this( null );
+  }
+
+  public Person( final String name ) {
+    this( name, null );
+  }
+
+  public Person( final String name, final String surname ) {
+    this.name = name;
+    this.surname = surname;
+  }
+}
+```
+
+The above example shows three constructors.  The default constructor is calling the constructor that takes one parameter, which in turn calls the constructor that takes two parameters.
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class MagicBox {
+
+  public String name;
+  public Point location;
+
+  public MagicBox() {
+    this( null );
+  }
+
+  public MagicBox( final String name ) {
+    this( name, null );
+  }
+
+  public MagicBox( final Point location ) {
+    this( null, location );
+  }
+
+  public MagicBox( final String name, final Point location ) {
+    this.name = name;
+    this.location = location;
+  }
+}
+```
+
+The example highlights a problem related to `null` being a generic type.  The Java compiler is not able to determine which constructor it will call.
+
+The default constructor invokes another constructor and passes `null`.
+
+```java
+public MagicBox() {
+  this( null );
+}
+```
+
+The call `this( null )` matches both the constructors that have one reference type constructor.
+
+1. The one that takes a `String`
+
+    ```java
+    public MagicBox( final String name ) {
+      this( name, null );
+    }
+    ```
+
+1. The one that takes a `Point`
+
+    ```java
+    public MagicBox( final Point location ) {
+      this( null, location );
+    }
+    ```
+
+There are several ways to address this problem.  Three of which are listed below.
+
+1. The default constructor can do nothing as by default the properties will be set to `null`.
+
+1. We can cast the `null` to either `String` or `Point`
+
+    ```java
+    public MagicBox() {
+      this( (String) null );
+    }
+    ```
+
+1. Alternatively the default constructor can invoke the constructor that takes two parameters.
+
+    ```java
+    public MagicBox() {
+      this( null, null );
+    }
+    ```
 
 #### What are static factory methods?
 
