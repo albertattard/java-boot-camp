@@ -19,8 +19,8 @@
     1. [Gradle Task Dependency Tree](#gradle-task-dependency-tree)
     1. [Project Dependencies](#project-dependencies)
     1. [Package Project](#package-project)
-    1. [Make use of third-party libraries](#make-use-of-third-party-libraries)
-        1. [The Classpath](#the-classpath)
+1. [Make use of third-party libraries](#make-use-of-third-party-libraries)
+    1. [The Classpath](#the-classpath)
     1. [Make a fat JAR](#make-a-fat-jar)
 1. [Docker](#docker)
     1. [What is Docker?](#what-is-docker)
@@ -75,7 +75,9 @@ These specifications are not always easy to read and not meant as a beginner's t
 
 ### Given that the specification is hard to read and understand, why should I care?
 
-**With the understanding that this may be too technical**, consider the following code fragment.
+With the understanding that this may be too technical and do not worry if you do not understand any of this. 
+
+Consider the following code fragment.
 
 ```java
 int a = -7;
@@ -880,7 +882,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     Hello world.
     ```
 
-### Make use of third-party libraries
+## Make use of third-party libraries
 
 It is not recommended to reinvent the wheel and in many cases a library already exists which does exactly what you need.
 
@@ -945,7 +947,7 @@ It is not recommended to reinvent the wheel and in many cases a library already 
 
 Our program is making use of a class that is not part of the Java standard library and it is not part of our code.  Java has no way to locate this class and use it in our program.  Not that our JAR file only contains two files.  The `Preconditions` class is not part of our JAR file.
 
-#### The Classpath
+### The Classpath
 
 Java searches for classes that are on the [classpath](https://docs.oracle.com/javase/8/docs/technotes/tools/findingclasses.html).  When using the `-jar` option, all classes within that JAR file are automatically included as part of the classpath.
 
