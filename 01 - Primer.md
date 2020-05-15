@@ -5,8 +5,8 @@
 1. [Java](#java)
     1. [What is Java?](#what-is-java)
     1. [How do we develop Java Applications?](#how-do-we-develop-java-applications)
-1. [Java Language Specification](#java-language-specification)
-    1. [Given that the specification is hard to read and understand, why should I care?](#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
+    1. [Java Language Specification](#java-language-specification)
+        1. [Given that the specification is hard to read and understand, why should I care?](#given-that-the-specification-is-hard-to-read-and-understand-why-should-i-care)
 1. [Setup Environment (SDKMAN)](#setup-environment-sdkman)
 1. [Gradle and Maven](#gradle-and-maven)
     1. [Advantages of Gradle over Maven](#advantages-of-gradle-over-maven)
@@ -65,7 +65,7 @@ The source code is compiled into Bytecode.  Bytecode is a form of instruction se
 
 It is important to note that to develop and compile Java source code you need to have a JDK installed.  To run a Java application (including all programming languages that run on the JVM) you need to have the JRE installed.  Note that a JDK also includes the JRE and no need to install a separate JRE when you have a JDK installed.
 
-## Java Language Specification
+### Java Language Specification
 
 The [Java Language Specification (JLS)](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the Java language specification.
 
@@ -73,7 +73,7 @@ The specification is the authority on language behaviour, but it is terse and no
 
 These specifications are not always easy to read and not meant as a beginner's tutorial.
 
-### Given that the specification is hard to read and understand, why should I care?
+#### Given that the specification is hard to read and understand, why should I care?
 
 With the understanding that this may be too technical and do not worry if you do not understand any of this. 
 
