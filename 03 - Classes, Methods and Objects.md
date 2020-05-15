@@ -49,7 +49,12 @@
     1. [What is an interface?](#what-is-an-interface)
     1. [How is an interface different from a class?](#how-is-an-interface-different-from-a-class)
     1. [How can we use interfaces?](#how-can-we-use-interfaces)
-    1. [Default methods](#default-methods)
+    1. [Can we create an instance of an interface?](#can-we-create-an-instance-of-an-interface)
+    1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
+    1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
+        1. [What is the relation between lambda and functional interfaces? ](#what-is-the-relation-between-lambda-and-functional-interfaces)
+    1. [How can we sort the Point class?](#how-can-we-sort-the-point-class)
+    1. [Default and Static methods](#default-and-static-methods)
 1. [instanceof and cast operators](#instanceof-and-cast-operators)
 1. [Inheritance and Composition](#inheritance-and-composition)
 1. [Overloading and Overriding](#overloading-and-overriding)
@@ -3414,7 +3419,9 @@ public interface MyFirstInterface {
 }
 ```
 
-Note that the static field, `STATIC_FIELD`, is not a property.  Upto Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces.
+Note that the static field, `STATIC_FIELD`, is not a property.
+
+Upto Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces.
 
 ### How can we use interfaces?
 
@@ -3535,13 +3542,236 @@ Smile...Ka-chick
 
 This is referred to [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)), where the implementation of a method is determined at runtime.
 
+### Can we create an instance of an interface?
+
+We cannot create an instance of an interface, as interfaces are abstract by nature.  The following example will not compile.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CanShoot a = new CanShoot();
+    a.shoot();
+  }
+}
+```
+
+Say that the above will compile.  What should happen when the `shoot()` method is invoked?  The above cannot compile as we have no implementation for the `shoot()` method.  Java provides inner anonymous classes, such as the following example, [introduced in Java 1.1](https://www.cs.cornell.edu/andru/javaspec/1.1Update.html) that allow us to implement interfaces on the fly.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CanShoot a = new CanShoot() {
+      @Override
+      public void shoot() {
+        System.out.println( "An inner anonymous class" );
+      }
+    };
+    a.shoot();
+  }
+}
+```
+
+Inner anonymous classes, [discussed in more depth later on](#inner-anonymous-class), are not exclusive to interfaces.  We can create an inner anonymous class for classes as [discussed later on](#inner-anonymous-class).  The above example will print.
+
+```bash
+An inner anonymous class
+```
+
+### Can an interface extend another class or another interface?
+
+Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
+
+**Pending...**
+
+### Functional interface and lambda functions
+
+When lambdas where introduced, Java also introduced the concept of a functional interface, denoted by the `@FunctionalInterface` annotation.  **A functional interface is an interface that have one abstract method**.
+
+```java
+package demo;
+
+@FunctionalInterface
+public interface CanShoot {
+
+  void shoot();
+}
+```
+
+The `@FunctionalInterface` annotations marks the interface as a functional interface and a compilation error will occur if the interface has more than one abstract method.  Consider the following interface example.
+
+```java
+package demo;
+
+@FunctionalInterface
+public interface CanShoot {
+
+  void shoot();
+
+  default void aDefaultMethod() {
+  }
+
+  static void aStaticMethod() {
+  }
+}
+```
+
+The above is a valid functional interface as it only has one abstract method, `shoot()`.  The other methods are not abstract.  Now consider the following interface example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+@FunctionalInterface
+public interface CanShoot {
+
+  void shoot();
+
+  void aSecondAbstractMethod();
+}
+```
+
+The above is not a functional interface as there is more than one abstract method.
+
+#### What is the relation between lambda and functional interfaces?
+
+Consider the following example, presented before.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CanShoot a = new CanShoot() {
+      @Override
+      public void shoot() {
+        System.out.println( "An inner anonymous class" );
+      }
+    };
+    a.shoot();
+  }
+}
+```
+
+The above makes use of inner anonymous classes.  We can achieve the same thing using lambda as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CanShoot a = () -> System.out.println( "An inner anonymous class" );
+    a.shoot();
+  }
+}
+```
+
+The evaluation of a lambda expression produces an instance of a functional interface ([JLS 9.8](https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.8)).  Both of the examples will print the same thing to the console.
+
+```bash
+An inner anonymous class
+```
+
+While these two approaches display the same thing, these are quite different.  Consider the following source classes.
+
+```bash
+$ tree src/main/java
+src/main/java
+└── demo
+    ├── App.java
+    └── CanShoot.java
+```
+
+The `CanShoot` interface is a functional interface as shown next.
+
+```java
+package demo;
+
+@FunctionalInterface
+public interface CanShoot {
+
+  void shoot();
+}
+```
+
+The `App` class creates an inner anonymous class and make use of lambda too.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CanShoot a = new CanShoot() { @Override public void shoot() {} };
+    final CanShoot b = () -> {};
+
+    System.out.printf("The type of a is %s%n", a.getClass());
+    System.out.printf("The type of b is %s%n", b.getClass());
+  }
+}
+```
+
+Running the above we will print the following.
+
+```bash
+The type of a is class demo.App$1
+The type of b is class demo.App$$Lambda$1/0x0000000800b79840
+```
+
+Lambda will return a class with a funny name, but strangely enough lambdas are not bound to a class.  Listing the classes files produces during the compilation, we get three classes.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1.class
+        ├── App.class
+        └── CanShoot.class
+```
+
+The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.
+
+### How can we sort the Point class?
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point[] points = {
+      new Point( 1, 2 ),
+      new Point( 1, 3 ),
+      new Point( 2, 1 ),
+    };
+
+    final Comparator<Point> comparator =
+      Comparator.comparing( Point::getX )
+        .thenComparing( Point::getY );
+
+    Arrays.sort( points, comparator );
+    System.out.printf( "Sorted: %s", Arrays.toString( points ) );
+  }
+}
+```
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
 1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
 1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
 1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
 
-### Default methods
+### Default and Static methods
+
+**Pending...**
 
 ## instanceof and cast operators
 

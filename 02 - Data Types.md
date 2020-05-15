@@ -3166,7 +3166,7 @@ public class App {
 Now the source file needs to be located in folder `c`, which is in folder `b` and so on and so forth.
 
 ```bash
-tree src/main/java
+$ tree src/main/java
 src/main/java
 └── demo
     └── a
@@ -3211,7 +3211,7 @@ All our classes are saved in one package.  It is clear here that we can organise
 It is very common to see classes organised by technology.  For example, all controllers will be saved under a controller package.
 
 ```bash
-tree src/main/java
+$ tree src/main/java
 src/main/java
 └── demo
     ├── App.java
@@ -3306,7 +3306,7 @@ While this is very common, I do not quite like this kind of organisation.  Norma
 Alternatively, classes can be organised by their feature.  We have two features, *orders* and *payments*.
 
 ```bash
-tree src/main/java
+$ tree src/main/java
 src/main/java
 └── demo
     ├── App.java
