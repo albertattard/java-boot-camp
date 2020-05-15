@@ -19,10 +19,10 @@
     1. [Gradle Task Dependency Tree](#gradle-task-dependency-tree)
     1. [Project Dependencies](#project-dependencies)
     1. [Package Project](#package-project)
-1. [Make use of third-party libraries](#make-use-of-third-party-libraries)
+1. [Extend your application capabilities (using third-party libraries)](#extend-your-application-capabilities-using-third-party-libraries)
     1. [The Classpath](#the-classpath)
     1. [Make a fat JAR](#make-a-fat-jar)
-1. [Docker](#docker)
+1. [Making Applications Portable (Containerisation using Docker)](#making-applications-portable-containerisation-using-docker)
     1. [What is Docker?](#what-is-docker)
     1. [How does this work?](#how-does-this-work)
     1. [More than just Containers](#more-than-just-containers)
@@ -882,7 +882,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
     Hello world.
     ```
 
-## Make use of third-party libraries
+## Extend your application capabilities (using third-party libraries)
 
 It is not recommended to reinvent the wheel and in many cases a library already exists which does exactly what you need.
 
@@ -1177,7 +1177,7 @@ There are several ways how to create a fat JAR
 
 Irrespective from which approach we use, running the application as a fat JAR is simpler than running the application using the `-cp` option.  It also makes it simpler to distribute as all we need to share is one JAR file.
 
-## Docker
+## Making Applications Portable (Containerisation using Docker)
 
 ### What is Docker?
 
