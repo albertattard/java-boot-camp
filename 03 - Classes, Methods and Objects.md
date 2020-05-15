@@ -22,20 +22,21 @@
     1. [Add state](#add-state)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
-    1. [Constructors](#constructors)
-        1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
-        1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
-        1. [What are static factory methods?](#what-are-static-factory-methods)
-    1. [More state](#more-state)
-        1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
-    1. [Mutable and immutable](#mutable-and-immutable)
-        1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
+1. [Constructors](#constructors)
+    1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
+    1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
+    1. [What are static factory methods?](#what-are-static-factory-methods)
+    1. [Should utilities classes, like the `Math` class have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
+1. [Adding more state to our objects](#adding-more-state-to-our-objects)
+    1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
+1. [Mutable and immutable](#mutable-and-immutable)
+    1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
 1. [Inheritance](#inheritance)
     1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
     1. [Heavy box complete example](#heavy-box-complete-example)
     1. [The `super` keyword](#the-super-keyword)
     1. [The `final` keyword](#the-final-keyword)
-    1. [Private Constructor](#private-constructor)
+    1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
@@ -1606,7 +1607,7 @@ The above is a valid example.  Here a new instance of `Box` is create and then t
 
 It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
 
-### Constructors
+## Constructors
 
 The `Box` does not contain any methods called `Box()` that take no parameters.  What method do we call when we execute `new Box()`?
 
@@ -1670,7 +1671,7 @@ A constructor looks similar to a method but has the following constraints
 
 Apart from the above, a constructor is similar to a method.
 
-#### How many constructors can a class have?
+### How many constructors can a class have?
 
 **A class can have as many constructors as needs as long as each constructor has a unique signature**.
 
@@ -1742,7 +1743,7 @@ public class Box {
 
 Java will only provide a default constructor when no constructors are provided.
 
-#### Can one constructor call another constructor in the same class?
+### Can one constructor call another constructor in the same class?
 
 Yes, and that's quite a common practice.  Consider the following class.
 
@@ -1859,7 +1860,7 @@ There are several ways to address this problem.  Three of which are listed below
     }
     ```
 
-#### What are static factory methods?
+### What are static factory methods?
 
 The [first item in the Effective Java book](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev1) talks about static factory methods and recommends them over constructors.
 
@@ -1989,7 +1990,13 @@ public class BoxDimensions {
 }
 ```
 
-### More state
+### Should utilities classes, like the `Math` class have a constructor?
+
+**Penidng...**
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
+
+## Adding more state to our objects
 
 Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
 
@@ -2343,7 +2350,7 @@ The label can be represented by the `String` data-type.
     ...
     ```
 
-#### Why is the `isValidLabel()` method `private` and `static`?
+### Why is the `isValidLabel()` method `private` and `static`?
 
 The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
 
@@ -2355,7 +2362,7 @@ private static boolean isValidLabel( final String label ) {
 
 The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
 
-### Mutable and immutable
+## Mutable and immutable
 
 Consider the following example.
 
@@ -2408,7 +2415,7 @@ The above will not compile as variable `a` is marked final which means that vari
 
 The `Box` object is mutable, which means we can modify its state.  While variable `a` is `final`, the object to which variable `a` points to is mutable and thus the object can be modified.
 
-#### How can we create immutable objects?
+### How can we create immutable objects?
 
 Consider the following example.
 
@@ -2939,6 +2946,8 @@ public class LightBox extends Box {
 
 The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this belongs to the `Box` class.  A child class can access its parent's methods using the `super` keyword.  Without the `super` keyword, the above method will call itself recursively until a `StackOverflowException` is thrown.
 
+**Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
+
 ### The `final` keyword
 
 Java allows a class to extend another by default.  This can be prevented by the `final` keyword.
@@ -2946,21 +2955,65 @@ Java allows a class to extend another by default.  This can be prevented by the 
 ```java
 package demo;
 
-/* Imports removed for brevity */
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 public final class LightBox extends Box {
 
-  /* Members removed for brevity */
+  private boolean empty;
+
+  public boolean isEmpty() { /*...*/ }
+
+  public void putItem( final long itemId ) { /*...*/ }
+
+  @Override
+  public void changeLabelTo( final String label ) { /*...*/ }
+
+  public static boolean isValidLabel( final String label ) { /*...*/ }
 }
 ```
 
 The `LightBox` class cannot be extended.
 
-### Private Constructor
+### How do `private` constructor effect inheritance?
 
-Constructors can be `private` and if all constructors of a class are `private`, then this class cannot be extended by other classes, with one exception ([discussed later on](#can-abstract-classes-have-private-constructors)).
+For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4)
+```java
+package demo;
+
+public class A {
+  private A() { }
+}
+```
+
+The class is not `final`, but still cannot be extended by another class as its sole constructor is `private`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class B extends A {
+}
+```
+
+There are no constructors available to class `B` in the parent class `A`, therefor the above will not compile.  Consider the following example.
+
+```java
+package demo;
+
+public class A {
+
+  public static class C extends A {
+  }
+
+  private A() {
+  }
+}
+```
+
+The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
 
 ### Can a subclass invoke the constructor of a superclass?
 
@@ -3024,6 +3077,8 @@ public abstract class Box {
 A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be `abstract`.  Either `final` or `abstract`, but not both.
 
 ### Can abstract classes have private constructors?
+
+**Pending...** Maybe moved up.
 
 For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
 
