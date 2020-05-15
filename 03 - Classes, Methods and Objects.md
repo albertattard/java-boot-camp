@@ -2085,7 +2085,7 @@ The label can be represented by the `String` data-type.
       @DisplayName( "should have the given label value" )
       public void shouldHaveTheGivenLabel() {
         final Box box = new Box();
-        box.setLabel( "Test Label" );
+        box.changeLabelTo( "Test Label" );
         assertEquals( "Test Label", box.getLabel() );
       }
     }
@@ -2112,7 +2112,7 @@ The label can be represented by the `String` data-type.
 
       public String getLabel() { /*...*/ }
 
-      public void setLabel( final String label ) {
+      public void changeLabelTo( final String label ) {
       }
 
       @Override
@@ -2147,7 +2147,7 @@ The label can be represented by the `String` data-type.
         return label;
       }
 
-      public void setLabel( final String label ) {
+      public void changeLabelTo( final String label ) {
         this.label = label;
       }
 
@@ -2222,7 +2222,7 @@ The label can be represented by the `String` data-type.
       @ValueSource( strings = { "", " ", "null" } )
       public void shouldThrowAnExceptionWhenGivenInvalidLabel( @ConvertWith( NullableConverter.class ) String invalidLabel ) {
         final Box box = new Box();
-        assertThrows( IllegalArgumentException.class, () -> box.setLabel( invalidLabel ) );
+        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
       }
 
       /* Other tests removed for brevity */
@@ -2258,7 +2258,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      public void setLabel( String label ) throws IllegalArgumentException {
+      public void changeLabelTo( String label ) throws IllegalArgumentException {
         Preconditions.checkArgument( false == Strings.nullToEmpty( label ).isBlank() );
         this.label = label;
       }
@@ -2808,7 +2808,7 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
       @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
       public void shouldThrowExceptionWhenSettingLongLabels() {
         final LightBox box = new LightBox();
-        assertThrows( IllegalArgumentException.class, () -> box.setLabel( "123456789 123456789 123456789 123" ) );
+        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( "123456789 123456789 123456789 123" ) );
       }
 
       /* Other tests removed for brevity */
@@ -2826,9 +2826,9 @@ While heavy boxes may contain very long labels, light box labels cannot be longe
     public class LightBox extends Box {
 
       @Override
-      public void setLabel( final String label ) {
+      public void changeLabelTo( final String label ) {
         Preconditions.checkArgument( isValidLabel( label ) );
-        super.setLabel( label );
+        super.changeLabelTo( label );
       }
 
       public static boolean isValidLabel( final String label ) {
