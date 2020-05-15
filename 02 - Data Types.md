@@ -1822,7 +1822,7 @@ Example
 ```java
 package demo;
 
-public class RockPaperScissors {
+public class App {
 
   public static int determineOutcome( final int player1, final int player2 ) {
     if ( player1 == player2 ) {
@@ -1847,10 +1847,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static demo.RockPaperScissors.determineOutcome;
+import static demo.App.determineOutcome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RockPaperScissorsTest {
+public class AppTest {
 
   @ValueSource( ints = { 1, 2, 3 } )
   @ParameterizedTest( name = "should return 0 when both players play the same hand {0}" )
@@ -1923,7 +1923,7 @@ Refactored the code to use the `int` constants instead.
 ```java
 package demo;
 
-public class RockPaperScissors {
+public class App {
 
   /* Outcome constants */
   public static final int DRAW = 0;
@@ -1958,16 +1958,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import static demo.RockPaperScissors.DRAW;
-import static demo.RockPaperScissors.PAPER;
-import static demo.RockPaperScissors.ROCK;
-import static demo.RockPaperScissors.SCISSORS;
-import static demo.RockPaperScissors.WIN_PLAYER_1;
-import static demo.RockPaperScissors.WIN_PLAYER_2;
-import static demo.RockPaperScissors.determineOutcome;
+import static demo.App.DRAW;
+import static demo.App.PAPER;
+import static demo.App.ROCK;
+import static demo.App.SCISSORS;
+import static demo.App.WIN_PLAYER_1;
+import static demo.App.WIN_PLAYER_2;
+import static demo.App.determineOutcome;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RockPaperScissorsTest {
+public class AppTest {
 
   @ValueSource( ints = { PAPER, SCISSORS, ROCK } )
   @ParameterizedTest( name = "should return DRAW (0) when both players play the same hand {0}" )
@@ -1995,30 +1995,30 @@ Refactor the current solution into using enums
 
 1. **Refactor Outcome**
 
-    Replace the imports in the `RockPaperScissorsTest` class
+    Replace the imports in the `AppTest` class
 
     ```java
-    import static demo.RockPaperScissors.DRAW;
-    import static demo.RockPaperScissors.WIN_PLAYER_1;
-    import static demo.RockPaperScissors.WIN_PLAYER_2;
+    import static demo.App.DRAW;
+    import static demo.App.WIN_PLAYER_1;
+    import static demo.App.WIN_PLAYER_2;
     ```
 
     with
 
     ```java
-    import static demo.RockPaperScissors.Outcome.DRAW;
-    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_1;
-    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_2;
+    import static demo.App.Outcome.DRAW;
+    import static demo.App.Outcome.WIN_PLAYER_1;
+    import static demo.App.Outcome.WIN_PLAYER_2;
     ```
 
-    The above will not compile until we add the enum to the `RockPaperScissors` class.
+    The above will not compile until we add the enum to the `App` class.
 
     Replace the outcome constants with an enum
 
     ```java
     package demo;
 
-    public class RockPaperScissors {
+    public class App {
 
       public enum Outcome {
         DRAW,
@@ -2077,14 +2077,14 @@ Refactor the current solution into using enums
     import org.junit.jupiter.params.provider.CsvSource;
     import org.junit.jupiter.params.provider.EnumSource;
 
-    import static demo.RockPaperScissors.Hand;
-    import static demo.RockPaperScissors.Outcome.DRAW;
-    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_1;
-    import static demo.RockPaperScissors.Outcome.WIN_PLAYER_2;
-    import static demo.RockPaperScissors.determineOutcome;
+    import static demo.App.Hand;
+    import static demo.App.Outcome.DRAW;
+    import static demo.App.Outcome.WIN_PLAYER_1;
+    import static demo.App.Outcome.WIN_PLAYER_2;
+    import static demo.App.determineOutcome;
     import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    public class RockPaperScissorsTest {
+    public class AppTest {
 
       @EnumSource( Hand.class )
       @ParameterizedTest( name = "should return DRAW when both players play the same hand {0}" )
@@ -2111,7 +2111,7 @@ Refactor the current solution into using enums
     ```java
     package demo;
 
-    public class RockPaperScissors {
+    public class App {
 
       public enum Outcome {
         DRAW,
@@ -2207,7 +2207,7 @@ Complete example
 ```java
 package demo;
 
-public class RockPaperScissors {
+public class App {
 
   public enum Outcome {
     DRAW,
