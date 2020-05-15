@@ -68,12 +68,30 @@ It is important to note that to develop and compile Java source code you need to
 
 The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the specification.
 
-The specifications also define what type of comments are supported by the Java programming language.
+With the understanding that this may be too technical, consider the following code fragment.
 
-1. /* comment */
-1. // comment
+```java
+int a = -7;
+int b = +a;
+```
 
-These are defined in [section 3.7 of the specification](https://docs.oracle.com/javase/specs/jls/se14/html/jls-3.html#jls-3.7).
+The above code fragment shows the use of the `+` unary operator.  This operator is rarely used, and its behaviour is unknown to many.  The description provided by an official [Java tutorial](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/op1.html) is:
+
+"_Unary plus operator; indicates positive value (numbers are positive without this, however)_"
+
+Many believe that the unary `+` operator is the opposite of the unary `-` operator, and the following should print `7`.
+
+```java
+int a = -7;
+int b = +a;
+System.out.println(b);
+```
+
+That is very misleading.  This operator's real functionality is explained in the [Java Language Specifications, section 15.15.3. Unary Plus Operator +](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.15.3).
+
+"_Unary numeric promotion ([§5.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6)) is performed on the operand. The type of the unary plus expression is the promoted type of the operand. The result of the unary plus expression is not a variable, but a value, even if the result of the operand expression is a variable. _"
+
+In other words, variables of types `byte`, `short` and `char` are promoted to type `int`.  The previous example will simply print `-7`.
 
 These specifications are not always easy to read and not meant as a beginner's tutorial.
 
