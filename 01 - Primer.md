@@ -66,7 +66,7 @@ It is important to note that to develop and compile Java source code you need to
 
 ## Java Language Specification
 
-The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the specification.
+The [Java Language Specification](https://docs.oracle.com/javase/specs/jls/se14/html/index.html) is the definitive technical reference for the Java programming language.  Anything related to the Java programming language and its behaviour is documented in the Java language specification.
 
 With the understanding that this may be too technical, consider the following code fragment.
 
