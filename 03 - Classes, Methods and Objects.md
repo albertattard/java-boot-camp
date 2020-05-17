@@ -80,10 +80,10 @@
 
 ## Setup
 
-1. Clone Repo: [java-boot-camp-blank](https://github.com/albertattard/java-boot-camp-blank)
+1. Clone Repo: [java-boot-camp-blueprint](https://github.com/albertattard/java-boot-camp-blueprint)
 
     ```bash
-    $ git clone https://github.com/albertattard/java-boot-camp-blank.git
+    $ git clone https://github.com/albertattard/java-boot-camp-blueprint.git
     ```
 
 1. Open the repo in IDE
