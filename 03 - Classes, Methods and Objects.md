@@ -42,7 +42,8 @@
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
-    1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
+    1. [Are constructors inherited?](#are-constructors-inherited)
+    1. [Can a subclass invoke the constructor of a superclass (the super())?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -3282,7 +3283,7 @@ public class B extends A {
 }
 ```
 
-There are no constructors available to class `B` in the parent class `A`, therefor the above will not compile.  Consider the following example.
+There are no constructors available to class `B`, in the parent class `A`, therefor the above will not compile.  Consider the following example.
 
 ```java
 package demo;
@@ -3299,9 +3300,130 @@ public class A {
 
 The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
 
-### Can a subclass invoke the constructor of a superclass?
+### Are constructors inherited?
 
-**Pending...**
+**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit it. 
+
+The `Box` class provides two constructors, a default constructor and a constructor that takes a `boolean` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Box a = new Box( true );
+    final LightBox b = new LightBox( true );
+  }
+}
+```
+
+While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited. 
+
+### Can a subclass invoke the constructor of a superclass (the super())?
+
+Yes, a subclass can invoke any of the parent's constructors and pass the required parameters to the parent class.  The `Box` class has two constructors.  The following example shows and example of this.
+
+```java
+package demo;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
+
+public final class LightBox extends Box {
+
+  private boolean empty;
+
+  public LightBox() {
+  }
+
+  public LightBox( final boolean open ) {
+    super( open );
+  }
+
+  public boolean isEmpty() { /* ... */ }
+
+  public void putItem( final long itemId ) { /* ... */ }
+
+  @Override
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  public static boolean isValidLabel( final String label ) { /* ... */ }
+}
+```
+
+The `LightBox` now can be initialised open or closed as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final LightBox a = new LightBox();
+    final LightBox b = new LightBox( true );
+
+    System.out.printf( "Box a is %s%n", a.isOpen() ? "open" : "closed" );
+    System.out.printf( "Box b is %s%n", b.isOpen() ? "open" : "closed" );
+  }
+}
+```
+
+The second instance, created an instance of an open box while the first instance creates a closed box.
+
+```bash
+Box a is closed
+Box b is open
+```
+
+A class cannot invoke any of the *grandparent*'s constructors.  Consider the following hierarchy.
+
+1. The grandparent class, `A`
+
+    ```java
+    package demo;
+    
+    public class A {
+    
+      public A() {
+        System.out.println( "A()" );
+      }
+    
+      public A( int a ) {
+        System.out.printf( "A(int=%d)%n", a );
+      }
+    }
+    ```
+   
+    The grandparent has two constructors, the default constructor and another constructor that takes an `int`.
+
+1. The parent class, `B`
+
+    ```java
+    package demo;
+    
+    public class B {
+    }
+    ```
+   
+    The parent class, `B`, does not define any constructors and thus a default one is assigned to class `B`.
+
+1. The child class, `C`
+
+    **⚠️ THE FOLLOWING DOES NOT COMPILE!!**
+
+    ```java
+    package demo;
+    
+    public class C {
+    
+      public C() {
+        super( 10 );
+      }
+    }
+    ```
+    
+    Class `C`, tries to invoke a constructor that takes an `int` as its sole parameter.  Class `A` has such constructor but class `B` does not.
 
 ## Abstraction
 
