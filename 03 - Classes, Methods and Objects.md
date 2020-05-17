@@ -21,7 +21,6 @@
     1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
-    1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
     1. [Adding more state to our objects](#adding-more-state-to-our-objects)
         1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Constructors](#constructors)
@@ -1528,11 +1527,7 @@ public class Box {
 
 When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' properties.  In this case, all four instance methods will have access to all object's properties too.
 
-**On the other hand, `static` methods cannot access the object state**.
-
-Different from local variables, when a method modifies the object's state, then all other methods will observe these changes.  There is a small caveat on this which will be discussed in more detail when we talk about [concurrency]().
-
-### Multiple instances of the same class
+**On the other hand, `static` methods cannot access the object state**.  Different from local variables, when a method modifies the object's state, then all other methods will observe these changes.  There is a small caveat about this which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
 Consider the following example.
 
