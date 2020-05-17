@@ -20,6 +20,7 @@
 1. [Simple objects](#simple-objects)
     1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
+    1. [What does 'object state' mean?](#what-does-object-state-mean)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Adding more state to our objects](#adding-more-state-to-our-objects)
         1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
@@ -1498,6 +1499,10 @@ A box may be open or may be closed.  The program needs to determine whether the 
     ```
 
     Both tests pass
+
+### What does 'object state' mean?
+
+**Pending...**
 
 ### How do instance methods access the object's state?
 
