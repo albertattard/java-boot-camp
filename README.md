@@ -127,7 +127,7 @@ Boot Camp for developers interested to learn Java.
     1. [Create a simple box object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#create-a-simple-box-object)
     1. [Add open and close functionality to the box](03%20-%20Classes%2C%20Methods%20and%20Objects.md#add-open-and-close-functionality-to-the-box)
     1. [What does '*object state*' mean?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-does-object-state-mean)
-    1. [How do instance methods access the object's state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-instance-methods-access-the-objects-state)
+    1. [How do instance methods interact with the object's state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-instance-methods-interact-with-the-objects-state)
     1. [Adding more state to our objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md#adding-more-state-to-our-objects)
         1. [Why is the `isValidLabel()` method `private` and `static`?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#why-is-the-isvalidlabel-method-private-and-static)
 1. [Constructors](03%20-%20Classes%2C%20Methods%20and%20Objects.md#constructors)

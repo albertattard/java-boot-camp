@@ -21,7 +21,7 @@
     1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [What does '*object state*' mean?](#what-does-object-state-mean)
-    1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
+    1. [How do instance methods interact with the object's state?](#how-do-instance-methods-interact-with-the-objects-state)
     1. [Adding more state to our objects](#adding-more-state-to-our-objects)
         1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Constructors](#constructors)
@@ -1502,9 +1502,17 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
 ### What does '*object state*' mean?
 
-**Pending...**
+The `Box` defined a property, called `open`.  The properties (not the `static` fields) defined by a class represent the object's state.  When objects are created, the properties defined by their class become the object's state.  Consider the following example.
 
-### How do instance methods access the object's state?
+```java
+Box a = new Box();
+```
+
+When the `Box` instance is created, the properties defined by the class becomes the object's state.  In this case, the object state, comprise one property of type `boolean`.  Similar to, "*an object is an instance of a class*", the objects' state is an instance of the properties defined by the class.
+
+**The state of one object is independent from the state of another object**.  One box may be open while the box instance is closed.
+
+### How do instance methods interact with the object's state?
 
 The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `open` property.
 
