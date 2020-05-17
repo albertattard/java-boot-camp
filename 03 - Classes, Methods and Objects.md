@@ -280,7 +280,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
     public class InnerInstanceClass { /* ... */ }
     ```
 
-1. **inner anonymous class** (missing in the above)
+1. **inner anonymous class** (missing in the above example)
 
 1. **`static` inner class**
 
@@ -301,6 +301,10 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
         ```java
         class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
         ```
+
+1. **local variables** (missing in the above example)
+
+    **Pending...**  Should we have a method anatomy?
 
 ## Classes, methods and properties (static no OOP)
 
@@ -1529,7 +1533,13 @@ When a method (*instance* or `static`) is invoked, the method's state (such as l
 
 **On the other hand, `static` methods cannot access the object state**.
 
-Different from local variables, when a method modifies the object's state (the properties), then all other methods will observe these changes.  There is a small caveat about this which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
+Different from local variables, when a method modifies the object's state (defined by its properties), then all other methods will observe these changes.  Consider the following sequence of events. 
+
+1. A box instance is created, and the property `open` is set to `false`.
+1. The `open()` method will set the property `open` to `true`.
+1. When later on the `isOpen()` method is invoked, then it returns the current value of the `open` property, which is `true`. 
+
+There is a small caveat to this, which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
 Consider the following example.
 
