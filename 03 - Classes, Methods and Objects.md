@@ -39,7 +39,7 @@
 1. [Inheritance](#inheritance)
     1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
     1. [Heavy box complete example](#heavy-box-complete-example)
-    1. [The `super` keyword](#the-super-keyword)
+    1. [How can a subclass invoke a method from the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-from-the-parent-class-the-super-keyword)
     1. [The `final` keyword](#the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
@@ -2367,7 +2367,7 @@ public class Box {
 }
 ```
 
-Java will only provide a default constructor when no constructors are provided.
+All classes must have a constructor (no exception) and a default constructor is only automatically provided when no constructors are define.
 
 ### Can one constructor call another constructor in the same class?
 
@@ -2985,7 +2985,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    Sometimes a property is used for various purposes.  Instead of creating a new property, `empty`, we could use the following.
+    Sometimes a property is used for various purposes.  Instead of creating a new property, `empty`, we could use the `itemId` property as shown in the following example.
 
     **⚠️ NOT RECOMMENDED!!**
 
@@ -3151,9 +3151,9 @@ A heavy box is a box that can take more than one item.
     }
     ```
 
-    The above example make use of `List`, which are discussed in more depth in the [Lists (ArrayList and Vector) section](06%20-%20Collections.md#lists-arraylist-and-vector) part of the [collections](06%20-%20Collections.md).
+    The above example make use of `List`, which are discussed in more depth in the [Lists (ArrayList and Vector) section](04%20-%20Collections.md#lists-vector-arraylist-and-linkedlist) part of the [collections](04%20-%20Collections.md).
 
-### The `super` keyword
+### How can a subclass invoke a method from the parent class (the `super` keyword)?
 
 While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should throw an `IllegalArgumentException`.
 
