@@ -3247,7 +3247,17 @@ public final class LightBox extends Box {
 }
 ```
 
-The `LightBox` class cannot be extended.
+The `LightBox` class cannot be extended.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class FeatherBox extends LightBox { /* ... */ }
+```
+
+The `FeatherBox` cannot extend `LightBox` as the latter is marked as `final`.
 
 ### How do `private` constructor effect inheritance?
 
