@@ -22,13 +22,13 @@
     1. [Add the open and close functionality to the box](#add-the-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
+    1. [Adding more state to our objects](#adding-more-state-to-our-objects)
+        1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Constructors](#constructors)
     1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
     1. [What are static factory methods?](#what-are-static-factory-methods)
     1. [Should utilities classes, like the `Math` class, have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
-1. [Adding more state to our objects](#adding-more-state-to-our-objects)
-    1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Mutable and immutable](#mutable-and-immutable)
     1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
 1. [Inheritance](#inheritance)
@@ -40,8 +40,8 @@
     1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
-    1. [Can final classes be abstract?](#can-final-classes-be-abstract)
-    1. [Can abstract classes have private constructors?](#can-abstract-classes-have-private-constructors)
+    1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
+    1. [Can abstract classes have `private` constructors?](#can-abstract-classes-have-private-constructors)
 1. [The `Object` class](#the-object-class)
     1. [The `toString()` method](#the-tostring-method)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
@@ -1610,6 +1610,372 @@ The above is a valid example.  Here a new instance of `Box` is create and then t
 
 It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
 
+### Adding more state to our objects
+
+Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
+
+1. `To be processed by Dept. XYZ`
+1. `Need to be rechecked by MNO`
+
+A box always has a label which is initially set to: `No label`.  **Note that the label cannot be blank or empty**.
+
+The label can be represented by the `String` data-type.
+
+1. By default, the label should have the value of `No label`.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() {
+        final Box box = new Box();
+        assertEquals( "No Label", box.getLabel() );
+      }
+    }
+    ```
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      private boolean open;
+
+      public Box() { /* ... */ }
+
+      public Box( final boolean open ) { /* ... */ }
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() {
+        return "No Label";
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+    Run the tests.  All tests should pass.
+
+1. Add the ability to change the label (assuming that only valid values will be provided)
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have the given label value" )
+      public void shouldHaveTheGivenLabel() {
+        final Box box = new Box();
+        box.changeLabelTo( "Test Label" );
+        assertEquals( "Test Label", box.getLabel() );
+      }
+    }
+    ```
+
+    Note that in the above test, the name `changeLabelTo()` was used instead of `setLabel()`.  Both names are fine, but the former reads more like natural languages.  For example, we say, "_the supervisor changed the box's label_" instead of "_the supervisor set the box's label_".
+
+    Add the missing method (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      private boolean open;
+
+      public Box() { /* ... */ }
+
+      public Box( final boolean open ) { /* ... */ }
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() { /* ... */ }
+
+      public void changeLabelTo( final String label ) {
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+
+    }
+    ```
+
+    The test should fail.
+
+1. Implement the required logic
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      private boolean open;
+      private String label = "No Label";
+
+      public Box() { /* ... */ }
+
+      public Box( final boolean open ) { /* ... */ }
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() {
+        return label;
+      }
+
+      public void changeLabelTo( final String label ) {
+        this.label = label;
+      }
+
+      @Override
+      public String toString() {
+        final String openClose = open ? "an open" : "a closed";
+        return String.format( "%s box labelled '%s'", openClose, label );
+      }
+    }
+    ```
+
+    Re-run the tests.  All should pass.
+
+    The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) always represents the object.  Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is not need to bind it or do any gymnastics.
+
+1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
+
+    Following is a list of some invalid labels
+    * `null` (null)
+    * `""` (blank string)
+    * `"   "` (only whitespaces)
+
+    The [`@ValueSource` annotation](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/ValueSource.html) does not support `null`s and the following will not compile.
+
+    ```java
+    @ValueSource( strings = { "", " ", null } )
+    ```
+
+    We can pass `"null"` as a string value, as shown next, but this will be treated as string
+
+    ```java
+    @ValueSource( strings = { "", " ", "null" } )
+    ```
+
+    We can use a custom converter that help us convert the above sample.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.converter.ArgumentConversionException;
+    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
+    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+
+    public final class NullableConverter extends SimpleArgumentConverter {
+      @Override
+      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
+        if ( "null".equals( source ) ) {
+          return null;
+        }
+
+        return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+      }
+    }
+    ```
+
+    The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
+
+    ```java
+    return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+    ```
+
+    Add a test and use the `NullableConverter` converter.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.params.ParameterizedTest;
+    import org.junit.jupiter.params.converter.ConvertWith;
+    import org.junit.jupiter.params.provider.ValueSource;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have the given label value" )
+      public void shouldHaveTheGivenLabel() { /* ... */ }
+
+      @ValueSource( strings = { "", " ", "null" } )
+      @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
+      @ParameterizedTest( name = "should throw an IllegalArgumentException when given an invalid label ''{0}''" )
+      public void shouldThrowAnExceptionWhenGivenInvalidLabel( final @ConvertWith( NullableConverter.class ) String invalidLabel ) {
+        final Box box = new Box();
+        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
+      }
+    }
+    ```
+
+    Run the test.  The test should fail as we have no validations in place yet.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    ...
+    ```
+
+1. Add the validation
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+    import com.google.common.base.Strings;
+
+    public class Box {
+
+      private boolean open;
+      private String label = "No Label";
+
+      public Box() { /* ... */ }
+
+      public Box( final boolean open ) { /* ... */ }
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() { /* ... */ }
+
+      public void changeLabelTo( final String label ) {
+        Preconditions.checkArgument( isValidLabel( label ) );
+        this.label = label;
+      }
+
+      private static boolean isValidLabel( final String label ) {
+        return false == Strings.nullToEmpty( label ).isBlank();
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+    The above example makes use of [Google Guava](https://mvnrepository.com/artifact/com.google.guava/guava).
+
+    ```groovy
+    dependencies {
+      implementation 'com.google.guava:guava:29.0-jre'
+    }
+    ```
+
+    Run the tests again.  All tests should pass.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' PASSED
+
+    ...
+    ```
+
+#### Why is the `isValidLabel()` method `private` and `static`?
+
+The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
+
+```java
+private static boolean isValidLabel( final String label ) {
+  return false == Strings.nullToEmpty( label ).isBlank();
+}
+```
+
+The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
+
 ## Constructors
 
 The `Box` does not contain any methods called `Box()` that take no parameters.  What method do we call when we execute `new Box()`?
@@ -2012,372 +2378,6 @@ public class App {
 Trying to create an instance of such class does not make sense.
 
 Such classes should have `private` constructor to prevent others from initialising them by mistake.  This pattern is also mentioned in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book as [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4).
-
-## Adding more state to our objects
-
-Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
-
-1. `To be processed by Dept. XYZ`
-1. `Need to be rechecked by MNO`
-
-A box always has a label which is initially set to: `No label`.  **Note that the label cannot be blank or empty**.
-
-The label can be represented by the `String` data-type.
-
-1. By default, the label should have the value of `No label`.
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-
-    import static org.junit.jupiter.api.Assertions.assertEquals;
-    import static org.junit.jupiter.api.Assertions.assertFalse;
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-
-    public class BoxTest {
-
-      @Test
-      @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() {
-        final Box box = new Box();
-        assertEquals( "No Label", box.getLabel() );
-      }
-    }
-    ```
-
-    Add the missing method (without any special logic) just to make the program compile.
-
-    ```java
-    package demo;
-
-    public class Box {
-
-      private boolean open;
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
-      public void open() { /* ... */ }
-
-      public void close() { /* ... */ }
-
-      public boolean isOpen() { /* ... */ }
-
-      public String getLabel() {
-        return "No Label";
-      }
-
-      @Override
-      public String toString() { /* ... */ }
-    }
-    ```
-
-    Run the tests.  All tests should pass.
-
-1. Add the ability to change the label (assuming that only valid values will be provided)
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-
-    import static org.junit.jupiter.api.Assertions.assertEquals;
-    import static org.junit.jupiter.api.Assertions.assertFalse;
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-
-    public class BoxTest {
-
-      @Test
-      @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have the given label value" )
-      public void shouldHaveTheGivenLabel() {
-        final Box box = new Box();
-        box.changeLabelTo( "Test Label" );
-        assertEquals( "Test Label", box.getLabel() );
-      }
-    }
-    ```
-
-    Note that in the above test, the name `changeLabelTo()` was used instead of `setLabel()`.  Both names are fine, but the former reads more like natural languages.  For example, we say, "_the supervisor changed the box's label_" instead of "_the supervisor set the box's label_".
-
-    Add the missing method (without any special logic) just to make the program compile.
-
-    ```java
-    package demo;
-
-    public class Box {
-
-      private boolean open;
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
-      public void open() { /* ... */ }
-
-      public void close() { /* ... */ }
-
-      public boolean isOpen() { /* ... */ }
-
-      public String getLabel() { /* ... */ }
-
-      public void changeLabelTo( final String label ) {
-      }
-
-      @Override
-      public String toString() { /* ... */ }
-
-    }
-    ```
-
-    The test should fail.
-
-1. Implement the required logic
-
-    ```java
-    package demo;
-
-    public class Box {
-
-      private boolean open;
-      private String label = "No Label";
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
-      public void open() { /* ... */ }
-
-      public void close() { /* ... */ }
-
-      public boolean isOpen() { /* ... */ }
-
-      public String getLabel() {
-        return label;
-      }
-
-      public void changeLabelTo( final String label ) {
-        this.label = label;
-      }
-
-      @Override
-      public String toString() {
-        final String openClose = open ? "an open" : "a closed";
-        return String.format( "%s box labelled '%s'", openClose, label );
-      }
-    }
-    ```
-
-    Re-run the tests.  All should pass.
-
-    The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) always represents the object.  Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is not need to bind it or do any gymnastics.
-
-1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
-
-    Following is a list of some invalid labels
-    * `null` (null)
-    * `""` (blank string)
-    * `"   "` (only whitespaces)
-
-    The [`@ValueSource` annotation](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/ValueSource.html) does not support `null`s and the following will not compile.
-
-    ```java
-    @ValueSource( strings = { "", " ", null } )
-    ```
-
-    We can pass `"null"` as a string value, as shown next, but this will be treated as string
-
-    ```java
-    @ValueSource( strings = { "", " ", "null" } )
-    ```
-
-    We can use a custom converter that help us convert the above sample.
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.params.converter.ArgumentConversionException;
-    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
-    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
-
-    public final class NullableConverter extends SimpleArgumentConverter {
-      @Override
-      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
-        if ( "null".equals( source ) ) {
-          return null;
-        }
-
-        return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
-      }
-    }
-    ```
-
-    The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
-
-    ```java
-    return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
-    ```
-
-    Add a test and use the `NullableConverter` converter.
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-    import org.junit.jupiter.params.ParameterizedTest;
-    import org.junit.jupiter.params.converter.ConvertWith;
-    import org.junit.jupiter.params.provider.ValueSource;
-
-    import static org.junit.jupiter.api.Assertions.assertEquals;
-    import static org.junit.jupiter.api.Assertions.assertFalse;
-    import static org.junit.jupiter.api.Assertions.assertThrows;
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-
-    public class BoxTest {
-
-      @Test
-      @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have the given label value" )
-      public void shouldHaveTheGivenLabel() { /* ... */ }
-
-      @ValueSource( strings = { "", " ", "null" } )
-      @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
-      @ParameterizedTest( name = "should throw an IllegalArgumentException when given an invalid label ''{0}''" )
-      public void shouldThrowAnExceptionWhenGivenInvalidLabel( final @ConvertWith( NullableConverter.class ) String invalidLabel ) {
-        final Box box = new Box();
-        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
-      }
-    }
-    ```
-
-    Run the test.  The test should fail as we have no validations in place yet.
-
-    ```bash
-    $ ./gradlew test
-
-    ...
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label '' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    ...
-    ```
-
-1. Add the validation
-
-    ```java
-    package demo;
-
-    import com.google.common.base.Preconditions;
-    import com.google.common.base.Strings;
-
-    public class Box {
-
-      private boolean open;
-      private String label = "No Label";
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
-      public void open() { /* ... */ }
-
-      public void close() { /* ... */ }
-
-      public boolean isOpen() { /* ... */ }
-
-      public String getLabel() { /* ... */ }
-
-      public void changeLabelTo( final String label ) {
-        Preconditions.checkArgument( isValidLabel( label ) );
-        this.label = label;
-      }
-
-      private static boolean isValidLabel( final String label ) {
-        return false == Strings.nullToEmpty( label ).isBlank();
-      }
-
-      @Override
-      public String toString() { /* ... */ }
-    }
-    ```
-
-    The above example makes use of [Google Guava](https://mvnrepository.com/artifact/com.google.guava/guava).
-
-    ```groovy
-    dependencies {
-      implementation 'com.google.guava:guava:29.0-jre'
-    }
-    ```
-
-    Run the tests again.  All tests should pass.
-
-    ```bash
-    $ ./gradlew test
-
-    ...
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label '' PASSED
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' PASSED
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' PASSED
-
-    ...
-    ```
-
-### Why is the `isValidLabel()` method `private` and `static`?
-
-The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
-
-```java
-private static boolean isValidLabel( final String label ) {
-  return false == Strings.nullToEmpty( label ).isBlank();
-}
-```
-
-The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
 
 ## Mutable and immutable
 
@@ -3089,11 +3089,11 @@ public abstract class Box {
     }
     ```
 
-### Can final classes be abstract?
+### Can `final` classes be abstract?
 
 A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be `abstract`.  Either `final` or `abstract`, but not both.
 
-### Can abstract classes have private constructors?
+### Can abstract classes have `private` constructors?
 
 **Pending...** Maybe moved up.
 
