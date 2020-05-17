@@ -1406,7 +1406,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
       @Test
       @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /*...*/ }
+      public void shouldBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should not be open after the close method is called" )
@@ -1425,15 +1425,15 @@ A box may be open or may be closed.  The program needs to determine whether the 
 
     public class Box {
 
-      public void open() { /*...*/ }
+      public void open() { /* ... */ }
 
       public void close() {
       }
 
-      public boolean isOpen() { /*...*/ }
+      public boolean isOpen() { /* ... */ }
 
       @Override
-      public String toString() { /*...*/ }
+      public String toString() { /* ... */ }
     }
     ```
 
@@ -1656,14 +1656,14 @@ public class Box {
   public Box() {
   }
 
-  public void open() { /*...*/ }
+  public void open() { /* ... */ }
 
-  public void close() { /*...*/ }
+  public void close() { /* ... */ }
 
-  public boolean isOpen() { /*...*/ }
+  public boolean isOpen() { /* ... */ }
 
   @Override
-  public String toString() { /*...*/ }
+  public String toString() { /* ... */ }
 }
 ```
 
@@ -1691,14 +1691,14 @@ public class Box {
     this.open = open;
   }
 
-  public void open() { /*...*/ }
+  public void open() { /* ... */ }
 
-  public void close() { /*...*/ }
+  public void close() { /* ... */ }
 
-  public boolean isOpen() { /*...*/ }
+  public boolean isOpen() { /* ... */ }
 
   @Override
-  public String toString() { /*...*/ }
+  public String toString() { /* ... */ }
 }
 ```
 
@@ -1733,14 +1733,14 @@ public class Box {
     this.open = open;
   }
 
-  public void open() { /*...*/ }
+  public void open() { /* ... */ }
 
-  public void close() { /*...*/ }
+  public void close() { /* ... */ }
 
-  public boolean isOpen() { /*...*/ }
+  public boolean isOpen() { /* ... */ }
 
   @Override
-  public String toString() { /*...*/ }
+  public String toString() { /* ... */ }
 }
 ```
 
@@ -1937,9 +1937,9 @@ Which constructor are we referring to in the above fragment?
 There were several attempts to solve this problem, some of them are not that good.  A not so good approach is to use a different type to represent one of the parameters (not the object's property).
 
 ```java
-public BoxDimensions( int base, float height ) { /*...*/ }
+public BoxDimensions( int base, float height ) { /* ... */ }
 
-public BoxDimensions( int side, int depth ) { /*...*/ }
+public BoxDimensions( int side, int depth ) { /* ... */ }
 ```
 
 The above code fragment uses `float` to differentiate between the constructors.
@@ -2040,11 +2040,11 @@ The label can be represented by the `String` data-type.
 
       @Test
       @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /*...*/ }
+      public void shouldBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /*...*/ }
+      public void shouldNotBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should have a default label value of 'No Label'" )
@@ -2064,22 +2064,22 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
 
-      public Box() { /*...*/ }
+      public Box() { /* ... */ }
 
-      public Box( final boolean open ) { /*...*/ }
+      public Box( final boolean open ) { /* ... */ }
 
-      public void open() { /*...*/ }
+      public void open() { /* ... */ }
 
-      public void close() { /*...*/ }
+      public void close() { /* ... */ }
 
-      public boolean isOpen() { /*...*/ }
+      public boolean isOpen() { /* ... */ }
 
       public String getLabel() {
         return "No Label";
       }
 
       @Override
-      public String toString() { /*...*/ }
+      public String toString() { /* ... */ }
     }
     ```
 
@@ -2101,15 +2101,15 @@ The label can be represented by the `String` data-type.
 
       @Test
       @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /*...*/ }
+      public void shouldBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /*...*/ }
+      public void shouldNotBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() { /*...*/ }
+      public void shouldHaveADefaultLabel() { /* ... */ }
 
       @Test
       @DisplayName( "should have the given label value" )
@@ -2132,23 +2132,23 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
 
-      public Box() { /*...*/ }
+      public Box() { /* ... */ }
 
-      public Box( final boolean open ) { /*...*/ }
+      public Box( final boolean open ) { /* ... */ }
 
-      public void open() { /*...*/ }
+      public void open() { /* ... */ }
 
-      public void close() { /*...*/ }
+      public void close() { /* ... */ }
 
-      public boolean isOpen() { /*...*/ }
+      public boolean isOpen() { /* ... */ }
 
-      public String getLabel() { /*...*/ }
+      public String getLabel() { /* ... */ }
 
       public void changeLabelTo( final String label ) {
       }
 
       @Override
-      public String toString() { /*...*/ }
+      public String toString() { /* ... */ }
 
     }
     ```
@@ -2165,15 +2165,15 @@ The label can be represented by the `String` data-type.
       private boolean open;
       private String label = "No Label";
 
-      public Box() { /*...*/ }
+      public Box() { /* ... */ }
 
-      public Box( final boolean open ) { /*...*/ }
+      public Box( final boolean open ) { /* ... */ }
 
-      public void open() { /*...*/ }
+      public void open() { /* ... */ }
 
-      public void close() { /*...*/ }
+      public void close() { /* ... */ }
 
-      public boolean isOpen() { /*...*/ }
+      public boolean isOpen() { /* ... */ }
 
       public String getLabel() {
         return label;
@@ -2261,19 +2261,19 @@ The label can be represented by the `String` data-type.
 
       @Test
       @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /*...*/ }
+      public void shouldBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /*...*/ }
+      public void shouldNotBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() { /*...*/ }
+      public void shouldHaveADefaultLabel() { /* ... */ }
 
       @Test
       @DisplayName( "should have the given label value" )
-      public void shouldHaveTheGivenLabel() { /*...*/ }
+      public void shouldHaveTheGivenLabel() { /* ... */ }
 
       @ValueSource( strings = { "", " ", "null" } )
       @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
@@ -2317,17 +2317,17 @@ The label can be represented by the `String` data-type.
       private boolean open;
       private String label = "No Label";
 
-      public Box() { /*...*/ }
+      public Box() { /* ... */ }
 
-      public Box( final boolean open ) { /*...*/ }
+      public Box( final boolean open ) { /* ... */ }
 
-      public void open() { /*...*/ }
+      public void open() { /* ... */ }
 
-      public void close() { /*...*/ }
+      public void close() { /* ... */ }
 
-      public boolean isOpen() { /*...*/ }
+      public boolean isOpen() { /* ... */ }
 
-      public String getLabel() { /*...*/ }
+      public String getLabel() { /* ... */ }
 
       public void changeLabelTo( final String label ) {
         Preconditions.checkArgument( isValidLabel( label ) );
@@ -2339,7 +2339,7 @@ The label can be represented by the `String` data-type.
       }
 
       @Override
-      public String toString() { /*...*/ }
+      public String toString() { /* ... */ }
     }
     ```
 
@@ -2672,7 +2672,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
       @Test
       @DisplayName( "should be empty when a new light box is created and no items are placed" )
-      public void shouldBeEmpty() { /*...*/ }
+      public void shouldBeEmpty() { /* ... */ }
 
       @Test
       @DisplayName( "should not be empty after an item is placed in the box" )
@@ -2691,7 +2691,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class LightBox extends Box {
 
-      public boolean isEmpty() { /*...*/ }
+      public boolean isEmpty() { /* ... */ }
 
       public void putItem( final long itemId ) {
       }
@@ -2767,11 +2767,11 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
       @Test
       @DisplayName( "should be empty when a new light box is created and no items are placed" )
-      public void shouldBeEmpty() { /*...*/ }
+      public void shouldBeEmpty() { /* ... */ }
 
       @Test
       @DisplayName( "should not be empty after an item is placed in the box" )
-      public void shouldNotBeEmpty() { /*...*/ }
+      public void shouldNotBeEmpty() { /* ... */ }
 
       @Test
       @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
@@ -2806,7 +2806,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
       private boolean empty;
 
-      public boolean isEmpty() { /*...*/ }
+      public boolean isEmpty() { /* ... */ }
 
       public void putItem( final long itemId ) {
         Preconditions.checkArgument( empty );
@@ -2914,15 +2914,15 @@ public class LightBoxTest {
 
   @Test
   @DisplayName( "should be empty when a new light box is created and no items are placed" )
-  public void shouldBeEmpty() { /*...*/ }
+  public void shouldBeEmpty() { /* ... */ }
 
   @Test
   @DisplayName( "should not be empty after an item is placed in the box" )
-  public void shouldNotBeEmpty() { /*...*/ }
+  public void shouldNotBeEmpty() { /* ... */ }
 
   @Test
   @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
-  public void shouldThrowExceptionWhenItemAlreadyExists() { /*...*/ }
+  public void shouldThrowExceptionWhenItemAlreadyExists() { /* ... */ }
 
   @Test
   @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
@@ -2945,9 +2945,9 @@ public class LightBox extends Box {
 
   private boolean empty;
 
-  public boolean isEmpty() { /*...*/ }
+  public boolean isEmpty() { /* ... */ }
 
-  public void putItem( final long itemId ) { /*...*/ }
+  public void putItem( final long itemId ) { /* ... */ }
 
   @Override
   public void changeLabelTo( final String label ) {
@@ -2979,14 +2979,14 @@ public final class LightBox extends Box {
 
   private boolean empty;
 
-  public boolean isEmpty() { /*...*/ }
+  public boolean isEmpty() { /* ... */ }
 
-  public void putItem( final long itemId ) { /*...*/ }
+  public void putItem( final long itemId ) { /* ... */ }
 
   @Override
-  public void changeLabelTo( final String label ) { /*...*/ }
+  public void changeLabelTo( final String label ) { /* ... */ }
 
-  public static boolean isValidLabel( final String label ) { /*...*/ }
+  public static boolean isValidLabel( final String label ) { /* ... */ }
 }
 ```
 
@@ -3221,11 +3221,11 @@ public class Person {
   public String name;
   public String surname;
 
-  public Person() { /*...*/ }
+  public Person() { /* ... */ }
 
-  public Person( final String name ) { /*...*/ }
+  public Person( final String name ) { /* ... */ }
 
-  public Person( final String name, final String surname ) { /*...*/ }
+  public Person( final String name, final String surname ) { /* ... */ }
 
   @Override
   public String toString() {
@@ -3325,11 +3325,11 @@ public class Person {
   public String name;
   public String surname;
 
-  public Person() { /*...*/ }
+  public Person() { /* ... */ }
 
-  public Person( final String name ) { /*...*/ }
+  public Person( final String name ) { /* ... */ }
 
-  public Person( final String name, final String surname ) { /*...*/ }
+  public Person( final String name, final String surname ) { /* ... */ }
 
   @Override
   public boolean equals( final Object object ) {
@@ -3347,7 +3347,7 @@ public class Person {
   }
 
   @Override
-  public String toString() { /*...*/ }
+  public String toString() { /* ... */ }
 }
 ```
 
@@ -3435,14 +3435,14 @@ public class Person {
   public String name;
   public String surname;
 
-  public Person() { /*...*/ }
+  public Person() { /* ... */ }
 
-  public Person( final String name ) { /*...*/ }
+  public Person( final String name ) { /* ... */ }
 
-  public Person( final String name, final String surname ) { /*...*/ }
+  public Person( final String name, final String surname ) { /* ... */ }
 
   @Override
-  public boolean equals( final Object object ) { /*...*/ }
+  public boolean equals( final Object object ) { /* ... */ }
 
   @Override
   public int hashCode() {
@@ -3450,7 +3450,7 @@ public class Person {
   }
 
   @Override
-  public String toString() { /*...*/ }
+  public String toString() { /* ... */ }
 }
 ```
 
@@ -3768,7 +3768,7 @@ public class App {
     final MyFirstInterface a = null;
   }
 
-  private static void useMyInterface( final MyFirstInterface a ) { /*...*/ }
+  private static void useMyInterface( final MyFirstInterface a ) { /* ... */ }
 }
 ```
 
@@ -4214,11 +4214,11 @@ public abstract class Temperature {
   public static final Temperature KELVIN = new Kelvin();
 
 
-  private static class Fahrenheit extends Temperature { /*...*/ }
+  private static class Fahrenheit extends Temperature { /* ... */ }
 
-  private static class Celsius extends Temperature { /*...*/ }
+  private static class Celsius extends Temperature { /* ... */ }
 
-  private static class Kelvin extends Temperature { /*...*/ }
+  private static class Kelvin extends Temperature { /* ... */ }
 
 }
 ```
@@ -4258,25 +4258,25 @@ package demo;
 
 public abstract class Temperature {
 
-  private Temperature() { /*...*/ }
+  private Temperature() { /* ... */ }
 
   public abstract boolean isTooCold();
 
   public abstract boolean isTooHot();
 
 
-  public static Temperature withFahrenheit( double fahrenheit ) { /*...*/ }
+  public static Temperature withFahrenheit( double fahrenheit ) { /* ... */ }
 
-  public static Temperature withCelsius( double celsius ) { /*...*/ }
+  public static Temperature withCelsius( double celsius ) { /* ... */ }
 
-  public static Temperature withKelvin( double kelvin ) { /*...*/ }
+  public static Temperature withKelvin( double kelvin ) { /* ... */ }
 
 
-  private static class Fahrenheit extends Temperature { /*...*/ }
+  private static class Fahrenheit extends Temperature { /* ... */ }
 
-  private static class Celsius extends Temperature { /*...*/ }
+  private static class Celsius extends Temperature { /* ... */ }
 
-  private static class Kelvin extends Temperature { /*...*/ }
+  private static class Kelvin extends Temperature { /* ... */ }
 }
 ```
 
