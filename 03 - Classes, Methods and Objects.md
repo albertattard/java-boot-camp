@@ -18,7 +18,7 @@
     1. [Class members access modifiers table](#class-members-access-modifiers-table)
     1. [Which access modifier should I pick?](#which-access-modifier-should-i-pick)
 1. [Simple objects](#simple-objects)
-    1. [Basic object](#basic-object)
+    1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
@@ -1283,9 +1283,9 @@ Always start with the least visible access modifier, `private`, and then increas
 
 The post-office is automating the packaging of letters or items into boxes and is creating a program to handles this.  There are two types of boxes, the light boxes and the heavy boxes.  The light boxes only take one item in them whereas the heavy boxes can take as many items as it can fit.
 
-### Basic object
+### Create a simple box object
 
-Let start by creating a basic object that will represent a box.  The box will not have any functionality.  Do not worry about light and heavy boxes just yet.
+Let start by creating a simple object that will represent a box.  The box will not have any functionality.  Do not worry about light and heavy boxes just yet.
 
 1. Create the `Box` class
 

@@ -124,7 +124,7 @@ Boot Camp for developers interested to learn Java.
     1. [Class members access modifiers table](03%20-%20Classes%2C%20Methods%20and%20Objects.md#class-members-access-modifiers-table)
     1. [Which access modifier should I pick?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#which-access-modifier-should-i-pick)
 1. [Simple objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md#simple-objects)
-    1. [Basic object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#basic-object)
+    1. [Create a simple box object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#create-a-simple-box-object)
     1. [Add open and close functionality to the box](03%20-%20Classes%2C%20Methods%20and%20Objects.md#add-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#multiple-instances-of-the-same-class)
