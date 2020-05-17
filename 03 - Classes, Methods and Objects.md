@@ -12,14 +12,14 @@
     1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [How can we test functionality that makes use of `static` methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does `static` mean?](#what-does-static-mean)
-    1. [`static` fields](#static-fields)
+    1. [How do `static` fields behave?](#how-do-static-fields-behave)
 1. [Access control](#access-control)
     1. [Classes access modifiers table](#classes-access-modifiers-table)
     1. [Class members access modifiers table](#class-members-access-modifiers-table)
     1. [Which access modifier should I pick?](#which-access-modifier-should-i-pick)
 1. [Simple objects](#simple-objects)
     1. [Basic object](#basic-object)
-    1. [Add the open and close functionality to the box](#add-the-open-and-close-functionality-to-the-box)
+    1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [How do instance methods access the object's state?](#how-do-instance-methods-access-the-objects-state)
     1. [Multiple instances of the same class](#multiple-instances-of-the-same-class)
     1. [Adding more state to our objects](#adding-more-state-to-our-objects)
@@ -921,7 +921,7 @@ When the `max()` method is called in the above context, the `max()` method is si
 
 The variable `nullVariable` is of type `Math` and can access any member that this type defines.  The `Math` class has the `max()` `static` method which can be access or through the `Math` class name or through a variable of type `Math`.
 
-### `static` fields
+### How do `static` fields behave?
 
 The Java API has a [`Point` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) that can be used to represent a point on a [cartesian plane](https://en.wikipedia.org/wiki/Cartesian_coordinate_system).
 
@@ -1342,7 +1342,7 @@ Let start by creating a basic object that will represent a box.  The box will no
     My box a basic box
     ```
 
-### Add the open and close functionality to the box
+### Add open and close functionality to the box
 
 A box may be open or may be closed.  The program needs to determine whether the box is open or closed before putting things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
 
