@@ -39,8 +39,8 @@
 1. [Inheritance](#inheritance)
     1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
     1. [Heavy box complete example](#heavy-box-complete-example)
-    1. [How can a subclass invoke a method from the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-from-the-parent-class-the-super-keyword)
-    1. [The `final` keyword](#the-final-keyword)
+    1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
+    1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Can a subclass invoke the constructor of a superclass?](#can-a-subclass-invoke-the-constructor-of-a-superclass)
 1. [Abstraction](#abstraction)
@@ -3153,9 +3153,9 @@ A heavy box is a box that can take more than one item.
 
     The above example make use of `List`, which are discussed in more depth in the [Lists (ArrayList and Vector) section](04%20-%20Collections.md#lists-vector-arraylist-and-linkedlist) part of the [collections](04%20-%20Collections.md).
 
-### How can a subclass invoke a method from the parent class (the `super` keyword)?
+### How can a subclass invoke a method in the parent class (the `super` keyword)?
 
-While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should throw an `IllegalArgumentException`.
+While heavy boxes may contain very long labels, light box labels cannot be longer than 32 letters long.  Trying to set longer labels should throw an `IllegalArgumentException`.  The `LightBox` class needs to check the label's length before passing it to the parent class to set it.
 
 ```java
 package demo;
@@ -3222,7 +3222,7 @@ The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this 
 
 **Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
 
-### The `final` keyword
+### Can we prevent a class from being extended (the `final` keyword)?
 
 Java allows a class to extend another by default.  This can be prevented by the `final` keyword.
 
