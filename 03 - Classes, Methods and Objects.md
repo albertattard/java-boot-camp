@@ -2183,7 +2183,7 @@ public class App {
         System.out.printf( "number (iac)  = %d%n", this.number );
 
         /* Inner anonymous class within another inner anonymous class */
-        /* Referred to for our example, inner-inner anonymous class */
+        /* Referred to in our example as inner-inner anonymous class */
         new Runnable() {
           @Override
           public void run() {
@@ -2203,9 +2203,9 @@ public class App {
 }
 ```
 
-The above example will not compile.  Also, inner anonymous classes should not introduce new state as it makes things more complex for nothing.  The inner-inner anonymous class (the inner-inner anonymous class is the inner anonymous class defined within the `run()` within the inner anonymous class) has no way to refer to its outer class thus, there is no way we can get the `number` property defined by the inner anonymous class.
+The above example will not compile.  Also, inner anonymous classes should not introduce new state as it makes things more complex for nothing.  The *inner-inner anonymous class* (the *inner-inner anonymous class* is the inner anonymous class defined within the `run()` within the *inner anonymous class*) has no way to refer to its outer class thus, there is no way we can get the `number` property defined by the *inner anonymous class*.
 
-Moving property to within the method would make it available to the inner-inner anonymous class.
+Moving the property to within the method would make it available to the *inner-inner anonymous class*.
 
 ```java
     /* Inner anonymous class */
@@ -2219,7 +2219,7 @@ Moving property to within the method would make it available to the inner-inner 
         System.out.printf( "number (iac)  = %d%n", this.number );
 
         /* Inner anonymous class within another inner anonymous class */
-        /* Referred to for our example, inner-inner anonymous class */
+        /* Referred to in our example as inner-inner anonymous class */
         new Runnable() {
           @Override
           public void run() {
