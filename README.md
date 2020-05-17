@@ -134,7 +134,7 @@ Boot Camp for developers interested to learn Java.
 1. [What does `this` means?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-does-this-means)
     1. [Can we access `static` methods using the `this` keyword?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-access-static-methods-using-the-this-keyword)
     1. [How does the `this` keyword works with inner anonymous classes?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-does-the-this-keyword-works-with-inner-anonymous-classes)
-    1. [How does `this` works with nested inner anonymous classes?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-does-this-works-with-nested-inner-anonymous-classes)
+    1. [🤔 How does `this` works with nested inner anonymous classes?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#-how-does-this-works-with-nested-inner-anonymous-classes)
 1. [Constructors](03%20-%20Classes%2C%20Methods%20and%20Objects.md#constructors)
     1. [How many constructors can a class have?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-one-constructor-call-another-constructor-in-the-same-class)

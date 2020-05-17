@@ -28,7 +28,7 @@
 1. [What does `this` means?](#what-does-this-means)
     1. [Can we access `static` methods using the `this` keyword?](#can-we-access-static-methods-using-the-this-keyword)
     1. [How does the `this` keyword works with inner anonymous classes?](#how-does-the-this-keyword-works-with-inner-anonymous-classes)
-    1. [How does `this` works with nested inner anonymous classes?](#how-does-this-works-with-nested-inner-anonymous-classes)
+    1. [🤔 How does `this` works with nested inner anonymous classes?](#-how-does-this-works-with-nested-inner-anonymous-classes)
 1. [Constructors](#constructors)
     1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
@@ -1803,7 +1803,7 @@ The label can be represented by the `String` data-type.
 
     Re-run the tests.  All should pass.
     
-    The above example introduced a new keyword, `this`.  Do not worry about the new keyword just yet as it is covered in depth [later on](#what-does-this-means).
+    The above example introduced a new keyword, `this`.  Do not worry about the new keyword just yet as it is covered in [a following section](#what-does-this-means).
 
 ### How can we prevent invalid labels to be used?
 
@@ -2020,7 +2020,12 @@ public class Box {
   }
 
   public void changeLabelTo( final String label ) {
+    Preconditions.checkArgument( isValidLabel( label ) );
     this.label = label;
+  }
+
+  private static boolean isValidLabel( final String label ) {
+    return false == Strings.nullToEmpty( label ).isBlank();
   }
 
   @Override
@@ -2032,7 +2037,7 @@ public class Box {
 }
 ```
 
-The above example goes to great length to refer to everything through the `this` keyword. And there is no need to do that.
+The above example goes to great length to refer to everything through the `this` keyword, and there is no need to do that.
 
 ### Can we access `static` methods using the `this` keyword?
 
@@ -2151,7 +2156,7 @@ Following is an updated example
 
 As before, we can always prefix the `this` keywords with the class name as shown above.  
 
-### How does `this` works with nested inner anonymous classes?
+### 🤔 How does `this` works with nested inner anonymous classes?
 
 Consider the following challenge.
 
