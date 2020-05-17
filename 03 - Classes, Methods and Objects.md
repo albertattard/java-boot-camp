@@ -1991,7 +1991,7 @@ The `isValidLabel()` can be made public as there is no harm with that, but then 
 
 The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) represents the object and instance methods can access the object they are currently interacting with using `this` keyword.
 
-One can simply say that when an instance method is invoked, a new variable is made available to the method through which the instance method can interact with the object.  In the [previous example](#adding-more-state-to-our-objects), the `this` keyword was only used in one place, and yet it works.  The `this` keyword is only required when we need to make a distinction between a local variable and class property.  With that said, we can use the `this` keyword to refer to both properties and instance methods.
+One can simply say that when an instance method is invoked, a new variable is made available to the method through which the instance method can interact with the object.  In the [previous example](#adding-more-state-to-our-objects), the `this` keyword was only used in one place, and yet it works.  The `this` keyword is only required when we need to make a distinction between a local variable and a class property.  With that said, we can use the `this` keyword to refer to both properties and instance methods.
 
 Consider the following example.
 
@@ -2041,7 +2041,7 @@ The above example goes to great length to refer to everything through the `this`
 
 ### Can we access `static` methods using the `this` keyword?
 
-The `this` keyword can be used to access `static` methods, but that's not required nor recommended.
+The `this` keyword can be used to access `static` methods, **but that's not required nor recommended**.
 
 **⚠️ NOT RECOMMENDED!!**
 
@@ -2058,17 +2058,15 @@ public class App {
     this.staticMethod();
   }
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     new App().instanceMethod();
   }
 }
 ```
 
-The `staticMethod()` method is being called by the `instanceMethod()` using the `this` keyword.
-
 ### How does the `this` keyword works with inner anonymous classes?
 
-Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is no need to bind it or do any gymnastics.
+Different from some other programming languages, like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is no need to bind it or do any gymnastics.
 
 In Java, we can have objects within objects in the form of [inner anonymous classes, discussed in depth later on].  Consider the following (*possibly advanced*) example.
 
@@ -2086,14 +2084,15 @@ public class App {
 
     /* Create an inner anonymous class */
     final Runnable r = new Runnable() {
-      @Override public void run() {
+      @Override
+      public void run() {
         System.out.printf( "number = %d%n", this.number );
       }
     };
     r.run();
   }
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     new App().instanceMethod();
   }
 }
@@ -2124,7 +2123,8 @@ Let's breakdown the `instanceMethod()` method down.
     ```java
         /* Create an inner anonymous class */
         final Runnable r = new Runnable() {
-          @Override public void run() {
+          @Override 
+          public void run() {
             System.out.printf( "number = %d%n", this.number );
           }
         };
@@ -2146,7 +2146,8 @@ Following is an updated example
 
     /* Create an inner anonymous class */
     final Runnable r = new Runnable() {
-      @Override public void run() {
+      @Override 
+      public void run() {
         System.out.printf( "number = %d%n", App.this.number );
       }
     };
@@ -2197,7 +2198,7 @@ public class App {
     r.run();
   }
 
-  public static void main( String[] args ) {
+  public static void main( final String[] args ) {
     new App().instanceMethod();
   }
 }
