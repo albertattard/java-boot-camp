@@ -113,9 +113,9 @@ Boot Camp for developers interested to learn Java.
 
 1. [Anatomy of a Java class](03%20-%20Classes%2C%20Methods%20and%20Objects.md#anatomy-of-a-java-class)
     1. [Terms](03%20-%20Classes%2C%20Methods%20and%20Objects.md#terms)
-1. [Classes and methods (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#classes-and-methods-static-no-oop)
+1. [Classes, methods and properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#classes-methods-and-properties-static-no-oop)
     1. [Is `void` a type?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#is-void-a-type)
-1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#properties-static-no-oop)
+    1. [Properties (static no OOP)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#properties-static-no-oop)
 1. [How can we test functionality that makes use of `static` methods?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does `static` mean?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-does-static-mean)
     1. [`static` fields](03%20-%20Classes%2C%20Methods%20and%20Objects.md#static-fields)

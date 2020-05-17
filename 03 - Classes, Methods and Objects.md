@@ -7,9 +7,9 @@
 1. [Setup](#setup)
 1. [Anatomy of a Java class](#anatomy-of-a-java-class)
     1. [Terms](#terms)
-1. [Classes and methods (static no OOP)](#classes-and-methods-static-no-oop)
+1. [Classes, methods and properties (static no OOP)](#classes-methods-and-properties-static-no-oop)
     1. [Is `void` a type?](#is-void-a-type)
-1. [Properties (static no OOP)](#properties-static-no-oop)
+    1. [Properties (static no OOP)](#properties-static-no-oop)
 1. [How can we test functionality that makes use of `static` methods?](#how-can-we-test-functionality-that-makes-use-of-static-methods)
     1. [What does `static` mean?](#what-does-static-mean)
     1. [`static` fields](#static-fields)
@@ -303,7 +303,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
         class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
         ```
 
-## Classes and methods (static no OOP)
+## Classes, methods and properties (static no OOP)
 
 Consider the following example
 
@@ -525,7 +525,7 @@ While `int` is a type and we can create a variable of type `int`, `void` is not 
 
 This quite unique to Java as other languages always return a type.  The decision of having `void` as a non-type caused some complications in the newer versions of Java, such as lambda.
 
-## Properties (static no OOP)
+### Properties (static no OOP)
 
 Consider the following program
 
