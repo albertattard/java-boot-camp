@@ -1681,10 +1681,6 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
 
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
       public void open() { /* ... */ }
 
       public void close() { /* ... */ }
@@ -1749,10 +1745,6 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
 
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
-
       public void open() { /* ... */ }
 
       public void close() { /* ... */ }
@@ -1781,10 +1773,6 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
       private String label = "No Label";
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
 
       public void open() { /* ... */ }
 
@@ -1933,10 +1921,6 @@ The label can be represented by the `String` data-type.
 
       private boolean open;
       private String label = "No Label";
-
-      public Box() { /* ... */ }
-
-      public Box( final boolean open ) { /* ... */ }
 
       public void open() { /* ... */ }
 
