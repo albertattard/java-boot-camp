@@ -1574,7 +1574,7 @@ public class App {
 }
 ```
 
-Output
+Two boxes are created, and one of them is modified while the other one is not.  The boxes state is printed at every step.
 
 ```bash
 -- Two boxes --------
