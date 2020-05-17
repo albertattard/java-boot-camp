@@ -23,12 +23,12 @@
     1. [What does '*object state*' mean?](#what-does-object-state-mean)
     1. [How do instance methods interact with the object's state?](#how-do-instance-methods-interact-with-the-objects-state)
     1. [Adding more state to our objects](#adding-more-state-to-our-objects)
-    1. [What does `this` means?](#what-does-this-means)
+    1. [How can we prevent invalid labels to be used?](#how-can-we-prevent-invalid-labels-to-be-used)
+        1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
+1. [What does `this` means?](#what-does-this-means)
         1. [Can we access `static` methods using the `this` keyword?](#can-we-access-static-methods-using-the-this-keyword)
         1. [How does the `this` keyword works with inner anonymous classes?](#how-does-the-this-keyword-works-with-inner-anonymous-classes)
         1. [How does `this` works with nested inner anonymous classes?](#how-does-this-works-with-nested-inner-anonymous-classes)
-    1. [How can we prevent invalid labels to be used?](#how-can-we-prevent-invalid-labels-to-be-used)
-        1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [Constructors](#constructors)
     1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
@@ -1802,8 +1802,192 @@ The label can be represented by the `String` data-type.
     ```
 
     Re-run the tests.  All should pass.
+    
+    The above example introduced a new keyword, `this`.  Do not worry about the new keyword just yet as it is covered in depth [later on](#what-does-this-means).
 
-### What does `this` means?
+### How can we prevent invalid labels to be used?
+
+1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
+
+    Following is a list of some invalid labels
+    * `null` (null)
+    * `""` (blank string)
+    * `"   "` (only whitespaces)
+
+    The [`@ValueSource` annotation](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/ValueSource.html) does not support `null`s and the following will not compile.
+
+    ```java
+    @ValueSource( strings = { "", " ", null } )
+    ```
+
+    We can pass `"null"` as a string value, as shown next, but this will be treated as string
+
+    ```java
+    @ValueSource( strings = { "", " ", "null" } )
+    ```
+
+    We can use a custom converter that help us convert the above sample.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.params.converter.ArgumentConversionException;
+    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
+    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+
+    public final class NullableConverter extends SimpleArgumentConverter {
+      @Override
+      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
+        if ( "null".equals( source ) ) {
+          return null;
+        }
+
+        return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+      }
+    }
+    ```
+
+    The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
+
+    ```java
+    return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
+    ```
+
+    Add a test and use the `NullableConverter` converter.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.params.ParameterizedTest;
+    import org.junit.jupiter.params.converter.ConvertWith;
+    import org.junit.jupiter.params.provider.ValueSource;
+
+    import static org.junit.jupiter.api.Assertions.assertEquals;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be open after the open method is called" )
+      public void shouldBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have a default label value of 'No Label'" )
+      public void shouldHaveADefaultLabel() { /* ... */ }
+
+      @Test
+      @DisplayName( "should have the given label value" )
+      public void shouldHaveTheGivenLabel() { /* ... */ }
+
+      @ValueSource( strings = { "", " ", "null" } )
+      @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
+      @ParameterizedTest( name = "should throw an IllegalArgumentException when given an invalid label ''{0}''" )
+      public void shouldThrowAnExceptionWhenGivenInvalidLabel( final @ConvertWith( NullableConverter.class ) String invalidLabel ) {
+        final Box box = new Box();
+        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
+      }
+    }
+    ```
+
+    Run the test.  The test should fail as we have no validations in place yet.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' FAILED
+        org.opentest4j.AssertionFailedError at BoxTest.java:51
+
+    ...
+    ```
+
+1. Add the validation
+
+    ```java
+    package demo;
+
+    import com.google.common.base.Preconditions;
+    import com.google.common.base.Strings;
+
+    public class Box {
+
+      private boolean open;
+      private String label = "No Label";
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() { /* ... */ }
+
+      public void changeLabelTo( final String label ) {
+        Preconditions.checkArgument( isValidLabel( label ) );
+        this.label = label;
+      }
+
+      private static boolean isValidLabel( final String label ) {
+        return false == Strings.nullToEmpty( label ).isBlank();
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+    The above example makes use of [Google Guava](https://mvnrepository.com/artifact/com.google.guava/guava).
+
+    ```groovy
+    dependencies {
+      implementation 'com.google.guava:guava:29.0-jre'
+    }
+    ```
+
+    Run the tests again.  All tests should pass.
+
+    ```bash
+    $ ./gradlew test
+
+    ...
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label '' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' PASSED
+
+    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' PASSED
+
+    ...
+    ```
+
+#### Why is the `isValidLabel()` method `private` and `static`?
+
+The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
+
+```java
+private static boolean isValidLabel( final String label ) {
+  return false == Strings.nullToEmpty( label ).isBlank();
+}
+```
+
+The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
+
+## What does `this` means?
 
 The [`this` keyword](https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html) represents the object and instance methods can access the object they are currently interacting with using `this` keyword.
 
@@ -2042,188 +2226,6 @@ Moving property to within the method would make it available to the inner-inner 
       }
     };
 ```
-
-### How can we prevent invalid labels to be used?
-
-1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
-
-    Following is a list of some invalid labels
-    * `null` (null)
-    * `""` (blank string)
-    * `"   "` (only whitespaces)
-
-    The [`@ValueSource` annotation](https://junit.org/junit5/docs/5.2.0/api/org/junit/jupiter/params/provider/ValueSource.html) does not support `null`s and the following will not compile.
-
-    ```java
-    @ValueSource( strings = { "", " ", null } )
-    ```
-
-    We can pass `"null"` as a string value, as shown next, but this will be treated as string
-
-    ```java
-    @ValueSource( strings = { "", " ", "null" } )
-    ```
-
-    We can use a custom converter that help us convert the above sample.
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.params.converter.ArgumentConversionException;
-    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
-    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
-
-    public final class NullableConverter extends SimpleArgumentConverter {
-      @Override
-      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
-        if ( "null".equals( source ) ) {
-          return null;
-        }
-
-        return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
-      }
-    }
-    ```
-
-    The above converter converts the text `"null"` to an actual `null`.  Otherwise, it calls the default converter and let it deal with the conversion.
-
-    ```java
-    return DefaultArgumentConverter.INSTANCE.convert( source, targetType );
-    ```
-
-    Add a test and use the `NullableConverter` converter.
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-    import org.junit.jupiter.params.ParameterizedTest;
-    import org.junit.jupiter.params.converter.ConvertWith;
-    import org.junit.jupiter.params.provider.ValueSource;
-
-    import static org.junit.jupiter.api.Assertions.assertEquals;
-    import static org.junit.jupiter.api.Assertions.assertFalse;
-    import static org.junit.jupiter.api.Assertions.assertThrows;
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-
-    public class BoxTest {
-
-      @Test
-      @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have a default label value of 'No Label'" )
-      public void shouldHaveADefaultLabel() { /* ... */ }
-
-      @Test
-      @DisplayName( "should have the given label value" )
-      public void shouldHaveTheGivenLabel() { /* ... */ }
-
-      @ValueSource( strings = { "", " ", "null" } )
-      @DisplayName( "should throw an IllegalArgumentException when given an invalid label" )
-      @ParameterizedTest( name = "should throw an IllegalArgumentException when given an invalid label ''{0}''" )
-      public void shouldThrowAnExceptionWhenGivenInvalidLabel( final @ConvertWith( NullableConverter.class ) String invalidLabel ) {
-        final Box box = new Box();
-        assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( invalidLabel ) );
-      }
-    }
-    ```
-
-    Run the test.  The test should fail as we have no validations in place yet.
-
-    ```bash
-    $ ./gradlew test
-
-    ...
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label '' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:51
-
-    ...
-    ```
-
-1. Add the validation
-
-    ```java
-    package demo;
-
-    import com.google.common.base.Preconditions;
-    import com.google.common.base.Strings;
-
-    public class Box {
-
-      private boolean open;
-      private String label = "No Label";
-
-      public void open() { /* ... */ }
-
-      public void close() { /* ... */ }
-
-      public boolean isOpen() { /* ... */ }
-
-      public String getLabel() { /* ... */ }
-
-      public void changeLabelTo( final String label ) {
-        Preconditions.checkArgument( isValidLabel( label ) );
-        this.label = label;
-      }
-
-      private static boolean isValidLabel( final String label ) {
-        return false == Strings.nullToEmpty( label ).isBlank();
-      }
-
-      @Override
-      public String toString() { /* ... */ }
-    }
-    ```
-
-    The above example makes use of [Google Guava](https://mvnrepository.com/artifact/com.google.guava/guava).
-
-    ```groovy
-    dependencies {
-      implementation 'com.google.guava:guava:29.0-jre'
-    }
-    ```
-
-    Run the tests again.  All tests should pass.
-
-    ```bash
-    $ ./gradlew test
-
-    ...
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label '' PASSED
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label ' ' PASSED
-
-    BoxTest > should throw an IllegalArgumentException when given and invalid label 'null' PASSED
-
-    ...
-    ```
-
-#### Why is the `isValidLabel()` method `private` and `static`?
-
-The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
-
-```java
-private static boolean isValidLabel( final String label ) {
-  return false == Strings.nullToEmpty( label ).isBlank();
-}
-```
-
-The `isValidLabel()` can be made public as there is no harm with that, but then we will enable other classes to bind to the `Box` class.  This can have consequences, similar to what we discussed in the [use of static methods](#how-can-we-test-functionality-that-makes-use-of-static-methods).
 
 ## Constructors
 
