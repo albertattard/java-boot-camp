@@ -26,9 +26,9 @@
     1. [How can we prevent invalid labels to be used?](#how-can-we-prevent-invalid-labels-to-be-used)
         1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [What does `this` means?](#what-does-this-means)
-        1. [Can we access `static` methods using the `this` keyword?](#can-we-access-static-methods-using-the-this-keyword)
-        1. [How does the `this` keyword works with inner anonymous classes?](#how-does-the-this-keyword-works-with-inner-anonymous-classes)
-        1. [How does `this` works with nested inner anonymous classes?](#how-does-this-works-with-nested-inner-anonymous-classes)
+    1. [Can we access `static` methods using the `this` keyword?](#can-we-access-static-methods-using-the-this-keyword)
+    1. [How does the `this` keyword works with inner anonymous classes?](#how-does-the-this-keyword-works-with-inner-anonymous-classes)
+    1. [How does `this` works with nested inner anonymous classes?](#how-does-this-works-with-nested-inner-anonymous-classes)
 1. [Constructors](#constructors)
     1. [How many constructors can a class have?](#how-many-constructors-can-a-class-have)
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
@@ -2034,7 +2034,7 @@ public class Box {
 
 The above example goes to great length to refer to everything through the `this` keyword. And there is no need to do that.
 
-#### Can we access `static` methods using the `this` keyword?
+### Can we access `static` methods using the `this` keyword?
 
 The `this` keyword can be used to access `static` methods, but that's not required nor recommended.
 
@@ -2061,7 +2061,7 @@ public class App {
 
 The `staticMethod()` method is being called by the `instanceMethod()` using the `this` keyword.
 
-#### How does the `this` keyword works with inner anonymous classes?
+### How does the `this` keyword works with inner anonymous classes?
 
 Different from some other languages like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is no need to bind it or do any gymnastics.
 
@@ -2151,7 +2151,7 @@ Following is an updated example
 
 As before, we can always prefix the `this` keywords with the class name as shown above.  
 
-#### How does `this` works with nested inner anonymous classes?
+### How does `this` works with nested inner anonymous classes?
 
 Consider the following challenge.
 
