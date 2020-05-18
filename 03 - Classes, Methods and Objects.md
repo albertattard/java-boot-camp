@@ -2204,7 +2204,7 @@ public class Box {
   }
 
   public boolean isOpen() {
-    return this.open == State.OPEN;
+    return this.state == State.OPEN;
   }
 
   public String getLabel() {
@@ -2222,9 +2222,9 @@ public class Box {
 
   @Override
   public String toString() {
-    final String openClose = this.isOpen() ? "an open" : "a closed";
+    final String openClosed = this.isOpen() ? "an open" : "a closed";
     final String labelLocalVariable = this.getLabel();
-    return String.format( "%s box labelled '%s'", openClose, labelLocalVariable );
+    return String.format( "%s box labelled '%s'", openClosed, labelLocalVariable );
   }
 
   private enum State { /* ... */ }
@@ -2434,30 +2434,47 @@ The `Box` does not contain any methods called `Box()` that take no parameters.  
 ```java
 package demo;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
-  private enum State {
-    OPEN, CLOSED;
-  }
-
   private State state = State.CLOSED;
+  private String label = "No Label";
 
   public void open() {
-    open = true;
+    state = State.OPEN;
   }
 
   public void close() {
-    open = false;
+    state = State.CLOSED;
   }
 
   public boolean isOpen() {
-    return open;
+    return state == State.OPEN;
+  }
+
+  public String getLabel() {
+    return label;
+  }
+
+  public void changeLabelTo( final String label ) {
+    checkArgument( isValidLabel( label ) );
+    this.label = label;
+  }
+
+  private static boolean isValidLabel( final String label ) {
+    return false == nullToEmpty( label ).isBlank();
   }
 
   @Override
   public String toString() {
-    return String.format( "%s box", open ? "an open" : "a closed" );
+    final String openClose = this.isOpen() ? "an open" : "a closed";
+    final String labelLocalVariable = this.getLabel();
+    return String.format( "%s box labelled '%s'", openClose, labelLocalVariable );
   }
+
+  private enum State { /* ... */ }
 }
 ```
 
@@ -2470,9 +2487,13 @@ We can define a constructor as shown in the following example.
 ```java
 package demo;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
-  private boolean open;
+  private State state = State.CLOSED;
+  private String label = "No Label";
 
   public Box() {
   }
@@ -2483,8 +2504,16 @@ public class Box {
 
   public boolean isOpen() { /* ... */ }
 
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
   @Override
   public String toString() { /* ... */ }
+
+  private enum State { /* ... */ }
 }
 ```
 
