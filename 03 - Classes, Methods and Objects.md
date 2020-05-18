@@ -42,7 +42,9 @@
     1. [How does mutability works when we have nested objects?](#how-does-mutability-works-when-we-have-nested-objects)
 1. [Inheritance](#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
-    1. [Create a the `HeavyBox` (complete example)](#create-a-the-heavybox-complete-example)
+    1. [Can we add items to a box if the box is not open?](#can-we-add-items-to-a-box-if-the-box-is-not-open)
+    1. [Can we design our classes that automatically prevents the object from going to invalid state?](#can-we-design-our-classes-that-automatically-prevents-the-object-from-going-to-invalid-state)
+    1. [Create the `HeavyBox` (complete example)](#create-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
@@ -3299,7 +3301,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     public class LightBoxTest {
 
       @Test
-      @DisplayName( "should be empty when a new light box is created and no items are placed" )
+      @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
       public void shouldBeEmpty() { /* ... */ }
 
       @Test
@@ -3409,7 +3411,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     The property `itemId` is used for two purposes and that's discouraged.  If negative IDs become valid, for any reason, this logic becomes invalid.
 
-1. A light box can only contain one item and an `IllegalArgumentException` should be thrown if an item is added to a non-empty box.
+1. A light box can only contain one item and an [`IllegalStateException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalStateException.html) should be thrown if an item is added to a non-empty box.
 
     ```java
     package demo;
@@ -3424,7 +3426,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     public class LightBoxTest {
 
       @Test
-      @DisplayName( "should be empty when a new light box is created and no items are placed" )
+      @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
       public void shouldBeEmpty() { /* ... */ }
 
       @Test
@@ -3432,11 +3434,11 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
       public void shouldNotBeEmpty() { /* ... */ }
 
       @Test
-      @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
-      public void shouldThrowExceptionWhenItemAlreadyExists() {
+      @DisplayName( "should thrown an IllegalStateException when adding an item to a non-empty box" )
+      public void shouldThrowExceptionWhenNotEmpty() {
         final LightBox box = new LightBox();
         box.putItem( 1 );
-        assertThrows( IllegalArgumentException.class, () -> box.putItem( 1 ) );
+        assertThrows( IllegalStateException.class, () -> box.putItem( 1 ) );
       }
     }
     ```
@@ -3448,7 +3450,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     ...
 
-    LightBoxTest > should thrown an IllegalArgumentException when adding an item to a non-empty box FAILED
+    LightBoxTest > should thrown an IllegalStateException when adding an item to a non-empty box FAILED
         org.opentest4j.AssertionFailedError at LightBoxTest.java:32
     ...
     ```
@@ -3458,24 +3460,173 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```java
     package demo;
 
-    import com.google.common.base.Preconditions;
+    import static com.google.common.base.Preconditions.checkState;
 
     public class LightBox extends Box {
 
-      private boolean empty;
+      private State state = State.EMPTY;
 
       public boolean isEmpty() { /* ... */ }
 
       public void putItem( final long itemId ) {
-        Preconditions.checkArgument( empty );
-        empty = false;
+        checkState( isEmpty() );
+        state = State.FULL;
       }
+
+      private enum State { /* ... */ }
     }
     ```
 
     Tests should pass now.
 
-### Create a the `HeavyBox` (complete example)
+### Can we add items to a box if the box is not open?
+
+No, our program should throw an `IllegalStateException` if the `putItem()` method is called on a light box that is not open.
+
+1. Start by adding a test
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
+      public void shouldBeEmpty() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be empty after an item is placed in the box" )
+      public void shouldNotBeEmpty() { /* ... */ }
+
+      @Test
+      @DisplayName( "should thrown an IllegalStateException when adding an item to a non-empty box" )
+      public void shouldThrowExceptionWhenNotEmpty() { /* ... */ }
+
+      @Test
+      @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
+      public void shouldThrowExceptionWhenClosed() {
+        final LightBox box = new LightBox();
+        assertFalse( box.isOpen() );
+        assertThrows( IllegalStateException.class, () -> box.putItem( 1 ) );
+      }
+    }
+    ```
+
+    The above test will fail.
+
+1. Check whether the box is open before adding an item in it.
+
+    ```java
+    package demo;
+
+    import static com.google.common.base.Preconditions.checkState;
+
+    public class LightBox extends Box {
+
+      private State state = State.EMPTY;
+
+      public boolean isEmpty() { /* ... */ }
+
+      public void putItem( final long itemId ) {
+        checkState( isOpen() );
+        checkState( isEmpty() );
+        state = State.FULL;
+      }
+
+      private enum State { /* ... */ }
+    }
+    ```
+
+    Alternatively we can have both check in one statement
+
+    ```java
+    checkState( isOpen() && isEmpty() );
+    ```
+
+1. Run the tests
+
+    ```bash
+    $ ./gradlew test
+
+    > Task :test FAILED
+
+    BoxTest > should be open after the open method is called PASSED
+
+    BoxTest > should not be open after the close method is called PASSED
+
+    LightBoxTest > should be empty when a new light box is created and no items are yet placed PASSED
+
+    LightBoxTest > should throw an IllegalStateException when trying to adding an item to a non-open box PASSED
+
+    LightBoxTest > should not be empty after an item is placed in the box FAILED
+        java.lang.IllegalStateException at LightBoxTest.java:23
+
+    LightBoxTest > should thrown an IllegalStateException when adding an item to a non-empty box FAILED
+        java.lang.IllegalStateException at LightBoxTest.java:31
+
+    6 tests completed, 2 failed
+
+    ...
+    ```
+
+    To our surprise, we broke more tests than we fixed.  Some of the previous tests were adding items to a closed box.
+
+    When you encounter such a case, do not rush and change the tests.  Instead, make sure that the changes that will be made to the tests will not break any of the existing functionality.  Always discuss such changes with the rest of the team.
+
+    We know that we should not be able to add items to a closed box, in which case we can update the previous tests to have the box in the proper state.
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertThrows;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class LightBoxTest {
+
+      @Test
+      @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
+      public void shouldBeEmpty() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be empty after an item is placed in the box" )
+      public void shouldNotBeEmpty() {
+        final LightBox box = new LightBox();
+        box.open();
+        box.putItem( 1 );
+        assertFalse( box.isEmpty() );
+      }
+
+      @Test
+      @DisplayName( "should thrown an IllegalStateException when adding an item to a non-empty box" )
+      public void shouldThrowExceptionWhenNotEmpty() {
+        final LightBox box = new LightBox();
+        box.open();
+        box.putItem( 1 );
+        assertThrows( IllegalStateException.class, () -> box.putItem( 1 ) );
+      }
+
+      @Test
+      @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
+      public void shouldThrowExceptionWhenClosed() { /* ... */ }
+    }
+    ```
+
+### Can we design our classes that automatically prevents the object from going to invalid state?
+
+**Pending...**
+
+### Create the `HeavyBox` (complete example)
 
 A heavy box is a box that can take more than one item.
 
@@ -3571,7 +3722,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LightBoxTest {
 
   @Test
-  @DisplayName( "should be empty when a new light box is created and no items are placed" )
+  @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
   public void shouldBeEmpty() { /* ... */ }
 
   @Test
