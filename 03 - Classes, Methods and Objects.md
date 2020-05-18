@@ -3135,7 +3135,7 @@ Item weighing 1,2000Kg, needs to go to Destination: Testing
 Item weighing 1,2000Kg, needs to go to Destination: Programming
 ```
 
-**It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on](04%20-%20Collections.md#defensive-copyings)), to mitigate mutation side effects.
+**It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on](04%20-%20Collections.md#defensive-copying)), to mitigate mutation side effects.
 
 ## Inheritance
 
@@ -3152,16 +3152,37 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-1. Like a box, light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.
+1. Like a box, the light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.
 
     We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class, as shown next.
 
+    <table>
+      <tbody>
+        <tr>
+          <th></th>
+          <th></th>
+        </tr>
+        <tr>
+          <td>
     ```java
     package demo;
 
     public class LightBox extends Box {
     }
     ```
+          </td>
+          <td>
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+    }
+    ```
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
 
     The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
 
