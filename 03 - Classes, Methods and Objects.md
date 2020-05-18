@@ -2667,6 +2667,11 @@ A constructor can call another constructor using `this()` and passes the require
 **⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
 
 ```java
+package demo;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
   private State state;
@@ -3160,6 +3165,9 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
         ```java
         package demo;
+
+        import static com.google.common.base.Preconditions.checkArgument;
+        import static com.google.common.base.Strings.nullToEmpty;
 
         public class LightBox {
 
