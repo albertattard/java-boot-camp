@@ -21,6 +21,7 @@
     1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [Is `boolean` the right choice?](#is-boolean-the-right-choice)
+        1. [Are there any other advantages, besides readability?](#are-there-any-other-advantages-besides-readability)
         1. [Why is the enum declared `private`?](#why-is-the-enum-declared-private)
     1. [What does '*object state*' mean?](#what-does-object-state-mean)
     1. [How do instance methods interact with the object's state?](#how-do-instance-methods-interact-with-the-objects-state)
@@ -1588,6 +1589,35 @@ public class Box {
 
 The enum constants are very explicit.  The enum constants `OPEN` will always mean open, independent from the property name.  Same applies to the `CLOSED` enum constant.  The program reads better and the reader can easily understand what each value (`OPEN` or `CLOSED`) means.  In the previous example, the meaning of the `boolean` value was relative to the variable name.  Enums mitigates this ambiguity as each constant is very explicit.
 
+#### Are there any other advantages, besides readability?
+
+Consider a flatten box, similar to those we buy form a home depot store.  When bough, the box is in a flatten state and we cannot put anything in it before we unpack it and put it in the correct form.  This scenario introduced a new state, which is the *flattened* state.  We cannot represent the box states, *flattened*, *open* and *closed* as one property of type `boolean`.  What we will end-up doing is creating a second property as shown next.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+  private boolean flattened;
+
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() {
+    return false == flattened && open;
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+The `isOpen()` now depends on two properties and not one.  Another developer can easily miss the second property and only rely on the `open`.  The issue with this approach is that we have one state in the real world represented by two properties in the code.  Note that when the box is the *flattened* state in reality, the box is not considered *closed*.  Remember that in reality a box can be either *flattened*, *open* or *closed*.  Yet the `open` property will have the value of `false`, which is interpreted as *closed*.
+
+Enums can contain more than two variants and can contain enough constants to suit our needs.
+
 **Always prefer enums over boolean**.
 
 #### Why is the enum declared `private`?
@@ -1596,7 +1626,7 @@ The enum `State` is only used within the `Box` class.  The `isOpen()` method, re
 
 ### What does '*object state*' mean?
 
-The `Box` defined a property, called `open`.  The properties (not the `static` fields) defined by a class represent the object's state.  When objects are created, the properties defined by their class become the object's state.  Consider the following example.
+The `Box` defined a property, called `state`.  The properties (not the `static` fields) defined by a class represent the object's state.  When objects are created, the properties defined by their class become the object's state.  Consider the following example.
 
 ```java
 Box a = new Box();
