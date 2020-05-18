@@ -1589,6 +1589,8 @@ public class Box {
 
 The enum constants are very explicit.  The enum constants `OPEN` will always mean open, independent from the property name.  Same applies to the `CLOSED` enum constant.  The program reads better and the reader can easily understand what each value (`OPEN` or `CLOSED`) means.  In the previous example, the meaning of the `boolean` value was relative to the variable name.  Enums mitigates this ambiguity as each constant is very explicit.
 
+**Always prefer enums over boolean**.
+
 #### Are there any other advantages, besides readability?
 
 Consider a flatten box, similar to those we buy form a home depot store.  When bough, the box is in a flatten state and we cannot put anything in it before we unpack it and put it in the correct form.  This scenario introduced a new state, which is the *flattened* state.  We cannot represent the box states, *flattened*, *open* and *closed* as one property of type `boolean`.  What we will end-up doing is creating a second property as shown next.
@@ -1638,43 +1640,47 @@ When the `Box` instance is created, the properties defined by the class becomes 
 
 ### How do instance methods interact with the object's state?
 
-The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `open` property.
+The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `state` property.
 
 ```java
 package demo;
 
 public class Box {
 
-  private boolean open;
+  private enum State {
+    OPEN, CLOSED;
+  }
+
+  private State state = State.CLOSED;
 
   public void open() {
-    open = true;
+    state = State.OPEN;
   }
 
   public void close() {
-    open = false;
+    state = State.CLOSED;
   }
 
   public boolean isOpen() {
-    return open;
+    return open == State.OPEN;
   }
 
   @Override
   public String toString() {
-    return String.format( "%s box", open ? "an open" : "a closed" );
+    return String.format( "%s box", isOpen() ? "an open" : "a closed" );
   }
 }
 ```
 
-When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' properties.  In this case, all four instance methods will have access to all object's properties too.
+When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' state (represented by the property `state` in this example).  In this case, all four instance methods will have access to the same property, `state`.
 
-**On the other hand, `static` methods cannot access the object state**.
+**On the other hand, `static` methods cannot access the object's state**.
 
-Different from local variables, when a method modifies the object's state (defined by its properties), then all other methods will observe these changes.  Consider the following sequence of events.
+Different from local variables, when a method modifies the object's state (defined by its properties), then all other instance methods will observe these changes.  Consider the following sequence of events.
 
-1. A box instance is created, and the property `open` is set to `false`.
-1. The `open()` method will set the property `open` to `true`.
-1. When later on the `isOpen()` method is invoked, then it returns the current value of the `open` property, which is `true`.
+1. A box instance is created, and the property `state` is set to `State.CLOSED`.
+1. The `open()` method will set the property `state` to `State.OPEN`.
+1. When later on the `isOpen()` method is invoked, then it compares the current value of the `state` property, which is `State.OPEN`, to determine whether the box is open of not.
 
 There is a small caveat to this, which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
@@ -1742,7 +1748,7 @@ Consider the following code fragment.
 x.open();
 ```
 
-Java will fetch the object, to which the variable `x` is pointing to, and will make all object's properties available the instance method `open()`.  The above instance method will change the object's state and will only affects the object to which variable `x` points to.  The state of the object to which variable `y` is pointing to is not affected by the above instance method call.
+Java will fetch the object, to which the variable `x` is pointing to, and will make all object's properties available the instance method `open()`.  The above instance method will change the object's state and will only affect the object to which variable `x` points to.  The state of the object to which variable `y` is pointing to is not affected by the above instance method call.
 
 Consider the following example.
 
@@ -1750,9 +1756,25 @@ Consider the following example.
 boolean isOpen = new Box().isOpen();
 ```
 
-The above is a valid example.  Here a new instance of `Box` is create and then the method `isOpen()` is invoked against the new instance.  Here the `Box` instance is not assigned to any variable and instead is used directly.  The above example will evaluate to `false`, which is the default value of the `open` property.
+The above is a valid example.  Here a new instance of `Box` is create and then the method `isOpen()` is invoked against the new instance.  Here the `Box` instance is not assigned to any variable and instead is used directly.
 
-It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
+**How does that works?**
+
+Consider the following code fragment.
+
+```java
+int a = 7 + 3;
+```
+
+What's the value of variable `a`?  Is it `10` or `7 + 3`?  The answer is `10`, as the `+` operator is evaluated before the `=` operator and Java evaluates the expression and then uses the answer.  Same happens with objects.  The `new` operator creates a new object in the *Java heap* and returns the object reference.  We can assign the reference returned to a variable or use it immediately as shown next.
+
+```java
+boolean isOpen = new Box().isOpen();
+```
+
+The above example will evaluate to `false`, as by default the box is closed.
+
+It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector, which will remove all it from the *Java heap*.
 
 ### Adding more state to our object
 
