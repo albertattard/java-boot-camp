@@ -1532,7 +1532,7 @@ public class Box {
 }
 ```
 
-A boolean variable can be in either of the two states, `true` or `false`.  By just reading the value `true`, or `false`, we cannot deduct whether the box is open or closed.  The meaning of the value `true` or `false` make sense when seen relative to the property name, `open` in this case.  Consider the following example, where the property name was changed from `open`, to `closed`.
+A `boolean` variable can be in either of the two states, `true` or `false`.  By just reading the value `true`, or `false`, we cannot deduct whether the box is open or closed.  The meaning of the value `true` or `false` make sense when seen relative to the property name, `open` in this case.  Consider the following example, where the property name was renamed from `open`, to `closed`.
 
 ```java
 package demo;
@@ -1552,9 +1552,9 @@ public class Box {
 }
 ```
 
-Now the meaning of `true` and `false` is different from what it was before.  Before, a `true` meant that the box was open.  Now (after renaming the property), when the property named `closed` is set to `true` it means that the box is closed.
+Now the meaning of `true` and `false` is different from what it was before.  Before, a `true` meant that the box was open.  Now (after renaming the property), a `true` means that the box is closed.
 
-While `boolean` types are very commonly used, it is recommended to use an enum instead.  Consider the following refactored version of the `Box` class.
+While `boolean` types are very common, it is recommended to use an enum instead.  Consider the following refactored version of the `Box` class.
 
 ```java
 package demo;
@@ -1592,7 +1592,7 @@ The enum constants are very explicit.  The enum constants `OPEN` will always mea
 
 #### Why is the enum declared `private`?
 
-The enum `State` is only used within the `Box` class.  The `isOpen()` method, returns `true` or `false` depending on whether the box is open or not.  Therefore, there is no need to make this enum more visible that it is.  In the event the State enum needs to be used by other classes, we can increase its visibility accordingly.
+The enum `State` is only used within the `Box` class.  The `isOpen()` method, returns `true` or `false` depending on whether the box is open or not.  Therefore, there is no need to make this enum more visible than it is.  In the event the `State` enum needs to be used by other classes, we can increase its visibility accordingly.
 
 ### What does '*object state*' mean?
 
