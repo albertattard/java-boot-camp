@@ -149,7 +149,7 @@ Boot Camp for developers interested to learn Java.
 1. [Inheritance](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
     1. [Can we add items to a box if the box is not open?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-add-items-to-a-box-if-the-box-is-not-open)
-    1. [Can we design our classes that automatically prevents the object from going to invalid state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-design-our-classes-that-automatically-prevents-the-object-from-going-to-invalid-state)
+    1. [🤔 Can we design our classes to automatically prevents the object from going into invalid state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#-can-we-design-our-classes-to-automatically-prevents-the-object-from-going-into-invalid-state)
     1. [Create the `HeavyBox` (complete example)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#create-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-prevent-a-class-from-being-extended-the-final-keyword)

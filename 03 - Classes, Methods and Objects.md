@@ -43,7 +43,7 @@
 1. [Inheritance](#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
     1. [Can we add items to a box if the box is not open?](#can-we-add-items-to-a-box-if-the-box-is-not-open)
-    1. [Can we design our classes that automatically prevents the object from going to invalid state?](#can-we-design-our-classes-that-automatically-prevents-the-object-from-going-to-invalid-state)
+    1. [🤔 Can we design our classes to automatically prevents the object from going into invalid state?](#-can-we-design-our-classes-to-automatically-prevents-the-object-from-going-into-invalid-state)
     1. [Create the `HeavyBox` (complete example)](#create-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
@@ -3477,11 +3477,13 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
+    Note that we are now using the [`checkState()` method](https://guava.dev/releases/29.0-jre/api/docs/com/google/common/base/Preconditions.html#checkState-boolean-) instead of the `checkArguments()` method as we need an `IllegalStateException`.
+
     Tests should pass now.
 
 ### Can we add items to a box if the box is not open?
 
-No, our program should throw an `IllegalStateException` if the `putItem()` method is called on a light box that is not open.
+No, our program should throw an `IllegalStateException` if the `putItem()` method is called on a `LightBox` instance that is *not open*.  We can only add an item to the box when the box is *open*.
 
 1. Start by adding a test
 
@@ -3521,7 +3523,7 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
 
     The above test will fail.
 
-1. Check whether the box is open before adding an item in it.
+1. Check whether the box is open before adding an item to it.
 
     ```java
     package demo;
@@ -3578,7 +3580,7 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
 
     To our surprise, we broke more tests than we fixed.  Some of the previous tests were adding items to a closed box.
 
-    When you encounter such a case, do not rush and change the tests.  Instead, make sure that the changes that will be made to the tests will not break any of the existing functionality.  Always discuss such changes with the rest of the team.
+    When you encounter such a case, **do not rush and change the tests.  Instead, make sure that the changes that will be made to the tests will not break any of the existing functionality.  Always discuss such changes with the rest of the team**.
 
     We know that we should not be able to add items to a closed box, in which case we can update the previous tests to have the box in the proper state.
 
@@ -3622,9 +3624,120 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
     }
     ```
 
-### Can we design our classes that automatically prevents the object from going to invalid state?
+### 🤔 Can we design our classes to automatically prevents the object from going into invalid state?
 
-**Pending...**
+Yes.  We can design our classes such that our objects can never be in an invalid state.  This approach moves towards functional programming.  Our light box can be in either open/close and empty/full state.
+
+| # | Open/Closed | Empty/Full |
+|--:|:-----------:|:----------:|
+| 1 |    `OPEN`   |   `EMPTY`  |
+| 2 |    `OPEN`   |    `FULL`  |
+| 3 |   `CLOSED`  |    `FULL`  |
+| 4 |   `CLOSED`  |   `EMPTY`  |
+
+This is captured by the following State-Transition Diagrams.
+
+![State-Transition Diagrams](assets/images/LightBox%20State-Transition%20Diagrams.png)
+
+Consider the following version `LightBox`.
+
+```java
+package demo;
+
+public class LightBox {
+
+  public static CloseEmpty newBox() {
+    return new LightBox().closeEmpty;
+  }
+
+  public class CloseEmpty extends LightBox {
+    public OpenEmpty open() {
+      return openEmpty;
+    }
+  }
+
+  public class OpenEmpty extends LightBox {
+    public CloseEmpty close() {
+      return closeEmpty;
+    }
+
+    public OpenFull putItem( final long itemId ) {
+      return openFull;
+    }
+  }
+
+  public class CloseFull extends LightBox {
+    public OpenFull open() {
+      return openFull;
+    }
+  }
+
+  public class OpenFull extends LightBox {
+    public CloseFull close() {
+      return closeFull;
+    }
+  }
+
+  private final CloseEmpty closeEmpty = new CloseEmpty();
+  private final OpenEmpty openEmpty = new OpenEmpty();
+  private final CloseFull closeFull = new CloseFull();
+  private final OpenFull openFull = new OpenFull();
+
+  private LightBox() {
+  }
+}
+```
+
+This is quite complex, so let's break it into smaller parts.
+
+1. Force the box to start in a close/empty state.
+
+    We can use static factory methods to create an instance of box and then return in the box in the desired state.
+
+    ```java
+    public static CloseEmpty newBox() {
+      return new LightBox().closeEmpty;
+    }
+    ```
+
+    Note that the constructor is `private` so that the class is only created using the static factory methods.
+
+    ```java
+    private LightBox() {
+    }
+    ```
+
+1. Each state is captured by an inner class, which only exposes the methods that are relevant to the current state.
+
+    ![Show only the methods available to the current state](assets/images/Show%20only%20the%20methods%20available%20to%20the%20current%20state.png)
+
+    An empty/closed box can only be opened.
+
+    ```java
+    public class CloseEmpty extends LightBox {
+      public OpenEmpty open() {
+        return openEmpty;
+      }
+    }
+    ```
+
+    An empty/open box can be closed or an item be added to it.
+
+    ```java
+    public class OpenEmpty extends LightBox {
+      public CloseEmpty close() {
+        return closeEmpty;
+      }
+
+      public OpenFull putItem( final long itemId ) {
+        return openFull;
+      }
+    }
+    ```
+
+    The inner classes can access the properties of the class.  Note that each method within the inner classes is returning a property defined within the outer class.
+
+While this look very promising, it is quite hard program with and not quite common in Java.
 
 ### Create the `HeavyBox` (complete example)
 
