@@ -22,8 +22,8 @@
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
     1. [What does '*object state*' mean?](#what-does-object-state-mean)
     1. [How do instance methods interact with the object's state?](#how-do-instance-methods-interact-with-the-objects-state)
-    1. [Adding more state to our objects](#adding-more-state-to-our-objects)
-    1. [How can we prevent invalid labels to be used?](#how-can-we-prevent-invalid-labels-to-be-used)
+    1. [Adding more state to our object](#adding-more-state-to-our-object)
+    1. [How can we prevent the use of invalid labels?](#how-can-we-prevent-the-use-of-invalid-labels)
         1. [Why is the `isValidLabel()` method `private` and `static`?](#why-is-the-isvalidlabel-method-private-and-static)
 1. [What does `this` means?](#what-does-this-means)
     1. [Can we access `static` methods using the `this` keyword?](#can-we-access-static-methods-using-the-this-keyword)
@@ -36,6 +36,7 @@
     1. [Should utilities classes, like the `Math` class, have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
 1. [Mutable and immutable](#mutable-and-immutable)
     1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
+    1. [How does mutability works when we have nested objects?](#how-does-mutability-works-when-we-have-nested-objects)
 1. [Inheritance](#inheritance)
     1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
     1. [Heavy box complete example](#heavy-box-complete-example)
@@ -1636,7 +1637,7 @@ The above is a valid example.  Here a new instance of `Box` is create and then t
 
 It is worth mentioning that an object is created in the *Java heap* and no variable are pointing to it.  This object will be picked up by the garbage collector and removes it from the *Java heap*.
 
-### Adding more state to our objects
+### Adding more state to our object
 
 Boxes have labels printed on the sides.  The label is a simple text identifying the box.  Following are some examples of label:
 
@@ -1806,7 +1807,7 @@ The label can be represented by the `String` data-type.
     
     The above example introduced a new keyword, `this`.  Do not worry about the new keyword just yet as it is covered in [a following section](#what-does-this-means).
 
-### How can we prevent invalid labels to be used?
+### How can we prevent the use of invalid labels?
 
 1. Make sure that invalid labels are rejected by throwing an `IllegalArgumaneException`
 
@@ -2720,7 +2721,9 @@ The `Item` class shown above, represents an item and its weight as a property of
 
 Note that the above example has a constructor that takes the `weight` as its parameter.  The item's weight needs to be provided when the item is created as otherwise the `weight` property will not have a value.
 
-It is important to note that the objects may point to other objects.  Consider the following example.
+### How does mutability works when we have nested objects?
+
+It is important to note that the objects may contain other objects.  Consider the following example.
 
 ```java
 package demo;
