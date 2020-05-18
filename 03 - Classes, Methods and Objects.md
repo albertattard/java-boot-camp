@@ -2706,7 +2706,7 @@ src/main/java/demo/Box.java:13: error: call to this must be first statement in c
         ^
 ```
 
-While it is quite a common practice to have constructors calling each other, note that we can find ourselves in some tricky situations.  Consider the following class.
+While constructors calling each other is quite a common practice to have constructors calling each other, note that we can find ourselves in some tricky situations.  Consider the following class.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -2820,7 +2820,7 @@ The class `BoxDimensions` captures the dimensions of a box.  Say that we would l
     | `base`    | `depth`  |
     | `height`  | `height` |
 
-1. Take two parameters the `side` and the `depth`.  The following table shows the mapping between the properties and the parameters.
+1. Takes two parameters the `side` and the `depth`.  The following table shows the mapping between the properties and the parameters.
 
     | Parameter | Property |
     |-----------|----------|
@@ -2865,10 +2865,21 @@ Which constructor are we referring to in the above fragment?
 
 There were several attempts to solve this problem, some of them are not that good.  A not so good approach is to use a different type to represent one of the parameters (not the object's property).
 
-```java
-public BoxDimensions( int base, float height ) { /* ... */ }
+**⚠️ NOT RECOMMENDED!!**
 
-public BoxDimensions( int side, int depth ) { /* ... */ }
+```java
+package demo;
+
+public class BoxDimensions {
+
+  private int width;
+  private int height;
+  private int depth;
+
+  public BoxDimensions( int base, float height ) { /* ... */ }
+
+  public BoxDimensions( int side, int depth ) { /* ... */ }
+}
 ```
 
 The above code fragment uses `float` to differentiate between the constructors.
@@ -2924,7 +2935,7 @@ public class BoxDimensions {
 
 ### Should utilities classes, like the `Math` class, have a constructor?
 
-There is no point to initialise stateless classes, also referred to as utilities classes, such as the `Math` class.  These classes where meant to serve a different purpose than being initialised as objects.
+There is no point to initialise stateless classes, also referred to as utilities classes, such as the `Math` class. These classes were meant to serve a different purpose than being initialised as objects.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -2940,7 +2951,9 @@ public class App {
 
 Trying to create an instance of such class does not make sense.
 
-Such classes should have `private` constructor to prevent others from initialising them by mistake.  This pattern is also mentioned in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book as [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4).
+Such classes should have a `private` constructor to prevent others from initialising them by mistake.  This pattern is also mentioned in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book as [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4).
+
+Java is a **general purpose programming language** that supports, [procedural programming](https://en.wikipedia.org/wiki/Procedural_programming) style, [object oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming) style and also [functional programming](https://en.wikipedia.org/wiki/Functional_programming) style.  Static constructs fall in the procedural programming style and as such does not interact with objects.
 
 ## Mutable and immutable
 
