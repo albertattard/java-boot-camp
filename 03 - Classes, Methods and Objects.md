@@ -1564,18 +1564,18 @@ package demo;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
 
   public void open() {
-    state = State.OPEN;
+    form = BoxForm.OPEN;
   }
 
   public void close() {
-    state = State.CLOSED;
+    form = BoxForm.CLOSED;
   }
 
   public boolean isOpen() {
-    return state == State.OPEN;
+    return form == BoxForm.OPEN;
   }
 
   @Override
@@ -1583,7 +1583,7 @@ public class Box {
     return String.format( "%s box", isOpen() ? "an open" : "a closed" );
   }
 
-  private enum State {
+  private enum BoxForm {
     OPEN, CLOSED;
   }
 }
@@ -1595,7 +1595,7 @@ The enum constants are very explicit.  The enum constants `OPEN` will always mea
 
 #### Are there any other advantages, besides readability?
 
-Consider a flatten box, similar to those we buy form a home depot store.  When bough, the box is in a flatten state and we cannot put anything in it before we unpack it and put it in the correct form.  This scenario introduced a new state, which is the *flattened* state.  We cannot represent the box states, *flattened*, *open* and *closed* as one property of type `boolean`.  What we will end-up doing is creating a second property as shown next.
+Consider a flatten box, similar to those we buy form a home depot store.  When bough, the box is in a flatten form and we cannot put anything in it before we unpack it and put it in the correct form.  This scenario introduced a new state, which is the *flattened* state.  We cannot represent the box states, *flattened*, *open* and *closed* as one property of type `boolean`.  What we will end-up doing is creating a second property as shown next.
 
 ```java
 package demo;
@@ -1626,7 +1626,7 @@ Enums can contain more than two variants and can contain enough constants to sui
 
 #### Why is the enum declared `private`?
 
-The enum `State` is only used within the `Box` class.  The `isOpen()` method, returns `true` or `false` depending on whether the box is open or not.  Therefore, there is no need to make this enum more visible than it is.  In the event the `State` enum needs to be used by other classes, we can increase its visibility accordingly.
+The enum `BoxForm` is only used within the `Box` class.  The `isOpen()` method, returns `true` or `false` depending on whether the box is open or not.  Therefore, there is no need to make this enum more visible than it is.  In the event the `BoxForm` enum needs to be used by other classes, we can increase its visibility accordingly.
 
 ### What does '*object state*' mean?
 
@@ -1649,18 +1649,18 @@ package demo;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
 
   public void open() {
-    state = State.OPEN;
+    form = BoxForm.OPEN;
   }
 
   public void close() {
-    state = State.CLOSED;
+    form = BoxForm.CLOSED;
   }
 
   public boolean isOpen() {
-    return open == State.OPEN;
+    return form == BoxForm.OPEN;
   }
 
   @Override
@@ -1668,7 +1668,7 @@ public class Box {
     return String.format( "%s box", isOpen() ? "an open" : "a closed" );
   }
 
-  private enum State {
+  private enum BoxForm {
     OPEN, CLOSED;
   }
 }
@@ -1680,9 +1680,9 @@ When a method (*instance* or `static`) is invoked, the method's state (such as l
 
 Different from local variables, when a method modifies the object's state (defined by its properties), then all other instance methods will observe these changes.  Consider the following sequence of events.
 
-1. A box instance is created, and the property `state` is set to `State.CLOSED`.
-1. The `open()` method will set the property `state` to `State.OPEN`.
-1. When later on the `isOpen()` method is invoked, then it compares the current value of the `state` property, which is `State.OPEN`, to determine whether the box is open of not.
+1. A box instance is created, and the property `state` is set to `BoxForm.CLOSED`.
+1. The `open()` method will set the property `state` to `BoxForm.OPEN`.
+1. When later on the `isOpen()` method is invoked, then it compares the current value of the `state` property, which is `BoxForm.OPEN`, to determine whether the box is open of not.
 
 There is a small caveat to this, which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
@@ -1827,7 +1827,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private State state = State.CLOSED;
+      private BoxForm form = BoxForm.CLOSED;
 
       public void open() { /* ... */ }
 
@@ -1842,7 +1842,7 @@ The label can be represented by the `String` data-type.
       @Override
       public String toString() { /* ... */ }
 
-      private enum State { /* ... */ }
+      private enum BoxForm { /* ... */ }
     }
     ```
 
@@ -1893,7 +1893,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private State state = State.CLOSED;
+      private BoxForm form = BoxForm.CLOSED;
 
       public void open() { /* ... */ }
 
@@ -1909,7 +1909,7 @@ The label can be represented by the `String` data-type.
       @Override
       public String toString() { /* ... */ }
 
-      private enum State { /* ... */ }
+      private enum BoxForm { /* ... */ }
     }
     ```
 
@@ -1922,7 +1922,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private State state = State.CLOSED;
+      private BoxForm form = BoxForm.CLOSED;
       private String label = "No Label";
 
       public void open() { /* ... */ }
@@ -1945,7 +1945,7 @@ The label can be represented by the `String` data-type.
         return String.format( "%s box labelled '%s'", openClose, label );
       }
 
-      private enum State { /* ... */ }
+      private enum BoxForm { /* ... */ }
     }
     ```
 
@@ -2074,7 +2074,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private State state = State.CLOSED;
+      private BoxForm form = BoxForm.CLOSED;
       private String label = "No Label";
 
       public void open() { /* ... */ }
@@ -2097,7 +2097,7 @@ The label can be represented by the `String` data-type.
       @Override
       public String toString() { /* ... */ }
 
-      private enum State { /* ... */ }
+      private enum BoxForm { /* ... */ }
     }
     ```
 
@@ -2137,7 +2137,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private State state = State.CLOSED;
+      private BoxForm form = BoxForm.CLOSED;
       private String label = "No Label";
 
       public void open() { /* ... */ }
@@ -2160,7 +2160,7 @@ The label can be represented by the `String` data-type.
       @Override
       public String toString() { /* ... */ }
 
-      private enum State { /* ... */ }
+      private enum BoxForm { /* ... */ }
     }
     ```
 
@@ -2194,19 +2194,19 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
   private String label = "No Label";
 
   public void open() {
-    this.state = State.OPEN;
+    this.form = BoxForm.OPEN;
   }
 
   public void close() {
-    this.state = State.CLOSED;
+    this.form = BoxForm.CLOSED;
   }
 
   public boolean isOpen() {
-    return this.state == State.OPEN;
+    return this.form == BoxForm.OPEN;
   }
 
   public String getLabel() {
@@ -2229,7 +2229,7 @@ public class Box {
     return String.format( "%s box labelled '%s'", openClosed, labelLocalVariable );
   }
 
-  private enum State { /* ... */ }
+  private enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2441,19 +2441,19 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
   private String label = "No Label";
 
   public void open() {
-    state = State.OPEN;
+    form = BoxForm.OPEN;
   }
 
   public void close() {
-    state = State.CLOSED;
+    form = BoxForm.CLOSED;
   }
 
   public boolean isOpen() {
-    return state == State.OPEN;
+    return form == BoxForm.OPEN;
   }
 
   public String getLabel() {
@@ -2476,7 +2476,7 @@ public class Box {
     return String.format( "%s box labelled '%s'", openClose, labelLocalVariable );
   }
 
-  private enum State { /* ... */ }
+  private enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2494,7 +2494,7 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
   private String label = "No Label";
 
   public Box() {
@@ -2515,7 +2515,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  private enum State { /* ... */ }
+  private enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2540,11 +2540,11 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state;
+  private BoxForm form;
   private String label = "No Label";
 
-  public Box( final State state ) {
-    this.state = state;
+  public Box( final BoxForm form ) {
+    this.form = form;
   }
 
   public void open() { /* ... */ }
@@ -2562,17 +2562,17 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  public enum State { /* ... */ }
+  public enum BoxForm { /* ... */ }
 }
 ```
 
-Note that the enum `State` was changed from `private` to `public`.  This is quite important as otherwise we will not be able to access the new constructor.  Now we can create boxes in the state we want them to be as shown in the following example.
+Note that the enum `BoxForm` was changed from `private` to `public`.  This is quite important as otherwise we will not be able to access the new constructor.  Now we can create boxes in the state we want them to be as shown in the following example.
 
 ```java
 package demo;
 
-import static demo.Box.State.CLOSED;
-import static demo.Box.State.OPEN;
+import static demo.Box.BoxForm.CLOSED;
+import static demo.Box.BoxForm.OPEN;
 
 public class App {
 
@@ -2586,7 +2586,7 @@ public class App {
 }
 ```
 
-The `Box` shown before has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either `State.OPEN` or `State.CLOSED`).
+The `Box` shown before has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the box form (either `BoxForm.OPEN` or `BoxForm.CLOSED`).
 
 **⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
 
@@ -2611,14 +2611,14 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state = State.CLOSED;
+  private BoxForm form = BoxForm.CLOSED;
   private String label = "No Label";
 
   public Box() {
   }
 
-  public Box( final State state ) {
-    this.state = state;
+  public Box( final BoxForm form ) {
+    this.form = form;
   }
 
   public void open() { /* ... */ }
@@ -2636,7 +2636,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  public enum State { /* ... */ }
+  public enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2654,15 +2654,15 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state;
+  private BoxForm form;
   private String label = "No Label";
 
   public Box() {
-    this( State.CLOSED );
+    this( BoxForm.CLOSED );
   }
 
-  public Box( final State state ) {
-    this.state = state;
+  public Box( final BoxForm form ) {
+    this.form = form;
   }
 
   public void open() { /* ... */ }
@@ -2680,7 +2680,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  public enum State { /* ... */ }
+  public enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2696,15 +2696,15 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class Box {
 
-  private State state;
+  private BoxForm form;
   private String label = "No Label";
 
   public Box() {
     label = "...";
-    this( State.CLOSED );
+    this( BoxForm.CLOSED );
   }
 
-  public Box( final State state ) { /* ... */ }
+  public Box( final BoxForm form ) { /* ... */ }
 
   public void open() { /* ... */ }
 
@@ -2721,7 +2721,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  public enum State { /* ... */ }
+  public enum BoxForm { /* ... */ }
 }
 ```
 
@@ -2729,7 +2729,7 @@ The above code will not compile.
 
 ```bash
 src/main/java/demo/Box.java:13: error: call to this must be first statement in constructor
-    this( State.CLOSED );
+    this( BoxForm.CLOSED );
         ^
 ```
 
@@ -2778,13 +2778,13 @@ public MagicBox() {
 
 The call `this( null )` matches both the constructors that have one reference type parameter.
 
-1. The one that takes a `String`
+1. The constructor that takes a `String`
 
     ```java
     public MagicBox( final String name ) { /* ... */ }
     ```
 
-1. The one that takes a `Point`
+1. The constructor that takes a `Point`
 
     ```java
     public MagicBox( final Point location ) { /* ... */ }
@@ -3193,12 +3193,12 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
         public class LightBox {
 
-          private State state;
+          private BoxForm form;
           private String label = "No Label";
 
           public Box() { /* ... */ }
 
-          public Box( final State state ) { /* ... */ }
+          public Box( final BoxForm form ) { /* ... */ }
 
           public void open() { /* ... */ }
 
@@ -3215,7 +3215,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
           @Override
           public String toString() { /* ... */ }
 
-          public enum State { /* ... */ }
+          public enum BoxForm { /* ... */ }
         }
         ```
 
@@ -3370,18 +3370,18 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
         public class LightBox extends Box {
 
-          private State state = State.EMPTY;
+          private Space space = Space.AVAILABLE;
 
           public boolean isEmpty() {
-            return state == State.EMPTY;
+            return space == Space.AVAILABLE;
           }
 
           public void putItem( final long itemId ) {
-            state = State.FULL;
+            space = Space.FULL;
           }
 
-          private enum State {
-            EMPTY, FULL
+          private enum Space {
+            AVAILABLE, FULL
           }
         }
         ```
@@ -3407,7 +3407,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Please refer to the *[is boolean the right choice?](#is-boolean-the-right-choice)* section for an in-depth discussion about this topic.
 
-    Sometimes a property is used for various purposes.  Instead of creating a new property, (`status` or `empty`, depending with approach you took), we could use the `itemId` property, as shown in the following example.
+    Sometimes a property is used for various purposes.  Instead of creating a new property, (`space` or `empty`, depending with approach you took), we could use the `itemId` property, as shown in the following example.
 
     **⚠️ NOT RECOMMENDED!!**
 
@@ -3484,16 +3484,16 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class LightBox extends Box {
 
-      private State state = State.EMPTY;
+      private Space space = Space.AVAILABLE;
 
       public boolean isEmpty() { /* ... */ }
 
       public void putItem( final long itemId ) {
         checkState( isEmpty() );
-        state = State.FULL;
+        space = Space.FULL;
       }
 
-      private enum State { /* ... */ }
+      private enum Space { /* ... */ }
     }
     ```
 
@@ -3552,17 +3552,17 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
 
     public class LightBox extends Box {
 
-      private State state = State.EMPTY;
+      private Space space = Space.AVAILABLE;
 
       public boolean isEmpty() { /* ... */ }
 
       public void putItem( final long itemId ) {
         checkState( isOpen() );
         checkState( isEmpty() );
-        state = State.FULL;
+        space = Space.FULL;
       }
 
-      private enum State { /* ... */ }
+      private enum Space { /* ... */ }
     }
     ```
 
@@ -3921,7 +3921,7 @@ import static com.google.common.base.Strings.nullToEmpty;
 
 public class LightBox extends Box {
 
-  private State state = State.EMPTY;
+  private Space space = Space.AVAILABLE;
 
   public boolean isEmpty() { /* ... */ }
 
@@ -3937,7 +3937,7 @@ public class LightBox extends Box {
     return nullToEmpty( label ).length() <= 32;
   }
 
-  private enum State { /* ... */ }
+  private enum Space { /* ... */ }
 }
 ```
 
@@ -4022,10 +4022,13 @@ The `Box` class provides two constructors, a default constructor and a construct
 ```java
 package demo;
 
+import static demo.Box.BoxForm.OPEN;
+
 public class App {
+
   public static void main( final String[] args ) {
-    final Box a = new Box( true );
-    final LightBox b = new LightBox( true );
+    final Box a = new Box( OPEN );
+    final LightBox b = new LightBox( OPEN );
   }
 }
 ```
@@ -4039,18 +4042,19 @@ Yes, a subclass can invoke any of the parent's constructors and pass the require
 ```java
 package demo;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Strings.nullToEmpty;
 
-public final class LightBox extends Box {
+public class LightBox extends Box {
 
-  private boolean empty;
+  private Space space = Space.AVAILABLE;
 
   public LightBox() {
   }
 
-  public LightBox( final boolean open ) {
-    super( open );
+  public LightBox( final BoxForm form ) {
+    super( form );
   }
 
   public boolean isEmpty() { /* ... */ }
@@ -4060,7 +4064,9 @@ public final class LightBox extends Box {
   @Override
   public void changeLabelTo( final String label ) { /* ... */ }
 
-  public static boolean isValidLabel( final String label ) { /* ... */ }
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
+  private enum Space { /* ... */ }
 }
 ```
 
@@ -4069,10 +4075,12 @@ The `LightBox` now can be initialised open or closed as shown next.
 ```java
 package demo;
 
+import static demo.Box.BoxForm.OPEN;
+
 public class App {
   public static void main( final String[] args ) {
     final LightBox a = new LightBox();
-    final LightBox b = new LightBox( true );
+    final LightBox b = new LightBox( OPEN );
 
     System.out.printf( "Box a is %s%n", a.isOpen() ? "open" : "closed" );
     System.out.printf( "Box b is %s%n", b.isOpen() ? "open" : "closed" );
