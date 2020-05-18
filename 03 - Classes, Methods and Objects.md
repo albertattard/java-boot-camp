@@ -50,7 +50,7 @@
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
-    1. [What happens when the not all 'children' are 'parents'?](#what-happens-when-the-not-all-children-are-parents)
+    1. [What happens when the not all '*children*' are '*parents*'?](#what-happens-when-the-not-all-children-are-parents)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -4144,7 +4144,120 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
     Class `C`, tries to invoke a constructor that takes an `int` as its sole parameter.  Class `A` has such constructor but class `B` does not.
 
-### What happens when the not all 'children' are 'parents'?
+### What happens when the not all '*children*' are '*parents*'?
+
+Consider the Square and Rectangle shapes.
+
+All sides of a square are equals, while in the case of a rectangle only the opposite sides are equal.  Consider the following example.
+
+**⚠️ NOT RECOMMENDED!!**
+
+1. The `Square` class
+
+    ```java
+    package demo;
+
+    public class Square {
+
+      public final int width;
+
+      public Square( final int width ) {
+        this.width = width;
+      }
+
+      public int calculatePerimeter() {
+        return width * 4;
+      }
+
+      public int calculateArea() {
+        return width * width;
+      }
+    }
+    ```
+
+1. The `Rectangle` extends the `Square` and adds a new field, `height`.
+
+    ```java
+    package demo;
+
+    public class Rectangle extends Square {
+
+      public final int height;
+
+      public Rectangle( final int width, final int height ) {
+        super( width );
+        this.height = height;
+      }
+
+      public int calculatePerimeter() {
+        return ( width + height ) * 2;
+      }
+
+      public int calculateArea() {
+        return width * height;
+      }
+    }
+    ```
+
+These two classes can be used as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Square a = new Square( 4 );
+    final Rectangle b = new Rectangle( 7, 3 );
+
+    System.out.printf( "The square has an area of %d and a perimeter of %d%n", a.calculateArea(), a.calculatePerimeter() );
+    System.out.printf( "The rectangle has an area of %d and a perimeter of %d%n", b.calculateArea(), b.calculatePerimeter() );
+  }
+}
+```
+
+This is a bad example of inheritance, because despite the appearances not all rectangles are squares.  By definition a *square* is a quadrilateral with all four angles right angles and all four sides of the same length while a *rectangle* is a quadrilateral with all four angles right angles.  The above implementation is incorrect.
+
+1. The `Rectangle` class
+
+    ```java
+    package demo;
+
+    public class Rectangle {
+
+      public final int width;
+      public final int height;
+
+      public Rectangle( final int width, final int height ) {
+        this.width = width;
+        this.height = height;
+      }
+
+      public int calculatePerimeter() {
+        return ( width + height ) * 2;
+      }
+
+      public int calculateArea() {
+        return width * height;
+      }
+    }
+    ```
+
+1. The `Square` class
+
+    ```java
+    package demo;
+
+    public class Square extends Rectangle {
+
+      public Square( final int width ) {
+        super( width, width );
+      }
+    }
+    ```
+
+This is typical problem with inheritance where the wrong hierarchy is built and later on very hard to change.
+
+The Java API has some unfortunate instances where the inheritance was not properly implemented.  The Properties class is a good example of bad in
 
 **Pending...**
 

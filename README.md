@@ -156,7 +156,7 @@ Boot Camp for developers interested to learn Java.
     1. [How do `private` constructor effect inheritance?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
-    1. [What happens when the not all 'children' are 'parents'?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-when-the-not-all-children-are-parents)
+    1. [What happens when the not all '*children*' are '*parents*'?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-when-the-not-all-children-are-parents)
 1. [Abstraction](03%20-%20Classes%2C%20Methods%20and%20Objects.md#abstraction)
     1. [When a class must be abstract?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-final-classes-be-abstract)
