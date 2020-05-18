@@ -3164,25 +3164,20 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         </tr>
         <tr>
           <td>
-    ```java
-    package demo;
+            <pre>package demo;
 
-    public class LightBox extends Box {
-    }
-    ```
+public class LightBox extends Box {
+}</pre>
           </td>
           <td>
-    ```java
-    package demo;
+            <pre>package demo;
 
-    public class LightBox extends Box {
-    }
-    ```
+public class LightBox extends Box {
+}</pre>
           </td>
         </tr>
       </tbody>
     </table>
-
 
     The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
 
