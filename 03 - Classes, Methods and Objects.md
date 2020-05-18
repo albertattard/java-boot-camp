@@ -20,6 +20,8 @@
 1. [Simple objects](#simple-objects)
     1. [Create a simple box object](#create-a-simple-box-object)
     1. [Add open and close functionality to the box](#add-open-and-close-functionality-to-the-box)
+    1. [Is `boolean` the right choice?](#is-boolean-the-right-choice)
+        1. [Why is the enum declared `private`?](#why-is-the-enum-declared-private)
     1. [What does '*object state*' mean?](#what-does-object-state-mean)
     1. [How do instance methods interact with the object's state?](#how-do-instance-methods-interact-with-the-objects-state)
     1. [Adding more state to our object](#adding-more-state-to-our-object)
@@ -1507,6 +1509,90 @@ A box may be open or may be closed.  The program needs to determine whether the 
     ```
 
     Both tests pass
+
+### Is `boolean` the right choice?
+
+We used a property of type `boolean` to represent that open/closed state of the box, as shown below.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean open;
+
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+A boolean variable can be in either of the two states, `true` or `false`.  By just reading the value `true`, or `false`, we cannot deduct whether the box is open or closed.  The meaning of the value `true` or `false` make sense when seen relative to the property name, `open` in this case.  Consider the following example, where the property name was changed from `open`, to `closed`.
+
+```java
+package demo;
+
+public class Box {
+
+  private boolean closed;
+
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+Now the meaning of `true` and `false` is different from what it was before.  Before, a `true` meant that the box was open.  Now (after renaming the property), when the property named `closed` is set to `true` it means that the box is closed.
+
+While `boolean` types are very commonly used, it is recommended to use an enum instead.  Consider the following refactored version of the `Box` class.
+
+```java
+package demo;
+
+public class Box {
+
+  private enum State {
+    OPEN, CLOSED;
+  }
+
+  private State state = State.CLOSED;
+
+  public void open() {
+    state = State.OPEN;
+  }
+
+  public void close() {
+    state = State.CLOSED;
+  }
+
+  public boolean isOpen() {
+    return state == State.OPEN;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "%s box", isOpen() ? "an open" : "a closed" );
+  }
+}
+```
+
+The enum constants are very explicit.  The enum constants `OPEN` will always mean open, independent from the property name.  Same applies to the `CLOSED` enum constant.  The program reads better and the reader can easily understand what each value (`OPEN` or `CLOSED`) means.  In the previous example, the meaning of the `boolean` value was relative to the variable name.  Enums mitigates this ambiguity as each constant is very explicit.
+
+**Always prefer enums over boolean**.
+
+#### Why is the enum declared `private`?
+
+The enum `State` is only used within the `Box` class.  The `isOpen()` method, returns `true` or `false` depending on whether the box is open or not.  Therefore, there is no need to make this enum more visible that it is.  In the event the State enum needs to be used by other classes, we can increase its visibility accordingly.
 
 ### What does '*object state*' mean?
 

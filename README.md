@@ -126,6 +126,8 @@ Boot Camp for developers interested to learn Java.
 1. [Simple objects](03%20-%20Classes%2C%20Methods%20and%20Objects.md#simple-objects)
     1. [Create a simple box object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#create-a-simple-box-object)
     1. [Add open and close functionality to the box](03%20-%20Classes%2C%20Methods%20and%20Objects.md#add-open-and-close-functionality-to-the-box)
+    1. [Is `boolean` the right choice?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#is-boolean-the-right-choice)
+        1. [Why is the enum declared `private`?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#why-is-the-enum-declared-private)
     1. [What does '*object state*' mean?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-does-object-state-mean)
     1. [How do instance methods interact with the object's state?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-instance-methods-interact-with-the-objects-state)
     1. [Adding more state to our object](03%20-%20Classes%2C%20Methods%20and%20Objects.md#adding-more-state-to-our-object)
