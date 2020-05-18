@@ -2123,6 +2123,47 @@ The label can be represented by the `String` data-type.
     ...
     ```
 
+1. (Optional) Use static imports
+
+    The `checkArgument()` and `nullToEmpty()` are static methods and thus we can use the static imports if we like.
+
+    ```java
+    package demo;
+
+    import static com.google.common.base.Preconditions.checkArgument;
+    import static com.google.common.base.Strings.nullToEmpty;
+
+    public class Box {
+
+      private State state = State.CLOSED;
+      private String label = "No Label";
+
+      public void open() { /* ... */ }
+
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
+
+      public String getLabel() { /* ... */ }
+
+      public void changeLabelTo( final String label ) {
+        checkArgument( isValidLabel( label ) );
+        this.label = label;
+      }
+
+      private static boolean isValidLabel( final String label ) {
+        return false == nullToEmpty( label ).isBlank();
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+
+      private enum State { /* ... */ }
+    }
+    ```
+
+    This is a personal preference and I do not see any critical benefits when using one or the other.  Static imports are used a lot in these notes as they then to produce more concise code, which fits better in code example.
+
 #### Why is the `isValidLabel()` method `private` and `static`?
 
 The `isValidLabel()` does not access any state, thus is safe to have it as `static`.
@@ -2146,6 +2187,9 @@ Consider the following example.
 ```java
 package demo;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
   private State state = State.CLOSED;
@@ -2168,12 +2212,12 @@ public class Box {
   }
 
   public void changeLabelTo( final String label ) {
-    Preconditions.checkArgument( isValidLabel( label ) );
+    checkArgument( isValidLabel( label ) );
     this.label = label;
   }
 
   private static boolean isValidLabel( final String label ) {
-    return false == Strings.nullToEmpty( label ).isBlank();
+    return false == nullToEmpty( label ).isBlank();
   }
 
   @Override
@@ -2392,7 +2436,11 @@ package demo;
 
 public class Box {
 
-  private boolean open;
+  private enum State {
+    OPEN, CLOSED;
+  }
+
+  private State state = State.CLOSED;
 
   public void open() {
     open = true;
