@@ -2429,7 +2429,7 @@ Moving the property to within the method would make it available to the *inner-i
 
 ## Constructors
 
-The `Box` does not contain any methods called `Box()` that take no parameters.  What method do we call when we execute `new Box()`?
+The `Box` does not contain any methods called `Box()` that takes no parameters.  What method do we call when we execute `new Box()`?
 
 ```java
 package demo;
@@ -2528,17 +2528,21 @@ Apart from the above, a constructor is similar to a method.
 
 **A class can have as many constructors as needs as long as each constructor has a unique signature**.
 
-Let say that we would like to have the possibility to create an instance of a `Box` and also set its state.  We can do that by using a constructor.
+Let say that we would like to have the possibility to create an instance of a `Box` and also set its state (open/closed).  We can do that by using a constructor.
 
 ```java
 package demo;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
-  private boolean open;
+  private State state;
+  private String label = "No Label";
 
-  public Box( final boolean open ) {
-    this.open = open;
+  public Box( final State state ) {
+    this.state = state;
   }
 
   public void open() { /* ... */ }
@@ -2547,12 +2551,20 @@ public class Box {
 
   public boolean isOpen() { /* ... */ }
 
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
   @Override
   public String toString() { /* ... */ }
+
+  private enum State { /* ... */ }
 }
 ```
 
-The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either *open* or *closed*).
+The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either `State.OPEN` or `State.CLOSED`).
 
 **⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
 
@@ -2567,20 +2579,24 @@ public class App {
 }
 ```
 
-This is a bit annoying as we are forcing the callers to always pass a `open` state.  We can add the second constructor and allow the caller to pick the most suitable constructor.
+This is a bit annoying as we are forcing the callers to always pass a value, even when the default value suffice.  We can add the second constructor and allow the caller to pick the most suitable constructor.
 
 ```java
 package demo;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
+
 public class Box {
 
-  private boolean open;
+  private State state = State.CLOSED;
+  private String label = "No Label";
 
   public Box() {
   }
 
-  public Box( final boolean open ) {
-    this.open = open;
+  public Box( final State state ) {
+    this.state = state;
   }
 
   public void open() { /* ... */ }
@@ -2589,8 +2605,16 @@ public class Box {
 
   public boolean isOpen() { /* ... */ }
 
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
   @Override
   public String toString() { /* ... */ }
+
+  private enum State { /* ... */ }
 }
 ```
 
@@ -2598,34 +2622,91 @@ All classes must have a constructor (no exception) and a default constructor is 
 
 ### Can one constructor call another constructor in the same class?
 
-Yes, and that's quite a common practice.  Consider the following class.
+Yes, and that's quite a common practice.  We can modify the default constructor such that it calls the second constructor and passes the value to be used when non are provided.
 
 ```java
 package demo;
 
-public class Person {
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
 
-  public String name;
-  public String surname;
+public class Box {
 
-  public Person() {
-    this( null );
+  private State state;
+  private String label = "No Label";
+
+  public Box() {
+    this( State.CLOSED );
   }
 
-  public Person( final String name ) {
-    this( name, null );
+  public Box( final State state ) {
+    this.state = state;
   }
 
-  public Person( final String name, final String surname ) {
-    this.name = name;
-    this.surname = surname;
-  }
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() { /* ... */ }
+
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+
+  private enum State { /* ... */ }
 }
 ```
 
-The above example shows three constructors.  The default constructor is calling the constructor that takes one parameter, which in turn calls the constructor that takes two parameters.
+A constructor can call another constructor using `this()` and passes the required parameters.  `this()` needs to be the first statement called within the constructor.  The following example does not compile.
 
-Consider the following example.
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+
+```java
+public class Box {
+
+  private State state;
+  private String label = "No Label";
+
+  public Box() {
+    label = "...";
+    this( State.CLOSED );
+  }
+
+  public Box( final State state ) { /* ... */ }
+
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() { /* ... */ }
+
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+
+  private enum State { /* ... */ }
+}
+```
+
+The above code will not compile.
+
+```bash
+src/main/java/demo/Box.java:13: error: call to this must be first statement in constructor
+    this( State.CLOSED );
+        ^
+```
+
+While it is quite a common practice to have constructors calling each other, note that we can find ourselves in some tricky situations.  Consider the following class.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -2658,7 +2739,7 @@ public class MagicBox {
 }
 ```
 
-The example highlights a problem related to `null` being a generic type.  The Java compiler is not able to determine which constructor it will call.
+The example highlights a problem related to `null` being a *flexible* type.  `null` can be used with any reference type.  The Java compiler is not able to determine which constructor to call.
 
 The default constructor invokes another constructor and passes `null`.
 
@@ -2673,17 +2754,13 @@ The call `this( null )` matches both the constructors that have one reference ty
 1. The one that takes a `String`
 
     ```java
-    public MagicBox( final String name ) {
-      this( name, null );
-    }
+    public MagicBox( final String name ) { /* ... */ }
     ```
 
 1. The one that takes a `Point`
 
     ```java
-    public MagicBox( final Point location ) {
-      this( null, location );
-    }
+    public MagicBox( final Point location ) { /* ... */ }
     ```
 
 There are several ways to address this problem.  Three of which are listed below.
@@ -2705,13 +2782,15 @@ There are several ways to address this problem.  Three of which are listed below
 
     [Casting is covered in depth later on](#instanceof-and-cast-operators).
 
-1. Alternatively the default constructor can invoke the constructor that takes two parameters.
+1. Alternatively, the default constructor can invoke the constructor that takes two parameters.
 
     ```java
     public MagicBox() {
       this( null, null );
     }
     ```
+
+All approaches are valid, but a better option if to use *static factory methods*.
 
 ### What are static factory methods?
 
