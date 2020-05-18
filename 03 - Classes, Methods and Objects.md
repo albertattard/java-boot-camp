@@ -1562,10 +1562,6 @@ package demo;
 
 public class Box {
 
-  private enum State {
-    OPEN, CLOSED;
-  }
-
   private State state = State.CLOSED;
 
   public void open() {
@@ -1583,6 +1579,10 @@ public class Box {
   @Override
   public String toString() {
     return String.format( "%s box", isOpen() ? "an open" : "a closed" );
+  }
+
+  private enum State {
+    OPEN, CLOSED;
   }
 }
 ```
@@ -1647,10 +1647,6 @@ package demo;
 
 public class Box {
 
-  private enum State {
-    OPEN, CLOSED;
-  }
-
   private State state = State.CLOSED;
 
   public void open() {
@@ -1668,6 +1664,10 @@ public class Box {
   @Override
   public String toString() {
     return String.format( "%s box", isOpen() ? "an open" : "a closed" );
+  }
+
+  private enum State {
+    OPEN, CLOSED;
   }
 }
 ```
@@ -1825,7 +1825,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private boolean open;
+      private State state = State.CLOSED;
 
       public void open() { /* ... */ }
 
@@ -1839,6 +1839,8 @@ The label can be represented by the `String` data-type.
 
       @Override
       public String toString() { /* ... */ }
+
+      private enum State { /* ... */ }
     }
     ```
 
@@ -1889,7 +1891,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private boolean open;
+      private State state = State.CLOSED;
 
       public void open() { /* ... */ }
 
@@ -1905,6 +1907,7 @@ The label can be represented by the `String` data-type.
       @Override
       public String toString() { /* ... */ }
 
+      private enum State { /* ... */ }
     }
     ```
 
@@ -1917,7 +1920,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private boolean open;
+      private State state = State.CLOSED;
       private String label = "No Label";
 
       public void open() { /* ... */ }
@@ -1939,6 +1942,8 @@ The label can be represented by the `String` data-type.
         final String openClose = open ? "an open" : "a closed";
         return String.format( "%s box labelled '%s'", openClose, label );
       }
+
+      private enum State { /* ... */ }
     }
     ```
 
@@ -2067,7 +2072,7 @@ The label can be represented by the `String` data-type.
 
     public class Box {
 
-      private boolean open;
+      private State state = State.CLOSED;
       private String label = "No Label";
 
       public void open() { /* ... */ }
@@ -2089,6 +2094,8 @@ The label can be represented by the `String` data-type.
 
       @Override
       public String toString() { /* ... */ }
+
+      private enum State { /* ... */ }
     }
     ```
 
@@ -2141,19 +2148,19 @@ package demo;
 
 public class Box {
 
-  private boolean open;
+  private State state = State.CLOSED;
   private String label = "No Label";
 
   public void open() {
-    this.open = true;
+    this.open = State.OPEN;
   }
 
   public void close() {
-    this.open = false;
+    this.open = State.CLOSED;
   }
 
   public boolean isOpen() {
-    return this.open;
+    return this.open == State.OPEN;
   }
 
   public String getLabel() {
@@ -2175,6 +2182,8 @@ public class Box {
     final String labelLocalVariable = this.getLabel();
     return String.format( "%s box labelled '%s'", openClose, labelLocalVariable );
   }
+
+  private enum State { /* ... */ }
 }
 ```
 
@@ -2209,7 +2218,7 @@ public class App {
 
 Different from some other programming languages, like [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this), there is no need to bind it or do any gymnastics.
 
-In Java, we can have objects within objects in the form of [inner anonymous classes, discussed in depth later on].  Consider the following (*possibly advanced*) example.
+In Java, we can have objects within objects in the form of [inner anonymous classes, discussed in depth later on](#inner-anonymous-class).  Consider the following (*possibly advanced*) example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
