@@ -49,7 +49,7 @@
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
-    1. [Can a subclass invoke the constructor of a superclass (the super())?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
+    1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
     1. [What happens when the not all 'children' are 'parents'?](#what-happens-when-the-not-all-children-are-parents)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
@@ -2562,11 +2562,31 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  private enum State { /* ... */ }
+  public enum State { /* ... */ }
 }
 ```
 
-The `Box` shown in the above example has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either `State.OPEN` or `State.CLOSED`).
+Note that the enum `State` was changed from `private` to `public`.  This is quite important as otherwise we will not be able to access the new constructor.  Now we can create boxes in the state we want them to be as shown in the following example.
+
+```java
+package demo;
+
+import static demo.Box.State.CLOSED;
+import static demo.Box.State.OPEN;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Box a = new Box( OPEN );
+    final Box b = new Box( CLOSED );
+
+    System.out.printf( "Box a: %s%n", a );
+    System.out.printf( "Box b: %s%n", b );
+  }
+}
+```
+
+The `Box` shown before has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the state (either `State.OPEN` or `State.CLOSED`).
 
 **⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
 
@@ -2616,7 +2636,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  private enum State { /* ... */ }
+  public enum State { /* ... */ }
 }
 ```
 
@@ -2660,7 +2680,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  private enum State { /* ... */ }
+  public enum State { /* ... */ }
 }
 ```
 
@@ -2701,7 +2721,7 @@ public class Box {
   @Override
   public String toString() { /* ... */ }
 
-  private enum State { /* ... */ }
+  public enum State { /* ... */ }
 }
 ```
 
@@ -3195,7 +3215,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
           @Override
           public String toString() { /* ... */ }
 
-          private enum State { /* ... */ }
+          public enum State { /* ... */ }
         }
         ```
 
@@ -3755,7 +3775,7 @@ public class App {
 }
 ```
 
-While this look very promising, it is quite hard program with and not quite common in Java.
+While this look very promising, it is quite hard program in this fashion and not quite common in Java.
 
 ### Create the `HeavyBox` (complete example)
 
@@ -3958,7 +3978,8 @@ For a class to be extended, the subclass needs to have access to at least one of
 package demo;
 
 public class A {
-  private A() { }
+  private A() {
+  }
 }
 ```
 
@@ -3973,7 +3994,7 @@ public class B extends A {
 }
 ```
 
-There are no constructors available to class `B`, in the parent class `A`, therefor the above will not compile.  Consider the following example.
+There are no constructors visible to class `B` in the parent class `A`, therefore, the above will not compile.  Consider the following example.
 
 ```java
 package demo;
@@ -3992,9 +4013,9 @@ The inner class `C` is an inner class within class `A`.  Like any other member w
 
 ### Are constructors inherited?
 
-**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit it.
+**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit them.
 
-The `Box` class provides two constructors, a default constructor and a constructor that takes a `boolean` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
+The `Box` class provides two constructors, a default constructor and a constructor that takes a `Box.` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -4011,7 +4032,7 @@ public class App {
 
 While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited.
 
-### Can a subclass invoke the constructor of a superclass (the super())?
+### Can a subclass invoke the constructor of a superclass (the `super()`)?
 
 Yes, a subclass can invoke any of the parent's constructors and pass the required parameters to the parent class.  The `Box` class has two constructors.  The following example shows and example of this.
 
