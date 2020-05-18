@@ -38,13 +38,14 @@
     1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
     1. [How does mutability works when we have nested objects?](#how-does-mutability-works-when-we-have-nested-objects)
 1. [Inheritance](#inheritance)
-    1. [Evolving the light box class (step by step)](#evolving-the-light-box-class-step-by-step)
+    1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
     1. [Heavy box complete example](#heavy-box-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the super())?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
+    1. [What happens when the not all 'children' are 'parents'?](#what-happens-when-the-not-all-children-are-parents)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -1553,11 +1554,11 @@ When a method (*instance* or `static`) is invoked, the method's state (such as l
 
 **On the other hand, `static` methods cannot access the object state**.
 
-Different from local variables, when a method modifies the object's state (defined by its properties), then all other methods will observe these changes.  Consider the following sequence of events. 
+Different from local variables, when a method modifies the object's state (defined by its properties), then all other methods will observe these changes.  Consider the following sequence of events.
 
 1. A box instance is created, and the property `open` is set to `false`.
 1. The `open()` method will set the property `open` to `true`.
-1. When later on the `isOpen()` method is invoked, then it returns the current value of the `open` property, which is `true`. 
+1. When later on the `isOpen()` method is invoked, then it returns the current value of the `open` property, which is `true`.
 
 There is a small caveat to this, which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
@@ -1804,7 +1805,7 @@ The label can be represented by the `String` data-type.
     ```
 
     Re-run the tests.  All should pass.
-    
+
     The above example introduced a new keyword, `this`.  Do not worry about the new keyword just yet as it is covered in [a following section](#what-does-this-means).
 
 ### How can we prevent the use of invalid labels?
@@ -2125,7 +2126,7 @@ Let's breakdown the `instanceMethod()` method down.
     ```java
         /* Create an inner anonymous class */
         final Runnable r = new Runnable() {
-          @Override 
+          @Override
           public void run() {
             System.out.printf( "number = %d%n", this.number );
           }
@@ -2148,7 +2149,7 @@ Following is an updated example
 
     /* Create an inner anonymous class */
     final Runnable r = new Runnable() {
-      @Override 
+      @Override
       public void run() {
         System.out.printf( "number = %d%n", App.this.number );
       }
@@ -2157,7 +2158,7 @@ Following is an updated example
   }
 ```
 
-As before, we can always prefix the `this` keywords with the class name as shown above.  
+As before, we can always prefix the `this` keywords with the class name as shown above.
 
 ### 🤔 How does `this` works with nested inner anonymous classes?
 
@@ -2824,7 +2825,62 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 
 There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can contain more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
 
-### Evolving the light box class (step by step)
+### Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)
+
+1. Create the `LightBox`
+
+    ```java
+    package demo;
+
+    public class LightBox {
+    }
+    ```
+
+1. Like a box, light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.  We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class.
+
+    ```java
+    package demo;
+
+    public class LightBox extends Box {
+    }
+    ```
+
+    The `LightBox` [inherits from (or extends)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) `Box`.  The `Box` is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` is known as the child class.
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        final LightBox a = new LightBox();
+        final Box b = new LightBox();
+
+        a.open();
+        b.close();
+
+        System.out.printf( "Box a: %s%n", a );
+        System.out.printf( "Box b: %s%n", b );
+      }
+    }
+    ```
+
+    All methods and state available to the `Box` is also available to the `LightBox`.
+
+    ```bash
+    Box a: an open box
+    Box b: a closed box
+    ```
+
+    Note that **all light boxes are boxes**, and this is quite an important statement.  We will come back to this in a [later section](#what-happens-when-the-not-all-children-are-parents), where we will see what happens when the previous statement is false.
+
+    Note that the opposite does not hold.  In other words, **NOT all boxes are light boxes**.  Fruit is a good analogy to this.  All apples are fruit but not all fruit is apples.  Shapes are another good example.  All circles are shape, but not all shapes are circle.
+
+    The following will not compile.
+
+    ```java
+    final LightBox a = new Box();
+    ```
 
 1. Create the `LightBox` and add the `isEmpty()` method
 
@@ -2852,21 +2908,6 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```java
     package demo;
 
-    public class LightBox {
-
-      public boolean isEmpty() {
-        return true;
-      }
-    }
-    ```
-
-    Test should pass.
-
-1.  Like a box, light box can be opened and closed.  This logic can either be copied here, or inherited from the `Box` class.
-
-    ```java
-    package demo;
-
     public class LightBox extends Box {
 
       public boolean isEmpty() {
@@ -2875,44 +2916,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    The `LightBox` [inherits from (or extends)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) `Box`, which is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html).
-
-    **All light boxes are boxes**.
-
-    ```java
-    package demo;
-
-    public class App {
-
-      public static void main( final String[] args ) {
-        final LightBox a = new LightBox();
-        final Box b = new LightBox();
-
-        a.open();
-        b.close();
-
-        System.out.printf( "Box a: %s%n", a );
-        System.out.printf( "Box b: %s%n", b );
-      }
-    }
-    ```
-
-    All methods and state available to the `Box` is also available to the `LightBox`.
-
-    ```bash
-    Box a: an open box
-    Box b: a closed box
-    ```
-
-    Note that the opposite does not hold.  In other words, **NOT all boxes are light boxes**.  Fruit is a good analogy to this.  All apples are fruit but not all fruit is apples.  Shapes are another good example.  All circles are shape, but not all shapes are circle.
-
-    The following will not compile.
-
-    ```java
-    final LightBox a = new Box();
-    ```
-
-    This is discussed further in the [instanceof and cast operators section](#instanceof-and-cast-operators).
+    Run the tests.  All tests should pass.
 
 1. Add the ability to add an item's id (of type `long`) to the `LightBox`.
 
@@ -3305,7 +3309,7 @@ The inner class `C` is an inner class within class `A`.  Like any other member w
 
 ### Are constructors inherited?
 
-**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit it. 
+**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit it.
 
 The `Box` class provides two constructors, a default constructor and a constructor that takes a `boolean` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
 
@@ -3322,7 +3326,7 @@ public class App {
 }
 ```
 
-While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited. 
+While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited.
 
 ### Can a subclass invoke the constructor of a superclass (the super())?
 
@@ -3385,30 +3389,30 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
     ```java
     package demo;
-    
+
     public class A {
-    
+
       public A() {
         System.out.println( "A()" );
       }
-    
+
       public A( int a ) {
         System.out.printf( "A(int=%d)%n", a );
       }
     }
     ```
-   
+
     The grandparent has two constructors, the default constructor and another constructor that takes an `int`.
 
 1. The parent class, `B`
 
     ```java
     package demo;
-    
+
     public class B {
     }
     ```
-   
+
     The parent class, `B`, does not define any constructors and thus a default one is assigned to class `B`.
 
 1. The child class, `C`
@@ -3417,16 +3421,20 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
     ```java
     package demo;
-    
+
     public class C {
-    
+
       public C() {
         super( 10 );
       }
     }
     ```
-    
+
     Class `C`, tries to invoke a constructor that takes an `int` as its sole parameter.  Class `A` has such constructor but class `B` does not.
+
+### What happens when the not all 'children' are 'parents'?
+
+**Pending...**
 
 ## Abstraction
 
