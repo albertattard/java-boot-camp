@@ -195,7 +195,7 @@ The [Java Shell tool (JShell)](https://docs.oracle.com/javase/9/jshell/introduct
     x ==> 7
     ```
 
-    For more information about Local Variable Type Inference please refer to the [style guidelines](http://openjdk.java.net/projects/amber/LVTIstyle.html).
+    For more information about Local Variable Type Inference please refer to the [style guidelines](http://openjdk.java.net/projects/amber/LVTIstyle.html) and [article Java Feature Spotlight: Local Variable Type Inference by Brian Goetz](https://www.infoq.com/articles/java-local-variable-type-inference/).
 
     Note that once a variable is created, it cannot change its type.  Once we create an `int`, that variable will stay an `int` and cannot accept anything else.
 
