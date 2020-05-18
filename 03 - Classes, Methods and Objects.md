@@ -3874,7 +3874,7 @@ public class LightBoxTest {
   public void shouldNotBeEmpty() { /* ... */ }
 
   @Test
-  @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
+  @DisplayName( "should thrown an IllegalStateException when adding an item to a non-empty box" )
   public void shouldThrowExceptionWhenNotEmpty() { /* ... */ }
 
   @Test
@@ -3927,7 +3927,7 @@ The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this 
 
 ### Can we prevent a class from being extended (the `final` keyword)?
 
-Java allows a class to extend another by default.  This can be prevented by the `final` keyword.
+Java allows a class to extend another class by default.  The `LightBox` was able to extend the `Box` class without having to do anything to the `Box` class.  This can be prevented by the `final` keyword, as shown next.
 
 ```java
 package demo;
@@ -3935,22 +3935,10 @@ package demo;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-public final class LightBox extends Box {
-
-  private boolean empty;
-
-  public boolean isEmpty() { /* ... */ }
-
-  public void putItem( final long itemId ) { /* ... */ }
-
-  @Override
-  public void changeLabelTo( final String label ) { /* ... */ }
-
-  public static boolean isValidLabel( final String label ) { /* ... */ }
-}
+public final class LightBox extends Box { /* ... */ }
 ```
 
-The `LightBox` class cannot be extended.  Consider the following example.
+The `LightBox` class cannot be extended by another class as the `LightBox` class is marked `final`.  Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
