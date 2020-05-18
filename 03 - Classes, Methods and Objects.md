@@ -3206,7 +3206,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         }
         ```
 
-    Given that the light box is a specific type of box, it is safe to inherit from the box.  We will elaborate more on this in [later sections](#inheritance-and-composition).
+    Given that the light box is a specific type of box, it is safe to inherit from box.  We will elaborate more on this in [later sections](#inheritance-and-composition).
 
     The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
 
@@ -3245,7 +3245,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     final LightBox a = new Box();
     ```
 
-1. Create the `LightBox` and add the `isEmpty()` method
+1. Add the `isEmpty()` method
 
     ```java
     package demo;
@@ -3258,7 +3258,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     public class LightBoxTest {
 
       @Test
-      @DisplayName( "should be empty when a new light box is created and no items are placed" )
+      @DisplayName( "should be empty when a new light box is created and no items are yet placed" )
       public void shouldBeEmpty() {
         final LightBox box = new LightBox();
         assertTrue( box.isEmpty() );
@@ -3339,24 +3339,53 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
 1. Add state to the `LightBox` class.
 
-    ```java
-    package demo;
+    Like many things in programming, we can take different approaches.
 
-    public class LightBox extends Box {
+    1. Using enums (preferred approach)
 
-      private boolean empty = true;
+        ```java
+        package demo;
 
-      public boolean isEmpty() {
-        return empty;
-      }
+        public class LightBox extends Box {
 
-      public void putItem( final long itemId ) {
-        empty = false;
-      }
-    }
-    ```
+          private State state = State.EMPTY;
 
-    Sometimes a property is used for various purposes.  Instead of creating a new property, `empty`, we could use the `itemId` property as shown in the following example.
+          public boolean isEmpty() {
+            return state == State.EMPTY;
+          }
+
+          public void putItem( final long itemId ) {
+            state = State.FULL;
+          }
+
+          private enum State {
+            EMPTY, FULL
+          }
+        }
+        ```
+
+    1. Using `boolean` (a very common approach)
+
+        ```java
+        package demo;
+
+        public class LightBox extends Box {
+
+          private boolean empty = true;
+
+          public boolean isEmpty() {
+            return empty;
+          }
+
+          public void putItem( final long itemId ) {
+            empty = false;
+          }
+        }
+        ```
+
+    Please refer to the *[is boolean the right choice?](#is-boolean-the-right-choice)* section for an in-depth discussion about this topic.
+
+    Sometimes a property is used for various purposes.  Instead of creating a new property, (`status` or `empty`, depending with approach you took), we could use the `itemId` property, as shown in the following example.
 
     **⚠️ NOT RECOMMENDED!!**
 
@@ -3365,10 +3394,11 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     public class LightBox extends Box {
 
-      private long itemId = -1L;
+      public static final long EMPTY = -1L;
+      private long itemId = EMPTY;
 
       public boolean isEmpty() {
-        return itemId == -1L;
+        return itemId == EMPTY;
       }
 
       public void putItem( final long itemId ) {
