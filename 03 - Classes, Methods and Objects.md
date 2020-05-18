@@ -3159,21 +3159,52 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     <table>
       <tbody>
         <tr>
-          <th></th>
-          <th></th>
+          <th>Replicate</th>
+          <th>Inherit</th>
         </tr>
         <tr>
           <td>
-            <pre>package demo;
+            <pre>
+            package demo;
 
-public class LightBox extends Box {
-}</pre>
+            public class LightBox {
+
+              private State state;
+              private String label = "No Label";
+
+              public Box() {
+                label = "...";
+                this( State.CLOSED );
+              }
+
+              public Box( final State state ) { /* ... */ }
+
+              public void open() { /* ... */ }
+
+              public void close() { /* ... */ }
+
+              public boolean isOpen() { /* ... */ }
+
+              public String getLabel() { /* ... */ }
+
+              public void changeLabelTo( final String label ) { /* ... */ }
+
+              private static boolean isValidLabel( final String label ) { /* ... */ }
+
+              @Override
+              public String toString() { /* ... */ }
+
+              private enum State { /* ... */ }
+            }
+            </pre>
           </td>
           <td>
-            <pre>package demo;
+            <pre>
+            package demo;
 
-public class LightBox extends Box {
-}</pre>
+            public class LightBox extends Box {
+            }
+            </pre>
           </td>
         </tr>
       </tbody>
