@@ -2152,11 +2152,11 @@ public class Box {
   private String label = "No Label";
 
   public void open() {
-    this.open = State.OPEN;
+    this.state = State.OPEN;
   }
 
   public void close() {
-    this.open = State.CLOSED;
+    this.state = State.CLOSED;
   }
 
   public boolean isOpen() {
