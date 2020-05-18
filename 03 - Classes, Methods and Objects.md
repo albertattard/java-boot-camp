@@ -3875,11 +3875,15 @@ public class LightBoxTest {
 
   @Test
   @DisplayName( "should thrown an IllegalArgumentException when adding an item to a non-empty box" )
-  public void shouldThrowExceptionWhenItemAlreadyExists() { /* ... */ }
+  public void shouldThrowExceptionWhenNotEmpty() { /* ... */ }
 
   @Test
-  @DisplayName( "should thrown an IllegalArgumentException when setting a label longer than 32 letters" )
-  public void shouldThrowExceptionWhenSettingLongLabels() {
+  @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
+  public void shouldThrowExceptionWhenClosed() { /* ... */ }
+
+  @Test
+  @DisplayName( "should thrown an IllegalArgumentException when given a label longer than 32 letters" )
+  public void shouldThrowExceptionWhenGivenLongLabels() {
     final LightBox box = new LightBox();
     assertThrows( IllegalArgumentException.class, () -> box.changeLabelTo( "123456789 123456789 123456789 123" ) );
   }
@@ -3891,12 +3895,13 @@ The `changeLabelTo()` method can be overridden and a new validation added as sho
 ```java
 package demo;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Strings.nullToEmpty;
 
 public class LightBox extends Box {
 
-  private boolean empty;
+  private State state = State.EMPTY;
 
   public boolean isEmpty() { /* ... */ }
 
@@ -3904,13 +3909,15 @@ public class LightBox extends Box {
 
   @Override
   public void changeLabelTo( final String label ) {
-    Preconditions.checkArgument( isValidLabel( label ) );
+    checkArgument( isValidLabel( label ) );
     super.changeLabelTo( label );
   }
 
   private static boolean isValidLabel( final String label ) {
-    return Strings.nullToEmpty( label ).length() <= 32;
+    return nullToEmpty( label ).length() <= 32;
   }
+
+  private enum State { /* ... */ }
 }
 ```
 
