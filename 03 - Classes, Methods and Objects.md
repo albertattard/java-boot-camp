@@ -3652,13 +3652,13 @@ public class LightBox {
     return new LightBox().closeEmpty;
   }
 
-  public class CloseEmpty extends LightBox {
+  public class CloseEmpty {
     public OpenEmpty open() {
       return openEmpty;
     }
   }
 
-  public class OpenEmpty extends LightBox {
+  public class OpenEmpty {
     public CloseEmpty close() {
       return closeEmpty;
     }
@@ -3668,13 +3668,13 @@ public class LightBox {
     }
   }
 
-  public class CloseFull extends LightBox {
+  public class CloseFull {
     public OpenFull open() {
       return openFull;
     }
   }
 
-  public class OpenFull extends LightBox {
+  public class OpenFull {
     public CloseFull close() {
       return closeFull;
     }
@@ -3739,6 +3739,22 @@ This is quite complex, so let's break it into smaller parts.
 
     The inner classes can access the properties of the class.  Note that each method within the inner classes is returning a property defined within the outer class.
 
+Following is an example of how this can be used.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final LightBox.CloseFull a = LightBox.newBox()
+      .open()
+      .putItem( 1L )
+      .close();
+  }
+}
+```
+
 While this look very promising, it is quite hard program with and not quite common in Java.
 
 ### Create the `HeavyBox` (complete example)
@@ -3770,6 +3786,7 @@ A heavy box is a box that can take more than one item.
       @DisplayName( "should not be empty after an item is placed in the box" )
       public void shouldNotBeEmpty() {
         final HeavyBox box = new HeavyBox();
+        box.open();
         box.addItem( 1 );
         assertFalse( box.isEmpty() );
       }
@@ -3778,6 +3795,7 @@ A heavy box is a box that can take more than one item.
       @DisplayName( "should allow multiple items in the box" )
       public void shouldAllowMultipleItems() {
         final HeavyBox box = new HeavyBox();
+        box.open();
         box.addItem( 1 );
         box.addItem( 2 );
         box.addItem( 3 );
@@ -3787,8 +3805,17 @@ A heavy box is a box that can take more than one item.
       @DisplayName( "should thrown an IllegalArgumentException when adding an item that is already in the box" )
       public void shouldThrowExceptionWhenItemAlreadyExists() {
         final HeavyBox box = new HeavyBox();
+        box.open();
         box.addItem( 1 );
         assertThrows( IllegalArgumentException.class, () -> box.addItem( 1 ) );
+      }
+
+      @Test
+      @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
+      public void shouldThrowExceptionWhenClosed() {
+        final HeavyBox box = new HeavyBox();
+        assertFalse( box.isOpen() );
+        assertThrows( IllegalStateException.class, () -> box.addItem( 1 ) );
       }
     }
     ```
@@ -3798,10 +3825,11 @@ A heavy box is a box that can take more than one item.
     ```java
     package demo;
 
-    import com.google.common.base.Preconditions;
-
     import java.util.ArrayList;
     import java.util.List;
+
+    import static com.google.common.base.Preconditions.checkArgument;
+    import static com.google.common.base.Preconditions.checkState;
 
     public class HeavyBox extends Box {
 
@@ -3812,7 +3840,8 @@ A heavy box is a box that can take more than one item.
       }
 
       public void addItem( final long itemId ) {
-        Preconditions.checkArgument( false == items.contains( itemId ) );
+        checkState( isOpen() );
+        checkArgument( false == items.contains( itemId ) );
         items.add( itemId );
       }
     }
