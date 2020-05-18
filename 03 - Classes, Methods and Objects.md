@@ -3154,61 +3154,51 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
 1. Like a box, the light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.
 
-    We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class, as shown next.
+    We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class.  Both options are shown next.
 
-    <table>
-      <tbody>
-        <tr>
-          <th>Replicate</th>
-          <th>Inherit</th>
-        </tr>
-        <tr>
-          <td>
-            <pre>
-            package demo;
+    1. Replicate
 
-            public class LightBox {
+        ```java
+        package demo;
 
-              private State state;
-              private String label = "No Label";
+        public class LightBox {
 
-              public Box() {
-                label = "...";
-                this( State.CLOSED );
-              }
+          private State state;
+          private String label = "No Label";
 
-              public Box( final State state ) { /* ... */ }
+          public Box() { /* ... */ }
 
-              public void open() { /* ... */ }
+          public Box( final State state ) { /* ... */ }
 
-              public void close() { /* ... */ }
+          public void open() { /* ... */ }
 
-              public boolean isOpen() { /* ... */ }
+          public void close() { /* ... */ }
 
-              public String getLabel() { /* ... */ }
+          public boolean isOpen() { /* ... */ }
 
-              public void changeLabelTo( final String label ) { /* ... */ }
+          public String getLabel() { /* ... */ }
 
-              private static boolean isValidLabel( final String label ) { /* ... */ }
+          public void changeLabelTo( final String label ) { /* ... */ }
 
-              @Override
-              public String toString() { /* ... */ }
+          private static boolean isValidLabel( final String label ) { /* ... */ }
 
-              private enum State { /* ... */ }
-            }
-            </pre>
-          </td>
-          <td>
-            <pre>
-            package demo;
+          @Override
+          public String toString() { /* ... */ }
 
-            public class LightBox extends Box {
-            }
-            </pre>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          private enum State { /* ... */ }
+        }
+        ```
+
+    1. Inherit
+
+        ```java
+        package demo;
+
+        public class LightBox extends Box {
+        }
+        ```
+
+    Given that the light box is a specific type of box, it is safe to inherit from the box.  We will elaborate more on this in [later sections](#inheritance-and-composition).
 
     The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
 
