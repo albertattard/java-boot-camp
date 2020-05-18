@@ -39,7 +39,7 @@
     1. [How does mutability works when we have nested objects?](#how-does-mutability-works-when-we-have-nested-objects)
 1. [Inheritance](#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
-    1. [Heavy box complete example](#heavy-box-complete-example)
+    1. [Create a the `HeavyBox` (complete example)](#create-a-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
@@ -2836,7 +2836,9 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-1. Like a box, light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.  We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class.
+1. Like a box, light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.
+
+    We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class, as shown next.
 
     ```java
     package demo;
@@ -2845,7 +2847,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    The `LightBox` [inherits from (or extends)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) `Box`.  The `Box` is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` is known as the child class.
+    The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
 
     ```java
     package demo;
@@ -2865,14 +2867,14 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    All methods and state available to the `Box` is also available to the `LightBox`.
+    All methods and state available to a `Box` object is also available to a `LightBox` object.
 
     ```bash
     Box a: an open box
     Box b: a closed box
     ```
 
-    Note that **all light boxes are boxes**, and this is quite an important statement.  We will come back to this in a [later section](#what-happens-when-the-not-all-children-are-parents), where we will see what happens when the previous statement is false.
+    Note that **all light boxes are boxes**, and this is quite an important statement when dealing with inheritance.  We will come back to this in a [later section](#what-happens-when-the-not-all-children-are-parents), where we will see what happens when the previous statement is false.
 
     Note that the opposite does not hold.  In other words, **NOT all boxes are light boxes**.  Fruit is a good analogy to this.  All apples are fruit but not all fruit is apples.  Shapes are another good example.  All circles are shape, but not all shapes are circle.
 
@@ -3082,7 +3084,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Tests should pass now.
 
-### Heavy box complete example
+### Create a the `HeavyBox` (complete example)
 
 A heavy box is a box that can take more than one item.
 

@@ -145,7 +145,7 @@ Boot Camp for developers interested to learn Java.
     1. [How does mutability works when we have nested objects?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-does-mutability-works-when-we-have-nested-objects)
 1. [Inheritance](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
-    1. [Heavy box complete example](03%20-%20Classes%2C%20Methods%20and%20Objects.md#heavy-box-complete-example)
+    1. [Create a the `HeavyBox` (complete example)](03%20-%20Classes%2C%20Methods%20and%20Objects.md#create-a-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-prevent-a-class-from-being-extended-the-final-keyword)
     1. [How do `private` constructor effect inheritance?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-do-private-constructor-effect-inheritance)
