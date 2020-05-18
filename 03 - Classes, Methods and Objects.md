@@ -1630,7 +1630,7 @@ The enum `BoxForm` is only used within the `Box` class.  The `isOpen()` method, 
 
 ### What does '*object state*' mean?
 
-The `Box` defined a property, called `state`.  The properties (not the `static` fields) defined by a class represent the object's state.  When objects are created, the properties defined by their class become the object's state.  Consider the following example.
+The `Box` defined a property, called `form` (of type `BoxForm`).  The properties (not the `static` fields) defined by a class represent the object's state.  When objects are created, the properties defined by their class become the object's state.  Consider the following example.
 
 ```java
 Box a = new Box();
@@ -1642,7 +1642,7 @@ When the `Box` instance is created, the properties defined by the class becomes 
 
 ### How do instance methods interact with the object's state?
 
-The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `state` property.
+The `Box` class, shown next, has four **instance** (not `static`) methods, all of which access the `form` property.
 
 ```java
 package demo;
@@ -1674,15 +1674,15 @@ public class Box {
 }
 ```
 
-When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' state (represented by the property `state` in this example).  In this case, all four instance methods will have access to the same property, `state`.
+When a method (*instance* or `static`) is invoked, the method's state (such as local variables) is loaded on the *Java stack* as a new frame.  All method's variables exists in the method's frame in the *Java stack*.  The method can only reach within its frame.  The classloader makes sure of that during the class loading process.  Instance methods have also access to the objects' state (represented by the property `form` in this example).  In this case, all four instance methods will have access to the same property, `form`.
 
 **On the other hand, `static` methods cannot access the object's state**.
 
 Different from local variables, when a method modifies the object's state (defined by its properties), then all other instance methods will observe these changes.  Consider the following sequence of events.
 
-1. A box instance is created, and the property `state` is set to `BoxForm.CLOSED`.
-1. The `open()` method will set the property `state` to `BoxForm.OPEN`.
-1. When later on the `isOpen()` method is invoked, then it compares the current value of the `state` property, which is `BoxForm.OPEN`, to determine whether the box is open of not.
+1. A box instance is created, and the property `form` is set to `BoxForm.CLOSED`.
+1. The `open()` method will set the property `form` to `BoxForm.OPEN`.
+1. When later on the `isOpen()` method is invoked, then it compares the current value of the `form` property, which is `BoxForm.OPEN`, to determine whether the box is open of not.
 
 There is a small caveat to this, which will be discussed in more detail when we talk about [concurrency](11%20-%20Concurrency.md).
 
