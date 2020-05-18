@@ -2736,7 +2736,7 @@ public class Destination {
     return department;
   }
 
-  public void setDepartment( final String department ) {
+  public void changeDepartmentTo( final String department ) {
     this.department = department;
   }
 
@@ -2795,14 +2795,14 @@ public class App {
 
   public static void main( final String[] args ) {
     final Destination a = new Destination();
-    a.setDepartment( "Testing" );
+    a.changeDepartmentTo( "Testing" );
 
     final Item b = new Item( 1.2, a );
     System.out.println( "-- Before changing the destination ----" );
     System.out.println( b );
 
     /* Change the department after creating the item */
-    a.setDepartment( "Programming" );
+    a.changeDepartmentTo( "Programming" );
     System.out.println( "-- After changing the destination -----" );
     System.out.println( b );
   }
