@@ -20,6 +20,7 @@
     1. [Sum numbers in List](#sum-numbers-in-list)
     1. [Sum content in List based on property](#sum-content-in-list-based-on-property)
     1. [Create Map from List](#create-map-from-list)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -92,3 +93,7 @@
 ### Create Map from List
 
 **🚧 Pending...**
+
+## Miscellaneous
+
+1. [FP vs OO: Choose Two by Brian Goetz](https://www.youtube.com/watch?v=8GWZE2Y2O9E)

@@ -5601,18 +5601,116 @@ public class BobTheBuilder implements JackOfAllTrades {
 The following table compares the different extends/imports options available between different types.
 
 | Type      | Class          | Interface         |
-|-----------|----------------|-------------------|
+|-----------|:--------------:|-------------------|
 | class     | `extends` 0..1 | `implements` 0..M |
 | interface | **N/A**        | `extends` 0..M    |
 | enum      | **N/A**        | `implements` 0..M |
 
 ### How many interfaces can a class implement?
 
-**🚧 Pending...**
+As hinted in the previous section, a class can implement as many interfaces it needs.  Consider the following two interfaces.
+
+1. Has the ability to pedal, such as a *bicycle* or a *pedal boat*.
+
+    ```java
+    package demo;
+
+    public interface CanPedal {
+
+      void pedal();
+    }
+    ```
+
+1. Has the ability to switch gears, such as a *bicycle* or a *car*.
+
+    ```java
+    package demo;
+
+    public interface CanChangeGears {
+
+      void shiftUp();
+
+      void shiftDown();
+    }
+    ```
+
+A class can implement both interfaces as shown in the following example.
+
+```java
+package demo;
+
+public abstract class Bicycle implements CanPedal, CanChangeGears{
+}
+```
+
+The above class is `abstract` as it does not implement all the abstract methods that the interfaces define.  We can implement some of the abstract methods defined by the interfaces, in which case the class still needs to be abstract.
+
+```java
+package demo;
+
+public abstract class Bicycle implements CanPedal, CanChangeGears {
+
+  @Override
+  public void shiftUp() { /* ... */ }
+
+  @Override
+  public void pedal() { /* ... */ }
+}
+```
+
+The new version of the `Bicycle` class is still missing the `shiftDown()` method, defined by the `CanChangeGears` interface, thus needs to be declared `abstract`.
 
 ### What happens if a class implements two interfaces that have the same abstract method?
 
-**🚧 Pending...**
+A class can implement interfaces that have the same method signature, only if the methods have the same return type.  A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type.  In general, a class cannot have two methods with the same name and parameters and different return types.
+
+Consider the following interfaces
+
+1. An algorithm that resolves to a `double`.
+
+    ```java
+    package demo;
+
+    public interface DoubleAlgorithm {
+
+      double compute();
+    }
+    ```
+
+1. An algorithm that resolved to an `int`
+
+    ```java
+    package demo;
+
+    public interface IntAlgorithm {
+
+      int compute();
+    }
+    ```
+
+Both interfaces define a method, named `compute()`, that return a different type.  Now consider the following class that implements both interfaces.
+
+```java
+package demo;
+
+public class Calculator implements IntAlgorithm, DoubleAlgorithm {
+
+  @Override
+  public int compute() { /* ... */ }
+
+  @Override
+  public double compute() { /* ... */ }
+}
+```
+
+Let's for the sake of the example say that the above class compiles.  Which method would we invoke when we encounter the following code.
+
+```java
+final Calculator c = new Calculator();
+c.compute();
+```
+
+There is no way for the Java compiler to link our call to the right method as two methods match.
 
 ### How can we sort the `Point` class?
 

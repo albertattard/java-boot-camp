@@ -340,6 +340,7 @@ Boot Camp for developers interested to learn Java.
     1. [Sum numbers in List](08%20-%20Lambda%20&%20Streams.md#sum-numbers-in-list)
     1. [Sum content in List based on property](08%20-%20Lambda%20&%20Streams.md#sum-content-in-list-based-on-property)
     1. [Create Map from List](08%20-%20Lambda%20&%20Streams.md#create-map-from-list)
+1. [Miscellaneous](08%20-%20Lambda%20&%20Streams.md#miscellaneous)
 
 ### [IO & Streams](09%20-%20IO%20&%20Streams.md)
 
