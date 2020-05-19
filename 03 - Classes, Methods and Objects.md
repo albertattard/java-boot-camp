@@ -4822,7 +4822,7 @@ This example was taken from [PUZZLE 13: ANIMAL FARM in Java™ Puzzlers: Traps, 
 
 ### The `getClass()` method
 
-An object is an instance of a class.  Thus, all objects have a class and this can be retrived using the `getClass()` method.  Consider the following example.
+An object is an instance of a class.  Thus, all objects have a class and this can be retrieved using [the `getClass()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#getClass()).  Consider the following example.
 
 ```java
 package demo;
@@ -4841,7 +4841,7 @@ public class App {
   }
 
   private static void printType( Object o ) {
-    System.out.printf( "The object's is of type %s%n", o.getClass() );
+    System.out.printf( "The object is of type %s%n", o.getClass() );
   }
 }
 ```
@@ -4849,11 +4849,11 @@ public class App {
 The above will print
 
 ```bash
-The object's is of type class java.awt.Point
-The object's is of type class java.util.Random
+The object is of type class java.awt.Point
+The object is of type class java.util.Random
 ```
 
-The class, of any type, can be also obtained from the actual class.  For example, we can obtain the class of the `Point` class using the `Point.class` static field.  All classes have a static field named `class`.  The class itself is represented as a Java object in Java.
+The class, of any object, can be also obtained from the actual class.  For example, we can obtain the class of the `Point` class using the `Point.class` static like field.  All classes have a static like field named `class`.  The class itself is represented as a Java object in Java.
 
 ```java
 package demo;
@@ -4886,6 +4886,51 @@ Is the object (class java.util.Random) of type Point? false
 ```
 
 The `getClass()` method is sometimes used in the `equals()` method when the class does not have subtypes (and to make the comparison more efficient).
+
+**⚠️ PROCEED WITH CAUTION!!**
+
+```java
+package demo;
+
+import java.util.Objects;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+public class Person {
+  private String name;
+  private String surname;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object ) {
+      return true;
+    }
+
+    // if ( !( object instanceof Person ) ) {
+    if ( object != null && object.getClass() == Person.class ) {
+      return false;
+    }
+
+    final Person other = (Person) object;
+    return Objects.equals( name, other.name ) &&
+      Objects.equals( surname, other.surname );
+  }
+
+  @Override
+  public int hashCode() { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+Note that the above version of the `equals()` method is slightly different from the previous version, the one that used the `instanceof` operator.
 
 ### The `wait()`, `notify()` and `notifyAll()` methods
 
