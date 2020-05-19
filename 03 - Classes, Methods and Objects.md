@@ -4292,6 +4292,14 @@ The `Box` class does not have enough information to determine whether it is empt
 1. The `LightBox` make use of the `space` (`Space` enum) property
 1. The `HeavyBox` delegates this to the `items` ([`List`'s `isEmpty()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#isEmpty())) property
 
+This means that while all boxes can be empty (or non-empty), the Box class cannot answer the question, `isEmpty()`.  The `Box` class needs to have a method for which it does not have an implementation.  Methods that do not have an implementation, or a body, are referred to as abstract methods as shown next.
+
+```java
+  public abstract boolean isEmpty();
+```
+
+The method shown above does not have a body and a semi-colon (`;`) is used instead of curly brackets (`{}`).  The full example is shown next.
+
 ```java
 package demo;
 
@@ -4328,7 +4336,7 @@ public abstract class Box {
 }
 ```
 
-The `isEmpty()` method needs to be `abstract` as while a box can be empty or not, the Box class does not know how to answer this question.
+The `isEmpty()` method needs to be `abstract` as while a box can be empty or not, the `Box` class does not know how to answer this question.
 
 Shapes are a good analogy.  All shapes have an area, but we cannot compute the area of shape, as shape is abstract.  We cannot draw a shape as shape is abstract.  Yet we know that shapes have an area.  We can compute the area of a square or a circle, but we cannot compute the area of a shape.
 
@@ -4362,6 +4370,8 @@ Shapes are a good analogy.  All shapes have an area, but we cannot compute the a
       /* Inherited abstract methods not implemented */
     }
     ```
+
+    Note that class `B` inherits an abstract method from class `A`.  The abstract method `m()` is not implemented and thus, class `B` must be abstract.
 
 ### Can `final` classes be abstract?
 
