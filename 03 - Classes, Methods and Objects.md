@@ -51,6 +51,7 @@
     1. [Are constructors inherited?](#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
     1. [What happens when not all '*children*' are '*parents*'?](#what-happens-when-not-all-children-are-parents)
+    1. [Is inheritance evil and an anti-pattern?](#is-inheritance-evil-and-an-anti-pattern)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -4254,6 +4255,10 @@ There are many other examples.  Cats are pets but not all pets are cats.  If som
 The Java API has some unfortunate instances too, where the inheritance was not properly implemented.  The [`Properties` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Properties.html) is a good example of bad inheritance.  The `Properties` class inherits from the [`Hashtable` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html).
 
 [One of the topics discussed later](#inheritance-and-composition) is touches about these problems and propose an alternative approach to inheritance.  This topic is also covered by [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), where it provides some bad usage of inheritance within the Java API.
+
+### Is inheritance evil and an anti-pattern?
+
+**Pending...**
 
 ## Abstraction
 
