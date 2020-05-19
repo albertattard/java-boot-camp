@@ -32,25 +32,25 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## Creational Design Pattern
 
 ### Factory Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Abstract Factory Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Singleton Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Prototype Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Builder Pattern.
 
@@ -58,74 +58,74 @@
 
 ### Adapter Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Bridge Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Composite Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Decorator Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Facade Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Flyweight Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Proxy Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ## Behavioral Design Pattern
 
 ### Chain Of Responsibility Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Command Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Interpreter Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Iterator Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Mediator Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Memento Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Observer Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### State Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Strategy Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Template Pattern
 
-**Pending...**
+**🚧 Pending...**
 
 ### Visitor Pattern
 
-**Pending...**
+**🚧 Pending...**

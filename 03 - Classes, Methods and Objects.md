@@ -321,7 +321,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 
 1. **local variables** (missing in the above example)
 
-    **Pending...**  Should we have a method anatomy?
+    **🚧 Pending...**  Should we have a method anatomy?
 
 ## Classes, methods and properties (static no OOP)
 
@@ -2987,7 +2987,7 @@ Java is a **general purpose programming language** that supports, [procedural pr
 
 ### Can we call methods from within a constructor?
 
-**Pending...**
+**🚧 Pending...**
 
 ## Mutable and immutable
 
@@ -3950,7 +3950,7 @@ public class LightBox extends Box {
 
 The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this belongs to the `Box` class.  A child class can access its parent's methods using the `super` keyword.  Without the `super` keyword, the above method will call itself recursively until a `StackOverflowException` is thrown.
 
-**Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
+**🚧 Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
 
 ### Can we prevent a class from being extended (the `final` keyword)?
 
@@ -4153,7 +4153,7 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
 ### Can a constructor in a parent class call a method in a subclass?
 
-**Pending...**
+**🚧 Pending...**
 
 ### What happens when not all '*children*' are '*parents*'?
 
@@ -4337,7 +4337,7 @@ A class that is marked `final` cannot be extended.  Therefore, a `final` class c
 
 ### Can abstract classes have `private` constructors?
 
-**Pending...** Maybe moved up.
+**🚧 Pending...** Maybe moved up.
 
 For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
 
@@ -5207,7 +5207,7 @@ An inner anonymous class
 
 Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
 
-**Pending...**
+**🚧 Pending...**
 
 ### Functional interface and lambda functions
 
@@ -5391,11 +5391,11 @@ public class App {
 
 ### `default` and `static` methods
 
-**Pending...**
+**🚧 Pending...**
 
 ## `instanceof` and `cast` operators
 
-**Pending...**
+**🚧 Pending...**
 
 ## Inheritance and composition
 
@@ -5419,7 +5419,7 @@ public class App {
 ```
 
 
-**Pending...**
+**🚧 Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
 
@@ -5427,7 +5427,7 @@ public class App {
 
 ### Overloading
 
-**Pending...**
+**🚧 Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
@@ -5437,23 +5437,23 @@ public class App {
 
 ### Initialisation block
 
-**Pending...**
+**🚧 Pending...**
 
 ### `static` initialisation block
 
-**Pending...**
+**🚧 Pending...**
 
 ### Outer class
 
-**Pending...**
+**🚧 Pending...**
 
 ### Inner instance class
 
-**Pending...**
+**🚧 Pending...**
 
 ### Inner static class
 
-**Pending...**
+**🚧 Pending...**
 
 Consider the following example.
 
@@ -5560,21 +5560,21 @@ The `Temperature` class cannot be extended by an external class, which prevents 
 
 ### Inner anonymous class
 
-**Pending...**
+**🚧 Pending...**
 
 ## Annotations
 
-**Pending...**
+**🚧 Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
 
 ### Project Lombok
 
-**Pending...**
+**🚧 Pending...**
 
 ## Generics
 
-**Pending...**
+**🚧 Pending...**
 
 Are not 100% Erased
 

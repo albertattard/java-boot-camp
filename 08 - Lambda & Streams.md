@@ -23,72 +23,72 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## Lambda Expressions
 
-**Pending...**
+**🚧 Pending...**
 
 ### Function as Parameters
 
-**Pending...**
+**🚧 Pending...**
 
 ### Constructor as Parameters
 
-**Pending...**
+**🚧 Pending...**
 
 ## Multiple Parameters
 
-**Pending...**
+**🚧 Pending...**
 
 ## Dealing with Exceptions
 
-**Pending...**
+**🚧 Pending...**
 
 ## Foreach Loops
 
-**Pending...**
+**🚧 Pending...**
 
 ## Streams (Lambda)
 
-**Pending...**
+**🚧 Pending...**
 
 ### Filter
 
-**Pending...**
+**🚧 Pending...**
 
 ### ForEach
 
-**Pending...**
+**🚧 Pending...**
 
 ### Map
 
-**Pending...**
+**🚧 Pending...**
 
 ### FlatMap
 
-**Pending...**
+**🚧 Pending...**
 
 ### Mapping and Filtering
 
-**Pending...**
+**🚧 Pending...**
 
 ## Collectors
 
-**Pending...**
+**🚧 Pending...**
 
 ## Common Uses
 
-**Pending...**
+**🚧 Pending...**
 
 ### Sum numbers in List
 
-**Pending...**
+**🚧 Pending...**
 
 ### Sum content in List based on property
 
-**Pending...**
+**🚧 Pending...**
 
 ### Create Map from List
 
-**Pending...**
+**🚧 Pending...**

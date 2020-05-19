@@ -930,7 +930,7 @@ List [a, b, c]
 
 #### Which List to Use?
 
-**Pending...**
+**🚧 Pending...**
 
 Array based collections are faster and take less space when compare to linked list based.
 Linked list has higher overheads per item when compared to arrays based
@@ -1083,7 +1083,7 @@ List b: [a, b, c, d]
 
 ### Set values MUST BE Immutable
 
-**Pending...**
+**🚧 Pending...**
 
 ### Types of Sets
 
@@ -1238,7 +1238,7 @@ Points [java.awt.Point[x=1,y=2]]
 
 #### Which Set to Use?
 
-**Pending...**
+**🚧 Pending...**
 
 ### Mutable and Immutable Sets
 
@@ -1861,19 +1861,19 @@ Set contains 1 elements
 
 ### Queues
 
-**Pending...**
+**🚧 Pending...**
 
 ### Stacks
 
-**Pending...**
+**🚧 Pending...**
 
 ## Java Collections Framework
 
-**Pending...**
+**🚧 Pending...**
 
 ## Google Guava (Collections)
 
-**Pending...**
+**🚧 Pending...**
 
 ## Miscellaneous
 

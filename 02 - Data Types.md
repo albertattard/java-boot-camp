@@ -697,7 +697,7 @@ This example was taken from [PUZZLE 21: WHAT’S MY CLASS, TAKE 2 in Java™ Puz
 
 ### Mutable Strings
 
-**Pending...**
+**🚧 Pending...**
 
 #### Puzzle (No Pain, No Gain)
 

@@ -11,7 +11,7 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## Single-responsibility Principle
 
@@ -39,20 +39,20 @@ The `calculateGrade()` is used by the *Enrollment Management* department while t
 Say that a change requested by *Academic Advising* department introduces a bug
 
 
-**Pending...**
+**🚧 Pending...**
 
 ## Open–closed principle
 
-**Pending...**
+**🚧 Pending...**
 
 ## Liskov substitution principle
 
-**Pending...**
+**🚧 Pending...**
 
 ## Interface segregation principle
 
-**Pending...**
+**🚧 Pending...**
 
 ## Dependency inversion principle
 
-**Pending...**
+**🚧 Pending...**

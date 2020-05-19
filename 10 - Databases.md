@@ -14,36 +14,36 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## H2, MySQL and PostgreSQL
 
-**Pending...**
+**🚧 Pending...**
 
 ## Data Sources (Hikari Connection Pool)
 
-**Pending...**
+**🚧 Pending...**
 
 ## Flyway (Database Migration)
 
-**Pending...**
+**🚧 Pending...**
 
 ## Statements, Prepared Statements, Result Sets
 
-**Pending...**
+**🚧 Pending...**
 
 ## Transactions
 
-**Pending...**
+**🚧 Pending...**
 
 ## JOOQ
 
-**Pending...**
+**🚧 Pending...**
 
 ## Query DSL
 
-**Pending...**
+**🚧 Pending...**
 
 ## JPA and Hibernate
 
-**Pending...**
+**🚧 Pending...**

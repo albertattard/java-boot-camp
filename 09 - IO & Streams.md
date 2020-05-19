@@ -15,39 +15,39 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## Try with Resources
 
-**Pending...**
+**🚧 Pending...**
 
 ## Java Streams
 
-**Pending...**
+**🚧 Pending...**
 
 ### Buffered Streams
 
-**Pending...**
+**🚧 Pending...**
 
 ## Java Readers
 
-**Pending...**
+**🚧 Pending...**
 
 ### Consuming an InputStream
 
-**Pending...**
+**🚧 Pending...**
 
 ### Writing to an OutputStream
 
-**Pending...**
+**🚧 Pending...**
 
 ## Java Non-Blocking IO
 
-**Pending...**
+**🚧 Pending...**
 
 ## HTTP Client (Java)
 
-**Pending...**
+**🚧 Pending...**
 
 ## Miscellaneous
 

@@ -33,115 +33,115 @@
 
 ## Setup
 
-**Pending...**
+**🚧 Pending...**
 
 ## Java Memory Model
 
-**Pending...**
+**🚧 Pending...**
 
 ## Threads
 
 ![Thread Lifecycle](assets/images/Thread%20Lifecycle.png)
 Image copied from: [Theory: Operating Systems and Code Execution](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323887)
 
-**Pending...**
+**🚧 Pending...**
 
 ### Daemons
 
-**Pending...**
+**🚧 Pending...**
 
 ### Waiting for a thread to finish (Join)
 
-**Pending...**
+**🚧 Pending...**
 
 ### ThreadLocal
 
-**Pending...**
+**🚧 Pending...**
 
 ### Stale Caches
 
-**Pending...**
+**🚧 Pending...**
 
 ### Race Conditions
 
-**Pending...**
+**🚧 Pending...**
 
 ### Methods that should never be used.
 
-**Pending...**
+**🚧 Pending...**
 
 1. `stop()`
 1. `suspend()`
 
 ## Concurrent Data Classes
 
-**Pending...**
+**🚧 Pending...**
 
 ### Primitive Wrappers
 
-**Pending...**
+**🚧 Pending...**
 
 ### List
 
-**Pending...**
+**🚧 Pending...**
 
 ### Set
 
-**Pending...**
+**🚧 Pending...**
 
 ### Map
 
-**Pending...**
+**🚧 Pending...**
 
 ### Queue
 
-**Pending...**
+**🚧 Pending...**
 
 ### Exchanger
 
-**Pending...**
+**🚧 Pending...**
 
 ## Classic Concurrency Control
 
 ### Volatile
 
-**Pending...**
+**🚧 Pending...**
 
 ### Synchronized
 
-**Pending...**
+**🚧 Pending...**
 
 ### Deadlocks
 
-**Pending...**
+**🚧 Pending...**
 
 ## New Approach to Concurrency
 
 ### Executors and Schedulers
 
-**Pending...**
+**🚧 Pending...**
 
 ### Lock and ReentrantLock
 
-**Pending...**
+**🚧 Pending...**
 
 ### Latch
 
-**Pending...**
+**🚧 Pending...**
 
 ### CyclicBarrier
 
-**Pending...**
+**🚧 Pending...**
 
 ### Fork Join Framework
 
-**Pending...**
+**🚧 Pending...**
 
 ## Cost of Concurrency
 
 Cost of context switching
 
-**Pending...**
+**🚧 Pending...**
 
 ## Miscellaneous
 

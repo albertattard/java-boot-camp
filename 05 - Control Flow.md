@@ -1553,7 +1553,7 @@ I am always called before the try/catch block exists
 
 ### Alternative Approach
 
-**Pending...**
+**🚧 Pending...**
 
 Java exceptions are an expensive operation and alternative approach should be preferred to signal failures when possible.
 
