@@ -5134,9 +5134,9 @@ Exception in thread "main" java.lang.ClassCastException: class java.awt.Point ca
 	at demo.App.main(App.java:13)
 ```
 
-How come the program was able to sort the array of string but not the array of points?
+**How come the program was able to sort the array of string but not the array of points?**
 
-The `sort()` method makes use of [the `Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) to compare and sort the array of strings.  The `Point` does not implement this interface and thus the `sort()` method cannot compare and sort the array of points.
+The [`sort()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(java.lang.Object%5B%5D)) makes use of [the `Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) to compare and sort the array of strings.  The `Point` does not implement this interface and thus the `sort()` method cannot compare and sort the array of points.
 
 ### What is an interface?
 
@@ -5167,7 +5167,7 @@ The above example is a bit useless as the interface does not define any methods.
 
 ### How is an interface different from a class?
 
-In a class we can have methods, static fields, properties, enums and inner classes.  In an interface anything like a class with the exception of properties.  **An interface cannot have properties**.
+In a class we can have methods, static fields, properties, enums and inner classes (and interfaced).  In an interface we can have almost anything like we have in a class with the exception of properties and inner instance classes.  **An interface cannot have properties and cannot have inner instance classes**.
 
 ```java
 package demo;
@@ -5178,6 +5178,12 @@ public interface MyFirstInterface {
 
   int anAbstractMethod();
 
+  class InnerStaticClass {
+  }
+
+  interface InnerInterface {
+  }
+
   default void anDefaultMethod() {
     System.out.println( "Java 8 introduced default methods" );
   }
@@ -5185,10 +5191,13 @@ public interface MyFirstInterface {
   static void aStaticMethod() {
     System.out.println( "Java 8 introduced static methods" );
   }
+
+  enum MyEnum {
+  }
 }
 ```
 
-Note that the static field, `STATIC_FIELD`, is not a property.
+Note that the static field, `STATIC_FIELD`, is not a property.  Also, the inner static class, `InnerStaticClass`, is an inner static class and not an inner instance class.
 
 Upto Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces.
 
@@ -5205,7 +5214,7 @@ public interface CanShoot {
 }
 ```
 
-The above interface has one method, `shoot()`.  Methods in an interface are `public abstract` as shown next.
+The above interface has one method, `shoot()`.  Methods in an interface are `public abstract` bu default.  The following example is an identical copy of the previous example.
 
 ```java
 package demo;
