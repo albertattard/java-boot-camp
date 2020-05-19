@@ -37,6 +37,7 @@
     1. [Can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class)
     1. [What are static factory methods?](#what-are-static-factory-methods)
     1. [Should utilities classes, like the `Math` class, have a constructor?](#should-utilities-classes-like-the-math-class-have-a-constructor)
+    1. [Can we call methods from within a constructor?](#can-we-call-methods-from-within-a-constructor)
 1. [Mutable and immutable](#mutable-and-immutable)
     1. [How can we create immutable objects?](#how-can-we-create-immutable-objects)
     1. [How does mutability works when we have nested objects?](#how-does-mutability-works-when-we-have-nested-objects)
@@ -50,6 +51,7 @@
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
+    1. [Can a constructor in a parent class call a method in a subclass?](#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass)
     1. [What happens when not all '*children*' are '*parents*'?](#what-happens-when-not-all-children-are-parents)
     1. [Is inheritance evil and an anti-pattern?](#is-inheritance-evil-and-an-anti-pattern)
 1. [Abstraction](#abstraction)
@@ -2869,13 +2871,13 @@ public class BoxDimensions {
   private int height;
   private int depth;
 
-  public BoxDimensions( int base, int height ) {
+  public BoxDimensions( final int base, final int height ) {
     this.width = base;
     this.depth = base;
     this.height = height;
   }
 
-  public BoxDimensions( int side, int depth ) {
+  public BoxDimensions( final int side, final int depth ) {
     this.width = side;
     this.height = side;
     this.depth = depth;
@@ -2982,6 +2984,10 @@ Trying to create an instance of such class does not make sense.
 Such classes should have a `private` constructor to prevent others from initialising them by mistake.  This pattern is also mentioned in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book as [Item 4: Enforce noninstantiability with a private constructor](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch2.xhtml#lev4).
 
 Java is a **general purpose programming language** that supports, [procedural programming](https://en.wikipedia.org/wiki/Procedural_programming) style, [object oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming) style and also [functional programming](https://en.wikipedia.org/wiki/Functional_programming) style.  Static constructs fall in the procedural programming style and as such does not interact with objects.
+
+### Can we call methods from within a constructor?
+
+**Pending...**
 
 ## Mutable and immutable
 
@@ -4145,6 +4151,10 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
     Class `C`, tries to invoke a constructor that takes an `int` as its sole parameter.  Class `A` has such constructor but class `B` does not.
 
+### Can a constructor in a parent class call a method in a subclass?
+
+**Pending...**
+
 ### What happens when not all '*children*' are '*parents*'?
 
 Consider the square and rectangle shapes.  All sides of a square are equals, while in a rectangle, only the opposite sides are equal.  We need one property to represent the side (or width) of a square while we need two properties to represent the height and the width of a rectangle.
@@ -4258,7 +4268,15 @@ The Java API has some unfortunate instances too, where the inheritance was not p
 
 ### Is inheritance evil and an anti-pattern?
 
-**Pending...**
+The internet is littered with articles reading "*inheritance is evil*" and most of them show very bad examples of inheritance.  Another common topic that is brought up when discussing inheritance is "*inheritance breaks encapsulation*".
+
+**Is inheritance evil?**
+
+No.  Inheritance is an important part of OOP and has its place.  With that said, and like many other things, inheritance can be misused and these articles feast on that.  Inheritance can be easily misused and binds classes together.  Adding functionality to a parent class will affect all children and that can be dangerous.
+
+Let see an extreme example.  Say we have a `Shape` class, that defines two abstract methods, `calculateArea()` and `calculatePerimeter()`.  All shapes have an area and perimeter and that's great.  Then we create `Circle`, `Rectangle` and other shapes and make them all inherit from the `Shape` class.  Now say we add a new method, called `calculateCircumference()`, to the `Shape` class.  That would force the rectangular shapes to also have a circumference, which is not the case.
+
+Take for example serialisation (another Java API which did not withstand the test of time).  If the parent class in a class hierarchy is made [`Serializable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html), then all subclasses become serializable.  This is not something to take lightly as it may have serious consequences.  Even [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about the issues of serialisation and suggested other approaches in [Item 85: Prefer alternatives to Java serialization](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch12.xhtml#lev85)
 
 ## Abstraction
 
