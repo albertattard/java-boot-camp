@@ -4709,9 +4709,11 @@ import java.util.Set;
 public class App {
 
   public static void main( final String[] args ) {
-    /* Create two collections, list and set and put two persons in each */
+    /* Two persons that will be added to the collections */
     final Person a = new Person( "Aden" );
     final Person b = new Person( "Jade" );
+
+    /* Create two collections, list and set and put two persons in each */
     final List<Person> list = List.of( a, b );
     final Set<Person> set = new HashSet<>( List.of( a, b ) );
     System.out.println( "-- Collections ------------" );
@@ -4954,13 +4956,13 @@ public class App {
 
   private static void waitInLobby( final Person a ) {
     final Thread t = new Thread( () -> {
-      display( "Waiting in the lobby for my name to be called" );
       synchronized ( a ) {
         try {
+          display( "Waiting in the lobby for my name to be called" );
           a.wait();
+          display( "My name was called!!" );
         } catch ( InterruptedException e ) { }
       }
-      display( "My name was called!!" );
     }, "waiting in lobby" );
     t.start();
   }
@@ -5008,13 +5010,13 @@ Break down of the above example.
     ```java
     private static void waitInLobby( final Person a ) {
       final Thread t = new Thread( () -> {
-        display( "Waiting in the lobby to be called" );
         synchronized ( a ) {
           try {
+            display( "Waiting in the lobby to be called" );
             a.wait();
+            display( "My name was called!!" );
           } catch ( InterruptedException e ) { }
         }
-        display( "My name was called!!" );
       }, "waiting in lobby" );
       t.start();
     }
@@ -5022,11 +5024,11 @@ Break down of the above example.
 
     The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the `notify()` or `notifyAll()` methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
 
-    The `wait()` method need to be invoked within a `synchronized` block.  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
+    The `wait()` method need to be invoked within [a `synchronized` block](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html).  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
 
     The `wait()` method will pause the current thread indefinitely.  The overloaded versions of this method provide a timeout to prevent threads from hanging there forever.
 
-    Like most of the concurrent operations, the `wait()` method may throw an `InterruptedException` if it is interrupted while waiting which need to be caught.  Using the `wait()` method outside a `synchronized` block will throw an `IllegalMonitorStateException`.
+    Like most of the concurrent operations, the `wait()` method may throw [an `InterruptedException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/InterruptedException.html) if it is interrupted while waiting which need to be caught.  Using the `wait()` method outside a `synchronized` block will throw [an `IllegalMonitorStateException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalMonitorStateException.html).
 
 1. The `letSomeTimePass()` pauses the current thread for 500 milliseconds.
 
