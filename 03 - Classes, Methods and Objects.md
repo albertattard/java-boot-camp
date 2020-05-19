@@ -4473,8 +4473,8 @@ package demo;
 
 public class Person {
 
-  public String name;
-  public String surname;
+  private String name;
+  private String surname;
 
   public Person() {
     this( null );
@@ -4493,7 +4493,7 @@ public class Person {
 
 ### The `toString()` method
 
-All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a string.
+All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a developer friendly string.
 
 ```java
 package demo;
@@ -4519,12 +4519,12 @@ It is always recommended to override the `toString()` method and return somethin
 ```java
 package demo;
 
-import com.google.common.base.Strings;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
 
-  public String name;
-  public String surname;
+  private String name;
+  private String surname;
 
   public Person() { /* ... */ }
 
@@ -4534,10 +4534,11 @@ public class Person {
 
   @Override
   public String toString() {
-    final boolean hasName = !Strings.isNullOrEmpty( name );
-    final boolean hasSurname = !Strings.isNullOrEmpty( surname );
+    final boolean hasName = !isNullOrEmpty( name );
+    final boolean hasSurname = !isNullOrEmpty( surname );
 
     if ( hasName && hasSurname ) {
+      // return name + " " + surname;
       return String.format( "%s %s", name, surname );
     }
 

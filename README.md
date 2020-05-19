@@ -309,6 +309,7 @@ Boot Camp for developers interested to learn Java.
     1. [Which Mocking Framework](06%20-%20Testing.md#which-mocking-framework)
 1. [Mutation Testing (PIT)](06%20-%20Testing.md#mutation-testing-pit)
 1. [Google Guava (Preconditions)](06%20-%20Testing.md#google-guava-preconditions)
+1. [Miscellaneous](06%20-%20Testing.md#miscellaneous)
 
 ### [SOLID](07%20-%20SOLID.md)
 

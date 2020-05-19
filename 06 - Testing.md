@@ -21,6 +21,7 @@
     1. [Which Mocking Framework](#which-mocking-framework)
 1. [Mutation Testing (PIT)](#mutation-testing-pit)
 1. [Google Guava (Preconditions)](#google-guava-preconditions)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -1108,3 +1109,12 @@ AppTest > should throw an IllegalArgumentException(Invalid dice value 0) when pr
 ### Recommended Reading
 
 1. Getting Started with Google Guava ([O'Reilly Books](https://learning.oreilly.com/library/view/getting-started-with/9781783280155/))
+
+## Miscellaneous
+
+1. [`@Disabled`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Disabled.html)
+1. [`TestInfo`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/TestInfo.html)
+1. [`TestReporter`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/TestReporter.html)
+1. [`MethodOrderer`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/MethodOrderer.html)
+1. [`IgnoreCondition`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.migrationsupport/org/junit/jupiter/migrationsupport/conditions/IgnoreCondition.html)
+1. [`assertAll()`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html#assertAll(java.util.Collection))
