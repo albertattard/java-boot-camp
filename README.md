@@ -181,6 +181,8 @@ Boot Camp for developers interested to learn Java.
     1. [How many interfaces can a class implement?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [How can we sort the `Point` class?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-sort-the-point-class)
+    1. [What's the purpose of an interface that has no abstract methods (marker interface)?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
+    1. [How can we apply natural ordering to a custom class?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-apply-natural-ordering-to-a-custom-class)
     1. [`default` and `static` methods](03%20-%20Classes%2C%20Methods%20and%20Objects.md#default-and-static-methods)
 1. [`instanceof` and `cast` operators](03%20-%20Classes%2C%20Methods%20and%20Objects.md#instanceof-and-cast-operators)
 1. [Inheritance and composition](03%20-%20Classes%2C%20Methods%20and%20Objects.md#inheritance-and-composition)
