@@ -3528,6 +3528,7 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
     import static org.junit.jupiter.api.Assertions.assertFalse;
     import static org.junit.jupiter.api.Assertions.assertThrows;
     import static org.junit.jupiter.api.Assertions.assertTrue;
+    import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
     public class LightBoxTest {
 
@@ -3547,11 +3548,13 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
       @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
       public void shouldThrowExceptionWhenClosed() {
         final LightBox box = new LightBox();
-        assertFalse( box.isOpen() );
+        assumeFalse( box.isOpen() );
         assertThrows( IllegalStateException.class, () -> box.putItem( 1 ) );
       }
     }
     ```
+
+    Note that the above test, makes use of the [`assumeFalse()` method](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assumptions.html#assumeFalse(boolean)) instead of the [`assertFalse()` method](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html#assertFalse(boolean)) as this is a precondition and not the actual test.  In this case, we are assuming that the box is closed by default.
 
     The above test will fail.
 
@@ -3625,6 +3628,7 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
     import static org.junit.jupiter.api.Assertions.assertFalse;
     import static org.junit.jupiter.api.Assertions.assertThrows;
     import static org.junit.jupiter.api.Assertions.assertTrue;
+    import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
     public class LightBoxTest {
 
@@ -3804,6 +3808,7 @@ A heavy box is a box that can take more than one item.
     import static org.junit.jupiter.api.Assertions.assertFalse;
     import static org.junit.jupiter.api.Assertions.assertThrows;
     import static org.junit.jupiter.api.Assertions.assertTrue;
+    import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
     public class HeavyBoxTest {
 
@@ -3846,7 +3851,7 @@ A heavy box is a box that can take more than one item.
       @DisplayName( "should throw an IllegalStateException when trying to adding an item to a non-open box" )
       public void shouldThrowExceptionWhenClosed() {
         final HeavyBox box = new HeavyBox();
-        assertFalse( box.isOpen() );
+        assumeFalse( box.isOpen() );
         assertThrows( IllegalStateException.class, () -> box.addItem( 1 ) );
       }
     }
@@ -3894,6 +3899,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assmueFalse;
 
 public class LightBoxTest {
 
@@ -5022,7 +5028,7 @@ Break down of the above example.
     }
     ```
 
-    The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the `notify()` or `notifyAll()` methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
+    The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the [`notify()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notify()) or [`notifyAll()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notifyAll()) methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
 
     The `wait()` method need to be invoked within [a `synchronized` block](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html).  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
 
