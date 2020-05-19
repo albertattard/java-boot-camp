@@ -4609,27 +4609,49 @@ public class App {
 }
 ```
 
-We have two instances which have the same content.  What will the `equals()` method return?
+We have two instances which have the same content, a person with the same name.  What will the `equals()` method return?
 
 ```bash
 Are the objects equal? false
 ```
 
-Despite having the same name (`"Aden"`) and surname (`null`), the `equals()` as defined by the `Object` class will only check whether the variables are pointing to the same instance in the *Java heap*.  Overriding the `equals()` method can help us solve this problem.
+Despite having the same name (`"Aden"`) and surname (`null`), the [`equals()` as defined by the `Object` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) will only check whether the variables are pointing to the same instance in the *Java heap*.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Aden" );
+    final Person b = a;
+
+    final boolean areEquals = a.equals( b );
+    System.out.printf( "Are the objects equal? %s%n", areEquals );
+  }
+}
+```
+
+In the above example, both variables `a` and `b` point to the same object in the *Java heap*.  The above will print `true`.
+
+```bash
+Are the objects equal? true
+```
+
+Overriding the `equals()` method can help us solve this problem.
 
 **⚠️ THE FOLLOWING EXAMPLE IS MISSING AN IMPORTANT METHOD.  DO NOT USE IT AS IS!!**
 
 ```java
 package demo;
 
-import com.google.common.base.Strings;
-
 import java.util.Objects;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
 
-  public String name;
-  public String surname;
+  private String name;
+  private String surname;
 
   public Person() { /* ... */ }
 
@@ -4657,44 +4679,25 @@ public class Person {
 }
 ```
 
-Now the two instance we had before can be properly compared using the `equals()` method.
+In the above example we made use of the [`Objects`' utilities `equals()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)).  This method is not to be mistaken with the normal `equals()` method.  The utilities `equals()` method is very useful in comparing two instance variables and is a shorthand for the following.
+
+```java
+public static boolean equals(Object a, Object b) {
+  return (a == b) || (a != null && a.equals(b));
+}
+```
+
+**How come we didn't static import the utilities `equals()` method?**  Note that we cannot static import a method, when another method with the same name already exists in the class.
+
+If we rerun the same program we had before, we will get the expected output, as our `equals()` method is now used.
 
 ```bash
 Are the objects equal? true
 ```
 
-The `equals()` is used a lot by the Java API in conjunction to the `hashCode()` method.  The relation between these two is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
+The `equals()` method is used a lot by the Java API in conjunction to the [`hashCode()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()).  The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
 
 Failing to override the `hashCode()` will make our class incompatible with some Java API.  Consider the following example.
-
-```java
-package demo;
-
-import java.util.List;
-
-public class App {
-  public static void main( final String[] args ) {
-    final Person a = new Person( "Aden" );
-    final Person b = new Person( "Jade" );
-
-    final List<Person> persons = List.of( a, b );
-    boolean containsAden = persons.contains( new Person( "Aden" ) );
-    boolean containsPeter = persons.contains( new Person( "Peter" ) );
-
-    System.out.printf( "List contains Aden? %s%n", containsAden );
-    System.out.printf( "List contains Peter? %s%n", containsPeter );
-  }
-}
-```
-
-The [list](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) relies on the `equals()` method to determine whether a person exists in the list or not.  The above will print.
-
-```bash
-List contains Aden? true
-List contains Peter? false
-```
-
-Now consider the following example.
 
 ```java
 package demo;
@@ -4704,42 +4707,71 @@ import java.util.List;
 import java.util.Set;
 
 public class App {
+
   public static void main( final String[] args ) {
+    /* Create two collections, list and set and put two persons in each */
     final Person a = new Person( "Aden" );
     final Person b = new Person( "Jade" );
+    final List<Person> list = List.of( a, b );
+    final Set<Person> set = new HashSet<>( List.of( a, b ) );
+    System.out.println( "-- Collections ------------" );
+    System.out.printf( "List: %s%n", list );
+    System.out.printf( "Set: %s%n", set );
 
-    final Set<Person> persons = new HashSet<>( List.of( a, b ) );
-    boolean containsAden = persons.contains( new Person( "Aden" ) );
-    boolean containsPeter = persons.contains( new Person( "Peter" ) );
+    /* Use different objects to search so that we do not rely on the object's identity */
+    final Person m = new Person( "Aden" );
+    final Person n = new Person( "Peter" );
 
-    System.out.printf( "List contains Aden? %s%n", containsAden );
-    System.out.printf( "List contains Peter? %s%n", containsPeter );
+    /* Search the list */
+    System.out.println( "-- Search the list --------" );
+    System.out.printf( "List contains %s? %s%n", m, list.contains( m ) );
+    System.out.printf( "List contains %s? %s%n", n, list.contains( n ) );
+
+    /* Search the set */
+    System.out.println( "-- Search the set ---------" );
+    System.out.printf( "Set contains %s? %s%n", m, set.contains( m ) );
+    System.out.printf( "Set contains %s? %s%n", n, set.contains( n ) );
   }
 }
 ```
 
-The above example makes use of [the `HashSet` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  Running the above **may** produce the following output.
+The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [the `HashSet` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage](04%20-%20Collections.md).  Running the above **may** produce the following output.
 
 ```bash
-List contains Aden? false
+-- Collections ------------
+List: [Aden, Jade]
+Set: [Aden, Jade]
+-- Search the list --------
+List contains Aden? true
 List contains Peter? false
+-- Search the set ---------
+Set contains Aden? false
+Set contains Peter? false
 ```
 
-Hash based classes, such as the `HashSet` class or [the `HashMap` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), rely on the `hashCode()` together with the `equals()` method.  The current implemetation may work or may not work, depends on how lucky we get with the value returned by the `Object`'s version of the `hashCode()` method.
+Note that while the `List` was able to find the person with name `"Aden"`, the `HashSet` was not.
+
+```bash
+-- Search the set ---------
+Set contains Aden? false
+Set contains Peter? false
+```
+
+Hash-based classes, such as the `HashSet` class or [the `HashMap` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), rely on the `hashCode()` together with the `equals()` method to function properly.  The current implemetation of the `Person` class may work or may not work, depends on how lucky we get with the value returned by the `Object`'s version of the `hashCode()` method.
 
 Following is a better version of the `Person` class.
 
 ```java
 package demo;
 
-import com.google.common.base.Strings;
-
 import java.util.Objects;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
 
-  public String name;
-  public String surname;
+  private String name;
+  private String surname;
 
   public Person() { /* ... */ }
 
