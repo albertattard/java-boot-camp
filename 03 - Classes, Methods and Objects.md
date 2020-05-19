@@ -56,8 +56,8 @@
     1. [Is inheritance evil and should be considered as an anti-pattern?](#is-inheritance-evil-and-should-be-considered-as-an-anti-pattern)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
-    1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
-    1. [Can abstract classes have `private` constructors?](#can-abstract-classes-have-private-constructors)
+    1. [Can `final` classes be `abstract`?](#can-final-classes-be-abstract)
+    1. [Can `abstract` classes have `private` constructors?](#can-abstract-classes-have-private-constructors)
 1. [The `Object` class](#the-object-class)
     1. [The `toString()` method](#the-tostring-method)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
@@ -4373,51 +4373,72 @@ Shapes are a good analogy.  All shapes have an area, but we cannot compute the a
 
     Note that class `B` inherits an abstract method from class `A`.  The abstract method `m()` is not implemented and thus, class `B` must be abstract.
 
-### Can `final` classes be abstract?
+### Can `final` classes be `abstract`?
 
 A class that is marked `final` cannot be extended.  Therefore, a `final` class cannot be `abstract`.  Either `final` or `abstract`, but not both.
 
-### Can abstract classes have `private` constructors?
+A `final` class must be concrete.  A concrete class is the opposite for an `abstract` class.
 
-**🚧 Pending...** Maybe moved up.
+### Can `abstract` classes have `private` constructors?
 
-For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
+This question is related to another question, [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance) discussed before.
+
+Yes, `abstract` classes can have `private` constructors.  This might not make much sense, because how can we extend an `abstract` class if all of its constructors are `private`?  There are cases where we want to limit the types of objects we want to support, and still have a class hierarchy.
+
+Consider the following example.
 
 ```java
 package demo;
 
-public class A {
-  private A() { }
+public abstract class Temperature {
+
+  private Temperature() { }
+
+  public abstract boolean isTooCold();
+
+  public abstract boolean isTooHot();
+
+
+  public static Temperature withFahrenheit( final double fahrenheit ) { /* ... */ }
+
+  public static Temperature withCelsius( final double celsius ) { /* ... */ }
+
+  public static Temperature withKelvin( final double kelvin ) { /* ... */ }
+
+
+  private static class Fahrenheit extends Temperature { /* ... */ }
+
+  private static class Celsius extends Temperature { /* ... */ }
+
+  private static class Kelvin extends Temperature { /* ... */ }
+
 }
 ```
 
-The class is not `final`, but still cannot be extended by another class as its only constructor is `private`.
+According to [wikipedia](https://en.wikipedia.org/wiki/Temperature), "_*temperature* is a physical property of matter that quantitatively expresses hot and cold_".  The `Temperature` class is an `abstract` class that defines two `abstract` methods, `isTooCold()` and `isTooHot()`.  The temperature can be measured (or represented) in *Fahrenheit*, *Celsius* or other units.
+
+Similar to the shapes, we cannot create a temperature without specifying its scale.  The above implementation defines three variants, all of which extend the `Temperature` class.  The above example looks a lot like enums, and that is **almost** correct.
+
+Like enums, we can only have the types defined, `Fahrenheit`, `Celsius` and `Kelvin` and we cannot add new types (outside from the `Temperature` class).  The following will not work.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
 ```java
-package demo;
+public class MyNewTemperatureType extends Temperature {
 
-public class B extends A {
-}
-```
-
-There are no constructors available to class `B` in the parent class `A`, therefor the above will not compile.  Consider the following example.
-
-```java
-package demo;
-
-public class A {
-
-  public static class C extends A {
+  @Override
+  public boolean isTooCold() {
+    return false;
   }
 
-  private A() {
+  @Override
+  public boolean isTooHot() {
+    return false;
   }
 }
 ```
 
-The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
+This is a form of subtypes control that while enables subclasses, only the defined subclasses are allowed.  The `Temperature` class cannot be extended by an external class, which prevents some funny code added to the application.  Different from enums, we can have multiple instances of each type.
 
 ## The `Object` class
 
@@ -5496,6 +5517,8 @@ public class App {
 ### Inner static class
 
 **🚧 Pending...**
+
+The following example was [used already](#can-abstract-classes-have-private-constructors).
 
 Consider the following example.
 
