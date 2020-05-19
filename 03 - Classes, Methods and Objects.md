@@ -5258,6 +5258,20 @@ public class App {
 
 We can now use a `Cannon` wherever we have a `CanShoot` type is required.
 
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    fire( new Cannon() );
+  }
+
+  private static void fire( CanShoot a ) {
+    a.shoot();
+  }
+}
+```
+
 Consider the following two classes.
 
 1. A footballer
