@@ -4285,25 +4285,52 @@ Take for example serialisation (another Java API which did not withstand the tes
 
 ## Abstraction
 
-Both the `LightBox` and the `HeavyBox` have the `isEmpty()` method which does the something for both types of boxes.  All types of boxes can be empty or non-empty.  Given that all boxes can be empty, can we move this method to the `Box` super class.
+A box can be empty or non-empty.  In fact, both the `LightBox` and the `HeavyBox` classes have the `isEmpty()` method which does the same thing for both types of boxes.  Given that **all** boxes can be empty (or non-empty), we can move the `isEmpty()` method to the `Box` class.
 
 The `Box` class does not have enough information to determine whether it is empty or not.  The sub-classes use different mechanism to determine whether they are empty or not.
 
-1. The `LightBox` make use of the `empty` field
-1. The `HeavyBox` delegates this to the `items` (`List`) field
+1. The `LightBox` make use of the `space` (`Space` enum) property
+1. The `HeavyBox` delegates this to the `items` ([`List`'s `isEmpty()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#isEmpty())) property
 
 ```java
 package demo;
 
-/* Imports removed for brevity */
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
 
 public abstract class Box {
 
+  private BoxForm form = BoxForm.CLOSED;
+  private String label = "No Label";
+
+  public Box() { /* ... */ }
+
+  public Box( final BoxForm form ) { /* ... */ }
+
+  public void open() { /* ... */ }
+
+  public void close() { /* ... */ }
+
+  public boolean isOpen() { /* ... */ }
+
+  public String getLabel() { /* ... */ }
+
+  public void changeLabelTo( final String label ) { /* ... */ }
+
+  private static boolean isValidLabel( final String label ) { /* ... */ }
+
   public abstract boolean isEmpty();
 
-  /* Other members removed for brevity */
+  @Override
+  public String toString() { /* ... */ }
+
+  public enum BoxForm { /* ... */ }
 }
 ```
+
+The `isEmpty()` method needs to be `abstract` as while a box can be empty or not, the Box class does not know how to answer this question.
+
+Shapes are a good analogy.  All shapes have an area, but we cannot compute the area of shape, as shape is abstract.  We cannot draw a shape as shape is abstract.  Yet we know that shapes have an area.  We can compute the area of a square or a circle, but we cannot compute the area of a shape.
 
 ### When a class must be abstract?
 
