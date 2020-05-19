@@ -178,6 +178,8 @@ Boot Camp for developers interested to learn Java.
     1. [Functional interface and lambda functions](03%20-%20Classes%2C%20Methods%20and%20Objects.md#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-is-the-relation-between-lambda-and-functional-interfaces)
     1. [Can an interface extend another class or another interface?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#can-an-interface-extend-another-class-or-another-interface)
+    1. [How many interfaces can a class implement?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-many-interfaces-can-a-class-implement)
+    1. [What happens if a class implements two interfaces that have the same abstract method?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [How can we sort the `Point` class?](03%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-sort-the-point-class)
     1. [`default` and `static` methods](03%20-%20Classes%2C%20Methods%20and%20Objects.md#default-and-static-methods)
 1. [`instanceof` and `cast` operators](03%20-%20Classes%2C%20Methods%20and%20Objects.md#instanceof-and-cast-operators)

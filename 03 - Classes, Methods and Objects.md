@@ -72,6 +72,8 @@
     1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](#what-is-the-relation-between-lambda-and-functional-interfaces)
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
+    1. [How many interfaces can a class implement?](#how-many-interfaces-can-a-class-implement)
+    1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
     1. [`default` and `static` methods](#default-and-static-methods)
 1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
@@ -5528,6 +5530,87 @@ Different from a normal Java class files, produced by the Java compiler during t
 ### Can an interface extend another class or another interface?
 
 Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
+
+Consider the following three interfaces.
+
+1. The `CanFish` interface
+
+    ```java
+    package demo;
+
+    public interface CanFish {
+
+      void fish();
+    }
+    ```
+
+1. The `CanPaint` interface
+
+    ```java
+    package demo;
+
+    public interface CanPaint {
+
+      void paint();
+    }
+    ```
+
+1. The `CanFixCar` interface
+
+    ```java
+    package demo;
+
+    public interface CanFixCar {
+
+      void fixCar();
+    }
+    ```
+
+We can create a fourth interface, called `JackOfAllTrades` that extend the previously shown interfaces.
+
+```java
+package demo;
+
+public interface JackOfAllTrades extends CanFish, CanFixCar, CanPaint {
+
+  void canDoAll();
+}
+```
+
+Any class implementing the `JackOfAllTrades` must implement all four methods, otherwise it must be marked as `abstract`.
+
+```java
+package demo;
+
+public class BobTheBuilder implements JackOfAllTrades {
+
+  @Override
+  public void canDoAll() { /* ... */ }
+
+  @Override
+  public void fish() { /* ... */ }
+
+  @Override
+  public void fixCar() { /* ... */ }
+
+  @Override
+  public void paint() { /* ... */ }
+}
+```
+
+The following table compares the different extends/imports options available between different types.
+
+| Type      | Class          | Interface         |
+|-----------|----------------|-------------------|
+| class     | `extends` 0..1 | `implements` 0..M |
+| interface | **N/A**        | `extends` 0..M    |
+| enum      | **N/A**        | `implements` 0..M |
+
+### How many interfaces can a class implement?
+
+**🚧 Pending...**
+
+### What happens if a class implements two interfaces that have the same abstract method?
 
 **🚧 Pending...**
 
