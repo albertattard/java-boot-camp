@@ -53,7 +53,7 @@
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
     1. [Can a constructor in a parent class call a method in a subclass?](#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass)
     1. [What happens when not all '*children*' are '*parents*'?](#what-happens-when-not-all-children-are-parents)
-    1. [Is inheritance evil and an anti-pattern?](#is-inheritance-evil-and-an-anti-pattern)
+    1. [Is inheritance evil and should be considered as an anti-pattern?](#is-inheritance-evil-and-should-be-considered-as-an-anti-pattern)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -3473,7 +3473,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     The test should fail.
 
     ```bash
-    ./gradlew test
+    $ ./gradlew test
 
     ...
 
@@ -4266,13 +4266,13 @@ The Java API has some unfortunate instances too, where the inheritance was not p
 
 [One of the topics discussed later](#inheritance-and-composition) is touches about these problems and propose an alternative approach to inheritance.  This topic is also covered by [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), where it provides some bad usage of inheritance within the Java API.
 
-### Is inheritance evil and an anti-pattern?
+### Is inheritance evil and should be considered as an anti-pattern?
 
 The internet is littered with articles reading "*inheritance is evil*" and most of them show very bad examples of inheritance.  Another common topic that is brought up when discussing inheritance is "*inheritance breaks encapsulation*".
 
 **Is inheritance evil?**
 
-No.  Inheritance is an important part of OOP and has its place.  With that said, and like many other things, inheritance can be misused and these articles feast on that.  Inheritance can be easily misused and binds classes together.  Adding functionality to a parent class will affect all children and that can be dangerous.
+No, inheritance is not evil and nor an anti-pattern.  Inheritance is an important part of OOP and has its place.  With that said, and like many other things, inheritance can be misused and these articles feast on that.  In fact, inheritance can be easily misused especially when the "all children are parent" constraint is not followed.  Furthermore, inheritance binds classes together, making the class hierarchy more brittle to change.  Adding functionality to a parent class will affect all children and that can be dangerous.
 
 Let see an extreme example.  Say we have a `Shape` class, that defines two abstract methods, `calculateArea()` and `calculatePerimeter()`.  All shapes have an area and perimeter and that's great.  Then we create `Circle`, `Rectangle` and other shapes and make them all inherit from the `Shape` class.  Now say we add a new method, called `calculateCircumference()`, to the `Shape` class.  That would force the rectangular shapes to also have a circumference, which is not the case.
 

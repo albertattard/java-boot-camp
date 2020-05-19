@@ -1474,7 +1474,7 @@ public class AppTest {
 The above test will fail.
 
 ```bash
-./gradlew test
+$ ./gradlew test
 
 > Task :test FAILED
 
