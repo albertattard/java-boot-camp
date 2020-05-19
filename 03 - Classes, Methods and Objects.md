@@ -50,7 +50,7 @@
     1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
-    1. [What happens when the not all '*children*' are '*parents*'?](#what-happens-when-the-not-all-children-are-parents)
+    1. [What happens when not all '*children*' are '*parents*'?](#what-happens-when-not-all-children-are-parents)
 1. [Abstraction](#abstraction)
     1. [When a class must be abstract?](#when-a-class-must-be-abstract)
     1. [Can `final` classes be abstract?](#can-final-classes-be-abstract)
@@ -4144,15 +4144,15 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
     Class `C`, tries to invoke a constructor that takes an `int` as its sole parameter.  Class `A` has such constructor but class `B` does not.
 
-### What happens when the not all '*children*' are '*parents*'?
+### What happens when not all '*children*' are '*parents*'?
 
-Consider the Square and Rectangle shapes.
+Consider the square and rectangle shapes.  All sides of a square are equals, while in a rectangle, only the opposite sides are equal.  We need one property to represent the side (or width) of a square while we need two properties to represent the height and the width of a rectangle.
 
-All sides of a square are equals, while in the case of a rectangle only the opposite sides are equal.  Consider the following example.
+Consider the following (**bad**) example of inheritance between the square and the rectangle.
 
 **⚠️ NOT RECOMMENDED!!**
 
-1. The `Square` class
+1. The `Square` class, has one property, `width`.
 
     ```java
     package demo;
@@ -4175,7 +4175,7 @@ All sides of a square are equals, while in the case of a rectangle only the oppo
     }
     ```
 
-1. The `Rectangle` extends the `Square` and adds a new field, `height`.
+1. The `Rectangle` extends the `Square` and adds a new property, `height`.
 
     ```java
     package demo;
@@ -4199,23 +4199,15 @@ All sides of a square are equals, while in the case of a rectangle only the oppo
     }
     ```
 
-These two classes can be used as shown next.
+The reasoning behind the design shown above is that given the rectangle has one more property than the square, we simply extend the square and add the missing property.
 
-```java
-package demo;
+This is a bad example of inheritance, because despite the appearances not all rectangles are squares.  By definition:
+* a *rectangle* is a quadrilateral with all four angles right angles
+* a *square* is a quadrilateral with all four angles right angles and **all four sides of the same length**.
 
-public class App {
-  public static void main( final String[] args ) {
-    final Square a = new Square( 4 );
-    final Rectangle b = new Rectangle( 7, 3 );
+In other words, a square is a special type of rectangle.  According to the definitions listed above, **all squares are rectangles, but not all rectangles are squares**.  Therefore, the inheritance must follow this rule and the square should extend the rectangle and not vice versa.
 
-    System.out.printf( "The square has an area of %d and a perimeter of %d%n", a.calculateArea(), a.calculatePerimeter() );
-    System.out.printf( "The rectangle has an area of %d and a perimeter of %d%n", b.calculateArea(), b.calculatePerimeter() );
-  }
-}
-```
-
-This is a bad example of inheritance, because despite the appearances not all rectangles are squares.  By definition a *square* is a quadrilateral with all four angles right angles and all four sides of the same length while a *rectangle* is a quadrilateral with all four angles right angles.  The above implementation is incorrect.
+The above implementation is incorrect.  The following example shows a better implementation that captures the above definitions.
 
 1. The `Rectangle` class
 
@@ -4242,7 +4234,7 @@ This is a bad example of inheritance, because despite the appearances not all re
     }
     ```
 
-1. The `Square` class
+1. The `Square` class, extends the `Rectangle` and exposes only one constructor.
 
     ```java
     package demo;
@@ -4255,11 +4247,13 @@ This is a bad example of inheritance, because despite the appearances not all re
     }
     ```
 
-This is typical problem with inheritance where the wrong hierarchy is built and later on very hard to change.
+This is a typical problem with inheritance where the wrong hierarchy is built.  Such hierarchies may be hard to change at a later stage as other things may be depending on it.
 
-The Java API has some unfortunate instances where the inheritance was not properly implemented.  The Properties class is a good example of bad in
+There are many other examples.  Cats are pets but not all pets are cats.  If someone asks for cat, we cannot give them a dog.  Therefore, when designing such hierarchy, we need to be careful to capture the "*all children are parent*", otherwise we may end up with some flawed design.
 
-**Pending...**
+The Java API has some unfortunate instances too, where the inheritance was not properly implemented.  The [`Properties` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Properties.html) is a good example of bad inheritance.  The `Properties` class inherits from the [`Hashtable` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html).
+
+[One of the topics discussed later](#inheritance-and-composition) is touches about these problems and propose an alternative approach to inheritance.  This topic is also covered by [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), where it provides some bad usage of inheritance within the Java API.
 
 ## Abstraction
 
@@ -5381,6 +5375,26 @@ public class App {
 **Pending...**
 
 ## Inheritance and composition
+
+`Hashtable` accepts objects as keys to the map, something that does not fit well with the `Properties` class.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Properties;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Properties p = new Properties();
+    p.put( "age", 21 );
+    p.put( new Point( 1, 2 ), 7 );
+
+    System.out.printf( "Properties %s%n", p );
+  }
+}
+```
+
 
 **Pending...**
 
