@@ -1944,7 +1944,7 @@ The label can be represented by the `String` data-type.
 
       @Override
       public String toString() {
-        final String openClose = open ? "an open" : "a closed";
+        final String openClose = isOpen() ? "an open" : "a closed";
         return String.format( "%s box labelled '%s'", openClose, label );
       }
 
@@ -2474,9 +2474,8 @@ public class Box {
 
   @Override
   public String toString() {
-    final String openClose = this.isOpen() ? "an open" : "a closed";
-    final String labelLocalVariable = this.getLabel();
-    return String.format( "%s box labelled '%s'", openClose, labelLocalVariable );
+    final String openClose = isOpen() ? "an open" : "a closed";
+    return String.format( "%s box labelled '%s'", openClose, label );
   }
 
   private enum BoxForm { /* ... */ }
@@ -2501,6 +2500,10 @@ public class Box {
   private String label = "No Label";
 
   public Box() {
+  }
+
+  public Box( final BoxForm form ) {
+    this.form = form;
   }
 
   public void open() { /* ... */ }
@@ -3022,7 +3025,7 @@ Box: an open box labelled 'No Label'
 
 The variable `a` is immutable and cannot be modified.  We cannot create a new `Box` and assign it to the variable `a` or set the variable `a` to `null`.
 
-⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
 ```java
 package demo;
@@ -3413,6 +3416,8 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
         ```
 
     Please refer to the *[is boolean the right choice?](#is-boolean-the-right-choice)* section for an in-depth discussion about this topic.
+
+    **What happens to the `itemId` value passed to the `putItem()` method?  We are not storing this value anywhere just yet as we don't have a test that retrieves the `itemId`.  Always do the bare minimum just to get the test working!!
 
     Sometimes a property is used for various purposes.  Instead of creating a new property, (`space` or `empty`, depending with approach you took), we could use the `itemId` property, as shown in the following example.
 
@@ -4272,11 +4277,11 @@ The internet is littered with articles reading "*inheritance is evil*" and most 
 
 **Is inheritance evil?**
 
-No, inheritance is not evil and nor an anti-pattern.  Inheritance is an important part of OOP and has its place.  With that said, and like many other things, inheritance can be misused and these articles feast on that.  In fact, inheritance can be easily misused especially when the "all children are parent" constraint is not followed.  Furthermore, inheritance binds classes together, making the class hierarchy more brittle to change.  Adding functionality to a parent class will affect all children and that can be dangerous.
+No, inheritance is not evil and nor an anti-pattern.  Inheritance is an important part of OOP and has its place.  With that said, and like many other things, inheritance can be misused and these articles feast on that.  In fact, inheritance can be easily misused especially when the "*all children are parent*" constraint is not followed.  Furthermore, inheritance binds classes together, making the class hierarchy more brittle to change.  Adding functionality to a parent class will affect all children and that can be dangerous.
 
 Let see an extreme example.  Say we have a `Shape` class, that defines two abstract methods, `calculateArea()` and `calculatePerimeter()`.  All shapes have an area and perimeter and that's great.  Then we create `Circle`, `Rectangle` and other shapes and make them all inherit from the `Shape` class.  Now say we add a new method, called `calculateCircumference()`, to the `Shape` class.  That would force the rectangular shapes to also have a circumference, which is not the case.
 
-Take for example serialisation (another Java API which did not withstand the test of time).  If the parent class in a class hierarchy is made [`Serializable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html), then all subclasses become serializable.  This is not something to take lightly as it may have serious consequences.  Even [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about the issues of serialisation and suggested other approaches in [Item 85: Prefer alternatives to Java serialization](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch12.xhtml#lev85)
+Take for example serialisation (another Java API which did not withstand the test of time).  If the parent class, in a class hierarchy, is made [`Serializable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/io/Serializable.html), then all subclasses will become serializable.  This is not something to take lightly as it may have serious consequences.  Even [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about the issues of serialisation and suggested other approaches in [Item 85: Prefer alternatives to Java serialization](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch12.xhtml#lev85).
 
 ## Abstraction
 
