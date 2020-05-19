@@ -1119,5 +1119,3 @@ AppTest > should throw an IllegalArgumentException(Invalid dice value 0) when pr
 1. [`IgnoreCondition`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.migrationsupport/org/junit/jupiter/migrationsupport/conditions/IgnoreCondition.html)
 1. [`assertAll()`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html#assertAll(java.util.Collection))
 1. assumptions
-1. tags
-1. `junit-platform.properties`

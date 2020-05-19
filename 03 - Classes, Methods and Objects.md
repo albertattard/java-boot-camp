@@ -69,9 +69,9 @@
     1. [How is an interface different from a class?](#how-is-an-interface-different-from-a-class)
     1. [How can we use interfaces?](#how-can-we-use-interfaces)
     1. [Can we create an instance of an interface?](#can-we-create-an-instance-of-an-interface)
-    1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](#what-is-the-relation-between-lambda-and-functional-interfaces)
+    1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
     1. [`default` and `static` methods](#default-and-static-methods)
 1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
@@ -5313,12 +5313,12 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    run( new Cannon() );
-    run( new Footballer() );
-    run( new Photographer() );
+    fire( new Cannon() );
+    fire( new Footballer() );
+    fire( new Photographer() );
   }
 
-  private static void run( final CanShoot a ) {
+  private static void fire( final CanShoot a ) {
     a.shoot();
   }
 }
@@ -5375,15 +5375,9 @@ Inner anonymous classes, [discussed in more depth later on](#inner-anonymous-cla
 An inner anonymous class
 ```
 
-### Can an interface extend another class or another interface?
-
-Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
-
-**🚧 Pending...**
-
 ### Functional interface and lambda functions
 
-When lambdas where introduced, Java also introduced the concept of a functional interface, denoted by the `@FunctionalInterface` annotation.  **A functional interface is an interface that have one abstract method**.
+When lambdas where introduced, Java also introduced the concept of a [functional interface, denoted by the `@FunctionalInterface` annotation](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/FunctionalInterface.html).  **A functional interface is an interface that has one abstract method**.
 
 ```java
 package demo;
@@ -5492,7 +5486,7 @@ public interface CanShoot {
 }
 ```
 
-The `App` class creates an inner anonymous class and make use of lambda too.
+The `App` class creates an inner anonymous class and make use of lambda too.  Both of them have a blank implementation of the `shoot()` method.
 
 ```java
 package demo;
@@ -5515,7 +5509,7 @@ The type of a is class demo.App$1
 The type of b is class demo.App$$Lambda$1/0x0000000800b79840
 ```
 
-Lambda will return a class with a funny name, but strangely enough lambdas are not bound to a class.  Listing the classes files produces during the compilation, we get three classes.
+Lambda will return a class with a funny name, but strangely enough lambdas are not bound to any of the classes produced by the compiler.  Listing the classes files produces during the compilation, we get three classes.
 
 ```bash
 $ tree build/classes/java
@@ -5527,7 +5521,15 @@ build/classes/java
         └── CanShoot.class
 ```
 
-The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.
+The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.  Everything in Java is a class and lambda are no exceptions.  In Java, classes are the smallest unit of work.  We cannot just have a method outside a class.
+
+Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will compile and create the *lambda runtime class*.  Note that the lambda is only compiled, when it is first encountered and not every time it is executed.
+
+### Can an interface extend another class or another interface?
+
+Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
+
+**🚧 Pending...**
 
 ### How can we sort the `Point` class?
 
