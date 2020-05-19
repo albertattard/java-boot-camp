@@ -3509,7 +3509,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-    Note that we are now using the [`checkState()` method](https://guava.dev/releases/29.0-jre/api/docs/com/google/common/base/Preconditions.html#checkState-boolean-) instead of the `checkArguments()` method as we need an `IllegalStateException`.
+    Note that we are now using the [`checkState()` method](https://guava.dev/releases/29.0-jre/api/docs/com/google/common/base/Preconditions.html#checkState-boolean-) instead of the `checkArguments()` method as we need to fail with an `IllegalStateException` when the light box already contains an item.
 
     Tests should pass now.
 
