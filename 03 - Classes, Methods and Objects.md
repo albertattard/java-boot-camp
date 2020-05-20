@@ -5954,7 +5954,189 @@ There is no way for the Java compiler to link our call to the right method as tw
 
 ### What's the purpose of an interface that has no abstract methods (marker interface)?
 
-**🚧 Pending...**
+Say that we have an application that sends data to the client in some form.  The transmission protocol does not matter in this case.  Some of the data handled by the application is sensitive while other date is not.
+
+Consider the following example
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final SensitiveInformation a = new SensitiveInformation();
+    final NonSensitiveInformation b = new NonSensitiveInformation();
+
+    sendToClient( a );
+    sendToClient( b );
+  }
+
+  private static void sendToClient( final Object a ) {
+    System.out.printf( "Sending data %s to client%n", a );
+  }
+}
+
+class SensitiveInformation {
+  private final String information = "Something very sensitive";
+
+  @Override
+  public String toString() {
+    return String.format( "SensitiveInformation{information='%s'}", information );
+  }
+}
+
+class NonSensitiveInformation {
+  private final String information = "Non sensitive information";
+
+  @Override
+  public String toString() {
+    return String.format( "NonSensitiveInformation{information='%s'}", information );
+  }
+}
+```
+
+Note that the above example has three classes in one class. The file name is `App.java`, the same as the public class name.  Furthermore, the above example categorises all sensitive data as one type, the `SensitiveInformation`.  In reality we will have many classes each containing some kind of sensitive information.  For simplicity I've only added one class.  Same applies for the `NonSensitiveInformation`.
+
+Running the above class will print the following.
+
+```java
+Sending data SensitiveInformation{information='Something very sensitive'} to client
+Sending data NonSensitiveInformation{information='Non sensitive information'} to client
+```
+
+Both the sensitive and non-sensitive information were printed alike.
+
+**How can we prevent any data that the business deems sensitive (such as the `SensitiveInformation`) from being sent to the client?**
+
+Note that we cannot change the method's `sendToClient()` parameter to the `NonSensitiveInformation` type as we may have many classes which do not contain sensitive data and can be safely sent to the client.
+
+One solution is to use marker interfaces.  An interface defines a type and any class implementing the interface can be used wherever this interface is required.  Consider the following interface.
+
+```java
+public interface CanShareWithClient {
+}
+```
+
+We can refactor the method `sendToClient()` such that it takes an instance of `CanShareWithClient` instead of `Object`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) { /* ... */ }
+
+  private static void sendToClient( final CanShareWithClient a ) {
+    System.out.printf( "Sending data %s to client%n", a );
+  }
+}
+
+class SensitiveInformation { /* ... */ }
+
+class NonSensitiveInformation { /* ... */ }
+```
+
+Our classes do not implement the marker interface `CanShareWithClient`, thus we cannot call the `sendToClient()` method and pass our objects, as yet.  We can have any class that can be safely shared with the client implement the marker interface `CanShareWithClient` and then use the `sendToClient()` method.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final SensitiveInformation a = new SensitiveInformation();
+    final NonSensitiveInformation b = new NonSensitiveInformation();
+
+    sendToClient( a ); /* ⚠️ This will not compile!! */
+    sendToClient( b ); /* 👍 This will work */
+  }
+
+  private static void sendToClient( final CanShareWithClient a ) {
+    System.out.printf( "Sending data %s to client%n", a );
+  }
+}
+
+class SensitiveInformation { /* ... */ }
+
+class NonSensitiveInformation implements CanShareWithClient { /* ... */ }
+```
+
+Using the marker interface `CanShareWithClient`, only classes that are marked by this interface (classes that implement the `CanShareWithClient` marker interface) can now be passed to the `sendToClient()` method.  The compiler will fail if we pass anything that does not implement this interface.
+
+The above solution works great if all classes that need to be sent to the client can implement the marker interface, `CanShareWithClient`.  This may not always be the case and we may need to go through a different route.  Another, personally less preferred, approach is to accept all objects but skip those that should not be sent.
+
+Consider another marker interface.
+
+```java
+public interface Sensitive {
+}
+```
+
+Any class marked by the `Sensitive` interface (classes that implement the `Sensitive` marker interface) is skipped by the `sendToClient()` as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final SensitiveInformation a = new SensitiveInformation();
+    final NonSensitiveInformation b = new NonSensitiveInformation();
+
+    sendToClient( a );
+    sendToClient( b );
+  }
+
+  private static void sendToClient( final Object a ) {
+    if ( !( a instanceof Sensitive ) ) {
+      System.out.printf( "Sending data %s to client%n", a );
+    }
+  }
+}
+
+class SensitiveInformation implements Sensitive { /* ... */ }
+
+class NonSensitiveInformation { /* ... */ }
+```
+
+Note that the sensitive information is skipped and only the classes that are **not** marked by the `Sensitive` are printed.
+
+```bash
+Sending data NonSensitiveInformation{information='Non sensitive information'} to client
+```
+
+I prefer the first approach where the `sendToClient()` only accepts types that implement a marker interface, because the compiler makes sure of that.  This approach is not always possible in which case we need to fall back on the second approach.  In either case, we need to add tests.
+
+1. First approach, using the `CanShareWithClient` marker interface
+
+    In the first case we need to make sure that all sensitive objects are not implementing the `CanShareWithClient`
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+
+    public class AppTest {
+
+      @Test
+      @DisplayName( "sensitive classes should not implement the CanShareWithClient interface" )
+      public void shouldNotImplementCanShareWithClient() {
+        final Object a = new SensitiveInformation();
+        assertFalse( a instanceof CanShareWithClient );
+      }
+    }
+    ```
+
+    This test is required to make sure that all sensitive classes do not implement the `CanShareWithClient` marker interface by mistake.  No need to test whether the non-sensitive data is implementing the interface as the compiler will check that for you.  It is not possible to call the `sendToClient()` and pass anything that does not implement `CanShareWithClient`.
+
+1. Second approach, try all types of objects that can be sent to the client and use mocks to make sure that only the classes that you are expecting to be send to the client are actually sent.
+
+    The example is a bit complex and is omitted as it is beyond the scope as it requires a more complex setup.
+
+In both cases, testing can be a bit tricky and in some cases is missed.
 
 ### `default` and `static` methods
 
@@ -6539,7 +6721,7 @@ jshell> 2147483647 - -2
 $2 ==> -2147483647
 ```
 
-That means that a negative number indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`).
+A negative number, on the other hand, indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`), which is incorrect!!
 
 Luckily we can rely on the [`Integer` wrapper class's `compare()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#compare(int,int)).  Consider the following example.
 
