@@ -6305,7 +6305,7 @@ Persons: [Person{name='null', surname='null'}, Person{name='null', surname='Atta
 
 ### How can we sort the `Point` class (the `Comparator` interface)?
 
-The [`Comparator` interface provides a set of static methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#comparing(java.util.function.Function)) that are very handy as shown in the following example.
+The [`Comparator` interface provides a set of static methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#comparing(java.util.function.Function)) that are very handy to sort objects as shown in the following example.
 
 ```java
 package demo;
@@ -6334,11 +6334,11 @@ public class App {
 
 We cannot modify the `Point` class as this is not part of our code.  We can still sort an array of points in the way we need it to be sorted by providing an instance of the `Comparator` interface.  This applies to any data type.  We can sort anything we want in the way we want by using a `Comparator`.
 
-The `Comparator` works very similar to the `Comparable`, discussed in the [hot does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one method `()` that takes two objects of the same type (not one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
+The `Comparator` works very similar to the `Comparable`, discussed in the [hot does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one [method `compare()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#compare(T,T)) that takes two (non-`null`) objects of the same type (not just one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
 
-Given any two objects of the same type, `a` and `b` (these objects do not have to implement any interface or extend any class).
+Given any two objects of the same type, `a` and `b` (these objects do not have to implement any interface or extend any special class).
 
-`comparator.compare (a, b)` will return:
+`comparator.compare(a, b)` will return:
 
 | Return | Condition                               |
 |-------:|-----------------------------------------|
@@ -6348,7 +6348,7 @@ Given any two objects of the same type, `a` and `b` (these objects do not have t
 
 Before Java 8, we had to implement the `Comparator` interface.  Java 8 introduced lambda and interface static method, which simplified the use of the `Comparator` interface.  Following is a longer version of the above code, that will achieve the same thing.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT TAKE ADVATNAGE OF NEW CODE STYLE!!**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT TAKE ADVANTAGE OF NEW CODE STYLE!!**
 
 ```java
 package demo;
@@ -6365,6 +6365,7 @@ public class App {
       new Point( 2, 1 ),
     };
 
+    /* Works with Java 1.5 or newer */
     final Comparator<Point> comparator = new Comparator<Point>() {
       @Override
       public int compare( final Point a, final Point b ) {
@@ -6379,13 +6380,13 @@ public class App {
 }
 ```
 
-The above example will work, and it is the only approach available (from those shown here) if you are using a version of Java before 1.8.  Both approaches will print the same output.
+The above example will work, and it is the only approach available (from those shown here) if you are using an older version of Java.  Both approaches will print the same output.
 
 ```bash
 Sorted: [java.awt.Point[x=1,y=2], java.awt.Point[x=1,y=3], java.awt.Point[x=2,y=1]]
 ```
 
-The points are ordered based on the value of the `x` property and the of the `y` property.
+The points are ordered based on the value of the properties `x` and `y` respectively.
 
 There are several approaches available to sort an array using a custom `Comparator`:
 
@@ -6422,12 +6423,141 @@ All three approaches will produce the same result.
 
 ### Can we compare two integers by subtracting one from the other?
 
-**🚧 Pending...**
+Some literature compares integers by subtracting them.  Consider the following class.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
-1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
-1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
-1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+  private final int age;
+
+  public Person( final String name, final int age ) {
+    this.name = name;
+    this.age = age;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name='%s', age=%d}", name, age );
+  }
+}
+```
+
+Say that we would like to sort the Persons based on their age.  We will use a `Comparator`, but teh same logic applies to the `Comparable` approach.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade", 13 ),
+      new Person( "Aden", 11 ),
+      new Person( "Mary", 42 ),
+      new Person( "John", 37 ),
+    };
+
+    final Comparator<Person> comparator = new Comparator<>() {
+      @Override
+      public int compare( final Person a, final Person b ) {
+        /* ⚠️ BAD DESIGN */
+        return a.age - b.age;
+      }
+    };
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Sorted by age: %s", Arrays.toString( persons ) );
+  }
+}
+```
+
+The persons are sorted by their age as expected.
+
+```bash
+Sorted by age: [Person{name='Aden', age=11}, Person{name='Jade', age=13}, Person{name='John', age=37}, Person{name='Mary', age=42}]
+```
+
+The above `Comparator` is broken despite its appearance.  Consider the following situation
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade", Integer.MAX_VALUE ),
+      new Person( "Aden", -2 ),
+    };
+
+    final Comparator<Person> comparator = new Comparator<>() {
+      @Override
+      public int compare( final Person a, final Person b ) {
+        /* ⚠️ BAD DESIGN */
+        return a.age - b.age;
+      }
+    };
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Sorted by age: %s", Arrays.toString( persons ) );
+  }
+}
+```
+
+Note that the above example is using very large values to highlight the problem when we negate an integer from another.
+
+```bash
+Sorted by age: [Person{name='Jade', age=2147483647}, Person{name='Aden', age=-2}]
+```
+
+The person with age `2147483647` is placed before the person with age `-2`.  That is incorrect!!
+
+The above problem arises from the fact that integer arithmetic overflows and produces unexpected behaviour.
+
+Luckily we can rely on the [`Integer` wrapper class's `compare()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#compare(int,int)).  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade", Integer.MAX_VALUE ),
+      new Person( "Aden", -2 ),
+    };
+
+    final Comparator<Person> comparator = new Comparator<>() {
+      @Override
+      public int compare( final Person a, final Person b ) {
+        return Integer.compare( a.age, b.age );
+      }
+    };
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Sorted by age: %s", Arrays.toString( persons ) );
+  }
+}
+```
+
+Now the persons are properly sorted.
+
+```bash
+Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
+```
 
 ## `instanceof` and `cast` operators
 
@@ -6690,3 +6820,7 @@ Arrays have three words
 1. Use *this* and *that* when comparing
 1. Desctructors
 1. Should we talk about method linking?
+1. [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
+    1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
+    1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
+    1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
