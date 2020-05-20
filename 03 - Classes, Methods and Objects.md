@@ -77,7 +77,7 @@
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
         1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
         1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
-        1. [Can we use multiple properties to determin natural ordering?](#can-we-use-multiple-properties-to-determin-natural-ordering)
+        1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [`default` and `static` methods](#default-and-static-methods)
@@ -6066,11 +6066,11 @@ Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{
 
 #### How does the `compareTo()` method works?
 
-The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns
+The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns: "_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
 
-"_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
+Let say we have two objects that implement the `Comparable` interface, `a` and `b`.
 
-Let say we have two objects that implement the `Comparable` interface, `a` and `b`.  `a.compareTo(b)` will return:
+`a.compareTo(b)` will return:
 
 | Return | Condition                               |
 |-------:|-----------------------------------------|
@@ -6078,13 +6078,15 @@ Let say we have two objects that implement the `Comparable` interface, `a` and `
 |   <=-1 | When `a` is considered smaller than `b` |
 |    >=1 | When `a` is considered larger than `b`  |
 
-Please note that the`compareTo()` may not just return `-1`, but it can return any negative value to indicate `a` is smaller than `b`.  Same applies when `a` is larger than `b`.
+Please note that the`compareTo()` may not just return `-1`, but it can return any negative value to indicate that `a` is smaller than `b`.  Same applies when `a` is larger than `b`.
 
-Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()`.  The contract ([Java Docs](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T))) specifies that a `NullPointerException` will be thrown if the given object is `null`.
+Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()` method.  The contract ([Java Docs](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T))) specifies that a `NullPointerException` will be thrown if the given object is `null`.
 
 #### What will happen if one of the properties used is `null`?
 
-**🚧 Pending...**
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A NullPointerException!!**
 
 ```java
 package demo;
@@ -6107,6 +6109,8 @@ public class App {
 }
 ```
 
+One of the persons creates has a `null` name.  Trying to sort this array will throw an `NullPointerException`.
+
 ```bash
 Exception in thread "main" java.lang.NullPointerException
 	at demo.Person.compareTo(Person.java:13)
@@ -6117,6 +6121,7 @@ Exception in thread "main" java.lang.NullPointerException
 	at demo.App.main(App.java:14)
 ```
 
+The `compareTo()` does not take `null`s and a `NullPointerException` will be thrown if the given object is `null` as documented in the interface's [Java Docs](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T)).
 
 ```java
   @Override
@@ -6125,6 +6130,7 @@ Exception in thread "main" java.lang.NullPointerException
   }
 ```
 
+Therefore, we need to check whether the `name` property is `null` before comparing it.
 
 ```java
 package demo;
@@ -6160,10 +6166,13 @@ public class Person implements Comparable<Person> {
 }
 ```
 
+The simple comparison got a bit more complicated, just because of `null`s.  At least now we can sort the persons that have a `null` name.
+
 ```bash
 Persons: [Person{name='null'}, Person{name='Aden'}, Person{name='Jade'}, Person{name='Peter'}]
 ```
 
+Luckily we can use another common library to simplify our code.
 
 ```groovy
 dependencies {
@@ -6171,7 +6180,7 @@ dependencies {
 }
 ```
 
-
+The old [apache commons lang]( https://mvnrepository.com/artifact/org.apache.commons/commons-lang) and its successor the [apache commons lang3]( https://mvnrepository.com/artifact/org.apache.commons/commons-lang3) are very popular libraries that have lots of useful functionality, similar to Guava.
 
 ```java
 package demo;
@@ -6194,8 +6203,9 @@ public class Person implements Comparable<Person> {
 }
 ```
 
+We simply delegated the whole comparison to the [`StringUtils`'s ` compare()` method](http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html#compare-java.lang.String-java.lang.String-), which also `null`-safe.
 
-#### Can we use multiple properties to determin natural ordering?
+#### Can we use multiple properties to determine natural ordering?
 
 
 ```java
