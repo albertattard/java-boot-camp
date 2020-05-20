@@ -327,6 +327,7 @@ Boot Camp for developers interested to learn Java.
 1. [Liskov substitution principle](07%20-%20SOLID.md#liskov-substitution-principle)
 1. [Interface segregation principle](07%20-%20SOLID.md#interface-segregation-principle)
 1. [Dependency inversion principle](07%20-%20SOLID.md#dependency-inversion-principle)
+1. [Miscellaneous](07%20-%20SOLID.md#miscellaneous)
 
 ### [Lambda & Streams](08%20-%20Lambda%20&%20Streams.md)
 

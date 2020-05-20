@@ -8,6 +8,7 @@
 1. [Liskov substitution principle](#liskov-substitution-principle)
 1. [Interface segregation principle](#interface-segregation-principle)
 1. [Dependency inversion principle](#dependency-inversion-principle)
+1. [Miscellaneous](#miscellaneous)
 
 ## Setup
 
@@ -56,3 +57,7 @@ Say that a change requested by *Academic Advising* department introduces a bug
 ## Dependency inversion principle
 
 **🚧 Pending...**
+
+## Miscellaneous
+
+1. https://speakerdeck.com/tastapod/why-every-element-of-solid-is-wrong
