@@ -44,7 +44,7 @@
 1. [Inheritance](#inheritance)
     1. [Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)](#extending-the-box-functionality-creating-and-evolving-the-lightbox-class-step-by-step)
     1. [Can we add items to a box if the box is not open?](#can-we-add-items-to-a-box-if-the-box-is-not-open)
-    1. [🤔 Can we design our classes to automatically prevents the object from going into invalid state?](#-can-we-design-our-classes-to-automatically-prevents-the-object-from-going-into-invalid-state)
+    1. [🤔 Can we design our classes to automatically prevents the object from going into invalid state (finite state machine)?](#-can-we-design-our-classes-to-automatically-prevents-the-object-from-going-into-invalid-state-finite-state-machine)
     1. [Create the `HeavyBox` (complete example)](#create-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
@@ -3666,7 +3666,7 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
     }
     ```
 
-### 🤔 Can we design our classes to automatically prevents the object from going into invalid state?
+### 🤔 Can we design our classes to automatically prevents the object from going into invalid state (finite state machine)?
 
 **🤔 Please note that this is quite an advance topic and it is understandable if you don't understand and comprehend the examples shown in this section**.
 
@@ -3683,12 +3683,16 @@ This is captured by the following State-Transition Diagrams.
 
 ![State-Transition Diagrams](assets/images/LightBox%20State-Transition%20Diagrams.png)
 
-Consider the following version `LightBox`.
+Consider the following (more complicated) version of the `LightBox` class.
 
 ```java
 package demo;
 
+import java.util.Optional;
+
 public class LightBox {
+
+  private Optional<Long> itemId = Optional.empty();
 
   public static CloseEmpty newBox() {
     return new LightBox().closeEmpty;
@@ -3706,6 +3710,7 @@ public class LightBox {
     }
 
     public OpenFull putItem( final long itemId ) {
+      LightBox.this.itemId = Optional.of( itemId );
       return openFull;
     }
   }
@@ -3797,7 +3802,129 @@ public class App {
 }
 ```
 
-While this look very promising, it is quite hard program in this fashion and not quite common in Java.
+While this look very promising, it is quite hard program in this fashion and not quite common in Java.  The above example has a flaw as we can save the state and invoked one of the methods that belong to that state more than once.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final LightBox.EmptyOpen emptyOpen = LightBox.newBox().open();
+    emptyOpen.putItem( 1L );
+    emptyOpen.putItem( 2L );
+  }
+}
+```
+
+The above code compiles and works, and the second item will replace the first item.  That's not the expected behaviour.  The light box's current state needs to be captured and checked before executing any action.  Consider the following finite state machine.
+
+```java
+package demo.complete;
+
+import static com.google.common.base.Preconditions.checkState;
+
+public class FiniteStateMachine {
+
+  private State activeState;
+
+  public FiniteStateMachine( final State initialState ) {
+    this.activeState = initialState;
+  }
+
+  public <T extends State> T changeState( State current, T next, Runnable block ) {
+    checkState( current == activeState );
+    block.run();
+    activeState = next;
+    return next;
+  }
+
+  public <T extends State> T changeState( State current, T next ) {
+    return changeState( current, next, BLANK );
+  }
+
+  private static final Runnable BLANK = () -> { };
+
+  public interface State { }
+}
+```
+
+This is a generic state machine that first checks whether the action being executed belongs to the current state or not.  Using our previous example, once the item is added (through the `putItem()` method), the light box should now be in the full/open state.  Therefore, we should not be able to invoke the `putItem()` method for the second time.
+
+We can refactor the `LightBox` class and use the finite state machine created before. 
+
+```java
+package demo;
+
+import demo.complete.FiniteStateMachine;
+
+import java.util.Optional;
+
+public class LightBox {
+
+  private Optional<Long> itemId = Optional.empty();
+
+  public static EmptyClosed newBox() { /* … */ }
+
+  public class EmptyClosed implements FiniteStateMachine.State {
+    public EmptyOpen open() {
+      return stateMachine.changeState( this, emptyOpen );
+    }
+  }
+
+  public class EmptyOpen implements FiniteStateMachine.State {
+    public EmptyClosed close() {
+      return stateMachine.changeState( this, emptyClosed );
+    }
+
+    public FullOpen putItem( final long itemId ) {
+      return stateMachine.changeState( this, fullOpen, () -> {
+        LightBox.this.itemId = Optional.of( itemId );
+      } );
+    }
+  }
+
+  public class FullOpen implements FiniteStateMachine.State {
+    public FullClosed close() {
+      return stateMachine.changeState( this, fullClosed );
+    }
+  }
+
+  public class FullClosed implements FiniteStateMachine.State {
+    public FullOpen open() {
+      return stateMachine.changeState( this, fullOpen );
+    }
+  }
+
+  private final EmptyClosed emptyClosed = new EmptyClosed();
+  private final EmptyOpen emptyOpen = new EmptyOpen();
+  private final FullOpen fullOpen = new FullOpen();
+  private final FullClosed fullClosed = new FullClosed();
+
+  private final FiniteStateMachine stateMachine = new FiniteStateMachine( emptyClosed );
+
+  private LightBox() { }
+}
+```
+
+Using the finite state machine, only the active state can invoke method.  Trying to invoke a method through a non-active state will throw an `IllegalStateException`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN IllegalStateException!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final LightBox.EmptyOpen emptyOpen = LightBox.newBox().open();
+    emptyOpen.putItem( 1L );
+    emptyOpen.putItem( 2L );
+  }
+}
+```
+
+Rerunning the same code will now throw an `IllegalStateException`.
+
+As mentioned before, while the final state machine provides some advantages, it adds a level of complexity.
 
 ### Create the `HeavyBox` (complete example)
 
