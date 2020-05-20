@@ -1383,6 +1383,13 @@ A box may be open or may be closed.  The program needs to determine whether the 
     public class BoxTest {
 
       @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() {
+        final Box box = new Box();
+        assertFalse( box.isOpen() );
+      }
+
+      @Test
       @DisplayName( "should be open after the open method is called" )
       public void shouldBeOpen() {
         final Box box = new Box();
@@ -3850,7 +3857,7 @@ public class FiniteStateMachine {
 
 This is a generic state machine that first checks whether the action being executed belongs to the current state or not.  Using our previous example, once the item is added (through the `putItem()` method), the light box should now be in the full/open state.  Therefore, we should not be able to invoke the `putItem()` method for the second time.
 
-We can refactor the `LightBox` class and use the finite state machine created before. 
+We can refactor the `LightBox` class and use the finite state machine created before.
 
 ```java
 package demo;
