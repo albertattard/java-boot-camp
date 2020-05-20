@@ -5853,7 +5853,49 @@ The new version of the `Bicycle` class is still missing the `shiftDown()` method
 
 ### What happens if a class implements two interfaces that have the same abstract method?
 
-A class can implement interfaces that have the same method signature, only if the methods have the same return type.  **A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type**.  In general, a class cannot have two methods with the same name and parameters and different return types.
+A class can implement interfaces that have the same method signature, only if the methods have the same return type.
+
+Consider the following two interfaces
+
+1. The double algorithm has a `compute()` method that returns a `double`.
+
+    ```java
+    package demo;
+
+    public interface DoubleAlgorithm {
+
+      double compute();
+    }
+    ```
+
+1. The complex algorithm has a `compute()` method that returns a `double`.
+
+    ```java
+    package demo;
+
+    public interface ComplexAlgorithm {
+
+      double compute();
+    }
+    ```
+
+A class can safely implement both interfaces as their methods have the same signature (name and parameters) and also have the same return type.
+
+```java
+package demo;
+
+public class Calculator implements ComplexAlgorithm, DoubleAlgorithm {
+
+  @Override
+  public double compute() {
+    return 0;
+  }
+}
+```
+
+The `Calculator` class implements both interfaces and only has one method.  Any instance of the `Calculator` class can be use when a `ComplexAlgorithm` or `DoubleAlgorithm` type is required.
+
+**A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type**.  In general, a class cannot have two methods with the same name and parameters and different return types.
 
 Consider the following interfaces
 
@@ -5868,7 +5910,7 @@ Consider the following interfaces
     }
     ```
 
-1. An algorithm that resolved to an `int`
+1. An algorithm that resolved to an `int`.
 
     ```java
     package demo;
