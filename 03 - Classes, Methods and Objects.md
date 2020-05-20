@@ -5999,13 +5999,15 @@ The above class creates an array of persons and print it.
 Persons: [Person{name='Jade'}, Person{name='Aden'}, Person{name='Mary'}, Person{name='Peter'}]
 ```
 
-Trying to sort the array of persons will throw a `ClassCastException` as we saw before as the sort method requires an instance of `Comparable`
+Trying to sort the array of persons will throw a `ClassCastException`, as we saw before, as the sort method requires an instance of `Comparable`
 
 ```java
 Arrays.sort( persons );
 ```
 
 We can implement the `Comparable` interface and add natural ordering as shown next.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
 
 ```java
 package demo;

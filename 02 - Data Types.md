@@ -1550,7 +1550,7 @@ This example was taken from [PUZZLE 14: ESCAPE ROUT in Java™ Puzzlers: Traps, 
 
 Consider the follow example.
 
-**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOOR LOOP STATEMENT, DISCUSSED LATER ON**
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOR LOOP STATEMENT, DISCUSSED LATER ON**
 
 ```java
 package demo;
@@ -1578,7 +1578,7 @@ This example was taken from [PUZZLE 24: A BIG DELIGHT IN EVERY BYTE in Java™ P
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOOR LOOP STATEMENT, DISCUSSED LATER ON**
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF THE FOR LOOP STATEMENT, DISCUSSED LATER ON**
 
 ```java
 package demo;
