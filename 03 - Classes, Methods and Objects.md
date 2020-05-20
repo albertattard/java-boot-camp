@@ -3193,7 +3193,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     }
     ```
 
-1. Like a box, the light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.
+1. Like a box, the light box can be opened and closed and has a label too.  The light box has all features the box has and can be seen as an extended version of the box.  Note that a light box can only contain one item.  A light box is empty if it has no item, otherwise non-empty.  We should not be able to add an item to a non-empty box.
 
     We have several options here.  We can either replicate all properties and methods to the new class, or inherit all of it from the `Box` class.  Both options are shown next.
 
@@ -3244,7 +3244,7 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
 
     Given that the light box is a specific type of box, it is safe to inherit from box.  We will elaborate more on this in [later sections](#inheritance-and-composition).
 
-    The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class.
+    The `LightBox` class [inherits from (or `extends`)](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html) the `Box` class.  The `Box` class is referred to as the [super class](https://docs.oracle.com/javase/tutorial/java/IandI/super.html) while the `LightBox` class is known as the child class (or the subclass).
 
     ```java
     package demo;
@@ -3282,6 +3282,8 @@ There are two types of boxes.  The light boxes, which are boxes that can contain
     ```
 
 1. Add the `isEmpty()` method
+
+    We can only place an item in a light box if this is empty.  Adding this functionality before the ability to add an item to the box seems more natural since that the latter relies on the box being empty.
 
     ```java
     package demo;
