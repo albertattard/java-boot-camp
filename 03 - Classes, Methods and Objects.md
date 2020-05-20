@@ -6430,8 +6430,8 @@ package demo;
 
 public class Person {
 
-  private final String name;
-  private final int age;
+  public final String name;
+  public final int age;
 
   public Person( final String name, final int age ) {
     this.name = name;
@@ -6445,7 +6445,9 @@ public class Person {
 }
 ```
 
-Say that we would like to sort the Persons based on their age.  We will use a `Comparator`, but teh same logic applies to the `Comparable` approach.
+Note that the properties are set to `public` for convenience.
+
+Say that we would like to sort the persons based on their age.  We will use a `Comparator`, but the same applies if we use a `Comparable` instead.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
 
@@ -6459,15 +6461,13 @@ public class App {
   public static void main( final String[] args ) {
     final Person[] persons = {
       new Person( "Jade", 13 ),
-      new Person( "Aden", 11 ),
-      new Person( "Mary", 42 ),
-      new Person( "John", 37 ),
+      new Person( "Aden", 11 )
     };
 
     final Comparator<Person> comparator = new Comparator<>() {
       @Override
       public int compare( final Person a, final Person b ) {
-        /* ⚠️ BAD DESIGN */
+        /* ⚠️ BAD DESIGN!! */
         return a.age - b.age;
       }
     };
@@ -6478,13 +6478,13 @@ public class App {
 }
 ```
 
-The persons are sorted by their age as expected.
+The persons are sorted by their age as expected.  The value of `11` is smaller than the value of `13`.
 
 ```bash
-Sorted by age: [Person{name='Aden', age=11}, Person{name='Jade', age=13}, Person{name='John', age=37}, Person{name='Mary', age=42}]
+Sorted by age: [Person{name='Aden', age=11}, Person{name='Jade', age=13}]
 ```
 
-The above `Comparator` is broken despite its appearance.  Consider the following situation
+The above instance of the `Comparator` interface is broken despite its appearance.  Consider the following (extreem) situation
 
 **⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
 
@@ -6498,13 +6498,13 @@ public class App {
   public static void main( final String[] args ) {
     final Person[] persons = {
       new Person( "Jade", Integer.MAX_VALUE ),
-      new Person( "Aden", -2 ),
+      new Person( "Aden", -2 )
     };
 
     final Comparator<Person> comparator = new Comparator<>() {
       @Override
       public int compare( final Person a, final Person b ) {
-        /* ⚠️ BAD DESIGN */
+        /* ⚠️ BAD DESIGN!! */
         return a.age - b.age;
       }
     };
@@ -6521,9 +6521,23 @@ Note that the above example is using very large values to highlight the problem 
 Sorted by age: [Person{name='Jade', age=2147483647}, Person{name='Aden', age=-2}]
 ```
 
-The person with age `2147483647` is placed before the person with age `-2`.  That is incorrect!!
+The person with age `2147483647` is placed before the person with age `-2`.  That is incorrect!!  We all know that `-2` is smaller than `2147483647`, yet our instance of `Comparator` thinks otherwise.
 
-The above problem arises from the fact that integer arithmetic overflows and produces unexpected behaviour.
+The above problem arises from the fact that integer arithmetic in Java overflows and produces unexpected behaviour.  When we subtract a negative value from a positive value we simply add the two numbers.
+
+```
+10 - -2 = 12
+```
+
+A positive number indicates that the left operand (value of `10`) is larger than the right operand (value of `-2`).
+
+Now consider our values
+
+```
+2147483647 - -2 = -2147483647
+```
+
+That means that a negative number indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`).
 
 Luckily we can rely on the [`Integer` wrapper class's `compare()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#compare(int,int)).  Consider the following example.
 
@@ -6553,7 +6567,7 @@ public class App {
 }
 ```
 
-Now the persons are properly sorted.
+Now the persons are properly sorted by their age.
 
 ```bash
 Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
