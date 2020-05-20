@@ -5720,7 +5720,7 @@ Different from a normal Java class files, produced by the Java compiler during t
 
 ### Can an interface extend another class or another interface?
 
-Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface cannot extend a class.  Interfaces can extend one or many interfaces.
+Interfaces cannot have state, therefore that rules out interfaces extending classes.  An interface can extend one or many interfaces.
 
 Consider the following three interfaces.
 
@@ -5757,7 +5757,7 @@ Consider the following three interfaces.
     }
     ```
 
-We can create a fourth interface, called `JackOfAllTrades` that extend the previously shown interfaces.
+We can create a fourth interface, called `JackOfAllTrades` that extends all the interfaces.
 
 ```java
 package demo;
@@ -5789,7 +5789,7 @@ public class BobTheBuilder implements JackOfAllTrades {
 }
 ```
 
-The following table compares the different extends/imports options available between different types.
+The following table compares the different extends/implements options available between different types.
 
 | Type      | Class          | Interface         |
 |-----------|:--------------:|-------------------|
@@ -5830,7 +5830,7 @@ A class can implement both interfaces as shown in the following example.
 ```java
 package demo;
 
-public abstract class Bicycle implements CanPedal, CanChangeGears{
+public abstract class Bicycle implements CanPedal, CanChangeGears {
 }
 ```
 
@@ -5853,7 +5853,7 @@ The new version of the `Bicycle` class is still missing the `shiftDown()` method
 
 ### What happens if a class implements two interfaces that have the same abstract method?
 
-A class can implement interfaces that have the same method signature, only if the methods have the same return type.  A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type.  In general, a class cannot have two methods with the same name and parameters and different return types.
+A class can implement interfaces that have the same method signature, only if the methods have the same return type.  **A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type**.  In general, a class cannot have two methods with the same name and parameters and different return types.
 
 Consider the following interfaces
 
