@@ -81,7 +81,8 @@
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
     1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
-    1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
+    1. [How can we sort the `Point` class (the `Comparator` interface)?](#how-can-we-sort-the-point-class-the-comparator-interface)
+    1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
 1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
@@ -6025,7 +6026,7 @@ package demo;
 
 public class Person implements Comparable<Person> {
 
-  private String name;
+  private final String name;
 
   public Person( final String name ) { /* ... */ }
 
@@ -6075,7 +6076,7 @@ Persons: [Person{name='Jade'}, Person{name='Aden'}, Person{name='Mary'}, Person{
 Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{name='Peter'}]
 ```
 
-Please note that the person's name can be `null`, which will cause the `compareTo()` method to throw a `NullPointerException`.  The following sesions discuss this in more depth.
+Please note that the person's name can be `null`, which will cause the `compareTo()` method to throw a `NullPointerException`.  The following sessions discuss this in more depth.
 
 ### How does the `compareTo()` method works?
 
@@ -6302,7 +6303,9 @@ Persons: [Person{name='Jade', surname='null'}, Person{name='null', surname='null
 Persons: [Person{name='null', surname='null'}, Person{name='null', surname='Attard'}, Person{name='Jade', surname='null'}, Person{name='Jade', surname='Attard'}]
 ```
 
-### How can we sort the `Point` class?
+### How can we sort the `Point` class (the `Comparator` interface)?
+
+The [`Comparator` interface provides a set of static methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#comparing(java.util.function.Function)) that are very handy as shown in the following example.
 
 ```java
 package demo;
@@ -6328,6 +6331,98 @@ public class App {
   }
 }
 ```
+
+We cannot modify the `Point` class as this is not part of our code.  We can still sort an array of points in the way we need it to be sorted by providing an instance of the `Comparator` interface.  This applies to any data type.  We can sort anything we want in the way we want by using a `Comparator`.
+
+The `Comparator` works very similar to the `Comparable`, discussed in the [hot does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one method `()` that takes two objects of the same type (not one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
+
+Given any two objects of the same type, `a` and `b` (these objects do not have to implement any interface or extend any class).
+
+`comparator.compare (a, b)` will return:
+
+| Return | Condition                               |
+|-------:|-----------------------------------------|
+|      0 | When `a` and `b` are considered equal   |
+|   <=-1 | When `a` is considered smaller than `b` |
+|    >=1 | When `a` is considered larger than `b`  |
+
+Before Java 8, we had to implement the `Comparator` interface.  Java 8 introduced lambda and interface static method, which simplified the use of the `Comparator` interface.  Following is a longer version of the above code, that will achieve the same thing.
+
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT TAKE ADVATNAGE OF NEW CODE STYLE!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point[] points = {
+      new Point( 1, 2 ),
+      new Point( 1, 3 ),
+      new Point( 2, 1 ),
+    };
+
+    final Comparator<Point> comparator = new Comparator<Point>() {
+      @Override
+      public int compare( final Point a, final Point b ) {
+        int diff = Integer.compare( a.x, b.x );
+        return diff != 0 ? diff : Integer.compare( a.y, b.y );
+      }
+    };
+
+    Arrays.sort( points, comparator );
+    System.out.printf( "Sorted: %s", Arrays.toString( points ) );
+  }
+}
+```
+
+The above example will work, and it is the only approach available (from those shown here) if you are using a version of Java before 1.8.  Both approaches will print the same output.
+
+```bash
+Sorted: [java.awt.Point[x=1,y=2], java.awt.Point[x=1,y=3], java.awt.Point[x=2,y=1]]
+```
+
+The points are ordered based on the value of the `x` property and the of the `y` property.
+
+There are several approaches available to sort an array using a custom `Comparator`:
+
+1. Extend the `Comparator` (works with versions of Java 1.5 or newer)
+
+    ```java
+    final Comparator<Point> comparator = new Comparator<Point>() {
+      @Override
+      public int compare( final Point a, final Point b ) {
+        int diff = Integer.compare( a.x, b.x );
+        return diff != 0 ? diff : Integer.compare( a.y, b.y );
+      }
+    };
+    ```
+
+1. Using lambda functions (works with versions of Java 1.8 or newer)
+
+    ```java
+    final Comparator<Point> comparator = ( a, b ) -> {
+      int diff = Integer.compare( a.x, b.x );
+      return diff != 0 ? diff : Integer.compare( a.y, b.y );
+    };
+    ```
+
+1. (**Recommended**) Using the `Comparator` static methods (works with versions of Java 1.8 or newer)
+
+    ```java
+    final Comparator<Point> comparator =
+      Comparator.comparing( Point::getX )
+        .thenComparing( Point::getY );
+    ```
+
+All three approaches will produce the same result.
+
+### Can we compare two integers by subtracting one from the other?
+
+**🚧 Pending...**
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/)
 1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
