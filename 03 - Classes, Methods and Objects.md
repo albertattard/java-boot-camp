@@ -6064,6 +6064,8 @@ Persons: [Person{name='Jade'}, Person{name='Aden'}, Person{name='Mary'}, Person{
 Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{name='Peter'}]
 ```
 
+Please note that the person's name can be `null`, which will cause the `compareTo()` method to throw a `NullPointerException`.  The following sesions discuss this in more depth.
+
 #### How does the `compareTo()` method works?
 
 The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns: "_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
@@ -6207,6 +6209,7 @@ We simply delegated the whole comparison to the [`StringUtils`'s ` compare()` me
 
 #### Can we use multiple properties to determine natural ordering?
 
+We can use all the properties we need when comparing objects.  Consider the following example.
 
 ```java
 package demo;
@@ -6225,7 +6228,7 @@ public class Person implements Comparable<Person> {
 
   @Override
   public int compareTo( final Person that ) {
-    int diff = compare( name, that.name );
+    final int diff = compare( name, that.name );
     if ( diff == 0 ) {
       return compare( surname, that.surname );
     }
@@ -6240,6 +6243,10 @@ public class Person implements Comparable<Person> {
 }
 ```
 
+When using multiple properties to compare objects, we will start with one property and then if that property for both objects is the same, we move to the next.  In the above example we first compared the two objects by their `name`, and then if the `name`s are the same, we fall back to the `surname`.  The `surname` is compared only if the `name`s are not the same.
+
+We can use the [ternary operator](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.25) instead.
+
 ```java
   @Override
   public int compareTo( final Person that ) {
@@ -6248,6 +6255,7 @@ public class Person implements Comparable<Person> {
   }
 ```
 
+The new `Person` class now supports natural ordering based on two properties.
 
 ```java
 package demo;
@@ -6274,7 +6282,7 @@ public class App {
 }
 ```
 
-
+Like before, `null`'s are placed before non-`null`s.
 
 ```bash
 --- Before Sorting -------
