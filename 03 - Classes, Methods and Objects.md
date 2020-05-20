@@ -1370,7 +1370,9 @@ Let start by creating a simple object that will represent a box.  The box will n
 
 A box may be open or may be closed.  The program needs to determine whether the box is open or closed before putting things inside.  The `Box` needs to have methods that will allow the program to open and/or close the box and determine whether the box is open or not.
 
-1. Create a test
+1. Assert the default state
+
+    By default, a box is always created in a close state.
 
     ```java
     package demo;
@@ -1378,7 +1380,7 @@ A box may be open or may be closed.  The program needs to determine whether the 
     import org.junit.jupiter.api.DisplayName;
     import org.junit.jupiter.api.Test;
 
-    import static org.junit.jupiter.api.Assertions.assertTrue;
+    import static org.junit.jupiter.api.Assertions.assertFalse;
 
     public class BoxTest {
 
@@ -1388,6 +1390,91 @@ A box may be open or may be closed.  The program needs to determine whether the 
         final Box box = new Box();
         assertFalse( box.isOpen() );
       }
+    }
+    ```
+
+    Add the missing methods (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      public boolean isOpen() {
+        return false;
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+    Run the test.  The test should pass.
+
+
+1. Add the `close()` functionality
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() {
+        final Box box = new Box();
+        box.close();
+        assertFalse( box.isOpen() );
+      }
+    }
+    ```
+
+    Add the missing methods (without any special logic) just to make the program compile.
+
+    ```java
+    package demo;
+
+    public class Box {
+
+      public void close() {
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+    Run the test.  Both tests should pass.
+
+1. Add the open functionality
+
+    ```java
+    package demo;
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+
+    import static org.junit.jupiter.api.Assertions.assertFalse;
+    import static org.junit.jupiter.api.Assertions.assertTrue;
+
+    public class BoxTest {
+
+      @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() { /* ... */ }
+
+      @Test
+      @DisplayName( "should not be open after the close method is called" )
+      public void shouldNotBeOpen() { /* ... */ }
 
       @Test
       @DisplayName( "should be open after the open method is called" )
@@ -1409,9 +1496,9 @@ A box may be open or may be closed.  The program needs to determine whether the 
       public void open() {
       }
 
-      public boolean isOpen() {
-        return true;
-      }
+      public void close() { /* ... */ }
+
+      public boolean isOpen() { /* ... */ }
 
       @Override
       public String toString() {
@@ -1420,67 +1507,21 @@ A box may be open or may be closed.  The program needs to determine whether the 
     }
     ```
 
-    Run the test.  The test should pass.
-
-1. Add the `close()` functionality
-
-    ```java
-    package demo;
-
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
-
-    import static org.junit.jupiter.api.Assertions.assertFalse;
-    import static org.junit.jupiter.api.Assertions.assertTrue;
-
-    public class BoxTest {
-
-      @Test
-      @DisplayName( "should be open after the open method is called" )
-      public void shouldBeOpen() { /* ... */ }
-
-      @Test
-      @DisplayName( "should not be open after the close method is called" )
-      public void shouldNotBeOpen() {
-        final Box box = new Box();
-        box.close();
-        assertFalse( box.isOpen() );
-      }
-    }
-    ```
-
-    Add the missing methods (without any special logic) just to make the program compile.
-
-    ```java
-    package demo;
-
-    public class Box {
-
-      public void open() { /* ... */ }
-
-      public void close() {
-      }
-
-      public boolean isOpen() { /* ... */ }
-
-      @Override
-      public String toString() { /* ... */ }
-    }
-    ```
-
-    Run the test.  While the *open* test passes, the *close* test fails.
+    Run the test.  The new test should fail, as the `isOpen()` method always return `false`.
 
     ```bash
-    $ ./gradlew test
+    $ ./gradlew clean test
 
-    > Task :test FAILED
+      > Task :test FAILED
 
-    BoxTest > should be open after the open method is called PASSED
+      BoxTest > should be closed by default PASSED
 
-    BoxTest > should not be open after the close method is called FAILED
-        org.opentest4j.AssertionFailedError at BoxTest.java:24
+      BoxTest > should be open after the open method is called FAILED
+          org.opentest4j.AssertionFailedError at BoxTest.java:31
 
-    2 tests completed, 1 failed
+      BoxTest > should not be open after the close method is called PASSED
+
+    ...
     ```
 
 1. Add state to the `Box`
@@ -1818,6 +1859,10 @@ The label can be represented by the `String` data-type.
     public class BoxTest {
 
       @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() { /* ... */ }
+
+      @Test
       @DisplayName( "should be open after the open method is called" )
       public void shouldBeOpen() { /* ... */ }
 
@@ -1875,6 +1920,10 @@ The label can be represented by the `String` data-type.
     import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
+
+      @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() { /* ... */ }
 
       @Test
       @DisplayName( "should be open after the open method is called" )
@@ -2032,6 +2081,10 @@ The label can be represented by the `String` data-type.
     import static org.junit.jupiter.api.Assertions.assertTrue;
 
     public class BoxTest {
+
+      @Test
+      @DisplayName( "should be closed by default" )
+      public void shouldBeClosedByDefault() { /* ... */ }
 
       @Test
       @DisplayName( "should be open after the open method is called" )
