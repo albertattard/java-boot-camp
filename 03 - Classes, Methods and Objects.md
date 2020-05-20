@@ -5954,7 +5954,7 @@ There is no way for the Java compiler to link our call to the right method as tw
 
 ### What's the purpose of an interface that has no abstract methods (marker interface)?
 
-Say that we have an application that sends data to the client in some form.  The transmission protocol does not matter in this case.  Some of the data handled by the application is sensitive while other date is not.
+Say that we have an application that sends data to the client in some form.  The transmission protocol does not matter in this case.  Some of the data handled by the application is sensitive while other data is not.
 
 Consider the following example
 
@@ -5994,7 +5994,7 @@ class NonSensitiveInformation {
 }
 ```
 
-Note that the above example has three classes in one class. The file name is `App.java`, the same as the public class name.  Furthermore, the above example categorises all sensitive data as one type, the `SensitiveInformation`.  In reality we will have many classes each containing some kind of sensitive information.  For simplicity I've only added one class.  Same applies for the `NonSensitiveInformation`.
+Note that, for simplicity, the above example has three top-level classes in one source file. The file name is `App.java`, the same as the public class name.  Furthermore, the above example categorises all sensitive data as one type, the `SensitiveInformation`.  In reality we will have many different classes, each containing some kind of sensitive information.  For simplicity, I've only added one class.  Same applies for the `NonSensitiveInformation` class.
 
 Running the above class will print the following.
 
@@ -6009,7 +6009,7 @@ Both the sensitive and non-sensitive information were printed alike.
 
 Note that we cannot change the method's `sendToClient()` parameter to the `NonSensitiveInformation` type as we may have many classes which do not contain sensitive data and can be safely sent to the client.
 
-One solution is to use marker interfaces.  An interface defines a type and any class implementing the interface can be used wherever this interface is required.  Consider the following interface.
+One solution is to use marker interfaces.  An interface defines a type and any class implementing the interface can be used wherever this interface is required.  Consider the following marker interface.
 
 ```java
 public interface CanShareWithClient {
@@ -6036,7 +6036,7 @@ class SensitiveInformation { /* ... */ }
 class NonSensitiveInformation { /* ... */ }
 ```
 
-Our classes do not implement the marker interface `CanShareWithClient`, thus we cannot call the `sendToClient()` method and pass our objects, as yet.  We can have any class that can be safely shared with the client implement the marker interface `CanShareWithClient` and then use the `sendToClient()` method.
+Our `SensitiveInformation` and `NonSensitiveInformation` classes do not implement the marker interface `CanShareWithClient`, thus we cannot call the `sendToClient()` method and pass our objects, as yet.  We can have any class that can be safely shared with the client implement the marker interface `CanShareWithClient` and then use the `sendToClient()` method.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -6052,9 +6052,7 @@ public class App {
     sendToClient( b ); /* 👍 This will work */
   }
 
-  private static void sendToClient( final CanShareWithClient a ) {
-    System.out.printf( "Sending data %s to client%n", a );
-  }
+  private static void sendToClient( final CanShareWithClient a ) { /* ... */ }
 }
 
 class SensitiveInformation { /* ... */ }
@@ -6079,13 +6077,7 @@ Any class marked by the `Sensitive` interface (classes that implement the `Sensi
 package demo;
 
 public class App {
-  public static void main( final String[] args ) {
-    final SensitiveInformation a = new SensitiveInformation();
-    final NonSensitiveInformation b = new NonSensitiveInformation();
-
-    sendToClient( a );
-    sendToClient( b );
-  }
+  public static void main( final String[] args ) { /* ... */ }
 
   private static void sendToClient( final Object a ) {
     if ( !( a instanceof Sensitive ) ) {
@@ -6105,7 +6097,7 @@ Note that the sensitive information is skipped and only the classes that are **n
 Sending data NonSensitiveInformation{information='Non sensitive information'} to client
 ```
 
-I prefer the first approach where the `sendToClient()` only accepts types that implement a marker interface, because the compiler makes sure of that.  This approach is not always possible in which case we need to fall back on the second approach.  In either case, we need to add tests.
+I prefer the first approach where the `sendToClient()` only accepts types that implement a marker interface, because the compiler makes sure that only classes of the right type are passed.  This approach is not always possible in which case we need to fallback on the second approach.  **In either case, we need to add tests**.
 
 1. First approach, using the `CanShareWithClient` marker interface
 
@@ -6130,11 +6122,15 @@ I prefer the first approach where the `sendToClient()` only accepts types that i
     }
     ```
 
-    This test is required to make sure that all sensitive classes do not implement the `CanShareWithClient` marker interface by mistake.  No need to test whether the non-sensitive data is implementing the interface as the compiler will check that for you.  It is not possible to call the `sendToClient()` and pass anything that does not implement `CanShareWithClient`.
+    This test is required to make sure that all sensitive classes do not implement the `CanShareWithClient` marker interface by mistake.  In the event someone marks a sensitive class by the `CanShareWithClient`, this test will catch that and will fails.
 
-1. Second approach, try all types of objects that can be sent to the client and use mocks to make sure that only the classes that you are expecting to be send to the client are actually sent.
+    No need to test whether the non-sensitive data is implementing the interface as the compiler will check that.  It is not possible to call the `sendToClient()` and pass anything that does not implement `CanShareWithClient`.
+
+1. Second approach, using the `Sensitive` marker interface to exclude sensitive classes
 
     The example is a bit complex and is omitted as it is beyond the scope as it requires a more complex setup.
+
+    We need to try all types of objects that can be (non-sensitive), and should not be (sensitive), sent to the client and use mocks to make sure that only the classes that you are expecting to be send to the client are actually sent.  If the mock is called when given an object deemed sensitive, the test should fail.  On the other hand, if the mock is not called when given a non-sensitive data, then the test should fail too.
 
 In both cases, testing can be a bit tricky and in some cases is missed.
 
