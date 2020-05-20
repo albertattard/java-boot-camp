@@ -76,13 +76,13 @@
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [`default` and `static` methods](#default-and-static-methods)
-1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
 1. [Sorting (the `Comparable` and `Comparator` interfaces)](#sorting-the-comparable-and-comparator-interfaces)
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
     1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
+1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -5959,10 +5959,6 @@ There is no way for the Java compiler to link our call to the right method as tw
 
 **🚧 Pending...**
 
-## `instanceof` and `cast` operators
-
-**🚧 Pending...**
-
 ## Sorting (the `Comparable` and `Comparator` interfaces)
 
 ### How can we apply natural ordering to a custom class (the `Comparable` interface)?
@@ -6337,6 +6333,10 @@ public class App {
 1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
 1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
 1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
+
+## `instanceof` and `cast` operators
+
+**🚧 Pending...**
 
 ## Inheritance and composition
 
