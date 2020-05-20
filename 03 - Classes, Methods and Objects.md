@@ -6066,7 +6066,21 @@ Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{
 
 #### How does the `compareTo()` method works?
 
-**🚧 Pending...**
+The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns
+
+"_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
+
+Let say we have two objects that implement the `Comparable` interface, `a` and `b`.  `a.compareTo(b)` will return:
+
+| Return | Condition                               |
+|-------:|-----------------------------------------|
+|      0 | When `a` and `b` are considered equal   |
+|   <=-1 | When `a` is considered smaller than `b` |
+|    >=1 | When `a` is considered larger than `b`  |
+
+Please note that the`compareTo()` may not just return `-1`, but it can return any negative value to indicate `a` is smaller than `b`.  Same applies when `a` is larger than `b`.
+
+Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()`.  The contract ([Java Docs](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T))) specifies that a `NullPointerException` will be thrown if the given object is `null`.
 
 #### What will happen if one of the properties used is `null`?
 
