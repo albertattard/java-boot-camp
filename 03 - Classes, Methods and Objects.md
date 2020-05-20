@@ -3180,7 +3180,7 @@ Item weighing 1,2000Kg, needs to go to Destination: Programming
 
 ## Inheritance
 
-There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can contain more than one item.  Both boxes can be open or closed and can be opened and closed using the methods created above.
+There are two types of boxes.  The light boxes, which are boxes that can contain only one item.  The heavy boxes can contain more than one item.  Both boxes can be open or closed and change their label using the methods created before.
 
 ### Extending the `Box` functionality (creating and evolving the `LightBox` class step by step)
 
