@@ -3923,7 +3923,7 @@ public class LightBox {
 
   private Optional<Long> itemId = Optional.empty();
 
-  public static EmptyClosed newBox() { /* … */ }
+  public static EmptyClosed newBox() { /* ... */ }
 
   public class EmptyClosed implements FiniteStateMachine.State {
     public EmptyOpen open() {
