@@ -6526,7 +6526,8 @@ The person with age `2147483647` is placed before the person with age `-2`.  Tha
 The above problem arises from the fact that integer arithmetic in Java overflows and produces unexpected behaviour.  When we subtract a negative value from a positive value we simply add the two numbers.
 
 ```
-10 - -2 = 12
+jshell> 10 - -2
+$1 ==> 12
 ```
 
 A positive number indicates that the left operand (value of `10`) is larger than the right operand (value of `-2`).
@@ -6534,7 +6535,8 @@ A positive number indicates that the left operand (value of `10`) is larger than
 Now consider our values
 
 ```
-2147483647 - -2 = -2147483647
+jshell> 2147483647 - -2
+$2 ==> -2147483647
 ```
 
 That means that a negative number indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`).
