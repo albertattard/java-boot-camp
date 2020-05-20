@@ -74,9 +74,12 @@
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [How many interfaces can a class implement?](#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
+    1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
+        1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
+        1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
+        1. [Can we use multiple properties to determin natural ordering?](#can-we-use-multiple-properties-to-determin-natural-ordering)
     1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
-    1. [How can we apply natural ordering to a custom class?](#how-can-we-apply-natural-ordering-to-a-custom-class)
     1. [`default` and `static` methods](#default-and-static-methods)
 1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
 1. [Inheritance and composition](#inheritance-and-composition)
@@ -5895,7 +5898,7 @@ public class Calculator implements ComplexAlgorithm, DoubleAlgorithm {
 
 The `Calculator` class implements both interfaces and only has one method.  Any instance of the `Calculator` class can be use when a `ComplexAlgorithm` or `DoubleAlgorithm` type is required.
 
-**A class cannot implement two, or more, interfaces that have the same method name and parameters, but have a different return type**.  In general, a class cannot have two methods with the same name and parameters and different return types.
+**A class cannot implement two, or more, interfaces that have the same method signature (name and parameters), but have a different return type**.  In general, a class cannot have two methods with the same signature (name and parameters) and different return types.
 
 Consider the following interfaces
 
@@ -5923,6 +5926,8 @@ Consider the following interfaces
 
 Both interfaces define a method, named `compute()`, that return a different type.  Now consider the following class that implements both interfaces.
 
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+
 ```java
 package demo;
 
@@ -5944,6 +5949,313 @@ c.compute();
 ```
 
 There is no way for the Java compiler to link our call to the right method as two methods match.
+
+### How can we apply natural ordering to a custom class (the `Comparable` interface)?
+
+In a previous example, we were able to sort an array of string using natural ordering.  Consider the following `Person` class.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name='%s'}", name );
+  }
+}
+```
+
+A `Person` has one property which can be initialise through the constructor.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( "Aden" ),
+      new Person( "Mary" ),
+      new Person( "Peter" ),
+    };
+
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+The above class creates an array of persons and print it.
+
+```bash
+Persons: [Person{name='Jade'}, Person{name='Aden'}, Person{name='Mary'}, Person{name='Peter'}]
+```
+
+Trying to sort the array of persons will throw a `ClassCastException` as we saw before as the sort method requires an instance of `Comparable`
+
+```java
+Arrays.sort( persons );
+```
+
+We can implement the `Comparable` interface and add natural ordering as shown next.
+
+```java
+package demo;
+
+public class Person implements Comparable<Person> {
+
+  private String name;
+
+  public Person( final String name ) { /* ... */ }
+
+  @Override
+  public int compareTo( final Person that ) {
+    return name.compareTo( that.name );
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+Now that our class implements the `Comparable` interface, we can use [the `Arrays`' `sort()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(java.lang.Object%5B%5D)) to sort our array of persons.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( "Aden" ),
+      new Person( "Mary" ),
+      new Person( "Peter" ),
+    };
+
+    System.out.println( "--- Before Sorting -------" );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+
+    Arrays.sort( persons );
+
+    System.out.println( "--- After Sorting --------" );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+The above example will print the array of persons alphabetically.
+
+```bash
+--- Before Sorting -------
+Persons: [Person{name='Jade'}, Person{name='Aden'}, Person{name='Mary'}, Person{name='Peter'}]
+--- After Sorting --------
+Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{name='Peter'}]
+```
+
+#### How does the `compareTo()` method works?
+
+**🚧 Pending...**
+
+#### What will happen if one of the properties used is `null`?
+
+**🚧 Pending...**
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( "Aden" ),
+      new Person( null ),
+      new Person( "Peter" ),
+    };
+
+    Arrays.sort( persons );
+
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+```bash
+Exception in thread "main" java.lang.NullPointerException
+	at demo.Person.compareTo(Person.java:13)
+	at demo.Person.compareTo(Person.java:3)
+	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:321)
+	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
+	at java.base/java.util.Arrays.sort(Arrays.java:1040)
+	at demo.App.main(App.java:14)
+```
+
+
+```java
+  @Override
+  public int compareTo( final Person that ) {
+    return name.compareTo( that.name );
+  }
+```
+
+
+```java
+package demo;
+
+public class Person implements Comparable<Person> {
+
+  private String name;
+
+  public Person( final String name ) { /* ... */ }
+
+  @Override
+  public int compareTo( final Person that ) {
+    /* If both are null or the same String instance */
+    if ( name == that.name ) {
+      return 0;
+    }
+
+    /* If name is null */
+    if ( name == null ) {
+      return -1;
+    }
+
+    /* If the other name is null */
+    if ( that.name == null ) {
+      return 1;
+    }
+
+    return name.compareTo( that.name );
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+```bash
+Persons: [Person{name='null'}, Person{name='Aden'}, Person{name='Jade'}, Person{name='Peter'}]
+```
+
+
+```groovy
+dependencies {
+  implementation 'org.apache.commons:commons-lang3:3.10'
+}
+```
+
+
+
+```java
+package demo;
+
+import static org.apache.commons.lang3.StringUtils.compare;
+
+public class Person implements Comparable<Person> {
+
+  private String name;
+
+  public Person( final String name ) { /* ... */ }
+
+  @Override
+  public int compareTo( final Person that ) {
+    return compare( name, that.name );
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+
+#### Can we use multiple properties to determin natural ordering?
+
+
+```java
+package demo;
+
+import static org.apache.commons.lang3.StringUtils.compare;
+
+public class Person implements Comparable<Person> {
+
+  private final String name;
+  private final String surname;
+
+  public Person( final String name, final String surname ) {
+    this.name = name;
+    this.surname = surname;
+  }
+
+  @Override
+  public int compareTo( final Person that ) {
+    int diff = compare( name, that.name );
+    if ( diff == 0 ) {
+      return compare( surname, that.surname );
+    }
+
+    return diff;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name='%s', surname='%s'}", name, surname );
+  }
+}
+```
+
+```java
+  @Override
+  public int compareTo( final Person that ) {
+    int diff = compare( name, that.name );
+    return diff != 0 ? diff : compare( surname, that.surname );
+  }
+```
+
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade", null ),
+      new Person(null, null),
+      new Person( "Jade", "Attard" ),
+      new Person( null, "Attard" )
+    };
+
+    System.out.println( "--- Before Sorting -------" );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+
+    Arrays.sort( persons );
+
+    System.out.println( "--- After Sorting --------" );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+
+
+```bash
+--- Before Sorting -------
+Persons: [Person{name='Jade', surname='null'}, Person{name='null', surname='null'}, Person{name='Jade', surname='Attard'}, Person{name='null', surname='Attard'}]
+--- After Sorting --------
+Persons: [Person{name='null', surname='null'}, Person{name='null', surname='Attard'}, Person{name='Jade', surname='null'}, Person{name='Jade', surname='Attard'}]
+```
 
 ### How can we sort the `Point` class?
 
@@ -5978,10 +6290,6 @@ public class App {
 1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
 
 ### What's the purpose of an interface that has no abstract methods (marker interface)?
-
-**🚧 Pending...**
-
-### How can we apply natural ordering to a custom class?
 
 **🚧 Pending...**
 
