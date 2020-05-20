@@ -74,14 +74,15 @@
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [How many interfaces can a class implement?](#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
-    1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
-        1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
-        1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
-        1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
-    1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [`default` and `static` methods](#default-and-static-methods)
 1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
+1. [Sorting (the `Comparable` and `Comparator` interfaces)](#sorting-the-comparable-and-comparator-interfaces)
+    1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
+    1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
+    1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
+    1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
+    1. [How can we sort the `Point` class?](#how-can-we-sort-the-point-class)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -5950,6 +5951,20 @@ c.compute();
 
 There is no way for the Java compiler to link our call to the right method as two methods match.
 
+### What's the purpose of an interface that has no abstract methods (marker interface)?
+
+**🚧 Pending...**
+
+### `default` and `static` methods
+
+**🚧 Pending...**
+
+## `instanceof` and `cast` operators
+
+**🚧 Pending...**
+
+## Sorting (the `Comparable` and `Comparator` interfaces)
+
 ### How can we apply natural ordering to a custom class (the `Comparable` interface)?
 
 In a previous example, we were able to sort an array of string using natural ordering.  Consider the following `Person` class.
@@ -6066,7 +6081,7 @@ Persons: [Person{name='Aden'}, Person{name='Jade'}, Person{name='Mary'}, Person{
 
 Please note that the person's name can be `null`, which will cause the `compareTo()` method to throw a `NullPointerException`.  The following sesions discuss this in more depth.
 
-#### How does the `compareTo()` method works?
+### How does the `compareTo()` method works?
 
 The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns: "_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
 
@@ -6084,7 +6099,7 @@ Please note that the`compareTo()` may not just return `-1`, but it can return an
 
 Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()` method.  The contract ([Java Docs](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T))) specifies that a `NullPointerException` will be thrown if the given object is `null`.
 
-#### What will happen if one of the properties used is `null`?
+### What will happen if one of the properties used is `null`?
 
 Consider the following example.
 
@@ -6207,7 +6222,7 @@ public class Person implements Comparable<Person> {
 
 We simply delegated the whole comparison to the [`StringUtils`'s ` compare()` method](http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/StringUtils.html#compare-java.lang.String-java.lang.String-), which also `null`-safe.
 
-#### Can we use multiple properties to determine natural ordering?
+### Can we use multiple properties to determine natural ordering?
 
 We can use all the properties we need when comparing objects.  Consider the following example.
 
@@ -6322,18 +6337,6 @@ public class App {
 1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
 1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
 1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
-
-### What's the purpose of an interface that has no abstract methods (marker interface)?
-
-**🚧 Pending...**
-
-### `default` and `static` methods
-
-**🚧 Pending...**
-
-## `instanceof` and `cast` operators
-
-**🚧 Pending...**
 
 ## Inheritance and composition
 
