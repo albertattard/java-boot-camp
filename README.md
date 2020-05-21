@@ -2,9 +2,8 @@
 
 Boot Camp for developers interested to learn Java.
 
-## Plan
 
-### [Primer](01%20-%20Primer.md)
+## [Primer](01%20-%20Primer.md)
 
 1. [Java](01%20-%20Primer.md#java)
     1. [What is Java?](01%20-%20Primer.md#what-is-java)
@@ -36,12 +35,12 @@ Boot Camp for developers interested to learn Java.
     1. [Multi-Stage Docker Build](01%20-%20Primer.md#multi-stage-docker-build)
     1. [Managing Docker Containers](01%20-%20Primer.md#managing-docker-containers)
 
-### [Java 101](02%20-%20Java%20101.md)
+## [Java 101](02%20-%20Java%20101.md)
 
 1. [JShell](02%20-%20Java%20101.md#jshell)
 1. [Java Single File Execution](02%20-%20Java%20101.md#java-single-file-execution)
 
-### [Data Types](03%20-%20Data%20Types.md)
+## [Data Types](03%20-%20Data%20Types.md)
 
 1. [Numbers and Strings (Variables and Scope)](03%20-%20Data%20Types.md#numbers-and-strings-variables-and-scope)
     1. [Puzzle (Time for a change)](03%20-%20Data%20Types.md#puzzle-time-for-a-change)
@@ -113,7 +112,7 @@ Boot Camp for developers interested to learn Java.
 1. [Internationalization](03%20-%20Data%20Types.md#internationalization)
 1. [Miscellaneous](03%20-%20Data%20Types.md#miscellaneous)
 
-### [Classes, Methods and Objects](04%20-%20Classes%2C%20Methods%20and%20Objects.md)
+## [Classes, Methods and Objects](04%20-%20Classes%2C%20Methods%20and%20Objects.md)
 
 1. [Anatomy of a Java class](04%20-%20Classes%2C%20Methods%20and%20Objects.md#anatomy-of-a-java-class)
     1. [Terms](04%20-%20Classes%2C%20Methods%20and%20Objects.md#terms)
@@ -213,7 +212,7 @@ Boot Camp for developers interested to learn Java.
     1. [Records](04%20-%20Classes%2C%20Methods%20and%20Objects.md#records)
     1. [Others](04%20-%20Classes%2C%20Methods%20and%20Objects.md#others)
 
-### [Collections](05%20-%20Collections.md)
+## [Collections](05%20-%20Collections.md)
 
 1. [Arrays](05%20-%20Collections.md#arrays)
     1. [Create Arrays](05%20-%20Collections.md#create-arrays)
@@ -267,7 +266,7 @@ Boot Camp for developers interested to learn Java.
 1. [Google Guava (Collections)](05%20-%20Collections.md#google-guava-collections)
 1. [Miscellaneous](05%20-%20Collections.md#miscellaneous)
 
-### [Control Flow](06%20-%20Control%20Flow.md)
+## [Control Flow](06%20-%20Control%20Flow.md)
 
 1. [Control Flow and Loops](06%20-%20Control%20Flow.md#control-flow-and-loops)
     1. [If (if/else) Control Flow Statement](06%20-%20Control%20Flow.md#if-ifelse-control-flow-statement)
@@ -303,7 +302,7 @@ Boot Camp for developers interested to learn Java.
 1. [Exceptions](06%20-%20Control%20Flow.md#exceptions)
     1. [Alternative Approach](06%20-%20Control%20Flow.md#alternative-approach)
 
-### [Testing](07%20-%20Testing.md)
+## [Testing](07%20-%20Testing.md)
 
 1. [Testing with JUnit 5 (Hamcrest and AssertJ)](07%20-%20Testing.md#testing-with-junit-5-hamcrest-and-assertj)
     1. [Add JUnit 5](07%20-%20Testing.md#add-junit-5)
@@ -325,7 +324,7 @@ Boot Camp for developers interested to learn Java.
 1. [Google Guava (Preconditions)](07%20-%20Testing.md#google-guava-preconditions)
 1. [Miscellaneous](07%20-%20Testing.md#miscellaneous)
 
-### [SOLID](08%20-%20SOLID.md)
+## [SOLID](08%20-%20SOLID.md)
 
 1. [Single-responsibility Principle](08%20-%20SOLID.md#single-responsibility-principle)
 1. [Open–closed principle](08%20-%20SOLID.md#open-closed-principle)
@@ -334,7 +333,7 @@ Boot Camp for developers interested to learn Java.
 1. [Dependency inversion principle](08%20-%20SOLID.md#dependency-inversion-principle)
 1. [Miscellaneous](08%20-%20SOLID.md#miscellaneous)
 
-### [Lambda & Streams](09%20-%20Lambda%20&%20Streams.md)
+## [Lambda & Streams](09%20-%20Lambda%20&%20Streams.md)
 
 1. [Lambda Expressions](09%20-%20Lambda%20&%20Streams.md#lambda-expressions)
     1. [Function as Parameters](09%20-%20Lambda%20&%20Streams.md#function-as-parameters)
@@ -355,7 +354,7 @@ Boot Camp for developers interested to learn Java.
     1. [Create Map from List](09%20-%20Lambda%20&%20Streams.md#create-map-from-list)
 1. [Miscellaneous](09%20-%20Lambda%20&%20Streams.md#miscellaneous)
 
-### [IO & Streams](10%20-%20IO%20&%20Streams.md)
+## [IO & Streams](10%20-%20IO%20&%20Streams.md)
 
 1. [Try with Resources](10%20-%20IO%20&%20Streams.md#try-with-resources)
 1. [Java Streams](10%20-%20IO%20&%20Streams.md#java-streams)
@@ -367,7 +366,7 @@ Boot Camp for developers interested to learn Java.
 1. [HTTP Client (Java)](10%20-%20IO%20&%20Streams.md#http-client-java)
 1. [Miscellaneous](10%20-%20IO%20&%20Streams.md#miscellaneous)
 
-### [Databases](11%20-%20Databases.md)
+## [Databases](11%20-%20Databases.md)
 
 1. [H2, MySQL and PostgreSQL](11%20-%20Databases.md#h2-mysql-and-postgresql)
 1. [Data Sources (Hikari Connection Pool)](11%20-%20Databases.md#data-sources-hikari-connection-pool)
@@ -378,7 +377,7 @@ Boot Camp for developers interested to learn Java.
 1. [Query DSL](11%20-%20Databases.md#query-dsl)
 1. [JPA and Hibernate](11%20-%20Databases.md#jpa-and-hibernate)
 
-### [Concurrency](12%20-%20Concurrency.md)
+## [Concurrency](12%20-%20Concurrency.md)
 
 1. [Java Memory Model](12%20-%20Concurrency.md#java-memory-model)
 1. [Threads](12%20-%20Concurrency.md#threads)
@@ -408,7 +407,7 @@ Boot Camp for developers interested to learn Java.
 1. [Cost of Concurrency](12%20-%20Concurrency.md#cost-of-concurrency)
 1. [Miscellaneous](12%20-%20Concurrency.md#miscellaneous)
 
-### [Common Design Patterns](13%20-%20Common%20Design%20Patterns.md)
+## [Common Design Patterns](13%20-%20Common%20Design%20Patterns.md)
 
 1. [Creational Design Pattern](13%20-%20Common%20Design%20Patterns.md#creational-design-pattern)
     1. [Factory Pattern](13%20-%20Common%20Design%20Patterns.md#factory-pattern)
@@ -437,7 +436,7 @@ Boot Camp for developers interested to learn Java.
     1. [Template Pattern](13%20-%20Common%20Design%20Patterns.md#template-pattern)
     1. [Visitor Pattern](13%20-%20Common%20Design%20Patterns.md#visitor-pattern)
 
-### [Recommended Reading](14%20-%20Recommended%20Reading.md)
+## [Recommended Reading](14%20-%20Recommended%20Reading.md)
 
 1. [Java](14%20-%20Recommended%20Reading.md#java)
 1. [Gradle](14%20-%20Recommended%20Reading.md#gradle)

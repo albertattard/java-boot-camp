@@ -43,7 +43,6 @@ public class Links {
     line.add( "" );
     line.add( "Boot Camp for developers interested to learn Java." );
     line.add( "" );
-    line.add( "## Plan" );
 
     for ( File file : files ) {
       final String name = file.getName();
@@ -53,7 +52,7 @@ public class Links {
       final String heading = name.split( "( - |\\.)" )[1];
 
       line.add( "" );
-      line.add( String.format( "### [%s](%s)%n", heading, encodeFileName ) );
+      line.add( String.format( "## [%s](%s)%n", heading, encodeFileName ) );
 
       for ( String t : updateLocalToc( file ) ) {
         if ( t.contains( "[Setup](" ) ) {
