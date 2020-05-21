@@ -14,6 +14,7 @@
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
+        1. [Working title](#working-title)
     1. [Sorting and Searching](#sorting-and-searching)
     1. [An Array of Characters Is Not a String](#an-array-of-characters-is-not-a-string)
 1. [Lists (Vector, ArrayList and LinkedList)](#lists-vector-arraylist-and-linkedlist)
@@ -43,6 +44,7 @@
         1. [LinkedHashMap](#linkedhashmap)
         1. [TreeMap](#treemap)
         1. [Which Map to Use?](#which-map-to-use)
+1. [Covariance and invariance](#covariance-and-invariance)
 1. [Relation between Collections the Objects they contain](#relation-between-collections-the-objects-they-contain)
     1. [List and the equals() method](#list-and-the-equals-method)
     1. [Hash based Collections and the equals() and hashCode() methods](#hash-based-collections-and-the-equals-and-hashcode-methods)
@@ -663,7 +665,7 @@ Running the same test now, will work and will not fail.  Note that we are also c
       public static void main( final String[] args ) {
         final Object[] a = new Long[5];
 
-        /* Throws ArrayStoreException */
+        /* Throws ArrayStoreException!! */
         a[0] = "A String";
       }
     }
@@ -675,6 +677,15 @@ Running the same test now, will work and will not fail.  Note that we are also c
     Exception in thread "main" java.lang.ArrayStoreException: java.lang.String
       at demo.App.main(App.java:6)
     ```
+
+#### Working title
+
+Does not work
+
+```java
+char[] a = {'a', 'b', 'c'};
+Object[] b = a;
+```
 
 ### Sorting and Searching
 
@@ -1544,6 +1555,10 @@ Hashmap
 
 Why HashTable doesn’t allow null and HashMap does?
 To successfully store and retrieve objects from a HashTable, the objects used as keys must implement the hashCode method and the equals method. Since null is not an object, it can’t implement these methods. HashMap is an advanced version and improvement on the Hashtable. HashMap was created later.
+
+## Covariance and invariance
+
+**🚧 Pending...**
 
 ## Relation between Collections the Objects they contain
 

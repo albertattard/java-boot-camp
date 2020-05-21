@@ -75,7 +75,7 @@
     1. [How many interfaces can a class implement?](#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
-    1. [`default` and `static` methods](#default-and-static-methods)
+    1. [What are `default` and `static` methods?](#what-are-default-and-static-methods)
 1. [Sorting (the `Comparable` and `Comparator` interfaces)](#sorting-the-comparable-and-comparator-interfaces)
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
@@ -6111,10 +6111,11 @@ I prefer the first approach where the `sendToClient()` only accepts types that i
 
     import static org.junit.jupiter.api.Assertions.assertFalse;
 
-    public class AppTest {
+    @DisplayName( "Sensitive Classes" )
+    public class SensitiveClassesTest {
 
       @Test
-      @DisplayName( "sensitive classes should not implement the CanShareWithClient interface" )
+      @DisplayName( "should not implement the CanShareWithClient interface" )
       public void shouldNotImplementCanShareWithClient() {
         final Object a = new SensitiveInformation();
         assertFalse( a instanceof CanShareWithClient );
@@ -6134,7 +6135,9 @@ I prefer the first approach where the `sendToClient()` only accepts types that i
 
 In both cases, testing can be a bit tricky and in some cases is missed.
 
-### `default` and `static` methods
+### What are `default` and `static` methods?
+
+Before Java 1.8, interfaces could not have non-abstract methods.  All methods within the interface had to be abstract.  
 
 **🚧 Pending...**
 
@@ -7018,3 +7021,4 @@ Arrays have three words
     1. [Item 20: Prefer interfaces to abstract classes](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev20)
     1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
     1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
+1. [Liskov Substitution Principle](https://stackify.com/solid-design-liskov-substitution-principle/)
