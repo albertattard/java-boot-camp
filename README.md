@@ -38,7 +38,18 @@ Boot Camp for developers interested to learn Java.
 ## [Java 101](02%20-%20Java%20101.md)
 
 1. [JShell](02%20-%20Java%20101.md#jshell)
-1. [Java Single File Execution](02%20-%20Java%20101.md#java-single-file-execution)
+1. [Java single file execution](02%20-%20Java%20101.md#java-single-file-execution)
+1. [Introduction to classes and methods](02%20-%20Java%20101.md#introduction-to-classes-and-methods)
+    1. [Source and class files](02%20-%20Java%20101.md#source-and-class-files)
+    1. [Methods](02%20-%20Java%20101.md#methods)
+1. [Introduction to variables and types](02%20-%20Java%20101.md#introduction-to-variables-and-types)
+1. [Introduction to collections](02%20-%20Java%20101.md#introduction-to-collections)
+    1. [Arrays](02%20-%20Java%20101.md#arrays)
+    1. [Lists](02%20-%20Java%20101.md#lists)
+1. [Introduction to control-flow](02%20-%20Java%20101.md#introduction-to-control-flow)
+    1. [If-Else](02%20-%20Java%20101.md#if-else)
+    1. [switch](02%20-%20Java%20101.md#switch)
+    1. [For Loops](02%20-%20Java%20101.md#for-loops)
 
 ## [Data Types](03%20-%20Data%20Types.md)
 
