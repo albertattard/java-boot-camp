@@ -4362,7 +4362,136 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
 ### Can a constructor in a parent class call a method in a subclass?
 
-**🚧 Pending...**
+Yes, but that's a slippery and dangerous slope.  The parent constructor executes before the child's properties are initialised and the constructor is executed.  This means that the child may have not been initialised yet and it may behave in an unexpected manner.
+
+Consider the following parent class
+
+```java
+package demo;
+
+public class Parent {
+
+  public Parent() {
+    aMethodThatMayAccessTheChildState();
+  }
+
+  public void aMethodThatMayAccessTheChildState() {
+  }
+}
+```
+
+The method `aMethodThatMayAccessTheChildState()` can be overloaded by any child class and access the state.  Now consider the following example of a child class.
+
+```java
+package demo;
+
+public class Child extends Parent {
+
+  private int a = 7;
+
+  public void aMethodThatMayAccessTheChildState() {
+    System.out.printf( "The value of property a is: %d%n", a );
+  }
+}
+```
+
+This is a trivial class that has a single property named `a`.  The property is also initialised to 7.  Given that the `aMethodThatMayAccessTheChildState()` is invoked by the `Parent`'s constructor.  Consider the following the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    new Child();
+  }
+}
+```
+
+Surprisingly enough this will print `0`, as shown next.
+
+```bash
+The value of property a is: 0
+```
+
+The property exists, but it has not yet been initialised.  The property is not final for a purpose as this will behave differently.
+
+To help us visualise the problem, let's add some print outs at each stage.
+
+```java
+package demo;
+
+public class Parent {
+
+  {
+    System.out.println( "Parent::{}" );
+  }
+
+  public Parent() {
+    System.out.println( "Parent::Parent()" );
+    aMethodThatMayAccessTheChildState();
+  }
+
+  public void aMethodThatMayAccessTheChildState() {
+    System.out.println( "Parent::aMethodThatMayAccessTheChildState()" );
+  }
+}
+```
+
+Same applies to the child class.
+
+```java
+package demo;
+
+public class Child extends Parent {
+
+  private int a = 7;
+
+  {
+    System.out.println( "Child::{}" );
+  }
+
+  public Child() {
+    System.out.println( "Child::Child()" );
+  }
+
+  public void aMethodThatMayAccessTheChildState() {
+    System.out.println( "Child::aMethodThatMayAccessTheChildState()" );
+    System.out.printf( "The value of property a is: %d%n", a );
+  }
+}
+```
+
+Running the same example will print the following.
+
+```bash
+Parent::{}
+Parent::Parent()
+Child::aMethodThatMayAccessTheChildState()
+The value of property a is: 0
+Child::{}
+Child::Child()
+```
+
+Note that the overridden method `aMethodThatMayAccessTheChildState()` is invoked before the child's initialisation block and the child's constructor.
+
+Be mindful when invoking methods from within the constructors.  Prefer [static factory methods](#what-are-static-factory-methods) over constructors and invoke the setup methods before returning the object.
+
+```java
+package demo;
+
+public class PreferStaticFactoryMethods {
+
+  public static PreferStaticFactoryMethods create() {
+    final PreferStaticFactoryMethods a = new PreferStaticFactoryMethods();
+    a.init();
+    return a;
+  }
+
+  private PreferStaticFactoryMethods() { /* ... */ }
+
+  private void init() { /* ... */ }
+}
+```
 
 ### What happens when not all '*children*' are '*parents*'?
 
