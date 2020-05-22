@@ -3059,7 +3059,26 @@ Java is a **general purpose programming language** that supports, [procedural pr
 
 ### Can we call methods from within a constructor?
 
-**🚧 Pending...**
+Yes, but that's not recommended as you may experiences some surprises.  The [section *Can a constructor in a parent class call a method in a subclass?*](#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass) covers this question in some depths.
+
+Be mindful when invoking methods from within the constructors.  Prefer [static factory methods](#what-are-static-factory-methods) over constructors and invoke the setup methods before returning the object.
+
+```java
+package demo;
+
+public class PreferStaticFactoryMethods {
+
+  public static PreferStaticFactoryMethods create() {
+    final PreferStaticFactoryMethods a = new PreferStaticFactoryMethods();
+    a.init();
+    return a;
+  }
+
+  private PreferStaticFactoryMethods() { /* ... */ }
+
+  private void init() { /* ... */ }
+}
+```
 
 ## Mutable and immutable
 
