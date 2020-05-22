@@ -4366,6 +4366,8 @@ Yes, but that's a slippery and dangerous slope.  The parent constructor executes
 
 Consider the following parent class
 
+**⚠️ NOT RECOMMENDED!!**
+
 ```java
 package demo;
 
@@ -4416,6 +4418,8 @@ The value of property a is: 0
 The property exists, but it has not yet been initialised.  The property is not final for a purpose as this will behave differently.
 
 To help us visualise the problem, let's add some print outs at each stage.
+
+**⚠️ NOT RECOMMENDED!!**
 
 ```java
 package demo;
