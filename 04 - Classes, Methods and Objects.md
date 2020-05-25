@@ -6406,7 +6406,118 @@ public class Log implements Display {
 
 ### What happens if a class implements two interfaces that have the same `default` methods?
 
-**🚧 Pending...**
+This question is very similar to another question we have explored, [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
+
+A class can implement two or more interfaces that have the same default method signatures.  There is one small caveat.  A class that implements two or more interfaces that have the same default method signature, then the class must override the common default method.
+
+Consider the following two interfaces
+
+1. A car
+
+    ```java
+    package demo;
+
+    public interface Car {
+
+      default void ignite() {
+        System.out.println( "Ignite the engine" );
+      }
+    }
+    ```
+
+1. A boat
+
+    ```java
+    package demo;
+
+    public interface Boat {
+
+      default void ignite() {
+        System.out.println( "Ignite the inboard motor" );
+      }
+    }
+    ```
+
+Both interfaces have a default method, `ignite()`.  Note that the methods need to have the same return type.  Now consider a boat car, such as the *Fiat 1110 Boat Car*, shown next.
+
+![the Fiat 1110 Boat Car](https://www.italianways.com/wp-content/uploads/2014/03/IW-fiat-1100-coriasco-boat-car-04.jpg)
+([Reference](https://www.italianways.com/the-fiat-1110-boat-car-a-boat-on-wheels/))
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class BoatCar implements Car, Boat {
+}
+```
+
+Let say that for the sake of the example, the above class compiles.  Consider the following example.
+
+```java
+final BoatCar car = new BoatCar();
+car.ignite();
+```
+
+**Which of the two default methods will be the above invoke?**  We can ask a different question.  **Which default method will the `BoatCar` inherit?**
+
+The `BoatCar` **MUST** override the default `ignite()` method and provide a concrete implementation.
+
+```java
+package demo;
+
+public class BoatCar implements Car, Boat {
+
+  @Override
+  public void ignite() {
+    Car.super.ignite();
+    Boat.super.ignite();
+  }
+}
+```
+
+The child class, in this case the `BoatCar` class, can invoke the interface's default method.  The `BoatCar` class can ignore both default methods, pick any of the default methods and execute them in any order, or simply pick one.  Consider the following, not necessary useful, example.
+
+```java
+package demo;
+
+public class BoatCar implements Car, Boat {
+
+  @Override
+  public void ignite() {
+    Boat.super.ignite();
+    Car.super.ignite();
+    Boat.super.ignite();
+    Car.super.ignite();
+    Boat.super.ignite();
+  }
+}
+```
+
+We can now invoke the `ignite()` method as we have a concrete implementation.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final BoatCar car = new BoatCar();
+    car.ignite();
+  }
+}
+```
+
+The above example will produce.
+
+```bash
+Ignite the inboard motor
+Ignite the engine
+Ignite the inboard motor
+Ignite the engine
+Ignite the inboard motor
+```
 
 ## Sorting (the `Comparable` and `Comparator` interfaces)
 
