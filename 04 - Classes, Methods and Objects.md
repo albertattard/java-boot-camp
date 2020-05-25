@@ -4236,8 +4236,8 @@ For a class to be extended, the subclass needs to have access to at least one of
 ```java
 package demo;
 
-public class A {
-  private A() {
+public class Parent {
+  private Parent() {
   }
 }
 ```
@@ -4249,26 +4249,41 @@ The class is not `final`, but still cannot be extended by another class as its s
 ```java
 package demo;
 
-public class B extends A {
+public class Child extends Parent {
 }
 ```
 
-There are no constructors visible to class `B` in the parent class `A`, therefore, the above will not compile.  Consider the following example.
+There are no constructors visible to class `Child` in the parent class `Parent`, therefore, the above will not compile.  Consider the following example.
 
 ```java
 package demo;
 
-public class A {
+public class Parent {
 
-  public static class C extends A {
+  public static class InnerChild extends Parent {
   }
 
-  private A() {
+  private Parent() {
   }
 }
 ```
 
-The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
+The inner class `InnerChild` is an inner class within class `Parent`.  Like any other member within class `Parent`, the inner class `InnerChild` can access the private constructor of class `Parent`.  This is quite a common practice where while allowing the benefits of inheritance is also controls what types of objects can be created.  Consider the following example.
+
+```java
+package demo;
+
+public class Box {
+
+  public static final class LightBox extends Box { /* ... */ }
+
+  public static final class HeavyBox extends Box { /* ... */ }
+
+  private Box() { /* ... */ }
+}
+```
+
+In the above example, while supports inheritance, we are limiting what kind of boxes can be created.  It is not possible for another class to extend the Box class due to the private constructor.  We will delve into this aspect [later on](#can-abstract-classes-have-private-constructors).
 
 ### Can a subclass invoke the constructor of a superclass (the `super()`)?
 
@@ -6289,7 +6304,7 @@ In both cases, testing can be a bit tricky and in some cases is missed.
 
 ### What are `default` and `static` methods?
 
-Before Java 1.8, interfaces could not have non-abstract methods.  All methods within the interface had to be abstract.  
+Before Java 1.8, interfaces could not have non-abstract methods.  All methods within the interface had to be abstract.
 
 **🚧 Pending...**
 
