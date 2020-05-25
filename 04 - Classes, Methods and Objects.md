@@ -87,10 +87,9 @@
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
     1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
     1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
-    1. [Is there a better approach than relying on `instanceof` and cast operators?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
+    1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
-    1. [Are there good cases](#are-there-good-cases)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -7157,39 +7156,39 @@ The `Pet` class defines any pet.  Following are some implementation of `Pet`
 
 1. A dog that barks
 
-```java
-package demo;
+    ```java
+    package demo;
 
-public class Dog extends Pet {
-  public void bark() {
-    System.out.println( "Woof..." );
-  }
-}
-```
+    public class Dog extends Pet {
+      public void bark() {
+        System.out.println( "Woof..." );
+      }
+    }
+    ```
 
 1. A cat that meows
 
-```java
-package demo;
+    ```java
+    package demo;
 
-public class Cat extends Pet {
-  public void meow() {
-    System.out.println( "Meow..." );
-  }
-}
-```
+    public class Cat extends Pet {
+      public void meow() {
+        System.out.println( "Meow..." );
+      }
+    }
+    ```
 
 1. A bird that tweets
 
-```java
-package demo;
+    ```java
+    package demo;
 
-public class Bird extends Pet {
-  public void chirp() {
-    System.out.println( "Tweet..." );
-  }
-}
-```
+    public class Bird extends Pet {
+      public void chirp() {
+        System.out.println( "Tweet..." );
+      }
+    }
+    ```
 
 We can use a `Dog`, `Cat` and `Bird` wherever a `Pet` is required.  Now say that we need to write a method, say `doYourThing()`, that takes a `Pet` and if it is a dog it barks, if it is a cat it meows and if it is a bird is tweets.  Consider the following example.
 
@@ -7382,21 +7381,15 @@ The above example is making use of upcasting to use the `runTask()` method that 
 
 **🚧 Pending...**
 
-### Is there a better approach than relying on `instanceof` and cast operators?
+### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
 
 **🚧 Pending...**
-
-Polymorphism
 
 ### Can we cast any object to any object?
 
 **🚧 Pending...**
 
 ### What happens if we cast the wrong object (the `ClassCastException`)?
-
-**🚧 Pending...**
-
-### Are there good cases
 
 **🚧 Pending...**
 
