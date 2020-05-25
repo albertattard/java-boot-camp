@@ -6406,7 +6406,7 @@ public class Log implements Display {
 
 ### What happens if a class implements two interfaces that have the same `default` methods?
 
-This question is very similar to another question we have explored, [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
+This question is very similar to another question we have explored before: [*What happens if a class implements two interfaces that have the same abstract method?*](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
 
 A class can implement two or more interfaces that have the same default method signatures.  There is one small caveat.  A class that implements two or more interfaces that have the same default method signature, then the class must override the common default method.
 
