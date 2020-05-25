@@ -76,6 +76,7 @@
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [What are `default` and `static` methods?](#what-are-default-and-static-methods)
+    1. [What happens if a class implements two interfaces that have the same `default` methods?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-default-methods)
 1. [Sorting (the `Comparable` and `Comparator` interfaces)](#sorting-the-comparable-and-comparator-interfaces)
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
@@ -6304,7 +6305,106 @@ In both cases, testing can be a bit tricky and in some cases is missed.
 
 ### What are `default` and `static` methods?
 
-Before Java 1.8, interfaces could not have non-abstract methods.  All methods within the interface had to be abstract.
+Before Java 1.8, interfaces could not have non-abstract methods.  All methods within the interface had to be `abstract`.  The reason behind this comes from [the diamond problem, also known as *Deadly Diamond of Death*](https://en.wikipedia.org/wiki/Multiple_inheritance#The_diamond_problem).  A class in Java can extend one other class and can implement many interfaces (with only abstract methods) to avoid the diamond problem.
+
+Consider the following interface.
+
+```java
+package demo;
+
+public interface Display {
+
+  void display( final String message );
+}
+```
+
+The implementation of this interface will display a message somewhere, such as the system console.  Now, say that we want to format a message.  We can make use of a `static` method to do that.
+
+```java
+package demo;
+
+public class Displays {
+
+  static String format( final String pattern, final Object... parameters ) {
+    return String.format( pattern, parameters );
+  }
+
+  private Displays() {
+  }
+}
+```
+
+Note that we created new class, ` Displays`, and provided a `private` constructor as this class was not meant to be initialised.  We can use this method to format messages independent from where this is going to be displayed.  Say that we want to support some custom messages, such as *hello …*.  This could be added using abstract classes as shown next.
+
+```java
+package demo;
+
+public abstract class AbstractDisplay implements Display {
+
+  public void displayf( final String pattern, final Object... parameters ) {
+    display( Displays.format( pattern, parameters ) );
+  }
+
+  public void hello( final String name ) {
+    displayf( "Hello %s", name );
+  }
+}
+```
+
+When working with older versions of Java (before Java 1.8), we had to split our code into several classes.  This is why we have classes like [`Collections`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html), which supports implementation of the [`Collection`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html) interface, such as [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html).
+
+As of Java 1.8, interfaces started supporting `static` and `default` methods too, which simplifies our design as shown in the following interface.
+
+```java
+package demo;
+
+public interface Display {
+
+  void display( final String message );
+
+  default void displayf( final String pattern, final Object... parameters ) {
+    display( format( pattern, parameters ) );
+  }
+
+  default void hello( final String name ) {
+    displayf( "Hello %s", name );
+  }
+
+  static String format( final String pattern, final Object... parameters ) {
+    return String.format( pattern, parameters );
+  }
+}
+```
+
+As of Java 1.8, we are able to consolidate the abstract class, `AbstractDisplay`, and utilities class `Displays` into one interface.  Our class can simply implement the interface and make use of its `default` and `static` methods.
+
+```java
+package demo;
+
+public class SystemConsole implements Display {
+
+  @Override
+  public void display( final String message ) {
+    System.out.println( message );
+  }
+}
+```
+
+Another implementation can take advantage of the same interface.
+
+```java
+package demo;
+
+public class Log implements Display {
+
+  @Override
+  public void display( final String message ) {
+    /* Write to log file */
+  }
+}
+```
+
+### What happens if a class implements two interfaces that have the same `default` methods?
 
 **🚧 Pending...**
 

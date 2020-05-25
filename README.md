@@ -197,6 +197,7 @@ Boot Camp for developers interested to learn Java.
     1. [What happens if a class implements two interfaces that have the same abstract method?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [What are `default` and `static` methods?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-are-default-and-static-methods)
+    1. [What happens if a class implements two interfaces that have the same `default` methods?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-default-methods)
 1. [Sorting (the `Comparable` and `Comparator` interfaces)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#sorting-the-comparable-and-comparator-interfaces)
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
     1. [How does the `compareTo()` method works?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-does-the-compareto-method-works)
