@@ -84,7 +84,7 @@
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` class (the `Comparator` interface)?](#how-can-we-sort-the-point-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
-1. [`instanceof` and cast operators](#instanceof-and-cast-operators)
+1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
     1. [A more practical example... (working title)](#a-more-practical-example-working-title)
     1. [Is there a better approach than relying on `instanceof` and cast operators?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
@@ -7139,7 +7139,7 @@ Now the persons are properly sorted by their age.
 Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
 ```
 
-## `instanceof` and cast operators
+## The `instanceof` and cast operators
 
 Two operators that usually indicate bad design practice are the [`instanceof`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.20.2) and the [cast](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5) operators.
 
@@ -7152,7 +7152,7 @@ public abstract class Pet {
 }
 ```
 
-The `Pet` class defines any pet.  Following are some pet candidates
+The `Pet` class defines any pet.  Following are some implementation of `Pet`
 
 1. A dog that barks
 
@@ -7190,7 +7190,7 @@ public class Bird extends Pet {
 }
 ```
 
-We can use a `Dog`, `Cat` and `Bird` wherever a `Pet` is required.  Now say that we need to write a method, say `doYourThing()`, that takes a `Pet` and if it is a dog, it barks, if it is a cat it meows and if it is a bird is tweets.  Consider the following example.
+We can use a `Dog`, `Cat` and `Bird` wherever a `Pet` is required.  Now say that we need to write a method, say `doYourThing()`, that takes a `Pet` and if it is a dog it barks, if it is a cat it meows and if it is a bird is tweets.  Consider the following example.
 
 **⚠️ NOT RECOMMENDED.  BAD PROGRAMMING PRACTICE!!**
 
@@ -7216,7 +7216,7 @@ public class App {
 }
 ```
 
-The above example meets the requirements but does not make use of good programming practices.  A better approach is discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators).
+The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators).
 
 ### A more practical example... (working title)
 

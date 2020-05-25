@@ -205,7 +205,7 @@ Boot Camp for developers interested to learn Java.
     1. [Can we use multiple properties to determine natural ordering?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` class (the `Comparator` interface)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-sort-the-point-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-compare-two-integers-by-subtracting-one-from-the-other)
-1. [`instanceof` and cast operators](04%20-%20Classes%2C%20Methods%20and%20Objects.md#instanceof-and-cast-operators)
+1. [The `instanceof` and cast operators](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-instanceof-and-cast-operators)
     1. [A more practical example... (working title)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#a-more-practical-example-working-title)
     1. [Is there a better approach than relying on `instanceof` and cast operators?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
     1. [Can we cast any object to any object?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-cast-any-object-to-any-object)
