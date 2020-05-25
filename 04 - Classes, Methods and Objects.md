@@ -6440,7 +6440,7 @@ Consider the following two interfaces
 
 Both interfaces have a default method, `ignite()`.  Note that the methods need to have the same return type.  Now consider a boat car, such as the *Fiat 1110 Boat Car*, shown next.
 
-![the Fiat 1110 Boat Car](https://www.italianways.com/wp-content/uploads/2014/03/IW-fiat-1100-coriasco-boat-car-04.jpg)
+![the Fiat 1110 Boat Car](https://www.italianways.com/wp-content/uploads/2014/03/IW-fiat-1100-coriasco-boat-car-04.jpg)<br/>
 ([Reference](https://www.italianways.com/the-fiat-1110-boat-car-a-boat-on-wheels/))
 
 Consider the following example.
