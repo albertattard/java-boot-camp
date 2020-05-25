@@ -10,6 +10,7 @@ The purpose of this section is to introduce some common aspects of the Java prog
 1. [Introduction to classes and methods](#introduction-to-classes-and-methods)
     1. [Source and class files](#source-and-class-files)
     1. [Methods](#methods)
+1. [Using existing functionality](#using-existing-functionality)
 1. [Introduction to variables and types](#introduction-to-variables-and-types)
 1. [Introduction to collections](#introduction-to-collections)
     1. [Arrays](#arrays)
@@ -313,7 +314,7 @@ src/main/java
 ```
 
 ```bash
-tree build/classes/java
+$ tree build/classes/java
 build/classes/java
 └── main
     └── demo
@@ -355,6 +356,28 @@ public class App {
 
 ```bash
 Hello world!!
+```
+
+## Using existing functionality
+
+```java
+import java.time.LocalDate;
+```
+
+```java
+package demo;
+
+import java.time.LocalDate;
+
+public class App {
+  public static void main( final String[] args ) {
+    System.out.printf( "Today's date is %s%n", LocalDate.now() );
+  }
+}
+```
+
+```bash
+Today's date is 2020-04-27
 ```
 
 ## Introduction to variables and types

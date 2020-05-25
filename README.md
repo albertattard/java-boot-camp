@@ -42,6 +42,7 @@ Boot Camp for developers interested to learn Java.
 1. [Introduction to classes and methods](02%20-%20Java%20Light.md#introduction-to-classes-and-methods)
     1. [Source and class files](02%20-%20Java%20Light.md#source-and-class-files)
     1. [Methods](02%20-%20Java%20Light.md#methods)
+1. [Using existing functionality](02%20-%20Java%20Light.md#using-existing-functionality)
 1. [Introduction to variables and types](02%20-%20Java%20Light.md#introduction-to-variables-and-types)
 1. [Introduction to collections](02%20-%20Java%20Light.md#introduction-to-collections)
     1. [Arrays](02%20-%20Java%20Light.md#arrays)
