@@ -48,8 +48,8 @@
     1. [Create the `HeavyBox` (complete example)](#create-the-heavybox-complete-example)
     1. [How can a subclass invoke a method in the parent class (the `super` keyword)?](#how-can-a-subclass-invoke-a-method-in-the-parent-class-the-super-keyword)
     1. [Can we prevent a class from being extended (the `final` keyword)?](#can-we-prevent-a-class-from-being-extended-the-final-keyword)
-    1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Are constructors inherited?](#are-constructors-inherited)
+    1. [How do `private` constructor effect inheritance?](#how-do-private-constructor-effect-inheritance)
     1. [Can a subclass invoke the constructor of a superclass (the `super()`)?](#can-a-subclass-invoke-the-constructor-of-a-superclass-the-super)
     1. [Can a constructor in a parent class call a method in a subclass?](#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass)
     1. [What happens when not all '*children*' are '*parents*'?](#what-happens-when-not-all-children-are-parents)
@@ -4205,6 +4205,30 @@ public class FeatherBox extends LightBox { /* ... */ }
 
 The `FeatherBox` cannot extend `LightBox` as the latter is marked as `final`.
 
+### Are constructors inherited?
+
+**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit them.
+
+The `Box` class provides two constructors, a default constructor and a constructor that takes a `Box.` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import static demo.Box.BoxForm.OPEN;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Box a = new Box( OPEN );
+    final LightBox b = new LightBox( OPEN );
+  }
+}
+```
+
+While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited.
+
 ### How do `private` constructor effect inheritance?
 
 For a class to be extended, the subclass needs to have access to at least one of the parent's class constructors.  Consider the following class.
@@ -4245,30 +4269,6 @@ public class A {
 ```
 
 The inner class `C` is an inner class within class `A`.  Like any other member within class `A`, the inner class `C` can access the private constructor of class `A`.  This is quite a common practice where the outer class defines the contract (a set of methods) and the inner classes define the implementation.
-
-### Are constructors inherited?
-
-**Constructors are not inherited**.  A subclass can invoke the parent's constructors, but it does not inherit them.
-
-The `Box` class provides two constructors, a default constructor and a constructor that takes a `Box.` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
-
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
-
-```java
-package demo;
-
-import static demo.Box.BoxForm.OPEN;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    final Box a = new Box( OPEN );
-    final LightBox b = new LightBox( OPEN );
-  }
-}
-```
-
-While the `Box` class have a constructor that accepts a `boolean` parameter, the `LightBox` class only has the given default (do nothing) constructor.  A class inherits the instance methods from the parent class, and its parents, but constructors are not inherited.
 
 ### Can a subclass invoke the constructor of a superclass (the `super()`)?
 
