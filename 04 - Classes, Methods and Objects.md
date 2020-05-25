@@ -7216,7 +7216,7 @@ public class App {
 }
 ```
 
-The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators).
+The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism).
 
 ### Are there good examples of the `instanceof` and cast operators?
 
@@ -7337,7 +7337,7 @@ public interface Task extends Runnable {
 
 Our objects can implement the `Task` interface and implement either or both lifecycle methods.
 
-1. The `SimpleTask` still implements the `Runnable` or instead it can implement the `Task` interface.
+1. The `SimpleTask` still implements the `Runnable`.
 
     ```java
     package demo;
@@ -7345,7 +7345,25 @@ Our objects can implement the `Task` interface and implement either or both life
     public class SimpleTask implements Runnable { /* ... */ }
     ```
 
-1. The `ComplexTask` implements one interface and can replace the default methods as it sees fit.
+1. A new task, `ModerateTask` still implements the `Task` and overrides the `init()` method only.
+
+    ```java
+    package demo;
+
+    public class ModerateTask implements Task {
+      @Override
+      public void init() {
+        System.out.println( "ModerateTask::init()" );
+      }
+
+      @Override
+      public void run() {
+        System.out.println( "ModerateTask::run()" );
+      }
+    }
+    ```
+
+1. The `ComplexTask` implements the `Task` interface and overrides all methods.
 
     ```java
     package demo;
@@ -7359,7 +7377,11 @@ We can now have two methods that handle these differently.
 package demo;
 
 public class App {
-  public static void main( final String[] args ) { /* ... */ }
+  public static void main( final String[] args ) {
+    runTask( new SimpleTask() );
+    runTask( new ModerateTask() );
+    runTask( new ComplexTask() );
+  }
 
   private static void runTask( final Runnable task ) {
     task.run();
