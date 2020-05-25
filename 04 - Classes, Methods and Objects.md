@@ -85,7 +85,8 @@
     1. [How can we sort the `Point` class (the `Comparator` interface)?](#how-can-we-sort-the-point-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
-    1. [A more practical example... (working title)](#a-more-practical-example-working-title)
+    1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
+    1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
     1. [Is there a better approach than relying on `instanceof` and cast operators?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
@@ -7192,7 +7193,7 @@ public class Bird extends Pet {
 
 We can use a `Dog`, `Cat` and `Bird` wherever a `Pet` is required.  Now say that we need to write a method, say `doYourThing()`, that takes a `Pet` and if it is a dog it barks, if it is a cat it meows and if it is a bird is tweets.  Consider the following example.
 
-**⚠️ NOT RECOMMENDED.  BAD PROGRAMMING PRACTICE!!**
+**⚠️ BAD PROGRAMMING PRACTICE!!**
 
 ```java
 package demo;
@@ -7218,63 +7219,78 @@ public class App {
 
 The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators).
 
-### A more practical example... (working title)
+### Are there good examples of the `instanceof` and cast operators?
 
-**🚧 Pending...**
+Yes. Frameworks, such as [Spring](https://spring.io/), use the `instanceof` and cast operators to decorate objects.  Consider the following two interfaces:
 
-[`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/InitializingBean.html)
+1. [`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/InitializingBean.html)
+1. [`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/DisposableBean.html)
 
-[`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/DisposableBean.html)
+Implementing any (or both) of these two interfaces will tell Spring how to interact with your [beans](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition).  It is important to note that Spring has been with us for quite some time, [since October 2002](https://en.wikipedia.org/wiki/Spring_Framework), and Spring had to work with older versions of Java where features like [interface default methods](#what-are-default-and-static-methods) were not available.  Using the `instanceof` and cast operators together with these two interfaces, Spring was able to initialise beans after creating them and displose beans before stopping them.
 
-```java
-package demo;
+Consider the following two interfaces
 
-interface RequireInit {
-  void init();
-}
-```
+1. A simple replacement of the `InitializingBean` interface
 
-```java
-package demo;
+    ```java
+    package demo;
 
-interface RequireCleanup {
-  void cleanup();
-}
-```
+    interface RequireInit {
+      void init();
+    }
+    ```
 
-```java
-package demo;
+1. Another simple replacement of the `DisposableBean` interface
 
-public class SimpleTask implements Runnable {
+    ```java
+    package demo;
 
-  @Override
-  public void run() {
-    System.out.println( "SimpleTask::run()" );
-  }
-}
-```
+    interface RequireCleanUp {
+      void cleanUp();
+    }
+    ```
 
-```java
-package demo;
+As the names indicate, one interface should be executed before and the other should be executed after.  To keep it very simple, we are simply executing a task.  Consider the following two tasks
 
-public class ComplexTask implements Runnable, RequireInit, RequireCleanup {
+1. A simple task that does not require any initialisation or clean up
 
-  @Override
-  public void init() {
-    System.out.println( "ComplexTask::init()" );
-  }
+    ```java
+    package demo;
 
-  @Override
-  public void run() {
-    System.out.println( "ComplexTask::run()" );
-  }
+    public class SimpleTask implements Runnable {
 
-  @Override
-  public void cleanup() {
-    System.out.println( "ComplexTask::cleanup()" );
-  }
-}
-```
+      @Override
+      public void run() {
+        System.out.println( "SimpleTask::run()" );
+      }
+    }
+    ```
+
+1. A more elaborate task that requires both initialisation and clean up.
+
+    ```java
+    package demo;
+
+    public class ComplexTask implements Runnable, RequireInit, RequireCleanup {
+
+      @Override
+      public void init() {
+        System.out.println( "ComplexTask::init()" );
+      }
+
+      @Override
+      public void run() {
+        System.out.println( "ComplexTask::run()" );
+      }
+
+      @Override
+      public void cleanUp() {
+        System.out.println( "ComplexTask::cleanup()" );
+      }
+    }
+    ```
+
+Now consider our light version of *the framework*.
 
 ```java
 package demo;
@@ -7292,12 +7308,14 @@ public class App {
 
     task.run();
 
-    if ( task instanceof RequireCleanup ) {
-      ( (RequireCleanup) task ).cleanup();
+    if ( task instanceof RequireCleanUp ) {
+      ( (RequireCleanUp) task ).cleanUp();
     }
   }
 }
 ```
+
+Our `runTask()` method takes a [`Runnable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Runnable.html).  If the runnable object is also a `RequireInit`, the `init()` is invoked and if it requires clean up, the `cleanUp()` method is invoked.
 
 ```bash
 SimpleTask::run()
@@ -7305,6 +7323,64 @@ ComplexTask::init()
 ComplexTask::run()
 ComplexTask::cleanup()
 ```
+
+Java 1.8 provides default methods, which can be used to simplify our example.
+
+```java
+package demo;
+
+public interface Task extends Runnable {
+  default void init() { }
+
+  default void cleanup() { }
+}
+```
+
+Our objects can implement the `Task` interface and implement either or both lifecycle methods.
+
+1. The `SimpleTask` still implements the `Runnable` or instead it can implement the `Task` interface.
+
+    ```java
+    package demo;
+
+    public class SimpleTask implements Runnable { /* ... */ }
+    ```
+
+1. The `ComplexTask` implements one interface and can replace the default methods as it sees fit.
+
+    ```java
+    package demo;
+
+    public class ComplexTask implements Task { /* ... */ }
+    ```
+
+We can now have two methods that handle these differently.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) { /* ... */ }
+
+  private static void runTask( final Runnable task ) {
+    task.run();
+  }
+
+  private static void runTask( final Task task ) {
+    task.init();
+
+    runTask( (Runnable) task );
+
+    task.cleanup();
+  }
+}
+```
+
+The above example is making use of upcasting to use the `runTask()` method that takes a `Runnable`.
+
+### What is upcasting and how is it different from casting or downcasting?
+
+**🚧 Pending...**
 
 ### Is there a better approach than relying on `instanceof` and cast operators?
 
