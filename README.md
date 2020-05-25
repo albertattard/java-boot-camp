@@ -210,7 +210,7 @@ Boot Camp for developers interested to learn Java.
     1. [Is there a better approach than relying on `instanceof` and cast operators?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
     1. [Can we cast any object to any object?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
-    1. [Are there good cases ](04%20-%20Classes%2C%20Methods%20and%20Objects.md#are-there-good-cases)
+    1. [Are there good cases](04%20-%20Classes%2C%20Methods%20and%20Objects.md#are-there-good-cases)
 1. [Inheritance and composition](04%20-%20Classes%2C%20Methods%20and%20Objects.md#inheritance-and-composition)
 1. [Overloading and overriding](04%20-%20Classes%2C%20Methods%20and%20Objects.md#overloading-and-overriding)
     1. [Overloading](04%20-%20Classes%2C%20Methods%20and%20Objects.md#overloading)

@@ -89,7 +89,7 @@
     1. [Is there a better approach than relying on `instanceof` and cast operators?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
-    1. [Are there good cases ](#are-there-good-cases)
+    1. [Are there good cases](#are-there-good-cases)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -7141,9 +7141,9 @@ Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}
 
 ## `instanceof` and cast operators
 
-**🚧 Pending...**
-
 Two operators that usually indicate bad design practice are the [`instanceof`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.20.2) and the [cast](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5) operators.
+
+**Why? You may be asking**.  Consider the following example.
 
 ```java
 package demo;
@@ -7151,6 +7151,10 @@ package demo;
 public abstract class Pet {
 }
 ```
+
+The `Pet` class defines any pet.  Following are some pet candidates
+
+1. A dog that barks
 
 ```java
 package demo;
@@ -7162,6 +7166,8 @@ public class Dog extends Pet {
 }
 ```
 
+1. A cat that meows
+
 ```java
 package demo;
 
@@ -7172,6 +7178,8 @@ public class Cat extends Pet {
 }
 ```
 
+1. A bird that tweets
+
 ```java
 package demo;
 
@@ -7181,6 +7189,10 @@ public class Bird extends Pet {
   }
 }
 ```
+
+We can use a `Dog`, `Cat` and `Bird` wherever a `Pet` is required.  Now say that we need to write a method, say `doYourThing()`, that takes a `Pet` and if it is a dog, it barks, if it is a cat it meows and if it is a bird is tweets.  Consider the following example.
+
+**⚠️ NOT RECOMMENDED.  BAD PROGRAMMING PRACTICE!!**
 
 ```java
 package demo;
@@ -7203,6 +7215,8 @@ public class App {
   }
 }
 ```
+
+The above example meets the requirements but does not make use of good programming practices.  A better approach is discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators).
 
 ### A more practical example... (working title)
 
