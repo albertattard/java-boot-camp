@@ -84,7 +84,12 @@
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` class (the `Comparator` interface)?](#how-can-we-sort-the-point-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
-1. [`instanceof` and `cast` operators](#instanceof-and-cast-operators)
+1. [`instanceof` and cast operators](#instanceof-and-cast-operators)
+    1. [A more practical example... (working title)](#a-more-practical-example-working-title)
+    1. [Is there a better approach than relying on `instanceof` and cast operators?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators)
+    1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
+    1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
+    1. [Are there good cases ](#are-there-good-cases)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -7134,7 +7139,174 @@ Now the persons are properly sorted by their age.
 Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
 ```
 
-## `instanceof` and `cast` operators
+## `instanceof` and cast operators
+
+**🚧 Pending...**
+
+Two operators that usually indicate bad design practice are the [`instanceof`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.20.2) and the [cast](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5) operators.
+
+```java
+package demo;
+
+public abstract class Pet {
+}
+```
+
+```java
+package demo;
+
+public class Dog extends Pet {
+  public void bark() {
+    System.out.println( "Woof..." );
+  }
+}
+```
+
+```java
+package demo;
+
+public class Cat extends Pet {
+  public void meow() {
+    System.out.println( "Meow..." );
+  }
+}
+```
+
+```java
+package demo;
+
+public class Bird extends Pet {
+  public void chirp() {
+    System.out.println( "Tweet..." );
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Pet pet = new Dog();
+    doYourThing( pet );
+  }
+
+  private static void doYourThing( final Pet pet ) {
+    if ( pet instanceof Dog ) {
+      final Dog dog = (Dog) pet;
+      dog.bark();
+    } else if ( pet instanceof Cat ) {
+      ( (Cat) pet ).meow();
+    } else if ( pet instanceof Bird ) {
+      ( (Bird) pet ).chirp();
+    }
+  }
+}
+```
+
+### A more practical example... (working title)
+
+**🚧 Pending...**
+
+[`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/InitializingBean.html)
+
+[`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/DisposableBean.html)
+
+```java
+package demo;
+
+interface RequireInit {
+  void init();
+}
+```
+
+```java
+package demo;
+
+interface RequireCleanup {
+  void cleanup();
+}
+```
+
+```java
+package demo;
+
+public class SimpleTask implements Runnable {
+
+  @Override
+  public void run() {
+    System.out.println( "SimpleTask::run()" );
+  }
+}
+```
+
+```java
+package demo;
+
+public class ComplexTask implements Runnable, RequireInit, RequireCleanup {
+
+  @Override
+  public void init() {
+    System.out.println( "ComplexTask::init()" );
+  }
+
+  @Override
+  public void run() {
+    System.out.println( "ComplexTask::run()" );
+  }
+
+  @Override
+  public void cleanup() {
+    System.out.println( "ComplexTask::cleanup()" );
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    runTask( new SimpleTask() );
+    runTask( new ComplexTask() );
+  }
+
+  private static void runTask( final Runnable task ) {
+    if ( task instanceof RequireInit ) {
+      ( (RequireInit) task ).init();
+    }
+
+    task.run();
+
+    if ( task instanceof RequireCleanup ) {
+      ( (RequireCleanup) task ).cleanup();
+    }
+  }
+}
+```
+
+```bash
+SimpleTask::run()
+ComplexTask::init()
+ComplexTask::run()
+ComplexTask::cleanup()
+```
+
+### Is there a better approach than relying on `instanceof` and cast operators?
+
+**🚧 Pending...**
+
+Polymorphism
+
+### Can we cast any object to any object?
+
+**🚧 Pending...**
+
+### What happens if we cast the wrong object (the `ClassCastException`)?
+
+**🚧 Pending...**
+
+### Are there good cases
 
 **🚧 Pending...**
 
