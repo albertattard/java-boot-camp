@@ -5683,11 +5683,11 @@ public class App {
 }
 ```
 
-The above example is a bit useless as the interface does not define any methods.
+The above example is a bit useless as the interface does not define any methods and we have no implementations of this interface yet.
 
 ### How is an interface different from a class?
 
-In a class we can have methods, static fields, properties, enums and inner classes (and interfaced).  In an interface we can have almost anything like we have in a class with the exception of properties and inner instance classes.  **An interface cannot have properties and cannot have inner instance classes**.
+In a class we can have methods, static fields, properties, enums and inner classes (and interfaces).  In an interface we can have almost anything like we have in a class with the exception of properties and inner instance classes.  **An interface cannot have properties and cannot have inner instance classes**.  Following is an example of an interface.
 
 ```java
 package demo;
@@ -5719,7 +5719,7 @@ public interface MyFirstInterface {
 
 Note that the static field, `STATIC_FIELD`, is not a property.  Also, the inner static class, `InnerStaticClass`, is an inner static class and not an inner instance class.
 
-Upto Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces.
+Up till Java 7, interfaces could not have any functionality.  Java 8 introduced [default and static methods](https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html) to interfaces, [discussed in more depth in later sections](#what-are-default-and-static-methods).
 
 ### How can we use interfaces?
 
@@ -5734,7 +5734,7 @@ public interface CanShoot {
 }
 ```
 
-The above interface has one method, `shoot()`.  Methods in an interface are `public abstract` bu default.  The following example is an identical copy of the previous example.
+The above interface has one method, `shoot()`.  Methods in an interface are `public` and  `abstract` by default.  The following example is an identical copy of the previous example.
 
 ```java
 package demo;
@@ -5753,8 +5753,6 @@ Any class implementing this interface will have the `shoot()` method.
 package demo;
 
 public class Cannon implements CanShoot {
-
-  private double calibre;
 
   @Override
   public void shoot() {
@@ -5801,8 +5799,6 @@ Consider the following two classes.
 
     public class Footballer implements CanShoot {
 
-      private int shirtNumber;
-
       @Override
       public void shoot() {
         System.out.println( "Near the pole, shooting...GOAL!!" );
@@ -5817,8 +5813,6 @@ Consider the following two classes.
 
     public class Photographer implements CanShoot {
 
-      private String name;
-
       @Override
       public void shoot() {
         System.out.println( "Smile...Ka-chick" );
@@ -5826,7 +5820,7 @@ Consider the following two classes.
     }
     ```
 
-All three classes shown implement the `CanShoot` interface and three provide a different implementation to the `shoot()` method.  A cannot fires a shell, the photographer takes photos while the footballer shoots to score.  This means that we can use any of these types wherever the `CanShoot` is required.
+All three classes shown implement the `CanShoot` interface and the three provide a different implementation to the `shoot()` method.  A cannot fires a shell, the photographer takes photos while the footballer shoots to score.  We can use any of these types wherever the `CanShoot` is required.
 
 ```java
 package demo;
@@ -5852,7 +5846,9 @@ Near the pole, shooting...GOAL!!
 Smile...Ka-chick
 ```
 
-This is referred to [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)), where the implementation of a method is determined at runtime.
+In our example, the `CanShoot` interface simply defines a method that returns nothing.  In other cases, the methods of the interface define methods that should behave or return in specific way so that they can be with the rest of the application.
+
+The ability to determine what method will be executed is referred to as a [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)).
 
 ### Can we create an instance of an interface?
 
@@ -5871,7 +5867,7 @@ public class App {
 }
 ```
 
-Say that the above will compile.  What should happen when the `shoot()` method is invoked?  The above cannot compile as we have no implementation for the `shoot()` method.  Java provides inner anonymous classes, such as the following example, [introduced in Java 1.1](https://www.cs.cornell.edu/andru/javaspec/1.1Update.html) that allow us to implement interfaces on the fly.
+Say that the above will compile.  What should happen when the `shoot()` method is invoked?  The above cannot compile as we have no implementation for the `shoot()` method.  Java supports [inner anonymous classes](#inner-anonymous-class), such as the following example, [introduced in Java 1.1](https://www.cs.cornell.edu/andru/javaspec/1.1Update.html) that allow us to implement interfaces on the fly.
 
 ```java
 package demo;
@@ -5889,7 +5885,7 @@ public class App {
 }
 ```
 
-Inner anonymous classes, [discussed in more depth later on](#inner-anonymous-class), are not exclusive to interfaces.  We can create an inner anonymous class for classes as [discussed later on](#inner-anonymous-class).  The above example will print.
+Inner anonymous classes, are not exclusive to interfaces and we can create an inner anonymous class for classes too.  The above example will print.
 
 ```bash
 An inner anonymous class
