@@ -64,7 +64,7 @@
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
-    1. [The `wait()`, `notify()` and `notifyAll()` methods](#the-wait-notify-and-notifyall-methods)
+    1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](#-the-wait-notify-and-notifyall-methods)
 1. [Interfaces](#interfaces)
     1. [What is an interface?](#what-is-an-interface)
     1. [How is an interface different from a class?](#how-is-an-interface-different-from-a-class)
@@ -5476,8 +5476,6 @@ Is the object (class java.util.Random) of type Point? false
 
 The `getClass()` method is sometimes used in the `equals()` method when the class does not have subtypes (and to make the comparison more efficient).
 
-**⚠️ PROCEED WITH CAUTION!!**
-
 ```java
 package demo;
 
@@ -5521,9 +5519,11 @@ public class Person {
 
 Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.
 
-### The `wait()`, `notify()` and `notifyAll()` methods
+### 🤔 The `wait()`, `notify()` and `notifyAll()` methods
 
-Java supported multithreading since its early days.  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic and wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
+**🤔 This section touches a quite advanced topic and it is understandable if you do not comprehend any of the methods mentioned here**.  It is perfectly safe to skip this section and move to the next.
+
+Java supported multithreading since its early days (more than 25 years ago).  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic, register at the desk and then wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
 The following example simulates a patient visiting the doctor and waiting for their name to be called.  The following example make use of multithreading, [an advance topic which is still be covered](11%20-%20Concurrency.md).
 
@@ -5534,19 +5534,19 @@ import java.time.LocalTime;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new Person( "Aden" );
+    final Person patient = new Person( "Aden" );
 
-    waitInLobby( a );
+    waitInLobby( patient );
     letSomeTimePass();
-    callNext( a );
+    callNext( patient );
   }
 
-  private static void waitInLobby( final Person a ) {
+  private static void waitInLobby( final Person patient ) {
     final Thread t = new Thread( () -> {
-      synchronized ( a ) {
+      synchronized ( patient ) {
         try {
           display( "Waiting in the lobby for my name to be called" );
-          a.wait();
+          patient.wait();
           display( "My name was called!!" );
         } catch ( InterruptedException e ) { }
       }
@@ -5561,10 +5561,10 @@ public class App {
     } catch ( InterruptedException e ) { }
   }
 
-  private static void callNext( final Person a ) {
-    synchronized ( a ) {
-      displayf( "%s, the doctor is ready to see you", a );
-      a.notifyAll();
+  private static void callNext( final Person patient ) {
+    synchronized ( patient ) {
+      displayf( "%s, the doctor is ready to see you", patient );
+      patient.notifyAll();
     }
   }
 
@@ -5584,23 +5584,23 @@ Break down of the above example.
 
     ```java
     public static void main( final String[] args ) {
-      final Person a = new Person( "Aden" );
+      final Person patient = new Person( "Aden" );
 
-      waitInLobby( a );
+      waitInLobby( patient );
       letSomeTimePass();
-      callNext( a );
+      callNext( patient );
     }
     ```
 
 1. The `waitInLobby()` method is harder to understand.
 
     ```java
-    private static void waitInLobby( final Person a ) {
+    private static void waitInLobby( final Person patient ) {
       final Thread t = new Thread( () -> {
-        synchronized ( a ) {
+        synchronized ( patient ) {
           try {
             display( "Waiting in the lobby to be called" );
-            a.wait();
+            patient.wait();
             display( "My name was called!!" );
           } catch ( InterruptedException e ) { }
         }
@@ -5633,15 +5633,15 @@ Break down of the above example.
 1. The `callNext()` method obtains the lock on the person using the `synchronized` block and then invoked the `notifyAll()` method.
 
     ```java
-    private static void callNext( final Person a ) {
-      synchronized ( a ) {
-        displayf( "%s, the doctor is ready to see you", a );
+    private static void callNext( final Person patient ) {
+      synchronized ( patient ) {
+        displayf( "%s, the doctor is ready to see you", patient );
         a.notifyAll();
       }
     }
     ```
 
-    The `notifyAll()` method notifies all threads that the object (the object to which variable `a` points to) is ready to wake up and resume operation.  This will cause the `wait()` method to stop waiting and unblocks the other thread (created in the `waitInLobby()` method).  The `notify()` method behaves similarly to the `notifyAll()` with the difference that only one thread is notified and not all threads.  If the notified thread is not the right thread (not the thread that was blocked waiting), then the notification is lost, and the blocked thread will hang waiting forever.  It is always recommended to use the `notifyAll()` method instead of the `notify()` method.
+    The `notifyAll()` method notifies all threads that the object (the object to which variable `patient` points to) is ready to wake up and resume operation.  This will cause the `wait()` method to stop waiting and unblocks the other thread (created in the `waitInLobby()` method).  The `notify()` method behaves similarly to the `notifyAll()` with the difference that only one thread is notified and not all threads.  If the notified thread is not the right thread (not the thread that was blocked waiting), then the notification is lost, and the blocked thread will hang waiting forever.  It is always recommended to use the `notifyAll()` method instead of the `notify()` method.
 
 The example prints the following.
 
@@ -5654,7 +5654,7 @@ The example prints the following.
 
 A small observation regarding the messages order.  Note that the second message happened before the first message by some nano seconds, yet it appears after the first message.  Note that the text within the square brackets, `waiting in lobby` and `main`, represents the thread's name from where the message is printed.  The example made use of two threads, the main thread and a second thread, named `waiting in lobby`.
 
-The approach to multithreading in Java has been revised and a new concurrency API was added to the language.  The new concurrency API provider better concurrency primitives and is always recommended over intrinsic locking, shown above.  Concurrency is covered in detail, [in later sections](11%20-%20Concurrency.md).
+The approach to multithreading in Java has been revised and a new concurrency API was added to the language.  The new concurrency API provider better concurrency primitives and is always recommended over intrinsic locking, shown above.  Concurrency is covered in detail, [in later sections](12%20-%20Concurrency.md).
 
 ## Interfaces
 

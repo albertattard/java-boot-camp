@@ -185,7 +185,7 @@ Boot Camp for developers interested to learn Java.
     1. [The `equals()` and `hashCode()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#puzzle-animal-farm)
     1. [The `getClass()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-getclass-method)
-    1. [The `wait()`, `notify()` and `notifyAll()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-wait-notify-and-notifyall-methods)
+    1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#-the-wait-notify-and-notifyall-methods)
 1. [Interfaces](04%20-%20Classes%2C%20Methods%20and%20Objects.md#interfaces)
     1. [What is an interface?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-is-an-interface)
     1. [How is an interface different from a class?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-is-an-interface-different-from-a-class)
