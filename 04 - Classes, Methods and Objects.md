@@ -5237,8 +5237,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
 
-  private String name;
-  private String surname;
+  private final String name;
+  private final String surname;
 
   public Person() { /* ... */ }
 
@@ -5256,9 +5256,9 @@ public class Person {
       return false;
     }
 
-    final Person other = (Person) object;
-    return Objects.equals( name, other.name ) &&
-      Objects.equals( surname, other.surname );
+    final Person that = (Person) object;
+    return Objects.equals( name, that.name ) &&
+      Objects.equals( surname, that.surname );
   }
 
   @Override
@@ -5266,7 +5266,7 @@ public class Person {
 }
 ```
 
-In the above example we made use of the [`Objects`' utilities `equals()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)).  This method is not to be mistaken with the normal `equals()` method.  The utilities `equals()` method is very useful in comparing two instance variables and is a shorthand for the following.
+In the above example we made use of the [`Objects`' utilities `equals()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)).  This method is not to be mistaken with the normal `equals()` method.  The utilities `equals()` method is very useful when comparing two instance variables and is a shorthand for the following.
 
 ```java
 public static boolean equals(Object a, Object b) {
@@ -5282,7 +5282,7 @@ If we rerun the same program we had before, we will get the expected output, as 
 Are the objects equal? true
 ```
 
-The `equals()` method is used a lot by the Java API in conjunction to the [`hashCode()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()).  The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
+The `equals()` method is used a lot by the Java API in conjunction with the [`hashCode()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()).  The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
 
 Failing to override the `hashCode()` will make our class incompatible with some Java API.  Consider the following example.
 
@@ -5324,7 +5324,7 @@ public class App {
 }
 ```
 
-The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [the `HashSet` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage](04%20-%20Collections.md).  Running the above **may** produce the following output.
+The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage](05%20-%20Collections.md).  Running the above **may** produce the following output.
 
 ```bash
 -- Collections ------------
@@ -5346,7 +5346,7 @@ Set contains Aden? false
 Set contains Peter? false
 ```
 
-Hash-based classes, such as the `HashSet` class or [the `HashMap` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), rely on the `hashCode()` together with the `equals()` method to function properly.  The current implemetation of the `Person` class may work or may not work, depends on how lucky we get with the value returned by the `Object`'s version of the `hashCode()` method.
+Hash-based classes, such as the `HashSet` class or [the `HashMap` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), rely on the `hashCode()` together with the `equals()` method to function properly.  The current implementation of the `Person` class may work or may not work, depends on how lucky we get with the value returned by the `Object`'s version of the `hashCode()` method.
 
 Following is a better version of the `Person` class.
 
@@ -5359,8 +5359,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
 
-  private String name;
-  private String surname;
+  private final String name;
+  private final String surname;
 
   public Person() { /* ... */ }
 
