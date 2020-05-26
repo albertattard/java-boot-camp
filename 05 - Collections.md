@@ -167,7 +167,7 @@ Alternative methods of array creation
 
 When creating and passing array to a function, the `new` keyword needs to be used.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
 
 ```java
 package demo;

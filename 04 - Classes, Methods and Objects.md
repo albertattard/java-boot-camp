@@ -2670,7 +2670,7 @@ public class App {
 
 The `Box` shown before has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the box form (either `BoxForm.OPEN` or `BoxForm.CLOSED`).
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
 
 ```java
 package demo;
@@ -2768,7 +2768,7 @@ public class Box {
 
 A constructor can call another constructor using `this()` and passes the required parameters.  `this()` needs to be the first statement called within the constructor.  The following example does not compile.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
 
 ```java
 package demo;
@@ -2939,7 +2939,7 @@ The class `BoxDimensions` captures the dimensions of a box.  Say that we would l
 
 These two constructors have the same signature as shown in the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
 
 ```java
 package demo;
@@ -6176,11 +6176,11 @@ The new version of the `Bicycle` class is still missing the `shiftDown()` method
 
 ### What happens if a class implements two interfaces that have the same abstract method?
 
-A class can implement interfaces that have the same method signature, only if the methods have the same return type.
+A class can implement two or more interfaces that have the same method signature, only if the methods have the same return type.
 
-Consider the following two interfaces
+Consider the following two interfaces.
 
-1. The double algorithm has a `compute()` method that returns a `double`.
+1. The `DoubleAlgorithm` interface has a `compute()` method that returns a `double`.
 
     ```java
     package demo;
@@ -6191,7 +6191,7 @@ Consider the following two interfaces
     }
     ```
 
-1. The complex algorithm has a `compute()` method that returns a `double`.
+1. The `ComplexAlgorithm` interface has a `compute()` method that returns a `double`.
 
     ```java
     package demo;
@@ -6246,7 +6246,7 @@ Consider the following interfaces
 
 Both interfaces define a method, named `compute()`, that return a different type.  Now consider the following class that implements both interfaces.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE.**
+**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
 
 ```java
 package demo;
@@ -6261,14 +6261,14 @@ public class Calculator implements IntAlgorithm, DoubleAlgorithm {
 }
 ```
 
-Let's for the sake of the example say that the above class compiles.  Which method would we invoke when we encounter the following code.
+Let's for the sake of the example say that the above class compiles.  Which method would we invoke when the `compute()` method is invoked on an instance of the Calculator class?
 
 ```java
 final Calculator c = new Calculator();
 c.compute();
 ```
 
-There is no way for the Java compiler to link our call to the right method as two methods match.
+There is no way for the Java compiler to link our call to the right method as both methods match.
 
 ### What's the purpose of an interface that has no abstract methods (marker interface)?
 
