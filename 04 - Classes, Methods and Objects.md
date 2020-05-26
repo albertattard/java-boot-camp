@@ -5429,8 +5429,8 @@ public class App {
     printType( b );
   }
 
-  private static void printType( Object o ) {
-    System.out.printf( "The object is of type %s%n", o.getClass() );
+  private static void printType( final Object object ) {
+    System.out.printf( "The object is of type %s%n", object.getClass() );
   }
 }
 ```
@@ -5442,7 +5442,7 @@ The object is of type class java.awt.Point
 The object is of type class java.util.Random
 ```
 
-The class, of any object, can be also obtained from the actual class.  For example, we can obtain the class of the `Point` class using the `Point.class` static like field.  All classes have a static like field named `class`.  The class itself is represented as a Java object in Java.
+The class, of any object, can be also obtained from the actual class name (or primitive type) using the class literal ([as defined by JLS-15.8.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.8.2)).  For example, we can obtain the class of the `Point` class using the class literal `Point.class`.  The class itself is represented as a Java object in Java.
 
 ```java
 package demo;
@@ -5460,9 +5460,9 @@ public class App {
     isOfPointType( b );
   }
 
-  private static void isOfPointType( final Object a ) {
-    final boolean isSameClass = Point.class == a.getClass();
-    System.out.printf( "Is the object (%s) of type Point? %s%n", a.getClass(), isSameClass );
+  private static void isOfPointType( final Object object ) {
+    final boolean isSameClass = Point.class == object.getClass();
+    System.out.printf( "Is the object (%s) of type Point? %s%n", object.getClass(), isSameClass );
   }
 }
 ```
@@ -5502,13 +5502,13 @@ public class Person {
     }
 
     // if ( !( object instanceof Person ) ) {
-    if ( object != null && object.getClass() == Person.class ) {
+    if ( object != null && object.getClass() == getClass() ) {
       return false;
     }
 
-    final Person other = (Person) object;
-    return Objects.equals( name, other.name ) &&
-      Objects.equals( surname, other.surname );
+    final Person that = (Person) object;
+    return Objects.equals( name, that.name ) &&
+      Objects.equals( surname, that.surname );
   }
 
   @Override
@@ -5519,7 +5519,7 @@ public class Person {
 }
 ```
 
-Note that the above version of the `equals()` method is slightly different from the previous version, the one that used the `instanceof` operator.
+Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.
 
 ### The `wait()`, `notify()` and `notifyAll()` methods
 
