@@ -181,6 +181,7 @@ Boot Camp for developers interested to learn Java.
     1. [Can `abstract` classes have `private` constructors?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors)
 1. [The `Object` class](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-object-class)
     1. [The `toString()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-tostring-method)
+        1. [Be careful with sensitive information](04%20-%20Classes%2C%20Methods%20and%20Objects.md#be-careful-with-sensitive-information)
     1. [The `equals()` and `hashCode()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#puzzle-animal-farm)
     1. [The `getClass()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-getclass-method)

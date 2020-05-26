@@ -60,6 +60,7 @@
     1. [Can `abstract` classes have `private` constructors?](#can-abstract-classes-have-private-constructors)
 1. [The `Object` class](#the-object-class)
     1. [The `toString()` method](#the-tostring-method)
+        1. [Be careful with sensitive information](#be-careful-with-sensitive-information)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
@@ -4669,7 +4670,7 @@ The `Box` class does not have enough information to determine whether it is empt
 1. The `LightBox` make use of the `space` (`Space` enum) property
 1. The `HeavyBox` delegates this to the `items` ([`List`'s `isEmpty()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#isEmpty())) property
 
-This means that while all boxes can be empty (or non-empty), the Box class cannot answer the question, `isEmpty()`.  The `Box` class needs to have a method for which it does not have an implementation.  Methods that do not have an implementation, or a body, are referred to as abstract methods as shown next.
+This means that while all boxes can be empty (or non-empty), the `Box` class cannot answer the question, `isEmpty()`.  The `Box` class needs to have a method for which it does not have an implementation.  Methods that do not have an implementation, or a body, are referred to as *abstract methods*, as shown next.
 
 ```java
   public abstract boolean isEmpty();
@@ -4830,7 +4831,7 @@ public class Person {
 }
 ```
 
-The `Person` class does not use the `extends` keyword.  By default, any classes that do not use the `extends` keyword extends the `Object` class.  The following example is equivalent to the above example.
+The `Person` class does not use the `extends` keyword.  By default, any class that dose not use the `extends` keyword, it automatically extends the `Object` class.  The following example is equivalent to the above example.
 
 ```java
 package demo;
@@ -4843,15 +4844,15 @@ The `Person` class has no methods defined, yet the IDE still shows a list of met
 
 ![Methods Inherited from the Object Class](assets/images/Methods%20Inherited%20from%20the%20Object%20Class.png)
 
-The following sections will work with the following version of the `Person` class.
+consider the following example.
 
 ```java
 package demo;
 
 public class Person {
 
-  private String name;
-  private String surname;
+  private final String name;
+  private final String surname;
 
   public Person() {
     this( null );
@@ -4868,9 +4869,11 @@ public class Person {
 }
 ```
 
+The following sections will work with the above `Person` class.
+
 ### The `toString()` method
 
-All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a developer friendly string.
+All objects in Java have a [method called `toString()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#toString()) which is used to convert an object into a *programmer friendly string*.
 
 ```java
 package demo;
@@ -4883,15 +4886,75 @@ public class App {
 }
 ```
 
-The above prints the following, unuseful, message.
+The above prints the following, *meaningless*, message.
 
 ```bash
 The person object: demo.Person@58372a00
 ```
 
-The `toString()` method is used to convert our person object into a `String`.
+The `toString()` method is used to convert our person object into a *programmer friendly string*.
 
-It is always recommended to override the `toString()` method and return something more useful.  [Item 12, titled Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book talks about this too.
+It is always recommended to override the `toString()` method and return something more useful.  [Item 12, Always override toString](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev12) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book talks about the importance of overriding this method too.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+  private final String surname;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, surname=%s}", name, surname );
+  }
+}
+```
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person();
+    final Person b = new Person( "Aden" );
+    final Person c = new Person( null, "Attard" );
+    final Person d = new Person( "Aden", "Attard" );
+
+    System.out.printf( "a = %s%n", a );
+    System.out.printf( "b = %s%n", b );
+    System.out.printf( "c = %s%n", c );
+    System.out.printf( "d = %s%n", d );
+  }
+}
+```
+
+The above program will print the following.
+
+```bash
+a = Person{name=null, surname=null}
+b = Person{name=Aden, surname=null}
+c = Person{name=null, surname=Attard}
+d = Person{name=Aden, surname=Attard}
+```
+
+The above is more useful when compared to the original message as we can see the object's state.
+
+Following are some important rules about the `toString()` method
+1. **The `toString()` method should never return a `null`**.
+1. **Do not rely on the output of the `toString()` method as a source of structured input**.<br/>
+    Do not parse an object based on the `toString()` method's output as this may change without warning.
+1. **Do not leak sensitive information through the `toString()` method**.
+
+There are cases where we may need to have a more meaningful output, such as constructing the *full name* from the *name* and *surname*, as shown in the following example.
 
 ```java
 package demo;
@@ -4932,29 +4995,7 @@ public class Person {
 }
 ```
 
-Consider the following example.
-
-```java
-package demo;
-
-public class App {
-  public static void main( final String[] args ) {
-    final Person a = new Person();
-    System.out.printf( "The person object: %s%n", a );
-
-    final Person b = new Person( "Aden" );
-    System.out.printf( "The person object: %s%n", b );
-
-    final Person c = new Person( null, "Attard" );
-    System.out.printf( "The person object: %s%n", c );
-
-    final Person d = new Person( "Aden", "Attard" );
-    System.out.printf( "The person object: %s%n", d );
-  }
-}
-```
-
-The above program will print the following.
+The result of the `toString()` method depends on the state and running the previous example would now yield the following.
 
 ```bash
 The person object: Unknown Person!!
@@ -4963,10 +5004,136 @@ The person object: Attard
 The person object: Aden Attard
 ```
 
-Following are two important points about the `toString()` method
-1. **The `toString()` method should never return a `null`**.
-1. **Do not rely on the output of the `toString()` method as a source of structured input**.
-    Do not parse an object based on the `toString()` output as this may change without warning.
+The above result is more appealing.  While this is all good, the purpose of the `toString()` method is to enable the programmer to display the object's state, **in no specific format**, and such output can be used in log files, for example.  When an object needs to be presented in a specific manner, I prefer to have a dedicated method, such as `getFullName()`, instead of reusing the `toString()` method.  In this case, each method will serve only one purpose.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName( "Person" )
+public class PersonTest {
+
+  @CsvSource( {
+    "null,null,Unknown Person!!",
+    "null,Attard,Attard",
+    "Aden,null,Aden",
+    "Aden,Attard,Aden Attard"
+  } )
+  @DisplayName( "should return the full name" )
+  @ParameterizedTest( name = "should return {2}, when the name is {0} and surname is {1}" )
+  public void shouldReturnFullName(
+    final @ConvertWith( NullableConverter.class ) String name,
+    final @ConvertWith( NullableConverter.class ) String surname,
+    final String expectedFullName ) {
+
+    final Person subject = new Person( name, surname );
+    assertEquals( expectedFullName, subject.getFullName() );
+  }
+}
+```
+
+#### Be careful with sensitive information
+
+Unfortunately, sensitive information tends to get leaked through the `toString()` method.  Consider the following example of a credit card.
+
+**⚠️ THE FOLLOWING EXAMPLE LEAKS SENSITIVE INFORMATION.  DO NOT USE IT AS IS!!**
+
+```java
+package demo;
+
+public class CreditCard {
+
+  private final long number;
+  private final int cvv;
+
+  public CreditCard( final long number, final int cvv ) {
+    this.number = number;
+    this.cvv = cvv;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "CreditCard{number=%d, cvv=%d}", number, cvv );
+  }
+}
+```
+
+The object's sensitive state is leaked through the `toString()` method as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final CreditCard a = new CreditCard( 1234_5678_9012_3456L, 123 );
+    System.out.printf( "Paying with: %s%n", a );
+  }
+}
+```
+
+The above example will print the following
+
+```bash
+Paying with: CreditCard{number=1234567890123456, cvv=123}
+```
+
+Both the credit card number and the card verification value (cvv) are sensitive information and should not be part of the `toString()` method.  Given the nature of this problem, as test is in order to make sure that no sensitive information is leaked through the `toString()` method.
+
+Let say that only the last 4 digits of the credit card number should be part of the `toString()`'s method output and the cvv should be completely masked.
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+@DisplayName( "Credit card" )
+public class CreditCardTest {
+
+  @Test
+  @DisplayName( "should only contain the last four digits of the credit card number and the cvv should be completely masked" )
+  public void shouldNotLeakSensitiveInformation() {
+    final CreditCard subject = new CreditCard( 1234_5678_9123_0000L, 123 );
+    assertFalse( subject.toString().matches( ".*[1-9]+.*" ) );
+  }
+}
+```
+
+Given that only the last four digits of the credit card number are returned by the `toString()` method and these have the value of `0000` on purpose, the `toString()` method should not contain any numbers between 1 and 9 both inclusive.  This makes sure that the first 12 digit of the credit card and the cvv are not part of the `toString()` method output.
+
+The following example shows a better version of the `toString()` method.
+
+```java
+package demo;
+
+public class CreditCard {
+
+  private final long number;
+  private final int cvv;
+
+  public CreditCard( final long number, final int cvv ) { /* ... */ }
+
+  @Override
+  public String toString() {
+    final long lastFourDigits = number % 10_000;
+    return String.format( "CreditCard{number=XXXX-XXXX-XXXX-%04d, cvv=XXX}", lastFourDigits );
+  }
+}
+```
+
+Running the previous example will now print.
+
+```bash
+Paying with: CreditCard{number=XXXX-XXXX-XXXX-3456, cvv=XXX}
+```
 
 ### The `equals()` and `hashCode()` methods
 
