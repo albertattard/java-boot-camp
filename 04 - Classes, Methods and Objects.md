@@ -6272,9 +6272,9 @@ There is no way for the Java compiler to link our call to the right method as bo
 
 ### What's the purpose of an interface that has no abstract methods (marker interface)?
 
-Say that we have an application that sends data to the client in some form.  The transmission protocol does not matter in this case.  Some of the data handled by the application is sensitive while other data is not.
+Say that we have an application that sends data to the client in some form.  Some of the data handled by the application is sensitive while other data is not.
 
-Consider the following example
+Consider the following example.
 
 ```java
 package demo;
