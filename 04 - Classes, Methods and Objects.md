@@ -5523,7 +5523,7 @@ Note that the above version of the `equals()` method is slightly different from 
 
 **🤔 This section touches a quite advanced topic and it is understandable if you do not comprehend any of the methods mentioned here**.  It is perfectly safe to skip this section and move to the next.
 
-Java supported multithreading since its early days (more than 25 years ago).  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic, register at the desk and then wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
+Java supported multithreading since its early days ([more than 25 years ago](https://en.wikipedia.org/wiki/Java_(software_platform))).  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic, register at the desk and then wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
 The following example simulates a patient visiting the doctor and waiting for their name to be called.  The following example make use of multithreading, [an advance topic which is still be covered](11%20-%20Concurrency.md).
 
@@ -5657,67 +5657,6 @@ A small observation regarding the messages order.  Note that the second message 
 The approach to multithreading in Java has been revised and a new concurrency API was added to the language.  The new concurrency API provider better concurrency primitives and is always recommended over intrinsic locking, shown above.  Concurrency is covered in detail, [in later sections](12%20-%20Concurrency.md).
 
 ## Interfaces
-
-We can extend the Java language by adding new types.  So far we have created new classes ([as shown in the Simple objects section](#simple-objects)).
-
-Consider the following example.
-
-```java
-package demo;
-
-import java.util.Arrays;
-
-public class App {
-  public static void main( final String[] args ) {
-    final String[] names = { "Mary", "Aden", "Peter", "Jade", "Mario" };
-    Arrays.sort( names );
-    System.out.printf( "Sorted: %s", Arrays.toString( names ) );
-  }
-}
-```
-
-The `Arrays.sort()` method sorts the names alphabetically.
-
-```bash
-Sorted: [Aden, Jade, Mario, Mary, Peter]
-```
-
-Can we sort any array like that?  Consider the following example.
-
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ClassCastException!!**
-
-```java
-package demo;
-
-import java.awt.Point;
-import java.util.Arrays;
-
-public class App {
-  public static void main( final String[] args ) {
-    final Point[] points = {
-      new Point( 1, 2 ),
-      new Point( 1, 3 ),
-      new Point( 2, 1 ),
-    };
-    Arrays.sort( points );
-    System.out.printf( "Sorted: %s", Arrays.toString( points ) );
-  }
-}
-```
-
-Unfortunately, running the above program will fail with `ClassCastException`.
-
-```bash
-Exception in thread "main" java.lang.ClassCastException: class java.awt.Point cannot be cast to class java.lang.Comparable (java.awt.Point is in module java.desktop of loader 'bootstrap'; java.lang.Comparable is in module java.base of loader 'bootstrap')
-	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
-	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
-	at java.base/java.util.Arrays.sort(Arrays.java:1040)
-	at demo.App.main(App.java:13)
-```
-
-**How come the program was able to sort the array of string but not the array of points?**
-
-The [`sort()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(java.lang.Object%5B%5D)) makes use of [the `Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) to compare and sort the array of strings.  The `Point` does not implement this interface and thus the `sort()` method cannot compare and sort the array of points.
 
 ### What is an interface?
 
@@ -6735,6 +6674,67 @@ Ignite the inboard motor
 ```
 
 ## Sorting (the `Comparable` and `Comparator` interfaces)
+
+We can extend the Java language by adding new types.  So far we have created several new types ([as shown in the Simple objects section](#simple-objects)).
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String[] names = { "Mary", "Aden", "Peter", "Jade", "Mario" };
+    Arrays.sort( names );
+    System.out.printf( "Sorted: %s", Arrays.toString( names ) );
+  }
+}
+```
+
+The `Arrays.sort()` method sorts the names alphabetically.
+
+```bash
+Sorted: [Aden, Jade, Mario, Mary, Peter]
+```
+
+Can we sort any array like that?  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ClassCastException!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point[] points = {
+      new Point( 1, 2 ),
+      new Point( 1, 3 ),
+      new Point( 2, 1 ),
+    };
+    Arrays.sort( points );
+    System.out.printf( "Sorted: %s", Arrays.toString( points ) );
+  }
+}
+```
+
+Unfortunately, running the above program will fail with `ClassCastException`.
+
+```bash
+Exception in thread "main" java.lang.ClassCastException: class java.awt.Point cannot be cast to class java.lang.Comparable (java.awt.Point is in module java.desktop of loader 'bootstrap'; java.lang.Comparable is in module java.base of loader 'bootstrap')
+	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
+	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
+	at java.base/java.util.Arrays.sort(Arrays.java:1040)
+	at demo.App.main(App.java:13)
+```
+
+**How come the program was able to sort the array of string but not the array of points?**
+
+The [`sort()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(java.lang.Object%5B%5D)) makes use of [the `Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) to compare and sort the array of strings.  The `Point` does not implement this interface and thus the `sort()` method cannot compare and sort the array of points.
 
 ### How can we apply natural ordering to a custom class (the `Comparable` interface)?
 
