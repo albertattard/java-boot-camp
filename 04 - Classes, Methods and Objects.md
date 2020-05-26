@@ -4539,7 +4539,7 @@ public class PreferStaticFactoryMethods {
 
 ### What happens when not all '*children*' are '*parents*'?
 
-Consider the square and rectangle shapes.  All sides of a square are equals, while in a rectangle, only the opposite sides are equal.  We need one property to represent the side (or width) of a square while we need two properties to represent the height and the width of a rectangle.
+Consider the *square* and *rectangle* shapes.  All sides of a square are equals, while in a rectangle, only the opposite sides are equal.  We need one property to represent the *side* (or *width*) of a square while we need two properties to represent the *height* and the *width* of a rectangle.
 
 Consider the following (**bad**) example of inheritance between the square and the rectangle.
 
@@ -4592,11 +4592,11 @@ Consider the following (**bad**) example of inheritance between the square and t
     }
     ```
 
-The reasoning behind the design shown above is that given the rectangle has one more property than the square, we simply extend the square and add the missing property.
+The reasoning behind the above design is that given the rectangle has one more property than the square, we simply extend the square and add the missing property.
 
 This is a bad example of inheritance, because despite the appearances not all rectangles are squares.  By definition:
 * a *rectangle* is a quadrilateral with all four angles right angles
-* a *square* is a quadrilateral with all four angles right angles and **all four sides of the same length**.
+* a *square* is a quadrilateral with all four angles right angles **and all four sides of the same length**.
 
 In other words, a square is a special type of rectangle.  According to the definitions listed above, **all squares are rectangles, but not all rectangles are squares**.  Therefore, the inheritance must follow this rule and the square should extend the rectangle and not vice versa.
 
@@ -4640,13 +4640,13 @@ The above implementation is incorrect.  The following example shows a better imp
     }
     ```
 
-This is a typical problem with inheritance where the wrong hierarchy is built.  Such hierarchies may be hard to change at a later stage as other things may be depending on it.
+This is a typical problem with inheritance where the wrong hierarchy is built.  Such hierarchies maybe hard to change at a later stage as other things may be depending on it.
 
-There are many other examples.  Cats are pets but not all pets are cats.  If someone asks for cat, we cannot give them a dog.  Therefore, when designing such hierarchy, we need to be careful to capture the "*all children are parent*", otherwise we may end up with some flawed design.
+There are many other examples.  Cats and dogs are pets but not all pets are cats.  If someone asks for cat, we cannot give them a dog.  Therefore, when designing such hierarchy, we need to be careful to capture the "*all children are parent*", otherwise we may end up with some flawed design.
 
-The Java API has some unfortunate instances too, where the inheritance was not properly implemented.  The [`Properties` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Properties.html) is a good example of bad inheritance.  The `Properties` class inherits from the [`Hashtable` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html).
+The Java API has some unfortunate examples of bad inheritance too.  The [`Properties` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Properties.html) is a "good" example of bad inheritance.  The `Properties` class inherits from the [`Hashtable` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html).  The [`Stack` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html) is another bad example of inheritance within the Java API,  The `Stack` class extends the [`Vector` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) and inherits all methods the `Vector` defined.  Some of these methods do not make sense from a stack data structure perspective.
 
-[One of the topics discussed later](#inheritance-and-composition) is touches about these problems and propose an alternative approach to inheritance.  This topic is also covered by [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), where it provides some bad usage of inheritance within the Java API.
+[One of the topics discussed later on](#inheritance-and-composition) touches about these problems and propose an alternative approach to inheritance (composition).  This topic is also covered in great depths in [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18) in the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/).
 
 ### Is inheritance evil and should be considered as an anti-pattern?
 
