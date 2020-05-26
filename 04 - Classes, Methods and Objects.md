@@ -88,6 +88,8 @@
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
     1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
     1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
+        1. [Downcasting](#downcasting)
+        1. [Upcasting](#upcasting)
     1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
@@ -102,6 +104,7 @@
     1. [Inner instance class](#inner-instance-class)
     1. [Inner static class](#inner-static-class)
     1. [Inner anonymous class](#inner-anonymous-class)
+    1. [Local class](#local-class)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
 1. [Generics](#generics)
@@ -7780,6 +7783,94 @@ runTask( (Runnable) task );
 
 **🚧 Pending...**
 
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Peter" );
+    final Person b = new VeryImportPerson( "Mary" );
+    final VeryImportPerson c = new VeryImportPerson( "Jane" );
+
+    System.out.println( "-- Variable a (Person>>Person) ----------------------------" );
+    handle( a );
+
+    System.out.println( "-- Variable b (Person>>VeryImportPerson) ------------------" );
+    handle( b );
+
+    System.out.println( "-- Variable c (VeryImportPerson>>VeryImportPerson) --------" );
+    handle( c );
+  }
+
+  public static void handle( final Person guest ) {
+    System.out.printf( "Water for %s%n", guest );
+  }
+
+  public static void handle( final VeryImportPerson guest ) {
+    System.out.printf( "Champagne for %s%n", guest );
+  }
+}
+```
+
+```bash
+-- Variable a (Person>>Person) ----------------------------
+Water for Person{name=Peter}
+-- Variable b (Person>>VeryImportPerson) ------------------
+Water for VeryImportPerson{name=Mary}
+-- Variable c (VeryImportPerson>>VeryImportPerson) --------
+Champagne for VeryImportPerson{name=Jane}
+```
+
+#### Downcasting
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new VeryImportPerson( "Aden" );
+    handle( (VeryImportPerson) a );
+  }
+
+  public static void handle( final Person guest ) {
+    System.out.printf( "Water for %s%n", guest );
+  }
+
+  public static void handle( final VeryImportPerson guest ) {
+    System.out.printf( "Champagne for %s%n", guest );
+  }
+}
+```
+
+```bash
+Champagne for VeryImportPerson{name=Aden}
+```
+
+#### Upcasting
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final VeryImportPerson a = new VeryImportPerson( "Aden" );
+    handle( (Person) a );
+  }
+
+  public static void handle( final Person guest ) {
+    System.out.printf( "Water for %s%n", guest );
+  }
+
+  public static void handle( final VeryImportPerson guest ) {
+    System.out.printf( "Champagne for %s%n", guest );
+  }
+}
+```
+
+```bash
+Water for VeryImportPerson{name=Aden}
+```
+
 ### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
 
 **🚧 Pending...**
@@ -7956,6 +8047,10 @@ public class App {
 The `Temperature` class cannot be extended by an external class, which prevents some funny code added to the application.
 
 ### Inner anonymous class
+
+**🚧 Pending...**
+
+### Local class
 
 **🚧 Pending...**
 
