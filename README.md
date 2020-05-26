@@ -204,7 +204,7 @@ Boot Camp for developers interested to learn Java.
     1. [How does the `compareTo()` method works?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-does-the-compareto-method-works)
     1. [What will happen if one of the properties used is `null`?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-will-happen-if-one-of-the-properties-used-is-null)
     1. [Can we use multiple properties to determine natural ordering?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-use-multiple-properties-to-determine-natural-ordering)
-    1. [How can we sort the `Point` class (the `Comparator` interface)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-sort-the-point-class-the-comparator-interface)
+    1. [How can we sort the `Point` or any other custom class (the `Comparator` interface)?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-can-we-sort-the-point-or-any-other-custom-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-compare-two-integers-by-subtracting-one-from-the-other)
 1. [The `instanceof` and cast operators](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-instanceof-and-cast-operators)
     1. [Are there good examples of the `instanceof` and cast operators?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#are-there-good-examples-of-the-instanceof-and-cast-operators)

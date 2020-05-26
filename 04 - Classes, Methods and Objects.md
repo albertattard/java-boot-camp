@@ -83,7 +83,7 @@
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
     1. [What will happen if one of the properties used is `null`?](#what-will-happen-if-one-of-the-properties-used-is-null)
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
-    1. [How can we sort the `Point` class (the `Comparator` interface)?](#how-can-we-sort-the-point-class-the-comparator-interface)
+    1. [How can we sort the `Point` or any other custom class (the `Comparator` interface)?](#how-can-we-sort-the-point-or-any-other-custom-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
     1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
@@ -7046,13 +7046,14 @@ public class App {
   public static void main( final String[] args ) {
     final Person[] persons = {
       new Person( "Jade", null ),
-      new Person(null, null),
+      new Person( null, null ),
       new Person( "Jade", "Attard" ),
       new Person( null, "Attard" )
     };
 
     System.out.println( "--- Before Sorting -------" );
     System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+
 
     Arrays.sort( persons );
 
@@ -7071,7 +7072,7 @@ Persons: [Person{name='Jade', surname='null'}, Person{name='null', surname='null
 Persons: [Person{name='null', surname='null'}, Person{name='null', surname='Attard'}, Person{name='Jade', surname='null'}, Person{name='Jade', surname='Attard'}]
 ```
 
-### How can we sort the `Point` class (the `Comparator` interface)?
+### How can we sort the `Point` or any other custom class (the `Comparator` interface)?
 
 The `Point` class belongs to the Java API and we cannot modify it.  In such cases, or in cases when we want to use a different ordering than the natural ordering, we can use the [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) interface.
 
@@ -7102,7 +7103,7 @@ public class App {
 }
 ```
 
-We cannot modify the `Point` class as this is not part of our code.  We can still sort an array of points in the way we need it to be sorted by providing an instance of the `Comparator` interface.  This applies to any data type.  We can sort anything we want in the way we want by using a `Comparator`.
+We cannot modify the `Point` class as this is not part of our code.  Yet, we can still sort an array of points in the way we need it to be sorted by providing an instance of the `Comparator` interface.  This applies to any data type.  We can sort anything we want in the way we want by using a `Comparator`.
 
 The `Comparator` works very similar to the `Comparable`, discussed in the [how does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one [method `compare()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#compare(T,T)) that takes two (non-`null`) objects of the same type (not just one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
 
@@ -7190,6 +7191,159 @@ There are several approaches available to sort an array using a custom `Comparat
     ```
 
 All three approaches will produce the same result.
+
+Note that `null`s can be tricky to handle and [the static methods provided by the `Comparator` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#nullsFirst(java.util.Comparator)) may not suffice.  Consider the following class.
+
+```java
+package demo;
+
+public class Person {
+
+  public final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s}", name );
+  }
+}
+```
+
+Now consider the following example, were we try to sort an array of persons that have `null` as their `name`.  Note that the person objects are not `null`, but the property being used to sort the array is `null`.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN NullPointerException!!**
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( null ),
+      new Person( "Aden" )
+    };
+
+    final Comparator<Person> comparator =
+      Comparator.nullsFirst( Comparator.comparing( Person::getName ) );
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+The above will fail with a `NullPointerException`, despite use of the `nullsFirst()` method.
+
+```bash
+Exception in thread "main" java.lang.NullPointerException
+	at java.base/java.util.Comparator.lambda$comparing$77a9974f$1(Comparator.java:469)
+	at java.base/java.util.Comparators$NullComparator.compare(Comparators.java:85)
+	at java.base/java.util.TimSort.countRunAndMakeAscending(TimSort.java:355)
+	at java.base/java.util.TimSort.sort(TimSort.java:220)
+	at java.base/java.util.Arrays.sort(Arrays.java:1232)
+	at demo.App.main(App.java:17)
+```
+
+The `nullsFirst()` method works well when the array contains `null`, but falls short when properties used by the `Comparator` are `null`.  Following is a version that works well with `null`s.
+
+```java
+package demo;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( null ),
+      new Person( "Aden" )
+    };
+
+    final Comparator<Person> comparator = new Comparator<Person>() {
+      @Override
+      public int compare( final Person a, final Person b ) {
+        return StringUtils.compare( a.name, b.name );
+      }
+    };
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
+
+The above example will sort the array as expected.
+
+```bash
+Persons: [Person{name=null}, Person{name=Aden}, Person{name=Jade}]
+```
+
+Notice how `null`s complicate things.  No wonder why [`NullPointerException` is consider the billion-dollar mistake](https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/).  Prevent `null`s when possible.  If a person must have a name (name should not be `null`), then don't accept `null`s as the person's name.  Consider the following version of the `Person` class.
+
+```java
+package demo;
+
+import javax.annotation.Nonnull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class Person {
+
+  public final String name;
+
+  public Person( @Nonnull final String name ) {
+    this.name = checkNotNull( name );
+  }
+
+  public @Nonnull String getName() { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+The constructor will throw a `NullPointerException` if `null` is provided as the `name`.
+
+The [`@Nonnull` annotation](http://checkstyle-addons.github.io/jsr305-javadoc/3.0.1/javax/annotation/Nonnull.html) is used by frameworks and IDEs to verify, as it best can, whether the given parameter is `null` and catch such error as early as possible.  Note that the `@Nonnull` has no effect at runtime and will not prevent `null`s to be passed.  It is just an annotation used by tools to analyse your code and help point out any problems.
+
+![Nonnull warning by IDE](assets/images/Nonnull%20warning%20by%20IDE.png)
+
+Now that the person class prevents `null`s, we can safely use the `Comparator` static methods to sort the array of persons.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person[] persons = {
+      new Person( "Jade" ),
+      new Person( "Aden" )
+    };
+
+    final Comparator<Person> comparator = Comparator.comparing( Person::getName );
+
+    Arrays.sort( persons, comparator );
+    System.out.printf( "Persons: %s%n", Arrays.toString( persons ) );
+  }
+}
+```
 
 ### Can we compare two integers by subtracting one from the other?
 
