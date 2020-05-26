@@ -5038,6 +5038,49 @@ public class PersonTest {
 }
 ```
 
+We can move the contents of the `toString()` method to the new `getFullName()` method.
+
+```java
+package demo;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+public class Person {
+
+  public final String name;
+  public final String surname;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  public String getFullName() {
+    final boolean hasName = !isNullOrEmpty( name );
+    final boolean hasSurname = !isNullOrEmpty( surname );
+
+    if ( hasName && hasSurname ) {
+      // return name + " " + surname;
+      return String.format( "%s %s", name, surname );
+    }
+
+    if ( hasName ) {
+      return name;
+    }
+
+    if ( hasSurname ) {
+      return surname;
+    }
+
+    return "Unknown Person!!";
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
 #### Be careful with sensitive information
 
 Unfortunately, sensitive information tends to get leaked through the `toString()` method.  Consider the following example of a credit card.
