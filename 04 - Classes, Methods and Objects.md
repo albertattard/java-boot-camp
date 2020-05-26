@@ -6468,7 +6468,7 @@ public interface Display {
 }
 ```
 
-The implementation of this interface will display a message somewhere, such as the system console.  Now, say that we want to format a message.  We can make use of a `static` method to do that.
+The implementation of this interface will display a message somewhere, such as the system console.  Now, say that we want to format a message as well.  We can make use of a `static` method to do that.
 
 ```java
 package demo;
@@ -6484,7 +6484,7 @@ public class Displays {
 }
 ```
 
-Note that we created new class, ` Displays`, and provided a `private` constructor as this class was not meant to be initialised.  We can use this method to format messages independent from where this is going to be displayed.  Say that we want to support some custom messages, such as *hello …*.  This could be added using abstract classes as shown next.
+Note that we created new class, ` Displays`, and provided a `private` constructor as [this class was not meant to be initialised](#should-utilities-classes-like-the-math-class-have-a-constructor).  We can use this method to format messages independent from where this is going to be displayed.  Say that we want to support some custom messages, such as "*hello …*".  This could be added using abstract classes as shown next.
 
 ```java
 package demo;
@@ -6588,7 +6588,7 @@ Consider the following two interfaces
     }
     ```
 
-Both interfaces have a default method, `ignite()`.  Note that the methods need to have the same return type.  Now consider a boat car, such as the *Fiat 1110 Boat Car*, shown next.
+Both interfaces have a default method, `ignite()`.  Note that the methods need to have the same return type, otherwise a call cannot implement both.  Now consider a boat car, such as the *Fiat 1110 Boat Car*, shown next.
 
 ![the Fiat 1110 Boat Car](https://www.italianways.com/wp-content/uploads/2014/03/IW-fiat-1100-coriasco-boat-car-04.jpg)<br/>
 ([Reference](https://www.italianways.com/the-fiat-1110-boat-car-a-boat-on-wheels/))
@@ -6670,8 +6670,6 @@ Ignite the inboard motor
 ```
 
 ## Sorting (the `Comparable` and `Comparator` interfaces)
-
-We can extend the Java language by adding new types.  So far we have created several new types ([as shown in the Simple objects section](#simple-objects)).
 
 Consider the following example.
 
@@ -6850,7 +6848,7 @@ Please note that the person's name can be `null`, which will cause the `compareT
 
 ### How does the `compareTo()` method works?
 
-The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method returns: "_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".
+The [`compareTo()` method is defined by the `Comparable` interface]( https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  The `compareTo()` method **must** return: "_a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object_".  Note that here the interface is defining a contract between the implementer and the consumer of the interface.  The `sort()` method relies on this contract to work properly.  If the implementer does not follow the contract, the result of the `sort()` may not be as expected.
 
 Let say we have two objects that implement the `Comparable` interface, `a` and `b`.
 
@@ -6921,7 +6919,7 @@ package demo;
 
 public class Person implements Comparable<Person> {
 
-  private String name;
+  private final String name;
 
   public Person( final String name ) { /* ... */ }
 
@@ -6973,7 +6971,7 @@ import static org.apache.commons.lang3.StringUtils.compare;
 
 public class Person implements Comparable<Person> {
 
-  private String name;
+  private final String name;
 
   public Person( final String name ) { /* ... */ }
 
@@ -7075,6 +7073,8 @@ Persons: [Person{name='null', surname='null'}, Person{name='null', surname='Atta
 
 ### How can we sort the `Point` class (the `Comparator` interface)?
 
+The `Point` class belongs to the Java API and we cannot modify it.  In such cases, or in cases when we want to use a different ordering than the natural ordering, we can use the [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) interface.
+
 The [`Comparator` interface provides a set of static methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#comparing(java.util.function.Function)) that are very handy to sort objects as shown in the following example.
 
 ```java
@@ -7104,7 +7104,7 @@ public class App {
 
 We cannot modify the `Point` class as this is not part of our code.  We can still sort an array of points in the way we need it to be sorted by providing an instance of the `Comparator` interface.  This applies to any data type.  We can sort anything we want in the way we want by using a `Comparator`.
 
-The `Comparator` works very similar to the `Comparable`, discussed in the [hot does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one [method `compare()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#compare(T,T)) that takes two (non-`null`) objects of the same type (not just one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
+The `Comparator` works very similar to the `Comparable`, discussed in the [how does the `compareTo()` method works](#how-does-the-compareto-method-works).  The `Comparator` defines one [method `compare()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html#compare(T,T)) that takes two (non-`null`) objects of the same type (not just one) and returns, `0` if both are equal, a negative number (`<=-1`) if the first is smaller than the second, and a positive number (`>=1`) if the first is larger than the second.
 
 Given any two objects of the same type, `a` and `b` (these objects do not have to implement any interface or extend any special class).
 
@@ -7234,7 +7234,7 @@ public class App {
       new Person( "Aden", 11 )
     };
 
-    final Comparator<Person> comparator = new Comparator<>() {
+    final Comparator<Person> comparator = new Comparator<Person>() {
       @Override
       public int compare( final Person a, final Person b ) {
         /* ⚠️ BAD DESIGN!! */
@@ -7254,7 +7254,7 @@ The persons are sorted by their age as expected.  The value of `11` is smaller t
 Sorted by age: [Person{name='Aden', age=11}, Person{name='Jade', age=13}]
 ```
 
-The above instance of the `Comparator` interface is broken despite its appearance.  Consider the following (extreem) situation
+The above instance of the `Comparator` interface is broken despite its appearance.  Consider the following (extreme) situation
 
 **⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
 
@@ -7271,7 +7271,7 @@ public class App {
       new Person( "Aden", -2 )
     };
 
-    final Comparator<Person> comparator = new Comparator<>() {
+    final Comparator<Person> comparator = new Comparator<Person>() {
       @Override
       public int compare( final Person a, final Person b ) {
         /* ⚠️ BAD DESIGN!! */
@@ -7293,23 +7293,25 @@ Sorted by age: [Person{name='Jade', age=2147483647}, Person{name='Aden', age=-2}
 
 The person with age `2147483647` is placed before the person with age `-2`.  That is incorrect!!  We all know that `-2` is smaller than `2147483647`, yet our instance of `Comparator` thinks otherwise.
 
-The above problem arises from the fact that integer arithmetic in Java overflows and produces unexpected behaviour.  When we subtract a negative value from a positive value we simply add the two numbers.
+The above problem arises from the fact that integer arithmetic in Java overflows and produces unexpected behaviour.  When we subtract a negative value from a positive value, we simply add the two numbers.
 
 ```
 jshell> 10 - -2
 $1 ==> 12
 ```
 
-A positive number indicates that the left operand (value of `10`) is larger than the right operand (value of `-2`).
+A positive number indicates that the left operand (value of `10`) is larger than the right operand (value of `-2`), which is correct.
 
-Now consider our values
+Now consider our extreme values
 
 ```
 jshell> 2147483647 - -2
 $2 ==> -2147483647
 ```
 
-A negative number, on the other hand, indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`), which is incorrect!!
+The evaluation of `2147483647 - -2` is equivalent to `2147483647 + 2` which overflows and returns a negative value.  A negative value, on the other hand, indicates that the left operand (value of `2147483647`) is smaller than the right operand (value of `-2`), which is incorrect!!
+
+This is quite a big problem which caused big bugs, even within Java API.  The [`Arrays.binarySerach()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int)) method was [broken because of this oversight](https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html).
 
 Luckily we can rely on the [`Integer` wrapper class's `compare()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#compare(int,int)).  Consider the following example.
 
@@ -7326,7 +7328,7 @@ public class App {
       new Person( "Aden", -2 ),
     };
 
-    final Comparator<Person> comparator = new Comparator<>() {
+    final Comparator<Person> comparator = new Comparator<Person>() {
       @Override
       public int compare( final Person a, final Person b ) {
         return Integer.compare( a.age, b.age );
@@ -7339,7 +7341,7 @@ public class App {
 }
 ```
 
-Now the persons are properly sorted by their age.
+Now the persons are properly sorted by their age, where `-2` is considered smaller than `2147483647`.
 
 ```bash
 Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
