@@ -6039,7 +6039,7 @@ build/classes/java
 
 The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.  Everything in Java is a class and lambda are no exceptions.  In Java, classes are the smallest unit of work.  We cannot just have a method outside a class.
 
-Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will compile and create the *lambda runtime class*.  Note that the lambda is only compiled, when it is first encountered and not every time it is executed.
+Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will compile and create the *lambda runtime class*.  Note that the lambda is only compiled once, when it is first encountered and not every time it is executed.
 
 ### Can an interface extend another class or another interface?
 
@@ -6080,7 +6080,7 @@ Consider the following three interfaces.
     }
     ```
 
-We can create a fourth interface, called `JackOfAllTrades` that extends all the interfaces.
+We can create a fourth interface, called `JackOfAllTrades` that extends all three interfaces.
 
 ```java
 package demo;
