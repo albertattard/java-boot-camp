@@ -7676,7 +7676,7 @@ public class App {
 }
 ```
 
-Our `runTask()` method takes a [`Runnable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Runnable.html).  If the runnable object is also a `RequireInit`, the `init()` is invoked and if it requires clean up, the `cleanUp()` method is invoked.
+Our `runTask()` method takes a [`Runnable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Runnable.html).  If the `Runnable` object is also a `RequireInit`, the `init()` is invoked and if it requires clean up, the `cleanUp()` method is invoked.
 
 ```bash
 SimpleTask::run()
@@ -7759,7 +7759,22 @@ public class App {
 }
 ```
 
+The above will print
+
+```bash
+SimpleTask::run()
+ModerateTask::init()
+ModerateTask::run()
+ComplexTask::init()
+ComplexTask::run()
+ComplexTask::cleanup()
+```
+
 The above example is making use of upcasting to use the `runTask()` method that takes a `Runnable`.
+
+```java
+runTask( (Runnable) task );
+```
 
 ### What is upcasting and how is it different from casting or downcasting?
 
