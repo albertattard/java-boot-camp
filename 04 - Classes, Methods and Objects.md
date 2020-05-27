@@ -5549,6 +5549,20 @@ The `equals()` and `hashCode()` methods are very important methods as these are 
 1. **No object is equal to `null`**: An object `a` is never equal to `null`.<br/>
     `a.equals(null)` always return `false`.
 
+The above rules do not mention the relation between the outcome of the `equals()` method and the outcome of the `hashCode()` method.  Following is a set of rules that govern this relation.
+
+1. **Consistent**: The hash code value of an object should remain the same throughout the execution of the program, as long as the object does not change.<br/>
+    The hash code value of an object can change between different executions of the program.
+1. **If equal, same hash code**: If two objects, `a` and `b`, are equal, then these two objects must have the same hash code value.<br/>
+    | When          | Returns | Then                           | Must   |
+    |---------------|---------|--------------------------------|--------|
+    | `a.equals(b)` | `true`  | `a.hashCode() == b.hashCode()` | `true` |
+1. **If same hash code, not necessarily equal**.  Hash code does not replace equality as two objects may have the same hash code and not be equal.
+    | When                           | Returns | Then          | May be  |
+    |--------------------------------|---------|---------------|---------|
+    | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `true`  |
+    | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `false` |
+
 #### Puzzle (Animal Farm)
 
 Consider the following example
