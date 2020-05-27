@@ -88,14 +88,13 @@
     1. [How can we sort the `Point` or any other custom class (the `Comparator` interface)?](#how-can-we-sort-the-point-or-any-other-custom-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
+    1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
     1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
     1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
         1. [Type Upcasting](#type-upcasting)
         1. [Type Downcasting](#type-downcasting)
     1. [Can we cast `null`?](#can-we-cast-null)
-    1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
-    1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
-    1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
+    1. [Can we cast primitive types?](#can-we-cast-primitive-types)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -8064,6 +8063,82 @@ public class App {
 
 The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism).
 
+### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
+
+Instead of relying on casting, we can take advantage of polymorphism.  Consider the following version of the `Pet` class.
+
+```java
+package demo;
+
+public abstract class Pet {
+
+    abstract void doIt();
+}
+```
+
+The `Pet` class defined an abstract method, named `doIt()`.  All subclasses need to override this method and provide a concrete implementation.
+
+1. A dog that barks
+
+    ```java
+    package demo;
+
+    public class Dog extends Pet {
+
+      @Override
+      public void doIt() {
+        System.out.println( "Woof..." );
+      }
+    }
+    ```
+
+1. A cat that meows
+
+    ```java
+    package demo;
+
+    public class Cat extends Pet {
+
+      @Override
+      public void doIt() {
+        System.out.println( "Meow..." );
+      }
+    }
+    ```
+
+1. A bird that tweets
+
+    ```java
+    package demo;
+
+    public class Bird extends Pet {
+
+      @Override
+      public void doIt() {
+        System.out.println( "Tweet..." );
+      }
+    }
+    ```
+
+Different from before, all subclasses of the `Pet` class have their own implementation of the `doIt()` method.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Pet pet = new Dog();
+    doYourThing( pet );
+  }
+
+  private static void doYourThing( final Pet pet ) {
+    pet.doIt();
+  }
+}
+```
+
+All pets have the `doIt()` method and we don't need to check the type and invoke specific methods as we did before.  Furthermore, if later on we add new types, such as `Fish` or `Tiger`, we don't have to change the `doYourThing()` method shown above as all pets will have the `doIt()` method.
+
 ### Are there good examples of the `instanceof` and cast operators?
 
 Yes. Frameworks, such as [Spring](https://spring.io/), use the `instanceof` and cast operators to decorate objects.  Consider the following two interfaces:
@@ -8071,7 +8146,7 @@ Yes. Frameworks, such as [Spring](https://spring.io/), use the `instanceof` and 
 1. [`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/InitializingBean.html)
 1. [`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/DisposableBean.html)
 
-Implementing any (or both) of these two interfaces will tell Spring how to interact with your [beans](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition).  It is important to note that Spring has been with us for quite some time, [since October 2002](https://en.wikipedia.org/wiki/Spring_Framework), and Spring had to work with older versions of Java where features like [interface default methods](#what-are-default-and-static-methods) were not available.  Using the `instanceof` and cast operators together with these two interfaces, Spring was able to initialise beans after creating them and displose beans before stopping them.
+Implementing any (or both) of these two interfaces will tell Spring how to interact with your [beans](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition).  It is important to note that Spring has been with us for quite some time, [since October 2002](https://en.wikipedia.org/wiki/Spring_Framework), and Spring had to work with older versions of Java where features like [interface default methods](#what-are-default-and-static-methods) were not available.  Using the `instanceof` and cast operators together with these two interfaces, Spring was able to initialise beans after creating them and dispose beans before stopping them.
 
 Consider the following two interfaces
 
@@ -8478,15 +8553,7 @@ The above works, as all `VeryImportantPerson` are `Person`.
 
 "_If the expression has the null type, then the expression may be cast to any reference type._" ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5))
 
-### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
-
-**🚧 Pending...**
-
-### Can we cast any object to any object?
-
-**🚧 Pending...**
-
-### What happens if we cast the wrong object (the `ClassCastException`)?
+### Can we cast primitive types?
 
 **🚧 Pending...**
 
