@@ -185,6 +185,7 @@ Boot Camp for developers interested to learn Java.
         1. [Be careful with sensitive information](04%20-%20Classes%2C%20Methods%20and%20Objects.md#be-careful-with-sensitive-information)
         1. [Be careful with recursive `toString()` calls](04%20-%20Classes%2C%20Methods%20and%20Objects.md#be-careful-with-recursive-tostring-calls)
     1. [The `equals()` and `hashCode()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-equals-and-hashcode-methods)
+        1. [Be careful with recursive `equals()` (and `hashCode()`) calls](04%20-%20Classes%2C%20Methods%20and%20Objects.md#be-careful-with-recursive-equals-and-hashcode-calls)
         1. [Puzzle (Animal Farm)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#puzzle-animal-farm)
     1. [The `getClass()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-getclass-method)
     1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#-the-wait-notify-and-notifyall-methods)

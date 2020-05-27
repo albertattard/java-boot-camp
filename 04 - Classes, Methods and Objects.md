@@ -63,6 +63,7 @@
         1. [Be careful with sensitive information](#be-careful-with-sensitive-information)
         1. [Be careful with recursive `toString()` calls](#be-careful-with-recursive-tostring-calls)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
+        1. [Be careful with recursive `equals()` (and `hashCode()`) calls](#be-careful-with-recursive-equals-and-hashcode-calls)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
     1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](#-the-wait-notify-and-notifyall-methods)
@@ -5567,6 +5568,304 @@ The above rules do not mention the relation between the outcome of the `equals()
     | When                           | Returns | Then          | Must    |
     |--------------------------------|---------|---------------|---------|
     | `a.hashCode() == b.hashCode()` | `false` | `a.equals(b)` | `false` |
+
+#### Be careful with recursive `equals()` (and `hashCode()`) calls
+
+This is very similar to [Be careful with recursive `toString()` calls](#be-careful-with-recursive-tostring-calls) section.
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS A StackOverflowError!!**
+
+```java
+package demo;
+
+import java.util.Objects;
+
+public class Person {
+
+  private final String name;
+  private final String surname;
+
+  private Person friend;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  public void setFriend( final Person friend ) { /* ... */ }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object ) {
+      return true;
+    }
+
+    if ( !( object instanceof Person ) ) {
+      return false;
+    }
+
+    final Person that = (Person) object;
+    return Objects.equals( name, that.name ) &&
+      Objects.equals( surname, that.surname ) &&
+      Objects.equals( friend, that.friend );
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash( name, surname, friend );
+  }
+
+  @Override
+  public String toString() { /* ... */ }
+}
+```
+
+Invoking the `hashCode()` function will cause a recursive chain that will only stop by the program crashing with a `StackOverflowError`.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person albert = new Person( "Albert", "Attard" );
+    final Person john = new Person( "John", "Ferry" );
+
+    /* Albert and John are friends */
+    albert.setFriend( john );
+    john.setFriend( albert );
+
+    System.out.printf( "albert's hash code: %d%n", albert.hashCode() );
+  }
+}
+```
+
+The following image shows how this deadly friendship cases an infinite recursive call.
+
+![Recursive hashCode() method](assets/images/Recursive%20hashCode%20method.png)
+
+```bash
+Exception in thread "main" java.lang.StackOverflowError
+	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+	at java.base/java.util.Objects.hash(Objects.java:147)
+	at demo.Person.hashCode(Person.java:48)
+	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+	at java.base/java.util.Objects.hash(Objects.java:147)
+    ...
+	at demo.Person.hashCode(Person.java:48)
+	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+```
+
+Same applies to the `equals()` method.  The example that triggers this problem is a bit more elaborate as we need to create a matching pair of objects which will cause the `equals()` to enter into a deadly recursive dance.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person albert = new Person( "Albert", "Attard" );
+    final Person john = new Person( "John", "Ferry" );
+
+    /* Albert and John are friends */
+    albert.setFriend( john );
+    john.setFriend( albert );
+
+    /* Another version of Albert and John */
+    final Person anotherAlbert = new Person( "Albert", "Attard" );
+    final Person anotherJohn = new Person( "John", "Ferry" );
+    anotherAlbert.setFriend( anotherJohn );
+    anotherJohn.setFriend( anotherAlbert );
+
+    System.out.printf( "Are equal? %s%n", albert.equals( anotherAlbert ) );
+  }
+}
+```
+
+As expected, the `equals()` methods will enter a recursive call that will only end by the program crashing with a `StackOverflowError`.
+
+```bash
+Exception in thread "main" java.lang.StackOverflowError
+	at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
+	at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
+	at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3973)
+	at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
+	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+	at java.base/java.util.regex.Pattern$BranchConn.match(Pattern.java:4718)
+	at java.base/java.util.regex.Pattern$GroupTail.match(Pattern.java:4840)
+	at java.base/java.util.regex.Pattern$BmpCharPropertyGreedy.match(Pattern.java:4349)
+	at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
+	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4754)
+	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+	at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3974)
+	at java.base/java.util.regex.Pattern$Start.match(Pattern.java:3627)
+	at java.base/java.util.regex.Matcher.search(Matcher.java:1729)
+	at java.base/java.util.regex.Matcher.find(Matcher.java:773)
+	at java.base/java.util.Formatter.parse(Formatter.java:2702)
+	at java.base/java.util.Formatter.format(Formatter.java:2655)
+	at java.base/java.util.Formatter.format(Formatter.java:2609)
+	at java.base/java.lang.String.format(String.java:3302)
+	at demo.Person.toString(Person.java:55)
+	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+	at java.base/java.util.Formatter.format(Formatter.java:2673)
+	at java.base/java.io.PrintStream.format(PrintStream.java:1209)
+	at java.base/java.io.PrintStream.printf(PrintStream.java:1105)
+	at demo.Person.equals(Person.java:31)
+	at java.base/java.util.Objects.equals(Objects.java:78)
+    ...
+	at java.base/java.util.Objects.equals(Objects.java:78)
+	at demo.Person.equals(Person.java:43)
+	at java.base/java.util.Objects.equals(Objects.java:78)
+	at demo.Person.equals(Person.java:43)
+```
+
+**How can we avoid this problem?**
+
+There are several approaches to address this problem.
+
+1. Do not have the `friend` property (or any other property that leads to recursive calls) as part of the equality/hash computation
+
+    ```java
+    package demo;
+
+    import java.util.Objects;
+
+    public class Person {
+
+      private final String name;
+      private final String surname;
+
+      private Person friend;
+
+      public Person() { /* ... */ }
+
+      public Person( final String name ) { /* ... */ }
+
+      public Person( final String name, final String surname ) { /* ... */ }
+
+      public void setFriend( final Person friend ) { /* ... */ }
+
+      @Override
+      public boolean equals( final Object object ) {
+        if ( this == object ) {
+          return true;
+        }
+
+        if ( !( object instanceof Person ) ) {
+          return false;
+        }
+
+        final Person that = (Person) object;
+        return Objects.equals( name, that.name ) &&
+          Objects.equals( surname, that.surname );
+      }
+
+      @Override
+      public int hashCode() {
+        return Objects.hash( name, surname );
+      }
+
+      @Override
+      public String toString() { /* ... */ }
+    }
+    ```
+
+1. Refactor the classes such that it avoids recursive calls
+
+    Create a class that represents friendship.
+
+    ```java
+    package demo;
+
+    import java.util.Objects;
+
+    public class Friendship {
+
+      private final Person a;
+      private final Person b;
+
+      public Friends( final Person a, final Person b ) {
+        this.a = a;
+        this.b = b;
+      }
+
+      @Override
+      public boolean equals( final Object object ) {
+        if ( this == object ) {
+          return true;
+        }
+
+        if ( !( object instanceof Friends ) ) {
+          return false;
+        }
+
+        final Friends that = (Friends) object;
+        return Objects.equals( a, that.a ) &&
+          Objects.equals( b, that.b );
+      }
+
+      @Override
+      public int hashCode() {
+        return Objects.hash( a, b );
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "Friendship{a=%s, b=%s}", a, b );
+      }
+    }
+    ```
+
+    Remove the `friend` property from the `Person` class.
+
+    ```java
+    package demo;
+
+    import java.util.Objects;
+
+    public class Person {
+
+      private final String name;
+      private final String surname;
+
+      public Person() { /* ... */ }
+
+      public Person( final String name ) { /* ... */ }
+
+      public Person( final String name, final String surname ) { /* ... */ }
+
+      @Override
+      public boolean equals( final Object object ) {
+        if ( this == object ) {
+          return true;
+        }
+
+        if ( !( object instanceof Person ) ) {
+          return false;
+        }
+
+        final Person that = (Person) object;
+        return Objects.equals( name, that.name ) &&
+          Objects.equals( surname, that.surname );
+      }
+
+      @Override
+      public int hashCode() {
+        return Objects.hash( name, surname );
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "Person{name=%s, surname=%s}", name, surname );
+      }
+    }
+    ```
+
+There may be other valid approaches that avoid recursive calls.
 
 #### Puzzle (Animal Farm)
 
