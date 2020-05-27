@@ -18,7 +18,8 @@ The purpose of this section is to introduce some common aspects of the Java prog
 1. [Introduction to control-flow](#introduction-to-control-flow)
     1. [If-Else](#if-else)
     1. [switch](#switch)
-    1. [For Loops](#for-loops)
+    1. [For loop](#for-loop)
+1. [Annotations](#annotations)
 
 ## Setup
 
@@ -540,7 +541,7 @@ public class App {
 List has many elements
 ```
 
-### For Loops
+### For loop
 
 ```java
 package demo;
@@ -588,3 +589,7 @@ Names in array
 [0] Jade
 [1] Aden
 ```
+
+## Annotations
+
+**🚧 Pending...**

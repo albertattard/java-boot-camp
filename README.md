@@ -50,7 +50,8 @@ Boot Camp for developers interested to learn Java.
 1. [Introduction to control-flow](02%20-%20Java%20Light.md#introduction-to-control-flow)
     1. [If-Else](02%20-%20Java%20Light.md#if-else)
     1. [switch](02%20-%20Java%20Light.md#switch)
-    1. [For Loops](02%20-%20Java%20Light.md#for-loops)
+    1. [For loop](02%20-%20Java%20Light.md#for-loop)
+1. [Annotations](02%20-%20Java%20Light.md#annotations)
 
 ## [Data Types](03%20-%20Data%20Types.md)
 
