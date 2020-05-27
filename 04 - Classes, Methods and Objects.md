@@ -61,7 +61,7 @@
 1. [The `Object` class](#the-object-class)
     1. [The `toString()` method](#the-tostring-method)
         1. [Be careful with sensitive information](#be-careful-with-sensitive-information)
-        1. [Be careful with recursive calls](#be-careful-with-recursive-calls)
+        1. [Be careful with recursive `toString()` calls](#be-careful-with-recursive-tostring-calls)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
@@ -5183,7 +5183,7 @@ Running the previous example will now print.
 Paying with: CreditCard{number=XXXX-XXXX-XXXX-3456, cvv=XXX}
 ```
 
-#### Be careful with recursive calls
+#### Be careful with recursive `toString()` calls
 
 Consider the following example.
 
@@ -5235,14 +5235,14 @@ public class App {
 }
 ```
 
-When printing `albert`'s, we print `albert`'s `name` and `surname` properties and his `friend`.  Java invokes `albert`'s friend (`john`) `toString()` method, who in turn calls his friend's (`albert`) `toString()` method as shown in the following image.
+When printing variable `albert`, we print `albert`'s `name` and `surname` properties and his `friend` (`john`) using `albert`'s ` toString()` method.  Then, Java invokes `john`'s `toString()` method to convert `john` to a `String`.  Now, given that `albert` is `john`'s friend, `albert`'s `toString()` method is called again from within `john`'s `toString()` method and the cycles starts all over again.  This is a recursive call and will theoretically run forever as shown in the following image.
 
 ![Recursive toString() method](assets/images/Recursive%20toString%20method.png)
 
 The above recursive call will keep going until we run out of memory and a `StackOverflowError` is thrown and the program crash.
 
 ```bash
-albert->toString()->john->toString()->albert->toString()->...until we consume all memory.
+albert->toString()->john->toString()->albert->toString()->john->toString()->...until we consume all memory.
 ```
 
 The above program will fail with an `StackOverflowError`.
