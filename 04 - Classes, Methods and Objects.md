@@ -5557,11 +5557,15 @@ The above rules do not mention the relation between the outcome of the `equals()
     | When          | Returns | Then                           | Must   |
     |---------------|---------|--------------------------------|--------|
     | `a.equals(b)` | `true`  | `a.hashCode() == b.hashCode()` | `true` |
-1. **If same hash code, not necessarily equal**.  Hash code does not replace equality as two objects may have the same hash code and not be equal.
+1. **If same hash code, not necessarily equal**.  Hash code does not replace equality as two objects may have the same hash code and not be equal.<br/>
     | When                           | Returns | Then          | May be  |
     |--------------------------------|---------|---------------|---------|
     | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `true`  |
     | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `false` |
+    Note that if two objects have a different hash code value, then these objects must not be equal.<br/>
+    | When                           | Returns | Then          | Must    |
+    |--------------------------------|---------|---------------|---------|
+    | `a.hashCode() == b.hashCode()` | `false` | `a.equals(b)` | `false` |
 
 #### Puzzle (Animal Farm)
 
