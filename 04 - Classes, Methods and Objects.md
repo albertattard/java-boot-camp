@@ -8579,7 +8579,9 @@ The `Random` class does not provide a `nextByte()` method and we need to rely on
 The value of a is: 7
 ```
 
-**What will happen if the value being type casted does not fit?  What happens if the value we are casting is our of the `byte` range?**  Consider the following example.
+**What will happen if the value being type casted does not fit?  What happens if the value we are casting is out of the `byte` range?**
+
+Consider the following example.
 
 ```java
 package demo;
@@ -8592,14 +8594,24 @@ public class App {
 }
 ```
 
-The literal value `130.33` is a literal of type `double` (`64` bit).  A `byte` is an 8-bit variable.  When this happens, Java will overflow and continue counting to the negative side as shown next.
+The literal `double` value `130.33` is outside the `byte` range (between `-128` and `127` both inclusive).  When this happens, Java will overflow and continue counting to the negative side as shown next.
 
 
 ```bash
 The value of a is: -126
 ```
 
-Furthermore, the decimal point information is lost.  Changing the number from `130.33` to `130.999_999_999` will not make any difference.
+**Why -126?**
+
+The maximum byte value is `127`, `3` less than our value `130` (ignoring the decimal points).
+
+| Add *x* to `Byte.MAX_VALUE` | Result |
+|----------------------------:|-------:|
+|                         `1` | `-128` |
+|                         `2` | `-127` |
+|                         `3` | `-126` |
+
+Furthermore, the decimal point information is lost during the type casting as integers do not have decimal points.  Changing the number from `130.33` to `130.999_999_999` will make no difference.
 
 ```java
 package demo;
