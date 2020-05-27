@@ -8611,6 +8611,13 @@ The maximum byte value is `127` ([`Byte.MAX_VALUE`](https://docs.oracle.com/en/j
 |                         `2` | `-127` |
 |                         `3` | `-126` |
 
+We can try this in [JShell](02%20-%20Java%20Light.md#jshell).
+
+```java
+jshell> (byte) (127 + 3)
+$1 ==> -126
+```
+
 Furthermore, the decimal point information is lost during the type casting as integers do not have decimal points.  Changing the number from `130.33` to `130.999_999_999` will make no difference.
 
 ```java
