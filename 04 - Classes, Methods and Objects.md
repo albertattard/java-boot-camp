@@ -8555,7 +8555,68 @@ Yes, null can be type casted to any objects.  We already saw this when answering
 
 ### Can we type cast primitive types?
 
-**🚧 Pending...**
+Yes, primitives can be type casted too, as defined in the [widening primitive conversion (JLS-5.1.2)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.2) and the [narrowing primitive conversion (JLS-5.1.3)](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.3) sections of the [Java Language Specifications](https://docs.oracle.com/javase/specs/jls/se14).
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Random r = new Random();
+    final byte a = (byte) r.nextInt( 10 );
+    System.out.printf( "The value of a is: %d%n", a );
+  }
+}
+```
+
+The `Random` class does not provide a `nextByte()` method and we need to rely on the `nextInt()` method and then type cast the returned `int` type to `byte`.
+
+```bash
+The value of a is: 7
+```
+
+**What will happen if the value being type casted does not fit?  What happens if the value we are casting is our of the `byte` range?**  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final byte a = (byte) 130.33;
+    System.out.printf( "The value of a is: %d%n", a );
+  }
+}
+```
+
+The literal value `130.33` is a literal of type `double` (`64` bit).  A `byte` is an 8-bit variable.  When this happens, Java will overflow and continue counting to the negative side as shown next.
+
+
+```bash
+The value of a is: -126
+```
+
+Furthermore, the decimal point information is lost.  Changing the number from `130.33` to `130.999_999_999` will not make any difference.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final byte a = (byte) 130.999_999_999;
+    System.out.printf( "The value of a is: %d%n", a );
+  }
+}
+```
+
+All decimal places are dropped with this type casting and the following is printed.
+
+```bash
+The value of a is: -126
+```
 
 ## Inheritance and composition
 
