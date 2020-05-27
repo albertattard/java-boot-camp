@@ -8603,7 +8603,7 @@ The value of a is: -126
 
 **Why -126?**
 
-The maximum byte value is `127`, `3` less than our value `130` (ignoring the decimal points).
+The maximum byte value is `127` ([`Byte.MAX_VALUE`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Byte.html#MAX_VALUE)), `3` less than our value, `130` (ignoring the decimal points).
 
 | Add *x* to `Byte.MAX_VALUE` | Result |
 |----------------------------:|-------:|
