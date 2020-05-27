@@ -2074,7 +2074,7 @@ The enum is: SPADES
 
 The [`valueOf()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Enum.html#valueOf(java.lang.Class,java.lang.String)) will thrown an `IllegalArgumentException` if the given name does not match (case-sensitive) any of the enum constants.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN IllegalArgumentException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `IllegalArgumentException`!!**
 
 ```java
 package demo;
@@ -2192,7 +2192,7 @@ The enum HEARTS has an ordinal of 2
 
 Surprisingly enough, this question belongs to arrays ([discussed later on](04%20-%20Collections.md#arrays)).  The array returned by the `values()` method will have four elements.  Trying to retrieve an element from the array past the enum ordinal will throw an `ArrayIndexOutOfBoundsException`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ArrayIndexOutOfBoundsException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `ArrayIndexOutOfBoundsException`!!**
 
 ```java
 package demo;

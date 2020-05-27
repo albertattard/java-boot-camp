@@ -340,7 +340,7 @@ This example was taken from [PUZZLE 12: ABC in Java™ Puzzlers: Traps, Pitfalls
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ArrayIndexOutOfBoundsException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `ArrayIndexOutOfBoundsException`!!**
 
 ```java
 package demo;

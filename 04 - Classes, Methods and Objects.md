@@ -87,14 +87,14 @@
     1. [Can we use multiple properties to determine natural ordering?](#can-we-use-multiple-properties-to-determine-natural-ordering)
     1. [How can we sort the `Point` or any other custom class (the `Comparator` interface)?](#how-can-we-sort-the-point-or-any-other-custom-class-the-comparator-interface)
     1. [Can we compare two integers by subtracting one from the other?](#can-we-compare-two-integers-by-subtracting-one-from-the-other)
-1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
-    1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
-    1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
-    1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
+1. [The `instanceof` and type cast operators](#the-instanceof-and-type-cast-operators)
+    1. [Is there a better approach than relying on `instanceof` and type cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-type-cast-operators-polymorphism)
+    1. [Are there good examples of the `instanceof` and type cast operators?](#are-there-good-examples-of-the-instanceof-and-type-cast-operators)
+    1. [What is type upcasting and how is it different from type casting or type downcasting?](#what-is-type-upcasting-and-how-is-it-different-from-type-casting-or-type-downcasting)
         1. [Type Upcasting](#type-upcasting)
         1. [Type Downcasting](#type-downcasting)
-    1. [Can we cast `null`?](#can-we-cast-null)
-    1. [Can we cast primitive types?](#can-we-cast-primitive-types)
+    1. [Can we type cast `null`?](#can-we-type-cast-null)
+    1. [Can we type cast primitive types?](#can-we-type-cast-primitive-types)
 1. [Inheritance and composition](#inheritance-and-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
@@ -2886,7 +2886,7 @@ There are several ways to address this problem.  Three of which are listed below
     }
     ```
 
-1. We can cast the `null` to either a `String` as shown next or a `Point`
+1. We can type cast the `null` to either a `String` as shown next or a `Point`
 
     ```java
     public MagicBox() {
@@ -2894,7 +2894,7 @@ There are several ways to address this problem.  Three of which are listed below
     }
     ```
 
-    [Casting is covered in depth later on](#instanceof-and-cast-operators).
+    [Type casting is covered in depth later on](#the-instanceof-and-type-cast-operators).
 
 1. Alternatively, the default constructor can invoke the constructor that takes two parameters.
 
@@ -4004,7 +4004,7 @@ public class LightBox {
 
 Using the finite state machine, only the active state can invoke method.  Trying to invoke a method through a non-active state will throw an `IllegalStateException`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN IllegalStateException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `IllegalStateException`!!**
 
 ```java
 package demo;
@@ -7178,7 +7178,7 @@ Sorted: [Aden, Jade, Mario, Mary, Peter]
 
 Can we sort any array like that?  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN ClassCastException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
 
 ```java
 package demo;
@@ -7701,7 +7701,7 @@ public class Person {
 
 Now consider the following example, were we try to sort an array of persons that have `null` as their `name`.  Note that the person objects are not `null`, but the property being used to sort the array is `null`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN NullPointerException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `NullPointerException`!!**
 
 ```java
 package demo;
@@ -7984,9 +7984,9 @@ Now the persons are properly sorted by their age, where `-2` is considered small
 Sorted by age: [Person{name='Aden', age=-2}, Person{name='Jade', age=2147483647}]
 ```
 
-## The `instanceof` and cast operators
+## The `instanceof` and type cast operators
 
-Two operators that usually indicate bad design practice are the [`instanceof`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.20.2) and the [cast](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5) operators.
+Two operators that usually indicate bad design practice are the [`instanceof`](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.20.2) and the [type cast](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5) operators.
 
 **Why? You may be asking**.  Consider the following example.
 
@@ -8061,11 +8061,11 @@ public class App {
 }
 ```
 
-The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism).
+The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and type cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-type-cast-operators-polymorphism).
 
-### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
+### Is there a better approach than relying on `instanceof` and type cast operators (polymorphism)?
 
-Instead of relying on casting, we can take advantage of polymorphism.  Consider the following version of the `Pet` class.
+Instead of relying on type casting, we can take advantage of polymorphism.  Consider the following version of the `Pet` class.
 
 ```java
 package demo;
@@ -8139,14 +8139,14 @@ public class App {
 
 All pets have the `doIt()` method and we don't need to check the type and invoke specific methods as we did before.  Furthermore, if later on we add new types, such as `Fish` or `Tiger`, we don't have to change the `doYourThing()` method shown above as all pets will have the `doIt()` method.
 
-### Are there good examples of the `instanceof` and cast operators?
+### Are there good examples of the `instanceof` and type cast operators?
 
-Yes. Frameworks, such as [Spring](https://spring.io/), use the `instanceof` and cast operators to decorate objects.  Consider the following two interfaces:
+Yes. Frameworks, such as [Spring](https://spring.io/), use the `instanceof` and type cast operators to decorate objects.  Consider the following two interfaces:
 
 1. [`InitializingBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/InitializingBean.html)
 1. [`DisposableBean`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/DisposableBean.html)
 
-Implementing any (or both) of these two interfaces will tell Spring how to interact with your [beans](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition).  It is important to note that Spring has been with us for quite some time, [since October 2002](https://en.wikipedia.org/wiki/Spring_Framework), and Spring had to work with older versions of Java where features like [interface default methods](#what-are-default-and-static-methods) were not available.  Using the `instanceof` and cast operators together with these two interfaces, Spring was able to initialise beans after creating them and dispose beans before stopping them.
+Implementing any (or both) of these two interfaces will tell Spring how to interact with your [beans](https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-definition).  It is important to note that Spring has been with us for quite some time, [since October 2002](https://en.wikipedia.org/wiki/Spring_Framework), and Spring had to work with older versions of Java where features like [interface default methods](#what-are-default-and-static-methods) were not available.  Using the `instanceof` and type cast operators together with these two interfaces, Spring was able to initialise beans after creating them and dispose beans before stopping them.
 
 Consider the following two interfaces
 
@@ -8329,13 +8329,13 @@ ComplexTask::run()
 ComplexTask::cleanup()
 ```
 
-The above example is making use of upcasting to use the `runTask()` method that takes a `Runnable`.
+The above example is making use of type upcasting to use the `runTask()` method that takes a `Runnable`.
 
 ```java
 runTask( (Runnable) task );
 ```
 
-### What is upcasting and how is it different from casting or downcasting?
+### What is type upcasting and how is it different from type casting or type downcasting?
 
 Consider the following class hierarchy
 
@@ -8379,7 +8379,9 @@ Consider the following class hierarchy
 
 The `Person` class does not extends anything, thus inherits from the `Object` class.  The `VeryImportantPerson` class is a subclass of the `Person` class.
 
-Type casting is the ability of making a type appearing as another, **compatible**, type.  There are two types of type casting [upcasting](#upcasting) and [downcasting](#downcasting).
+Type casting is the ability of making a type appearing as another, **compatible**, type.  There are two types of type casting:
+* [Type upcasting](#type-upcasting)
+* [Type downcasting](#type-downcasting).
 
 ![Upcasting and Downcasting](assets/images/Upcasting%20and%20Downcasting.png)
 
@@ -8449,7 +8451,7 @@ Say that we need to serve *champagne* and *water* when handling VIPs.  In order 
 | `Person`              | **YES** | NO        |
 | `VeryImportantPerson` | **YES** | **YES**   |
 
-We can invoke the first method, `handle(Person)`, by using explicit upcasting as shown in the following example.
+We can invoke the first method, `handle(Person)`, by using explicit type upcasting as shown in the following example.
 
 ```java
 package demo;
@@ -8547,13 +8549,11 @@ public class App {
 
 The above works, as all `VeryImportantPerson` are `Person`.
 
-### Can we cast `null`?
+### Can we type cast `null`?
 
-**🚧 Pending...**
+Yes, null can be type casted to any objects.  We already saw this when answering the question [can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class).  "_If the expression has the `null` type, then the expression may be type cast to any reference type._" ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5))
 
-"_If the expression has the null type, then the expression may be cast to any reference type._" ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5))
-
-### Can we cast primitive types?
+### Can we type cast primitive types?
 
 **🚧 Pending...**
 
