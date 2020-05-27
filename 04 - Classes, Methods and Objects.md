@@ -90,8 +90,8 @@
 1. [The `instanceof` and cast operators](#the-instanceof-and-cast-operators)
     1. [Are there good examples of the `instanceof` and cast operators?](#are-there-good-examples-of-the-instanceof-and-cast-operators)
     1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
-        1. [Downcasting](#downcasting)
-        1. [Upcasting](#upcasting)
+        1. [Type Upcasting](#type-upcasting)
+        1. [Type Downcasting](#type-downcasting)
     1. [Can we cast `null`?](#can-we-cast-null)
     1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
@@ -7352,7 +7352,7 @@ Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()` me
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A NullPointerException!!**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `NullPointerException`!!**
 
 ```java
 package demo;
@@ -8262,8 +8262,6 @@ runTask( (Runnable) task );
 
 ### What is upcasting and how is it different from casting or downcasting?
 
-**🚧 Pending...**
-
 Consider the following class hierarchy
 
 1. A class that represents a person
@@ -8286,125 +8284,193 @@ Consider the following class hierarchy
     }
     ```
 
-1. A class that represent a special type of person
+1. A class that represent a special type of person, a VIP
 
     ```java
     package demo;
 
-    public class VeryImportPerson extends Person {
+    public class VeryImportantPerson extends Person {
 
-      public VeryImportPerson( final String name ) {
+      public VeryImportantPerson( final String name ) {
         super( name );
       }
 
       @Override
       public String toString() {
-        return String.format( "VeryImportPerson{name=%s}", name );
+        return String.format( "VeryImportantPerson{name=%s}", name );
       }
     }
     ```
 
-The `Person` class does not extends anything, thus inherits from the `Object` class.  The `VeryImportPerson` class is a subclass of the `Person` class.
+The `Person` class does not extends anything, thus inherits from the `Object` class.  The `VeryImportantPerson` class is a subclass of the `Person` class.
 
-Type casting is the ability to change an object from one type to another **compatible** type.
+Type casting is the ability of making a type appearing as another, **compatible**, type.  There are two types of type casting [upcasting](#upcasting) and [downcasting](#downcasting).
 
-1. **Upcasting** is when we convert a type to more generic type.  For example, cast a variable of type `VeryImportPerson` to type `Person` or `Object`
+![Upcasting and Downcasting](assets/images/Upcasting%20and%20Downcasting.png)
 
-```java
+#### Type Upcasting
 
-```
-
-1. Downcasting
-
-Java supports two types of casting
+Type upcasting, also referred to as [widening reference conversion in JLS 5.1.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.5), is when we convert a type to more generic type, thus *widening*.  For example, type cast a variable of type `VeryImportantPerson` to type `Person` or type `Object`.
 
 ```java
 package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new Person( "Peter" );
-    final Person b = new VeryImportPerson( "Mary" );
-    final VeryImportPerson c = new VeryImportPerson( "Jane" );
+    final Person a = new Person( "Jade" );
+    final Object b = (Object) a;
+  }
+}
+```
 
-    System.out.println( "-- Variable a (Person>>Person) ----------------------------" );
+The above example shows an explicit type upcasting from type `Person` to type `Object`.  We can type upcast implicitly.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Jade" );
+    final Object b = a;
+  }
+}
+```
+
+In both examples, variable `b` is of type `Object` despite it points to an object of type `Person`.  Type upcasting always works and no checks are required, all persons are objects.
+
+**Why do we need explicit type upcasting?**
+
+Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final VeryImportantPerson a = new VeryImportantPerson( "Aden" );
     handle( a );
-
-    System.out.println( "-- Variable b (Person>>VeryImportPerson) ------------------" );
-    handle( b );
-
-    System.out.println( "-- Variable c (VeryImportPerson>>VeryImportPerson) --------" );
-    handle( c );
   }
 
   public static void handle( final Person guest ) {
     System.out.printf( "Water for %s%n", guest );
   }
 
-  public static void handle( final VeryImportPerson guest ) {
+  public static void handle( final VeryImportantPerson guest ) {
     System.out.printf( "Champagne for %s%n", guest );
   }
 }
 ```
 
+The `handle()` method is overloaded.  The first method takes a `Person` as its parameter while the second takes a `VeryImportantPerson`.  The above example will always invoke the second method as variable `a` is of type `VeryImportantPerson`, and will print.
+
 ```bash
--- Variable a (Person>>Person) ----------------------------
-Water for Person{name=Peter}
--- Variable b (Person>>VeryImportPerson) ------------------
-Water for VeryImportPerson{name=Mary}
--- Variable c (VeryImportPerson>>VeryImportPerson) --------
-Champagne for VeryImportPerson{name=Jane}
+Champagne for VeryImportantPerson{name=Aden}
 ```
 
-#### Downcasting
+Say that we need to serve *champagne* and *water* when handling VIPs.  In order words, VIPs get all that normal persons get and more.
+
+| Type                  | Water   | Champagne |
+|-----------------------|:-------:|:---------:|
+| `Person`              | **YES** | NO        |
+| `VeryImportantPerson` | **YES** | **YES**   |
+
+We can invoke the first method, `handle(Person)`, by using explicit upcasting as shown in the following example.
 
 ```java
 package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final Person a = new VeryImportPerson( "Aden" );
-    handle( (VeryImportPerson) a );
+    final VeryImportantPerson a = new VeryImportantPerson( "Aden" );
+    handle( a );
   }
 
   public static void handle( final Person guest ) {
     System.out.printf( "Water for %s%n", guest );
   }
 
-  public static void handle( final VeryImportPerson guest ) {
+  public static void handle( final VeryImportantPerson guest ) {
+    handle( (Person) guest );
     System.out.printf( "Champagne for %s%n", guest );
   }
 }
 ```
 
+The above will print.
+
 ```bash
-Champagne for VeryImportPerson{name=Aden}
+Water for VeryImportantPerson{name=Aden}
+Champagne for VeryImportantPerson{name=Aden}
 ```
 
-#### Upcasting
+#### Type Downcasting
+
+Type downcasting, also referred to as [narrowing reference conversion in JLS 5.1.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.1.6), is when we convert a type to more specific type, thus *narrowing*.  For example, type cast a variable of type `Object` to type `Person` or type `VeryImportantPerson`.
 
 ```java
 package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final VeryImportPerson a = new VeryImportPerson( "Aden" );
-    handle( (Person) a );
-  }
-
-  public static void handle( final Person guest ) {
-    System.out.printf( "Water for %s%n", guest );
-  }
-
-  public static void handle( final VeryImportPerson guest ) {
-    System.out.printf( "Champagne for %s%n", guest );
+    final Object a = new Person( "Jade" );
+    final Person b = (Person) a;
   }
 }
 ```
 
-```bash
-Water for VeryImportPerson{name=Aden}
+In the above example, we create a `Person` and then assign it to the variable `a`, of type `Object`.  It is important to understand that variable `a` is of type `Object`.  Variable `b` is of type `Person`, which is more specific than `Object`.  We cannot simply assign `a` to `b`.  The following example will not compile.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Object a = new Person( "Jade" );
+    final Person b = a;
+  }
+}
 ```
+
+Note that type downcasting is checked and a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html) is thrown if the types are not compatible.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
+
+```java
+package demo;
+
+import java.awt.Point;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Object a = new Point( 1, 2 );
+    final Person b = (Person) a;
+  }
+}
+```
+
+The above example will fail with a `ClassCastException` as `Point` is not a `Person`.
+
+```bash
+Exception in thread "main" java.lang.ClassCastException: class java.awt.Point cannot be cast to class demo.Person (java.awt.Point is in module java.desktop of loader 'bootstrap'; demo.Person is in unnamed module of loader 'app')
+	at demo.App.main(App.java:8)
+```
+
+**Can we have an object of type `VeryImportantPerson` assigned to a variable of type `Object` type downcasted to a `Person`?**.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Object a = new VeryImportantPerson( "Jade" );
+    final Person b = (Person) a;
+  }
+}
+```
+
+The above works, as all `VeryImportantPerson` are `Person`.
 
 ### Can we cast `null`?
 

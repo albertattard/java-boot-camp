@@ -471,7 +471,7 @@ Array of int: [10, 2, 3, 4, 5]
 
 Note that while this may sound bad, there may be valid cases when we need to modify data and no need to apply defensive copying.
 
-**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS and TESTING WHICH IS COVERED LATER ON.**
+**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS and TESTING WHICH IS COVERED LATER ON!!**
 
 Consider the following class.
 
@@ -1198,7 +1198,7 @@ The Java `TreeSet` is based on the [Red-Black tree](https://en.wikipedia.org/wik
 
 Note that adding items to a list which do not support natural ordering and without providing a comparator will throw a `ClassCastException` at runtime.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A ClassCastException.**
+**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
 
 ```java
 package demo;
