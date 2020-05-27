@@ -61,6 +61,7 @@
 1. [The `Object` class](#the-object-class)
     1. [The `toString()` method](#the-tostring-method)
         1. [Be careful with sensitive information](#be-careful-with-sensitive-information)
+        1. [Be careful with recursive calls](#be-careful-with-recursive-calls)
     1. [The `equals()` and `hashCode()` methods](#the-equals-and-hashcode-methods)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
@@ -90,6 +91,7 @@
     1. [What is upcasting and how is it different from casting or downcasting?](#what-is-upcasting-and-how-is-it-different-from-casting-or-downcasting)
         1. [Downcasting](#downcasting)
         1. [Upcasting](#upcasting)
+    1. [Can we cast `null`?](#can-we-cast-null)
     1. [Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?](#is-there-a-better-approach-than-relying-on-instanceof-and-cast-operators-polymorphism)
     1. [Can we cast any object to any object?](#can-we-cast-any-object-to-any-object)
     1. [What happens if we cast the wrong object (the `ClassCastException`)?](#what-happens-if-we-cast-the-wrong-object-the-classcastexception)
@@ -5181,6 +5183,145 @@ Running the previous example will now print.
 Paying with: CreditCard{number=XXXX-XXXX-XXXX-3456, cvv=XXX}
 ```
 
+#### Be careful with recursive calls
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS A StackOverflowError!!**
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+  private final String surname;
+
+  private Person friend;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  public void setFriend( final Person friend ) {
+    this.friend = friend;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, surname=%s, friend=%s}", name, surname, friend );
+  }
+}
+```
+
+Two persons can be friends.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Person albert = new Person( "Albert", "Attard" );
+    final Person john = new Person( "John", "Ferry" );
+
+    /* Albert and John are friends */
+    albert.setFriend( john );
+    john.setFriend( albert );
+
+    System.out.printf( "%s%n", albert );
+  }
+}
+```
+
+When printing `albert`'s, we print `albert`'s `name` and `surname` properties and his `friend`.  Java invokes `albert`'s friend (`john`) `toString()` method, who in turn calls his friend's (`albert`) `toString()` method as shown in the following image.
+
+![Recursive toString() method](assets/images/Recursive%20toString%20method.png)
+
+The above recursive call will keep going until we run out of memory and a `StackOverflowError` is thrown and the program crash.
+
+```bash
+albert->toString()->john->toString()->albert->toString()->...until we consume all memory.
+```
+
+The above program will fail with an `StackOverflowError`.
+
+```bash
+Exception in thread "main" java.lang.StackOverflowError
+	at java.base/java.lang.StringUTF16.checkIndex(StringUTF16.java:1587)
+	at java.base/java.lang.StringUTF16.charAt(StringUTF16.java:1384)
+	at java.base/java.lang.StringUTF16$CharsSpliterator.tryAdvance(StringUTF16.java:1194)
+	at java.base/java.util.stream.IntPipeline.forEachWithCancel(IntPipeline.java:163)
+	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:502)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:488)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+	at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.IntPipeline.findFirst(IntPipeline.java:528)
+	at java.base/java.text.DecimalFormatSymbols.findNonFormatChar(DecimalFormatSymbols.java:778)
+	at java.base/java.text.DecimalFormatSymbols.initialize(DecimalFormatSymbols.java:758)
+	at java.base/java.text.DecimalFormatSymbols.<init>(DecimalFormatSymbols.java:115)
+	at java.base/sun.util.locale.provider.DecimalFormatSymbolsProviderImpl.getInstance(DecimalFormatSymbolsProviderImpl.java:85)
+	at java.base/java.text.DecimalFormatSymbols.getInstance(DecimalFormatSymbols.java:182)
+	at java.base/java.util.Formatter.getZero(Formatter.java:2437)
+	at java.base/java.util.Formatter.<init>(Formatter.java:1956)
+	at java.base/java.util.Formatter.<init>(Formatter.java:1978)
+	at java.base/java.lang.String.format(String.java:3302)
+	at demo.Person.toString(Person.java:29)
+	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+	at java.base/java.util.Formatter.format(Formatter.java:2673)
+	at java.base/java.util.Formatter.format(Formatter.java:2609)
+	at java.base/java.lang.String.format(String.java:3302)
+	at demo.Person.toString(Person.java:29)
+    ...
+	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+	at java.base/java.util.Formatter.format(Formatter.java:2673)
+	at java.base/java.util.Formatter.format(Formatter.java:2609)
+	at java.base/java.lang.String.format(String.java:3302)
+	at demo.Person.toString(Person.java:29)
+	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+```
+
+Following is a better example that avoids recursive `toString()` method.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+  private final String surname;
+
+  private Person friend;
+
+  public Person() { /* ... */ }
+
+  public Person( final String name ) { /* ... */ }
+
+  public Person( final String name, final String surname ) { /* ... */ }
+
+  public void setFriend( final Person friend ) { /* ... */ }
+
+  @Override
+  public String toString() {
+    final String friendToString =
+      friend == null ? "no friend"
+        : String.format( "{name=%s, surname=%s}", friend.name, friend.surname );
+    return String.format( "Person{name=%s, surname=%s, friend=%s}", name, surname, friendToString );
+  }
+}
+```
+
+Running the previous example will not print.
+
+```bash
+Person{name=Albert, surname=Attard, friend={name=John, surname=Ferry}}
+```
+
 ### The `equals()` and `hashCode()` methods
 
 Consider the following example.
@@ -7783,6 +7924,60 @@ runTask( (Runnable) task );
 
 **🚧 Pending...**
 
+Consider the following class hierarchy
+
+1. A class that represents a person
+
+    ```java
+    package demo;
+
+    public class Person {
+
+      public final String name;
+
+      public Person( final String name ) {
+        this.name =  name ;
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "Person{name=%s}", name );
+      }
+    }
+    ```
+
+1. A class that represent a special type of person
+
+    ```java
+    package demo;
+
+    public class VeryImportPerson extends Person {
+
+      public VeryImportPerson( final String name ) {
+        super( name );
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "VeryImportPerson{name=%s}", name );
+      }
+    }
+    ```
+
+The `Person` class does not extends anything, thus inherits from the `Object` class.  The `VeryImportPerson` class is a subclass of the `Person` class.
+
+Type casting is the ability to change an object from one type to another **compatible** type.
+
+1. **Upcasting** is when we convert a type to more generic type.  For example, cast a variable of type `VeryImportPerson` to type `Person` or `Object`
+
+```java
+
+```
+
+1. Downcasting
+
+Java supports two types of casting
+
 ```java
 package demo;
 
@@ -7870,6 +8065,12 @@ public class App {
 ```bash
 Water for VeryImportPerson{name=Aden}
 ```
+
+### Can we cast `null`?
+
+**🚧 Pending...**
+
+"_If the expression has the null type, then the expression may be cast to any reference type._" ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5))
 
 ### Is there a better approach than relying on `instanceof` and cast operators (polymorphism)?
 
