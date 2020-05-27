@@ -5562,6 +5562,7 @@ The above rules do not mention the relation between the outcome of the `equals()
     |--------------------------------|---------|---------------|---------|
     | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `true`  |
     | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `false` |
+
     Note that if two objects have a different hash code value, then these objects must not be equal.<br/>
     | When                           | Returns | Then          | Must    |
     |--------------------------------|---------|---------------|---------|
