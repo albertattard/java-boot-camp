@@ -5527,6 +5527,28 @@ public class Person {
 
 Note that both the overridden methods `equals()` and `hashCode()` made use of the [Objects.equals()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)) and [Objects.hash()]() methods.
 
+The `equals()` and `hashCode()` methods are very important methods as these are extensively used by other classes.  [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks in detail about this in [Item 10: Obey the general contract when overriding equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev10).  Following are some important rules related to the `equals()` method.
+
+1. **Reflexive**: An object is always equal to itself.<br/>
+    `a.equals(a)` always return `true`.
+1. **Symmetry**: If an object, `a`, is equal to another object, `b`, then the second object `b` must also be equal to the first object `a`.<br/>
+    | When          | Returns | Then          | Must    |
+    |---------------|---------|---------------|---------|
+    | `a.equals(b)` | `true`  | `b.equals(a)` | `true`  |
+    | `a.equals(b)` | `false` | `b.equals(a)` | `false` |
+1. **Transitive**: If an object, `a`, is equal to another object, `b`, and the second object `b` is equals to yet another object, `c`, then the first object `a` must also be equal to the third object `c`.<br/>
+    | When          | Returns | And           |Returns  | Then          | Must    |
+    |---------------|---------|---------------|---------|---------------|---------|
+    | `a.equals(b)` | `true`  | `b.equals(c)` | `true`  | `a.equals(c)` | `true`  |
+    | `a.equals(b)` | `true`  | `b.equals(c)` | `false` | `a.equals(c)` | `false` |
+    | `a.equals(b)` | `false` | `b.equals(c)` | `true`  | `a.equals(c)` | `false` |
+1. **Consistent**: If two objects are equal at one point in time, and nothing has changed in the meantime, these objects should remain equal.<br/>
+    As mentioned in [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), the [`URL` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/net/URL.html) "_relies on comparison of the IP addresses of the hosts associated with the URLs. Translating a host name to an IP address can require network access, and it isn't guaranteed to yield the same results over time. This can cause the URL equals method to violate the equals contract and has caused problems in practice. The behavior of URL’s equals method was a big mistake and should not be emulated. Unfortunately, it cannot be changed due to compatibility requirements. To avoid this sort of problem, equals methods should perform only deterministic computations on memory-resident objects._"<br/>
+    ([reference](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev10))
+1. **No external influence**: An object should not rely on external factors to determine whether two objects are equal or not, for the reasons described above.
+1. **No object is equal to `null`**: An object `a` is never equal to `null`.<br/>
+    `a.equals(null)` always return `false`.
+
 #### Puzzle (Animal Farm)
 
 Consider the following example
