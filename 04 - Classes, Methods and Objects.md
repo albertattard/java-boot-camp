@@ -8534,7 +8534,7 @@ Exception in thread "main" java.lang.ClassCastException: class java.awt.Point ca
 	at demo.App.main(App.java:8)
 ```
 
-**Can we have an object of type `VeryImportantPerson` assigned to a variable of type `Object` type downcasted to a `Person`?**.  Consider the following example.
+**Can we have an object of type `VeryImportantPerson` assigned to a variable of type `Object` type downcasted to a `Person`?**  Consider the following example.
 
 ```java
 package demo;
@@ -8551,7 +8551,7 @@ The above works, as all `VeryImportantPerson` are `Person`.
 
 ### Can we type cast `null`?
 
-Yes, null can be type casted to any objects.  We already saw this when answering the question [can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class).  "_If the expression has the `null` type, then the expression may be type cast to any reference type._" ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5))
+Yes, `null` can be type casted to any object ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5)).  We already saw this when answering the question [can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class).
 
 ### Can we type cast primitive types?
 
