@@ -11,6 +11,7 @@
     1. [Multidimensional Arrays](#multidimensional-arrays)
         1. [Two dimensional array](#two-dimensional-array)
         1. [Irregular Arrays](#irregular-arrays)
+    1. [Arrays are reference type](#arrays-are-reference-types)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
@@ -67,6 +68,18 @@
 
 ## Arrays
 
+Arrays are data structures that enables you to store a collection of values of the same type.
+
+### Arrays Declaration
+To declare an array we use square brackets after the type of the elements we will store in array
+```java
+int[] a;
+```
+Alternatively the square brackets can be placed after the variable name instead of the type
+
+```java
+int a[];
+```
 ### Create Arrays
 
 Create an integer array of 5 elements
@@ -81,13 +94,6 @@ public class App {
   }
 }
 ```
-
-The square brackets can be placed after the variable name instead of the type
-
-```java
-int a[] = { 1, 2, 3, 4, 5 };
-```
-
 Output
 
 ```bash
@@ -436,6 +442,30 @@ a[2][1]=8
 a[2][2]=9
 ```
 
+### Arrays are reference types
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    int[] a = { 1, 2, 3, 4, 5 };
+    int[] b = a;
+    b[0] = 10;
+
+    System.out.printf( "Array a contains: %s%n", Arrays.toString( a ) );
+    System.out.printf( "Array b contains: %s%n", Arrays.toString( b ) );
+  }
+}
+```
+Output
+
+```bash
+Array a contains: [10, 2, 3, 4, 5]
+Array b contains: [10, 2, 3, 4, 5]
+```
 ### Arrays are always Mutable
 
 **Making and array variable `final` does not make it immutable**.
@@ -462,7 +492,6 @@ Array of int: [10, 2, 3, 4, 5]
 ```
 
 **Java arrays are always mutable and there is nothing preventing that**.
-
 [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28)
 
 ### Defensive Copying
