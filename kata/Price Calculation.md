@@ -113,14 +113,14 @@ The following table assumes a unit price of `1.99€`.
 
 The following table assumes a name of `Sample` and a unit price of `1.99€`.
 
-| Line Item Type       | Quantity  | Discount/Special Offer             | Description (`de`)                 | Description (`it_IT`)              |
-|----------------------|----------:|------------------------------------|------------------------------------|------------------------------------|
-| Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€` | ---          |
-| Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`   | `Sample (4.248Kg × 1.99€) 8.45€`   |
-| Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
-| Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€` | `Sample (5 × 1.99€ - 1.00€) 8.96€` |
-| Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
-| Special offer        |       `5` | Buy 3 pay for 2                    | `Sample (5 × 1,99€ - 1,99€) 7,96€` | `Sample (5 × 1.99€ - 1.99€) 7.96€` |
+| Line Item Type       | Quantity  | Discount/Special Offer             | Description (`de`/`it_IT`)                                                |
+|----------------------|----------:|------------------------------------|---------------------------------------------------------------------------|
+| Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€`                 |
+| Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`<br/>`Sample (4.248Kg × 1.99€) 8.45€`     |
+| Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
+| Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€`<br/>`Sample (5 × 1.99€ - 1.00€) 8.96€` |
+| Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
+| Special offer        |       `5` | Buy 3 pay for 2                    | `Sample (5 × 1,99€ - 1,99€) 7,96€`<br/>`Sample (5 × 1.99€ - 1.99€) 7.96€` |
 
 ## Possible Solution
 
