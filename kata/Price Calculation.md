@@ -95,14 +95,14 @@ All line items, irrespective of the type, need to
 |:--------------------:|----------------:|-----------:|------------------------------------|------------:|
 | Item                 |             `1` |    `1.99€` | Nothing (*qty × price*)            |     `1.99€` |
 | Item                 |             `5` |    `1.99€` | Nothing (*qty × price*)            |     `9.95€` |
+| Weighted item        |       `0.987Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `1.96€` |
+| Weighted item        |       `4.847Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `9.65€` |
 | Discounted item      |             `1` |    `1.99€` | 10% Discount when buying 3 or more |     `1.99€` |
 | Discounted item      |             `2` |    `1.99€` | 10% Discount when buying 3 or more |     `3.98€` |
 | Discounted item      |             `3` |    `1.99€` | 10% Discount when buying 3 or more |     `5.37€` |
 | Special offer        |             `1` |    `1.99€` | Buy 3 pay for 2                    |     `1.99€` |
 | Special offer        |             `3` |    `1.99€` | Buy 3 pay for 2                    |     `3.98€` |
 | Special offer        |             `5` |    `1.99€` | Buy 3 pay for 2                    |     `7.96€` |
-| Weighted item        |       `0.987Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `1.96€` |
-| Weighted item        |       `4.847Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `9.65€` |
 | Discounted next item |             `1` |    `1.99€` | 50% on the third and more          |     `1.99€` |
 | Discounted next item |             `2` |    `1.99€` | 50% on the third and more          |     `3.98€` |
 | Discounted next item |             `3` |    `1.99€` | 50% on the third and more          |     `4.98€` |
@@ -328,3 +328,115 @@ public class WeightedLineItem extends BaseLineItem {
 ```
 
 ### 4
+
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName( "Discounted line item" )
+public class DiscountedLineItemTest {
+
+  @CsvSource( value = {
+    "5 | 0.50 | 3 | 0.1 | 2.25",
+    "2 | 1.99 | 3 | 0.1 | 3.98",
+  }, delimiter = '|' )
+  @DisplayName( "compute price" )
+  @ParameterizedTest( name = "should return {4}, for quantity {0}, price {1}, discount threshold {2} and discount {3}" )
+  public void shouldComputePrice(
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int discountThreshold,
+    final BigDecimal discount,
+    final BigDecimal expectedComputedPrice
+  ) {
+    final DiscountedLineItem subject = new DiscountedLineItem( "Test item", quantity, unitPrice, discountThreshold, discount );
+    assertEquals( 0, expectedComputedPrice.compareTo( subject.calculatePrice() ) );
+  }
+
+  @CsvSource( value = {
+    "Pack of spaghetti | 5 | 0.50 | 3 | 0.1 | de    | Pack of spaghetti (5 × 0,50€ - 10%) 2,25€",
+    "Pack of spaghetti | 5 | 0.50 | 3 | 0.1 | it_IT | Pack of spaghetti (5 × 0.50€ - 10%) 2.25€",
+    "Can of beans      | 2 | 1.99 | 3 | 0.1 | de    | Can of beans (2 × 1,99€) 3,98€",
+  }, delimiter = '|' )
+  @DisplayName( "description" )
+  @ParameterizedTest( name = "should return {6}, for an item with name {0}, quantity {1}, price {2}, discount threshold {3} and discount {4} in {5}" )
+  public void shouldDescribe(
+    final String name,
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int discountThreshold,
+    final BigDecimal discount,
+    final Locale locale,
+    final String expectedDescription
+  ) {
+    final DiscountedLineItem subject = new DiscountedLineItem( name, quantity, unitPrice, discountThreshold, discount );
+    assertEquals( expectedDescription, subject.describe( locale ) );
+  }
+}
+```
+
+```java
+package demo;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+public class DiscountedLineItem extends BaseLineItem {
+
+  private final int quantity;
+  private final int discountThreshold;
+  private final BigDecimal discount;
+
+  public DiscountedLineItem(
+    final String name,
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int discountThreshold,
+    final BigDecimal discount
+  ) {
+    super( name, unitPrice );
+    this.quantity = quantity;
+    this.discountThreshold = discountThreshold;
+    this.discount = discount;
+  }
+
+  @Override
+  public BigDecimal calculatePrice() {
+    final BigDecimal total = calculateTotal();
+    return qualifyForDiscount() ? calculateDiscount( total ) : total;
+  }
+
+  @Override
+  public String describe( final Locale locale ) {
+    final String appliedDiscount = qualifyForDiscount() ?
+      String.format( " - %.0f%%", discountAsPercentage() ) : "";
+    return String.format( locale, "%s (%d × %.2f€%s) %.2f€", name, quantity, unitPrice, appliedDiscount, calculatePrice() );
+  }
+
+  private boolean qualifyForDiscount() {
+    return quantity >= discountThreshold;
+  }
+
+  private BigDecimal calculateDiscount( final BigDecimal amount ) {
+    return amount.subtract( amount.multiply( discount ) );
+  }
+
+  private BigDecimal calculateTotal() {
+    return unitPrice.multiply( new BigDecimal( quantity ) );
+  }
+
+  private BigDecimal discountAsPercentage() {
+    return discount.multiply( new BigDecimal( 100 ) );
+  }
+}
+```
+
+### 5
