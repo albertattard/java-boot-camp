@@ -15,16 +15,28 @@ Consider the following examples:
 
     For example, a can of beans is sold for `1.99€`.  Ten cans simply cost ten times the single unit price, `19.90€`.
 
+    | Quantity | Price   |
+    |---------:|--------:|
+    |      `1` | `1.10€` |
+    |      `2` | `2.20€` |
+    |      `5` | `5.50€` |
+
 1. Weighted items are sold based on their weight.
 
     For example, fruit is sold by its weight.  `1Kg` of banana will cost twice as much as `500g` of the same banana.
+
+    | Weight    | Price   |
+    |----------:|--------:|
+    |     `1Kg` | `1.10€` |
+    | `0.987Kg` | `1.09€` |
+    | `4.357Kg` | `4.79€` |
 
 1. Items are on special offer and the prices varies based on the number of items bought.
 
     For example, the special offer maybe "*you buy 3 items and you pay for only 2*".  If you buy four items, you will pay for three and if you buy six you pay for four, as shown in the following table.
 
     | Quantity | Special offer applied | Price without special offer | Price with special offer applied |
-    |:--------:|:---------------------:|----------------------------:|---------------------------------:|
+    |---------:|:---------------------:|----------------------------:|---------------------------------:|
     |      `1` |           NO          |                     `1.10€` |                          `1.10€` |
     |      `2` |           NO          |                     `2.20€` |                          `2.20€` |
     |      `3` |     **YES** (on 3)    |                     `3.30€` |   (pay for 2 and 1 free) `2.20€` |
@@ -37,7 +49,7 @@ Consider the following examples:
     For example, a discount of `10%` is applied to all items when three or more items are bought.  One can of olives costs `1.10€`, while three cans will cost `2.97€` (instead `3.30€`).
 
     | Quantity | Discount applied | Price without discount | Price with discount applied |
-    |:--------:|:----------------:|-----------------------:|----------------------------:|
+    |---------:|:----------------:|-----------------------:|----------------------------:|
     |      `1` |        NO        |                `1.10€` |                     `1.10€` |
     |      `2` |        NO        |                `2.20€` |                     `2.20€` |
     |      `3` |     **YES**      |                `3.30€` |   (`3.30€ - 0.33€`) `2.97€` |
@@ -48,7 +60,7 @@ Consider the following examples:
     For example, a discount of `50%` is applied to the third and more items when three or more items are bought.  For example, a shaving cream bottle costs `1.99€`, while three bottles will cost `4.98€` (instead of `5.97€`).
 
     | Quantity | Discount applied | Price without discount | Price with discount applied  |
-    |:--------:|:----------------:|-----------------------:|-----------------------------:|
+    |---------:|:----------------:|-----------------------:|-----------------------------:|
     |      `1` |        NO        |                `1.99€` |                      `1.10€` |
     |      `2` |        NO        |                `3.98€` |                      `3.98€` |
     |      `3` |     **YES**      |                `5.97€` |   (`5.97€ - 0.995€`) `4.98€` |
