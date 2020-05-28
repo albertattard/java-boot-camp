@@ -4,6 +4,7 @@
 
 1. [Setup](#setup)
 1. [Arrays](#arrays)
+    1. [Arrays Declaration](#arrays-declaration)
     1. [Create Arrays](#create-arrays)
         1. [Puzzle (ABC)](#puzzle-abc)
     1. [Working with Arrays](#working-with-arrays)
@@ -11,7 +12,7 @@
     1. [Multidimensional Arrays](#multidimensional-arrays)
         1. [Two dimensional array](#two-dimensional-array)
         1. [Irregular Arrays](#irregular-arrays)
-    1. [Arrays are reference type](#arrays-are-reference-types)
+    1. [Arrays are reference types](#arrays-are-reference-types)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)

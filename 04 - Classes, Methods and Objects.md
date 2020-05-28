@@ -96,6 +96,9 @@
     1. [Can we type cast `null`?](#can-we-type-cast-null)
     1. [Can we type cast primitive types?](#can-we-type-cast-primitive-types)
 1. [Inheritance and composition](#inheritance-and-composition)
+    1. [What is composition?](#what-is-composition)
+    1. [Why is there a big push in favour of composition over inheritance?](#why-is-there-a-big-push-in-favour-of-composition-over-inheritance)
+    1. [What are the disadvantages of composition?](#what-are-the-disadvantages-of-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overloading](#overloading)
     1. [Overriding](#overriding)
@@ -8639,6 +8642,38 @@ The value of a is: -126
 
 ## Inheritance and composition
 
+**🚧 Pending...**
+
+### What is composition?
+
+**🚧 Pending...**
+
+The word composition comes form Latin, *compositionem*, which means "to put together".
+
+
+
+Consider the following example.
+
+```java
+package demo;
+
+public class Address {
+
+  private Country country;
+  private City city;
+  private PostalCode postalCode;
+  private Street street;
+  private Unit unit;
+
+}
+```
+
+### Why is there a big push in favour of composition over inheritance?
+
+**🚧 Pending...**
+
+### What are the disadvantages of composition?
+
 `Hashtable` accepts objects as keys to the map, something that does not fit well with the `Properties` class.
 
 ```java
@@ -8657,7 +8692,6 @@ public class App {
   }
 }
 ```
-
 
 **🚧 Pending...**
 
