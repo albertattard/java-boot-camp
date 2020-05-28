@@ -13,7 +13,7 @@ Consider the following examples:
 
 1. Items are sold at a fix price per unit without any special offer or discounts.
 
-    For example, a can of beans is sold for `1.99 €`.  Ten cans simply cost ten times the single unit price, `19.90 €`.
+    For example, a can of beans is sold for `1.99€`.  Ten cans simply cost ten times the single unit price, `19.90€`.
 
 1. Weighted items are sold based on their weight.
 
@@ -25,34 +25,34 @@ Consider the following examples:
 
     | Quantity | Special offer applied | Price without special offer | Price with special offer applied |
     |:--------:|:---------------------:|----------------------------:|---------------------------------:|
-    |      `1` |           NO          |                    `1.10 €` |                         `1.10 €` |
-    |      `2` |           NO          |                    `2.20 €` |                         `2.20 €` |
-    |      `3` |     **YES** (on 3)    |                    `3.30 €` |  (pay for 2 and 1 free) `2.20 €` |
-    |      `4` |     **YES** (on 3)    |                    `4.40 €` |  (pay for 3 and 1 free) `3.30 €` |
-    |      `5` |     **YES** (on 3)    |                    `5.50 €` |  (pay for 4 and 1 free) `4.40 €` |
-    |      `6` |     **YES** (on 6)    |                    `6.60 €` |  (pay for 4 and 2 free) `4.40 €` |
+    |      `1` |           NO          |                     `1.10€` |                          `1.10€` |
+    |      `2` |           NO          |                     `2.20€` |                          `2.20€` |
+    |      `3` |     **YES** (on 3)    |                     `3.30€` |   (pay for 2 and 1 free) `2.20€` |
+    |      `4` |     **YES** (on 3)    |                     `4.40€` |   (pay for 3 and 1 free) `3.30€` |
+    |      `5` |     **YES** (on 3)    |                     `5.50€` |   (pay for 4 and 1 free) `4.40€` |
+    |      `6` |     **YES** (on 6)    |                     `6.60€` |   (pay for 4 and 2 free) `4.40€` |
 
 1. A discount is applied to all items bought if a certain amount is bought.
 
-    For example, a discount of `10%` is applied to all items when three or more items are bought.  One can of olives costs `1.10 €`, while three cans will cost `2.97 €` (instead `3.30 €`).
+    For example, a discount of `10%` is applied to all items when three or more items are bought.  One can of olives costs `1.10€`, while three cans will cost `2.97€` (instead `3.30€`).
 
-    | Quantity | Discount applied | Price without discount | Price with discount applied  |
-    |:--------:|:----------------:|-----------------------:|-----------------------------:|
-    |      `1` |        NO        |               `1.10 €` |                     `1.10 €` |
-    |      `2` |        NO        |               `2.20 €` |                     `2.20 €` |
-    |      `3` |     **YES**      |               `3.30 €` | (`3.30 € - 0.33 €`) `2.97 €` |
-    |      `4` |     **YES**      |               `4.40 €` | (`4.40 € - 0.44 €`) `3.96 €` |
+    | Quantity | Discount applied | Price without discount | Price with discount applied |
+    |:--------:|:----------------:|-----------------------:|----------------------------:|
+    |      `1` |        NO        |                `1.10€` |                     `1.10€` |
+    |      `2` |        NO        |                `2.20€` |                     `2.20€` |
+    |      `3` |     **YES**      |                `3.30€` |   (`3.30€ - 0.33€`) `2.97€` |
+    |      `4` |     **YES**      |                `4.40€` |   (`4.40€ - 0.44€`) `3.96€` |
 
 1. Discount applies to the next items if a certain amount is bought.
 
-    For example, a discount of `50%` is applied to the third and more items when three or more items are bought.  For example, a shaving cream bottle costs `1.99 €`, while three bottles will cost `4.98 €` (instead of `5.97 €`).
+    For example, a discount of `50%` is applied to the third and more items when three or more items are bought.  For example, a shaving cream bottle costs `1.99€`, while three bottles will cost `4.98€` (instead of `5.97€`).
 
-    | Quantity | Discount applied | Price without discount | Price with discount applied   |
-    |:--------:|:----------------:|-----------------------:|------------------------------:|
-    |      `1` |        NO        |               `1.99 €` |                      `1.10 €` |
-    |      `2` |        NO        |               `3.98 €` |                      `3.98 €` |
-    |      `3` |     **YES**      |               `5.97 €` | (`5.97 € - 0.995 €`) `4.98 €` |
-    |      `4` |     **YES**      |               `7.96 €` |  (`7.96 € - 1.99 €`) `5.97 €` |
+    | Quantity | Discount applied | Price without discount | Price with discount applied  |
+    |:--------:|:----------------:|-----------------------:|-----------------------------:|
+    |      `1` |        NO        |                `1.99€` |                      `1.10€` |
+    |      `2` |        NO        |                `3.98€` |                      `3.98€` |
+    |      `3` |     **YES**      |                `5.97€` |   (`5.97€ - 0.995€`) `4.98€` |
+    |      `4` |     **YES**      |                `7.96€` |    (`7.96€ - 1.99€`) `5.97€` |
 
 For this first phase an item will never fall into more than one of the above categories.  For example, fruit will either be a weighted item or discounted item, but never both.
 
