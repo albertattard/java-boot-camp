@@ -8648,27 +8648,32 @@ The value of a is: -126
 
 **🚧 Pending...**
 
-The word composition comes form Latin, *compositionem*, which means "to put together".
+The word composition comes form Latin, [*compositio*](https://en.wiktionary.org/wiki/compositio), which means "*to put together*".
 
-
-
-Consider the following example.
+In software, composition is the ability of build some elaborate classes by putting together other classes.  We have been using composition throughout the boot camp, without knowing.  Take for example the following `Person` class.
 
 ```java
 package demo;
 
-public class Address {
+public class Person {
 
-  private Country country;
-  private City city;
-  private PostalCode postalCode;
-  private Street street;
-  private Unit unit;
+  private final String name;
+  private final int age;
 
+  public Person( final String name, final int age ) { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
 }
 ```
 
+The `Person` **has a** `name` and **has an** `age`.  The `Person` class is composed from a `String` and an `int`.  Note that an emphasis was made on the **has a** phrase.  In [inheritance](#inheritance), we use the phrase **is a**.  For example, a `LightBox` **is a** `Box`.  The following image shows the difference between inheritance and composition.
+
+![Inheritance and composition](assets/images/Inheritance%20and%20composition.png)
+
 ### Why is there a big push in favour of composition over inheritance?
+
+
 
 **🚧 Pending...**
 
