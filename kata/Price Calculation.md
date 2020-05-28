@@ -469,4 +469,122 @@ public class DiscountedLineItem extends BaseLineItem {
 }
 ```
 
-### 5
+### Special Offer
+
+Test
+
+```java
+package kata;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName( "Special offer line item" )
+public class SpecialOfferLineItemTest {
+
+  @CsvSource( value = {
+    "1 | 1.99 | 3 | 2 | 1.99",
+    "3 | 1.99 | 3 | 2 | 3.98",
+    "5 | 1.99 | 3 | 2 | 7.96",
+  }, delimiter = '|' )
+  @DisplayName( "compute price" )
+  @ParameterizedTest( name = "should return {4}, for quantity {0}, price {1} and buy {2} pay for {3}" )
+  public void shouldCalculatePrice(
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int buyThreshold,
+    final int payFor,
+    final BigDecimal expectedCalculatedPrice
+  ) {
+    final SpecialOfferLineItem subject = new SpecialOfferLineItem( "Sample", quantity, unitPrice, buyThreshold, payFor );
+    assertEquals( expectedCalculatedPrice, subject.calculatePrice() );
+  }
+
+  @CsvSource( value = {
+    "Sample | 2 | 1.99 | 3 | 2 | de    | Sample (2 × 1,99€) 3,98€",
+    "Sample | 5 | 1.99 | 3 | 2 | de    | Sample (5 × 1,99€ - 1,99€) 7,96€",
+    "Sample | 5 | 1.99 | 3 | 2 | it_IT | Sample (5 × 1.99€ - 1.99€) 7.96€",
+  }, delimiter = '|' )
+  @DisplayName( "description" )
+  @ParameterizedTest( name = "should return {4}, for an item with name {0}, quantity {1} and price {2} in {3}" )
+  public void shouldDescribe(
+    final String name,
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int buyThreshold,
+    final int payFor,
+    final Locale locale,
+    final String expectedDescription
+  ) {
+    final SpecialOfferLineItem subject = new SpecialOfferLineItem( name, quantity, unitPrice, buyThreshold, payFor );
+    assertEquals( expectedDescription, subject.describe( locale ) );
+  }
+}
+```
+
+Implementation
+
+```java
+package kata;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+public class SpecialOfferLineItem extends BaseLineItem {
+
+  private final int quantity;
+  private final int buyThreshold;
+  private final int payFor;
+
+  public SpecialOfferLineItem( final String name, final int quantity, final BigDecimal unitPrice, final int buyThreshold,
+    final int payFor ) {
+    super( name, unitPrice );
+    this.quantity = quantity;
+    this.buyThreshold = buyThreshold;
+    this.payFor = payFor;
+  }
+
+  @Override public BigDecimal calculatePrice() {
+    final int effectiveQuantity = calculateEffectiveQuantity();
+    return unitPrice.multiply( new BigDecimal( effectiveQuantity ) );
+  }
+
+  @Override public String describe( final Locale locale ) {
+    final String appliedDiscount = qualifyForDiscount() ?
+      String.format( locale, " - %.2f€", computeDiscount() ) : "";
+    return String.format( locale, "%s (%d × %.2f€%s) %.2f€", name, quantity, unitPrice, appliedDiscount, calculatePrice() );
+  }
+
+  private BigDecimal computeDiscount() {
+    final int effectiveQuantity = calculateEffectiveQuantity();
+    final int difference = quantity - effectiveQuantity;
+    return unitPrice.multiply( new BigDecimal( difference ) );
+  }
+
+  private boolean qualifyForDiscount() {
+    return quantity >= buyThreshold;
+  }
+
+  private int calculateEffectiveQuantity() {
+    return ( quantity / buyThreshold * payFor ) + quantity % buyThreshold;
+  }
+}
+```
+
+### Discounted next item
+
+Test
+
+```java
+```
+
+Implementation
+
+```java
+```
