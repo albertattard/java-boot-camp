@@ -100,14 +100,14 @@ The following table assumes a unit price of `1.99€`.
 | Weighted item        |           `1Kg` | Nothing (*wgt × price*)            |            `1.99` |
 | Weighted item        |       `4.847Kg` | Nothing (*wgt × price*)            |         `9.64553` |
 | Discounted item      |             `1` | 10% Discount when buying 3 or more |            `1.99` |
-| Discounted item      |             `2` | 10% Discount when buying 3 or more |            `3.98` |
 | Discounted item      |             `3` | 10% Discount when buying 3 or more |           `5.373` |
+| Discounted item      |             `5` | 10% Discount when buying 3 or more |           `8.955` |
 | Special offer        |             `1` | Buy 3 pay for 2                    |            `1.99` |
 | Special offer        |             `3` | Buy 3 pay for 2                    |            `3.98` |
 | Special offer        |             `5` | Buy 3 pay for 2                    |            `7.96` |
 | Discounted next item |             `1` | 50% on the third and more          |            `1.99` |
-| Discounted next item |             `2` | 50% on the third and more          |            `3.98` |
-| Discounted next item |             `3` | 50% on the third and more          |            `4.98` |
+| Discounted next item |             `3` | 50% on the third and more          |            `3.98` |
+| Discounted next item |             `5` | 50% on the third and more          |            `4.98` |
 
 ### Provide a description
 
@@ -373,8 +373,8 @@ public class DiscountedLineItemTest {
 
   @CsvSource( value = {
     "1 | 1.99 | 3 | 0.1 | 1.99",
-    "2 | 1.99 | 3 | 0.1 | 3.98",
     "3 | 1.99 | 3 | 0.1 | 5.373",
+    "5 | 1.99 | 3 | 0.1 | 8.955",
   }, delimiter = '|' )
   @DisplayName( "compute price" )
   @ParameterizedTest( name = "should return {4}, for quantity {0}, price {1}, discount threshold {2} and discount {3}" )
@@ -385,7 +385,7 @@ public class DiscountedLineItemTest {
     final BigDecimal discount,
     final BigDecimal expectedCalculatedPrice
   ) {
-    final DiscountedLineItem subject = new DiscountedLineItem( "Test item", quantity, unitPrice, buyThreshold, discount );
+    final DiscountedLineItem subject = new DiscountedLineItem( "Sample", quantity, unitPrice, buyThreshold, discount );
     assertEquals( expectedCalculatedPrice, subject.calculatePrice() );
   }
 
