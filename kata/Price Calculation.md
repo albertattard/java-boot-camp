@@ -106,8 +106,8 @@ The following table assumes a unit price of `1.99€`.
 | Special offer        |             `3` | Buy 3 pay for 2                    |            `3.98` |
 | Special offer        |             `5` | Buy 3 pay for 2                    |            `7.96` |
 | Discounted next item |             `1` | 50% on the third and more          |            `1.99` |
-| Discounted next item |             `3` | 50% on the third and more          |            `3.98` |
-| Discounted next item |             `5` | 50% on the third and more          |            `4.98` |
+| Discounted next item |             `3` | 50% on the third and more          |           `4.975` |
+| Discounted next item |             `5` | 50% on the third and more          |           `6.965` |
 
 ### Provide a description
 
@@ -582,9 +582,102 @@ public class SpecialOfferLineItem extends BaseLineItem {
 Test
 
 ```java
+package kata;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName( "Discounted next line item" )
+public class DiscountedNextLineItemTest {
+
+  @CsvSource( value = {
+    "1 | 1.99 | 3 | 0.5 | 1.99",
+    "3 | 1.99 | 3 | 0.5 | 4.975",
+    "5 | 1.99 | 3 | 0.5 | 6.965",
+  }, delimiter = '|' )
+  @DisplayName( "compute price" )
+  @ParameterizedTest( name = "should return {4}, for quantity {0}, price {1}, discount threshold {2} and discount {3}" )
+  public void shouldComputePrice(
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int discountThreshold,
+    final BigDecimal discount,
+    final BigDecimal expectedCalculatedPrice
+  ) {
+    final DiscountedNextLineItem subject =
+      new DiscountedNextLineItem( "Sample", quantity, unitPrice, discountThreshold, discount );
+    assertEquals( expectedCalculatedPrice, subject.calculatePrice() );
+  }
+
+  @CsvSource( value = {
+    "Sample | 2 | 1.99 | 3 | 0.5 | de    | Sample (2 × 1,99€) 3,98€",
+    "Sample | 5 | 1.99 | 3 | 0.5 | de    | Sample (5 × 1,99€ - 2,99€) 6,97€",
+    "Sample | 5 | 1.99 | 3 | 0.5 | it_IT | Sample (5 × 1.99€ - 2.99€) 6.97€",
+  }, delimiter = '|' )
+  @DisplayName( "description" )
+  @ParameterizedTest( name = "should return {6}, for an item with name {0}, quantity {1}, price {2}, discount threshold {3} and discount {4} in {5}" )
+  public void shouldDescribe(
+    final String name,
+    final int quantity,
+    final BigDecimal unitPrice,
+    final int discountThreshold,
+    final BigDecimal discount,
+    final Locale locale,
+    final String expectedDescription
+  ) {
+    final DiscountedNextLineItem subject = new DiscountedNextLineItem( name, quantity, unitPrice, discountThreshold, discount );
+    assertEquals( expectedDescription, subject.describe( locale ) );
+  }
+}
 ```
 
 Implementation
 
 ```java
+package kata;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+public class DiscountedNextLineItem extends BaseLineItem {
+
+  private final int quantity;
+  private final int buyThreshold;
+  private final BigDecimal discount;
+
+  public DiscountedNextLineItem( final String name, final int quantity, final BigDecimal unitPrice, final int buyThreshold,
+    final BigDecimal discount ) {
+    super( name, unitPrice );
+    this.quantity = quantity;
+    this.buyThreshold = buyThreshold;
+    this.discount = discount;
+  }
+
+  @Override
+  public BigDecimal calculatePrice() {
+    final BigDecimal total = unitPrice.multiply( new BigDecimal( quantity ) );
+    return qualifyForDiscount() ? total.subtract( calculateDiscount() ) : total;
+  }
+
+  @Override
+  public String describe( final Locale locale ) {
+    final String appliedDiscount = qualifyForDiscount() ?
+      String.format( locale, " - %.2f€", calculateDiscount() ) : "";
+    return String.format( locale, "%s (%d × %.2f€%s) %.2f€", name, quantity, unitPrice, appliedDiscount, calculatePrice() );
+  }
+
+  private BigDecimal calculateDiscount() {
+    return unitPrice.multiply( new BigDecimal( quantity - buyThreshold + 1 ) ).multiply( discount );
+  }
+
+  private boolean qualifyForDiscount() {
+    return quantity >= buyThreshold;
+  }
+}
 ```
