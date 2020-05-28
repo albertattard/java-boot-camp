@@ -93,21 +93,21 @@ All line items, irrespective of the type, need to
 
 The following table assumes a unit price of `1.99€`.
 
-| Line Item Type       | Quantity/Weight | Discount/Special Offer             | Total Price |
-|----------------------|----------------:|------------------------------------|------------:|
-| Item                 |             `1` | Nothing (*qty × price*)            |     `1.99€` |
-| Item                 |             `5` | Nothing (*qty × price*)            |     `9.95€` |
-| Weighted item        |       `0.987Kg` | Nothing (*wgt × price*)            |     `1.96€` |
-| Weighted item        |       `4.847Kg` | Nothing (*wgt × price*)            |     `9.65€` |
-| Discounted item      |             `1` | 10% Discount when buying 3 or more |     `1.99€` |
-| Discounted item      |             `2` | 10% Discount when buying 3 or more |     `3.98€` |
-| Discounted item      |             `3` | 10% Discount when buying 3 or more |     `5.37€` |
-| Special offer        |             `1` | Buy 3 pay for 2                    |     `1.99€` |
-| Special offer        |             `3` | Buy 3 pay for 2                    |     `3.98€` |
-| Special offer        |             `5` | Buy 3 pay for 2                    |     `7.96€` |
-| Discounted next item |             `1` | 50% on the third and more          |     `1.99€` |
-| Discounted next item |             `2` | 50% on the third and more          |     `3.98€` |
-| Discounted next item |             `3` | 50% on the third and more          |     `4.98€` |
+| Line Item Type       | Quantity/Weight | Discount/Special Offer             | Total Price (`€`) |
+|----------------------|----------------:|------------------------------------|------------------:|
+| Item                 |             `1` | Nothing (*qty × price*)            |            `1.99` |
+| Item                 |             `5` | Nothing (*qty × price*)            |            `9.95` |
+| Weighted item        |           `1Kg` | Nothing (*wgt × price*)            |            `1.99` |
+| Weighted item        |       `4.847Kg` | Nothing (*wgt × price*)            |         `9.64553` |
+| Discounted item      |             `1` | 10% Discount when buying 3 or more |            `1.99` |
+| Discounted item      |             `2` | 10% Discount when buying 3 or more |            `3.98` |
+| Discounted item      |             `3` | 10% Discount when buying 3 or more |            `5.37` |
+| Special offer        |             `1` | Buy 3 pay for 2                    |            `1.99` |
+| Special offer        |             `3` | Buy 3 pay for 2                    |            `3.98` |
+| Special offer        |             `5` | Buy 3 pay for 2                    |            `7.96` |
+| Discounted next item |             `1` | 50% on the third and more          |            `1.99` |
+| Discounted next item |             `2` | 50% on the third and more          |            `3.98` |
+| Discounted next item |             `3` | 50% on the third and more          |            `4.98` |
 
 ### Provide a description
 
@@ -118,7 +118,7 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 | Item                 |       `1` | Not applicable                     | `Sample (1 × 1,99€) 1,99€`<br/>`Sample (1 × 1.99€) 1.99€`                 |
 | Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€`                 |
 | Weighted item        |     `1Kg` | Not applicable                     | `Sample (1Kg × 1,99€) 1,99€`<br/>`Sample (1Kg × 1.99€) 1.99€`             |
-| Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`<br/>`Sample (4.248Kg × 1.99€) 8.45€`     |
+| Weighted item        | `4.847Kg` | Not applicable                     | `Sample (4,847Kg × 1,99€) 8,45€`<br/>`Sample (4.847Kg × 1.99€) 8.45€`     |
 | Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
 | Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€`<br/>`Sample (5 × 1.99€ - 1.00€) 8.96€` |
 | Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
@@ -135,7 +135,6 @@ Tests
 ```java
 package kata;
 
-import kata.LineItem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -154,13 +153,13 @@ public class LineItemTest {
   }, delimiter = '|' )
   @DisplayName( "compute price" )
   @ParameterizedTest( name = "should return {2}, for quantity {0} and price {1}" )
-  public void shouldComputePrice(
+  public void shouldCalculatePrice(
     final int quantity,
     final BigDecimal unitPrice,
-    final BigDecimal expectedComputedPrice
+    final BigDecimal expectedCalculatedPrice
   ) {
-    final LineItem subject = new LineItem( "Test item", quantity, unitPrice );
-    assertEquals( 0, expectedComputedPrice.compareTo( subject.calculatePrice() ) );
+    final LineItem subject = new LineItem( "Sample", quantity, unitPrice );
+    assertEquals( expectedCalculatedPrice, subject.calculatePrice() );
   }
 
   @CsvSource( value = {
@@ -275,80 +274,11 @@ The tests should pass.
 Tests
 
 ```java
-package demo;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-
-import java.math.BigDecimal;
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-@DisplayName( "Weighted line item" )
-public class WeightedLineItemTest {
-
-  @CsvSource( value = {
-    "4.248 | 1.99 | 8.45352",
-    "0.987 | 1.99 | 1.96413",
-  }, delimiter = '|' )
-  @DisplayName( "compute price" )
-  @ParameterizedTest( name = "should return {2}, for weight {0} and price {1}" )
-  public void shouldComputePrice(
-    final BigDecimal weight,
-    final BigDecimal unitPrice,
-    final BigDecimal expectedComputedPrice
-  ) {
-    final WeightedLineItem subject = new WeightedLineItem( "Test item", weight, unitPrice );
-    assertEquals( 0, expectedComputedPrice.compareTo( subject.calculatePrice() ) );
-  }
-
-  @CsvSource( value = {
-    "Banana | 4.248 | 1.99 | de    | Banana (4,248Kg × 1,99€) 8,45€",
-    "Banana | 4.248 | 1.99 | it_IT | Banana (4.248Kg × 1.99€) 8.45€",
-    "Apple  | 0.987 | 1.49 | de    | Apple (0,987Kg × 1,49€) 1,47€",
-  }, delimiter = '|' )
-  @DisplayName( "description" )
-  @ParameterizedTest( name = "should return {4}, for an item with name {0}, quantity {1} and price {2} in {3}" )
-  public void shouldDescribe(
-    final String name,
-    final BigDecimal weight,
-    final BigDecimal unitPrice,
-    final Locale locale,
-    final String expectedDescription
-  ) {
-    final WeightedLineItem subject = new WeightedLineItem( name, weight, unitPrice );
-    assertEquals( expectedDescription, subject.describe( locale ) );
-  }
-}
 ```
 
+Implementation
+
 ```java
-package demo;
-
-import java.math.BigDecimal;
-import java.util.Locale;
-
-public class WeightedLineItem extends BaseLineItem {
-
-  private final BigDecimal weight;
-
-  protected WeightedLineItem( final String name, final BigDecimal weight, final BigDecimal unitPrice ) {
-    super( name, unitPrice );
-    this.weight = weight;
-  }
-
-  @Override
-  public BigDecimal calculatePrice() {
-    return weight.multiply( unitPrice );
-  }
-
-  @Override
-  public String describe( final Locale locale ) {
-    return String.format( locale, "%s (%.3fKg × %.2f€) %.2f€", name, weight, unitPrice, calculatePrice() );
-  }
-}
 ```
 
 ### 4
