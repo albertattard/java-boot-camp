@@ -115,7 +115,7 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 
 | Line Item Type       | Quantity  | Discount/Special Offer             | Description (`de`)                 | Description (`it_IT`)              |
 |----------------------|----------:|------------------------------------|------------------------------------|------------------------------------|
-| Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`         | `Sample (5 × 1.99€) 9.95€`         |
+| Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€` | ---          |
 | Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`   | `Sample (4.248Kg × 1.99€) 8.45€`   |
 | Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
 | Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€` | `Sample (5 × 1.99€ - 1.00€) 8.96€` |
