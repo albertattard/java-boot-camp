@@ -91,33 +91,36 @@ All line items, irrespective of the type, need to
 
 ### Calculate total price
 
-| Line Item Type       | Quantity/Weight | Unit Price | Discount/Special Offer             | Total Price |
-|:--------------------:|----------------:|-----------:|------------------------------------|------------:|
-| Item                 |             `1` |    `1.99€` | Nothing (*qty × price*)            |     `1.99€` |
-| Item                 |             `5` |    `1.99€` | Nothing (*qty × price*)            |     `9.95€` |
-| Weighted item        |       `0.987Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `1.96€` |
-| Weighted item        |       `4.847Kg` |    `1.99€` | Nothing (*wgt × price*)            |     `9.65€` |
-| Discounted item      |             `1` |    `1.99€` | 10% Discount when buying 3 or more |     `1.99€` |
-| Discounted item      |             `2` |    `1.99€` | 10% Discount when buying 3 or more |     `3.98€` |
-| Discounted item      |             `3` |    `1.99€` | 10% Discount when buying 3 or more |     `5.37€` |
-| Special offer        |             `1` |    `1.99€` | Buy 3 pay for 2                    |     `1.99€` |
-| Special offer        |             `3` |    `1.99€` | Buy 3 pay for 2                    |     `3.98€` |
-| Special offer        |             `5` |    `1.99€` | Buy 3 pay for 2                    |     `7.96€` |
-| Discounted next item |             `1` |    `1.99€` | 50% on the third and more          |     `1.99€` |
-| Discounted next item |             `2` |    `1.99€` | 50% on the third and more          |     `3.98€` |
-| Discounted next item |             `3` |    `1.99€` | 50% on the third and more          |     `4.98€` |
+The following table assumes a unit price of `1.99€`.
+
+| Line Item Type       | Quantity/Weight | Discount/Special Offer             | Total Price |
+|----------------------|----------------:|------------------------------------|------------:|
+| Item                 |             `1` | Nothing (*qty × price*)            |     `1.99€` |
+| Item                 |             `5` | Nothing (*qty × price*)            |     `9.95€` |
+| Weighted item        |       `0.987Kg` | Nothing (*wgt × price*)            |     `1.96€` |
+| Weighted item        |       `4.847Kg` | Nothing (*wgt × price*)            |     `9.65€` |
+| Discounted item      |             `1` | 10% Discount when buying 3 or more |     `1.99€` |
+| Discounted item      |             `2` | 10% Discount when buying 3 or more |     `3.98€` |
+| Discounted item      |             `3` | 10% Discount when buying 3 or more |     `5.37€` |
+| Special offer        |             `1` | Buy 3 pay for 2                    |     `1.99€` |
+| Special offer        |             `3` | Buy 3 pay for 2                    |     `3.98€` |
+| Special offer        |             `5` | Buy 3 pay for 2                    |     `7.96€` |
+| Discounted next item |             `1` | 50% on the third and more          |     `1.99€` |
+| Discounted next item |             `2` | 50% on the third and more          |     `3.98€` |
+| Discounted next item |             `3` | 50% on the third and more          |     `4.98€` |
 
 ### Provide a description
 
+The following table assumes a name of `Sample` and a unit price of `1.99€`.
 
-| Line Item Type       | Name     | Quantity  | Unit Price | Discount/Special Offer             | Description (`de`)                 | Description (`it_IT`)              |
-|----------------------|----------|----------:|-----------:|------------------------------------|------------------------------------|------------------------------------|
-| Item                 | `Sample` |       `5` |    `1.99€` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`         | `Sample (5 × 1.99€) 9.95€`         |
-| Weighted item        | `Sample` | `4.248Kg` |    `1.99€` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`   | `Sample (4.248Kg × 1.99€) 8.45€`   |
-| Discounted item      | `Sample` |       `2` |    `1.99€` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
-| Discounted item      | `Sample` |       `5` |    `1.99€` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€` | `Sample (5 × 1.99€ - 1.00€) 8.96€` |
-| Special offer        | `Sample` |       `2` |    `1.99€` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
-| Special offer        | `Sample` |       `5` |    `1.99€` | Buy 3 pay for 2                    | `Sample (5 × 1,99€ - 1,99€) 7,96€` | `Sample (5 × 1.99€ - 1.99€) 7.96€` |
+| Line Item Type       | Quantity  | Discount/Special Offer             | Description (`de`)                 | Description (`it_IT`)              |
+|----------------------|----------:|------------------------------------|------------------------------------|------------------------------------|
+| Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`         | `Sample (5 × 1.99€) 9.95€`         |
+| Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`   | `Sample (4.248Kg × 1.99€) 8.45€`   |
+| Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
+| Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€` | `Sample (5 × 1.99€ - 1.00€) 8.96€` |
+| Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`         | `Sample (2 × 1.99€) 3.98€`         |
+| Special offer        |       `5` | Buy 3 pay for 2                    | `Sample (5 × 1,99€ - 1,99€) 7,96€` | `Sample (5 × 1.99€ - 1.99€) 7.96€` |
 
 ## Possible Solution
 
