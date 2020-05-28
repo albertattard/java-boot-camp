@@ -115,7 +115,9 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 
 | Line Item Type       | Quantity  | Discount/Special Offer             | Description (`de`/`it_IT`)                                                |
 |----------------------|----------:|------------------------------------|---------------------------------------------------------------------------|
+| Item                 |       `1` | Not applicable                     | `Sample (1 × 1,99€) 1,99€`<br/>`Sample (1 × 1.99€) 1.99€`                 |
 | Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€`                 |
+| Weighted item        |     `1Kg` | Not applicable                     | `Sample (1Kg × 1,99€) 1,99€`<br/>`Sample (1Kg × 1.99€) 1.99€`             |
 | Weighted item        | `4.248Kg` | Not applicable                     | `Sample (4,248Kg × 1,99€) 8,45€`<br/>`Sample (4.248Kg × 1.99€) 8.45€`     |
 | Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
 | Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€`<br/>`Sample (5 × 1.99€ - 1.00€) 8.96€` |
@@ -126,11 +128,14 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 
 ## Possible Solution
 
-### 1
+### Item
+
+Tests
 
 ```java
-package demo;
+package kata;
 
+import kata.LineItem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -144,8 +149,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class LineItemTest {
 
   @CsvSource( value = {
-    "5 | 0.50 | 2.50",
-    "2 | 1.99 | 3.98",
+    "1 | 1.99 | 1.99",
+    "5 | 1.99 | 9.95",
   }, delimiter = '|' )
   @DisplayName( "compute price" )
   @ParameterizedTest( name = "should return {2}, for quantity {0} and price {1}" )
@@ -159,9 +164,9 @@ public class LineItemTest {
   }
 
   @CsvSource( value = {
-    "Pack of spaghetti | 5 | 0.50 | de    | Pack of spaghetti (5 × 0,50€) 2,50€",
-    "Pack of spaghetti | 5 | 0.50 | it_IT | Pack of spaghetti (5 × 0.50€) 2.50€",
-    "Can of beans      | 2 | 1.99 | de    | Can of beans (2 × 1,99€) 3,98€",
+    "Sample | 1 | 1.99 | de    | Sample (1 × 1,99€) 1,99€",
+    "Sample | 5 | 1.99 | de    | Sample (5 × 1,99€) 9,95€",
+    "Sample | 5 | 1.99 | it_IT | Sample (5 × 1.99€) 9.95€",
   }, delimiter = '|' )
   @DisplayName( "description" )
   @ParameterizedTest( name = "should return {4}, for an item with name {0}, quantity {1} and price {2} in {3}" )
@@ -177,6 +182,8 @@ public class LineItemTest {
   }
 }
 ```
+
+Implementation
 
 ```java
 package demo;
@@ -206,7 +213,9 @@ public class LineItem {
 }
 ```
 
-### 2
+### Create a base item
+
+Move the name and unit price to a base class as all line items have these two.
 
 ```java
 package demo;
@@ -229,6 +238,8 @@ public abstract class BaseLineItem {
   public abstract String describe( final Locale locale );
 }
 ```
+
+Refactor line item to extend the base line class.
 
 ```java
 package demo;
@@ -257,7 +268,11 @@ public class LineItem extends BaseLineItem {
 }
 ```
 
-### 3
+The tests should pass.
+
+### Weighted line item
+
+Tests
 
 ```java
 package demo;
