@@ -117,8 +117,8 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 |----------------------|----------:|------------------------------------|---------------------------------------------------------------------------|
 | Item                 |       `1` | Not applicable                     | `Sample (1 × 1,99€) 1,99€`<br/>`Sample (1 × 1.99€) 1.99€`                 |
 | Item                 |       `5` | Not applicable                     | `Sample (5 × 1,99€) 9,95€`<br/>`Sample (5 × 1.99€) 9.95€`                 |
-| Weighted item        |     `1Kg` | Not applicable                     | `Sample (1Kg × 1,99€) 1,99€`<br/>`Sample (1Kg × 1.99€) 1.99€`             |
-| Weighted item        | `4.847Kg` | Not applicable                     | `Sample (4,847Kg × 1,99€) 8,45€`<br/>`Sample (4.847Kg × 1.99€) 8.45€`     |
+| Weighted item        |     `1Kg` | Not applicable                     | `Sample (1,000Kg × 1,99€) 1,99€`<br/>`Sample (1.000Kg × 1.99€) 1.99€`             |
+| Weighted item        | `4.847Kg` | Not applicable                     | `Sample (4,847Kg × 1,99€) 9,65€`<br/>`Sample (4.847Kg × 1.99€) 9.65€`     |
 | Discounted item      |       `2` | 10% Discount when buying 3 or more | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
 | Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€`<br/>`Sample (5 × 1.99€ - 1.00€) 8.96€` |
 | Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
@@ -274,11 +274,82 @@ The tests should pass.
 Tests
 
 ```java
+package kata;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName( "Weighted line item" )
+public class WeightedLineItemTest {
+
+  @CsvSource( value = {
+    "1     | 1.99 | 1.99",
+    "4.847 | 1.99 | 9.64553",
+  }, delimiter = '|' )
+  @DisplayName( "compute price" )
+  @ParameterizedTest( name = "should return {2}, for weight {0} and price {1}" )
+  public void shouldCalculatePrice(
+    final BigDecimal weight,
+    final BigDecimal unitPrice,
+    final BigDecimal expectedCalculatedPrice
+  ) {
+    final WeightedLineItem subject = new WeightedLineItem( "Sample", weight, unitPrice );
+    assertEquals( expectedCalculatedPrice, subject.calculatePrice() );
+  }
+
+  @CsvSource( value = {
+    "Sample | 4.847 | 1.99 | de    | Sample (4,847Kg × 1,99€) 9,65€",
+    "Sample | 4.847 | 1.99 | it_IT | Sample (4.847Kg × 1.99€) 9.65€",
+    "Sample | 1     | 1.99 | de    | Sample (1,000Kg × 1,99€) 1,99€",
+  }, delimiter = '|' )
+  @DisplayName( "description" )
+  @ParameterizedTest( name = "should return {4}, for an item with name {0}, quantity {1} and price {2} in {3}" )
+  public void shouldDescribe(
+    final String name,
+    final BigDecimal weight,
+    final BigDecimal unitPrice,
+    final Locale locale,
+    final String expectedDescription
+  ) {
+    final WeightedLineItem subject = new WeightedLineItem( name, weight, unitPrice );
+    assertEquals( expectedDescription, subject.describe( locale ) );
+  }
+}
 ```
 
 Implementation
 
 ```java
+package kata;
+
+import java.math.BigDecimal;
+import java.util.Locale;
+
+public class WeightedLineItem extends BaseLineItem {
+
+  private final BigDecimal weight;
+
+  protected WeightedLineItem( final String name, final BigDecimal weight, final BigDecimal unitPrice ) {
+    super( name, unitPrice );
+    this.weight = weight;
+  }
+
+  @Override
+  public BigDecimal calculatePrice() {
+    return weight.multiply( unitPrice );
+  }
+
+  @Override
+  public String describe( final Locale locale ) {
+    return String.format( locale, "%s (%.3fKg × %.2f€) %.2f€", name, weight, unitPrice, calculatePrice() );
+  }
+}
 ```
 
 ### 4
