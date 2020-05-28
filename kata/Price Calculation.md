@@ -121,6 +121,8 @@ The following table assumes a name of `Sample` and a unit price of `1.99€`.
 | Discounted item      |       `5` | 10% Discount when buying 3 or more | `Sample (5 × 1,99€ - 1,00€) 8,96€`<br/>`Sample (5 × 1.99€ - 1.00€) 8.96€` |
 | Special offer        |       `2` | Buy 3 pay for 2                    | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
 | Special offer        |       `5` | Buy 3 pay for 2                    | `Sample (5 × 1,99€ - 1,99€) 7,96€`<br/>`Sample (5 × 1.99€ - 1.99€) 7.96€` |
+| Discounted next item |       `2` | 50% on the third and more          | `Sample (2 × 1,99€) 3,98€`<br/>`Sample (2 × 1.99€) 3.98€`                 |
+| Discounted next item |       `5` | 50% on the third and more          | `Sample (5 × 1,99€ - 2,99€) 6,97€`<br/>`Sample (5 × 1.99€ - 2.99€) 6.97€` |
 
 ## Possible Solution
 
