@@ -15,21 +15,21 @@ Consider the following examples:
 
     For example, a can of beans is sold for `1.99€`.  Ten cans simply cost ten times the single unit price, `19.90€`.
 
-    | Quantity | Price   |
-    |---------:|--------:|
-    |      `1` | `1.10€` |
-    |      `2` | `2.20€` |
-    |      `5` | `5.50€` |
+    | Quantity | Price (`€`) |
+    |---------:|------------:|
+    |      `1` |      `1.99` |
+    |      `2` |      `3.98` |
+    |      `5` |      `9.95` |
 
 1. Weighted items are sold based on their weight.
 
     For example, fruit is sold by its weight.  `1Kg` of banana will cost twice as much as `500g` of the same banana.
 
-    | Weight    | Price   |
-    |----------:|--------:|
-    |     `1Kg` | `1.10€` |
-    | `0.987Kg` | `1.09€` |
-    | `4.357Kg` | `4.79€` |
+    | Weight    | Price (`€`) |
+    |----------:|------------:|
+    |     `1Kg` |      `1.99` |
+    | `0.987Kg` |   `1.96413` |
+    | `4.847Kg` |   `9.64553` |
 
 1. Items are on special offer and the prices varies based on the number of items bought.
 

@@ -5971,8 +5971,8 @@ package demo;
 import java.util.Objects;
 
 public class Person {
-  private String name;
-  private String surname;
+  private final String name;
+  private final String surname;
 
   public Person() { /* ... */ }
 
