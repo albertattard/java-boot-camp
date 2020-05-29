@@ -188,6 +188,7 @@ Boot Camp for developers interested to learn Java.
         1. [Be careful with recursive `equals()` (and `hashCode()`) calls](04%20-%20Classes%2C%20Methods%20and%20Objects.md#be-careful-with-recursive-equals-and-hashcode-calls)
         1. [Puzzle (Animal Farm)](04%20-%20Classes%2C%20Methods%20and%20Objects.md#puzzle-animal-farm)
     1. [The `getClass()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-getclass-method)
+        1. [The `getClass()`, `class` and the `equals()` method](04%20-%20Classes%2C%20Methods%20and%20Objects.md#the-getclass-class-and-the-equals-method)
     1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](04%20-%20Classes%2C%20Methods%20and%20Objects.md#-the-wait-notify-and-notifyall-methods)
 1. [Interfaces](04%20-%20Classes%2C%20Methods%20and%20Objects.md#interfaces)
     1. [What is an interface?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-is-an-interface)

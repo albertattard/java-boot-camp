@@ -66,6 +66,7 @@
         1. [Be careful with recursive `equals()` (and `hashCode()`) calls](#be-careful-with-recursive-equals-and-hashcode-calls)
         1. [Puzzle (Animal Farm)](#puzzle-animal-farm)
     1. [The `getClass()` method](#the-getclass-method)
+        1. [The `getClass()`, `class` and the `equals()` method](#the-getclass-class-and-the-equals-method)
     1. [🤔 The `wait()`, `notify()` and `notifyAll()` methods](#-the-wait-notify-and-notifyall-methods)
 1. [Interfaces](#interfaces)
     1. [What is an interface?](#what-is-an-interface)
@@ -5960,14 +5961,14 @@ Is the object (class java.awt.Point) of type Point? true
 Is the object (class java.util.Random) of type Point? false
 ```
 
-The `getClass()` method is sometimes used in the `equals()` method when the class does not have subtypes (and to make the comparison more efficient).
+#### The `getClass()`, `class` and the `equals()` method
+
+The `getClass()` method is sometimes used in the `equals()` method in (**false**) hope to make the comparison more efficient.
 
 ```java
 package demo;
 
 import java.util.Objects;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class Person {
   private String name;
@@ -5986,7 +5987,7 @@ public class Person {
     }
 
     // if ( !( object instanceof Person ) ) {
-    if ( object != null && object.getClass() == getClass() ) {
+    if ( object == null || object.getClass() != getClass() ) {
       return false;
     }
 
@@ -6003,7 +6004,52 @@ public class Person {
 }
 ```
 
-Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.
+Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.  The above works exactly like the one before, when we used the `instanceof`.  Now, consider the following code fragment.
+
+**⚠️ PROCEED WITH CAUTION!!**
+
+```java
+    if ( object == null || object.getClass() != Person.class ) {
+```
+
+The above is not equivalent to the one saw before and will produce unexpected results when we extend the `Person` class.
+
+```java
+package demo;
+
+public class VeryImportantPerson extends Person {
+
+  public VeryImportantPerson( final String name, final String surname ) {
+    super( name, surname );
+  }
+}
+```
+
+Consider the following three objects.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final VeryImportantPerson a = new VeryImportantPerson( "Aden", "Attard" );
+    final VeryImportantPerson b = new VeryImportantPerson( "Aden", "Attard" );
+    final Person c = new Person( "Aden", "Attard" );
+    System.out.printf( "Are these equal? %s%n", a.equals( b ) );
+    System.out.printf( "Are these equal? %s%n", a.equals( c ) );
+  }
+}
+```
+
+All three instances have the same name and surname, yet the wrong pair evaluates to `true` as shown next.
+
+```bash
+Are these equal? false
+Are these equal? true
+```
+
+This example also breaks the `equals()` contract as the above is not reflective.  This is a typical example of premature optimisation is the root of evil.
 
 ### 🤔 The `wait()`, `notify()` and `notifyAll()` methods
 
@@ -8673,11 +8719,11 @@ The `Person` **has a** `name` and **has an** `age`.  The `Person` class is compo
 
 ### Why is there a big push in favour of composition over inheritance?
 
-
-
 **🚧 Pending...**
 
 ### What are the disadvantages of composition?
+
+**🚧 Pending...**
 
 `Hashtable` accepts objects as keys to the map, something that does not fit well with the `Properties` class.
 
@@ -8698,11 +8744,11 @@ public class App {
 }
 ```
 
-**🚧 Pending...**
-
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
 
 ## Overloading and overriding
+
+**🚧 Pending...**
 
 ### Overloading
 
@@ -8712,7 +8758,11 @@ public class App {
 
 ### Overriding
 
+**🚧 Pending...**
+
 ## Initialisation blocks, outer, inner and anonymous classes
+
+**🚧 Pending...**
 
 ### Initialisation block
 
