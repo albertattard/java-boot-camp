@@ -3,7 +3,9 @@
 ## TOC
 
 1. [Setup](#setup)
+1. [Definition](#definition)
 1. [Arrays](#arrays)
+    1. [Arrays Declaration](#arrays-declaration)
     1. [Create Arrays](#create-arrays)
         1. [Puzzle (ABC)](#puzzle-abc)
     1. [Working with Arrays](#working-with-arrays)
@@ -11,7 +13,7 @@
     1. [Multidimensional Arrays](#multidimensional-arrays)
         1. [Two dimensional array](#two-dimensional-array)
         1. [Irregular Arrays](#irregular-arrays)
-    1. [Arrays are reference type](#arrays-are-reference-types)
+    1. [Arrays are reference types](#arrays-are-reference-types)
     1. [Arrays are always Mutable](#arrays-are-always-mutable)
     1. [Defensive Copying](#defensive-copying)
     1. [Arrays of Objects](#arrays-of-objects)
@@ -20,7 +22,7 @@
     1. [An Array of Characters Is Not a String](#an-array-of-characters-is-not-a-string)
 1. [Lists (Vector, ArrayList and LinkedList)](#lists-vector-arraylist-and-linkedlist)
     1. [Create Lists](#create-lists)
-    1. [Types of Lists](#types-of-lists)
+    1. [List Implementations](#list-implementations)
         1. [Vector](#vector)
         1. [ArrayList](#arraylist)
         1. [LinkedList](#linkedlist)
@@ -66,9 +68,16 @@
 
 1. Open the repo in IDE
 
+## Definition
+A collection is a data structure which contains and processes a set of data. The data stored in the collection is
+encapsulated and the access to the data is only possible via predefined methods. Typical collections are: lists, sets,
+maps, queues, stacks, and trees. Java provides an interface for each collection and one or several implementations for
+this interface.
+
 ## Arrays
 
-Arrays are data structures that enables you to store a collection of values of the same type.
+Arrays are data structures that enables you to store a set of objects of the same type.
+Arrays are static data structures: we should define it's size when initializing it and it can not be changed.
 
 ### Arrays Declaration
 To declare an array we use square brackets after the type of the elements we will store in array
@@ -837,6 +846,9 @@ String Hello
 
 ## Lists (Vector, ArrayList and LinkedList)
 
+The **List** interface is the base interface for collections which allows to store an ordered collection
+of elements in a resizable container.
+
 ### Create Lists
 
 1. Create lists
@@ -876,9 +888,13 @@ String Hello
     List [a, b, c]
     ```
 
-### Types of Lists
+### List Implementations
+Vector, ArrayList and LinkedList implement List interface. They are very similar to use. Their main difference is their
+implementation which causes different performance for different operations.
 
 #### Vector
+Vector uses Array internally as data structure. They are dynamically resizable.
+By default, Vector doubles the size of its array when its size is increased.
 
 [Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html)
 
@@ -910,6 +926,9 @@ List [a, b, c]
 
 #### ArrayList
 
+ArrayList uses Array internally as data structure. They are dynamically resizable.
+By default, ArrayList increases by half of its size when its size is increased.
+
 [ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
 
 ```java
@@ -939,6 +958,7 @@ List [a, b, c]
 ```
 
 #### LinkedList
+LinkedList is implemented as a double linked list.
 
 [LinkedList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html)
 
@@ -976,7 +996,7 @@ Array based collections are faster and take less space when compare to linked li
 Linked list has higher overheads per item when compared to arrays based
 The only one place linked list out performs the array is FIFO queue
 Iterating is faster with arrays as items in the array are close to each other
-ArrayList is slow when we need to remove elements as we need to shift things down
+ArrayList is slow when we need to add or remove elements as we need to shift things down
 
 ### Double Brace Initialization
 
