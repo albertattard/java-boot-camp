@@ -243,6 +243,7 @@ Boot Camp for developers interested to learn Java.
 
 ## [Collections](05%20-%20Collections.md)
 
+1. [Definition](05%20-%20Collections.md#definition)
 1. [Arrays](05%20-%20Collections.md#arrays)
     1. [Arrays Declaration](05%20-%20Collections.md#arrays-declaration)
     1. [Create Arrays](05%20-%20Collections.md#create-arrays)
@@ -261,7 +262,7 @@ Boot Camp for developers interested to learn Java.
     1. [An Array of Characters Is Not a String](05%20-%20Collections.md#an-array-of-characters-is-not-a-string)
 1. [Lists (Vector, ArrayList and LinkedList)](05%20-%20Collections.md#lists-vector-arraylist-and-linkedlist)
     1. [Create Lists](05%20-%20Collections.md#create-lists)
-    1. [Types of Lists](05%20-%20Collections.md#types-of-lists)
+    1. [List Implementations](05%20-%20Collections.md#list-implementations)
         1. [Vector](05%20-%20Collections.md#vector)
         1. [ArrayList](05%20-%20Collections.md#arraylist)
         1. [LinkedList](05%20-%20Collections.md#linkedlist)
