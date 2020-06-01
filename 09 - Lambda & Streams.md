@@ -99,3 +99,12 @@
 1. [FP vs OO: Choose Two by Brian Goetz](https://www.youtube.com/watch?v=8GWZE2Y2O9E)
 1. Java Stream are map/reduce
 1. Collections in Java predates Streams and were not designed with Streams in mind.  The `stream()` needs to be used.
+1. `this` and Lambda
+    ```java
+    final Runnable lambda = () -> {
+      System.out.printf( "My class is %s%n", getClass() );
+    };
+
+    System.out.printf( "My class is %s%n", lambda.getClass() );
+    lambda.run();
+    ```
