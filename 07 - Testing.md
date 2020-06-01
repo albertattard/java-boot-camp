@@ -1118,6 +1118,9 @@ AppTest > should throw an IllegalArgumentException(Invalid dice value 0) when pr
 1. [`MethodOrderer`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/MethodOrderer.html)
 1. [`IgnoreCondition`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.migrationsupport/org/junit/jupiter/migrationsupport/conditions/IgnoreCondition.html)
 1. [`assertAll()`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html#assertAll(java.util.Collection))
-1. assumptions
+1. [Assumptions](https://junit.org/junit5/docs/5.7.0-M1/api/org/junit/jupiter/api/Assumptions.html) class in Junit 5 :
+    1. Assumptions.assumeTrue() –  If the  condition is true, then run the test, else aborting the test.
+    1. Assumptions.false() –  If the  condition is false, then run the test, else aborting the test.
+    1. Assumptions.assumingThat() –   is much more flexible, If condition is true then executes, else do not abort test continue rest of code in test.
 1. TestNG (alternative to JUnit)
 1. [add an aggregator example](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.params/org/junit/jupiter/params/aggregator/AggregateWith.html)

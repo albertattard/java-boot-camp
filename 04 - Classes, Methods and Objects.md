@@ -8992,3 +8992,4 @@ Arrays have three words
     1. [Item 21: Design interfaces for posterity](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev21)
     1. [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22)
 1. [Liskov Substitution Principle](https://stackify.com/solid-design-liskov-substitution-principle/)
+1 effectively final variables
