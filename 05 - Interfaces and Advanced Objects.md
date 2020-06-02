@@ -1253,7 +1253,7 @@ public interface Constants {
 }
 ```
 
-The above interface defines all constants used by the application.  This is discouraged as we created a new type that we do not intend it to be extended or implemented.  Yet, we have no means to prevent the interface from being implemented by a class or an enum or extended by another interface.
+The above interface defines all constants used by an application.  This is discouraged as we created that can be extended and implemented.  The `Constants` interface is not a type that should be implemented or extended by other types.  We never wanted for our constants to be a type that can form part of a type hierarchy.  It simply exists as a central place where all constants are defined.  We have no means to prevent the interface from being implemented by a class or an enum or extended by another interface.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this too in [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22).  Prefer classes to define constants as shown next instead.
 
