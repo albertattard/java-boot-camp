@@ -19,6 +19,7 @@
     1. [What's the purpose of an interface that has no abstract methods (marker interface)?](#whats-the-purpose-of-an-interface-that-has-no-abstract-methods-marker-interface)
     1. [What are `default` and `static` methods?](#what-are-default-and-static-methods)
     1. [What happens if a class implements two interfaces that have the same `default` methods?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-default-methods)
+    1. [Can we use an interface just to define constants?](#can-we-use-an-interface-just-to-define-constants)
 1. [Sorting (the `Comparable` and `Comparator` interfaces)](#sorting-the-comparable-and-comparator-interfaces)
     1. [How can we apply natural ordering to a custom class (the `Comparable` interface)?](#how-can-we-apply-natural-ordering-to-a-custom-class-the-comparable-interface)
     1. [How does the `compareTo()` method works?](#how-does-the-compareto-method-works)
@@ -1226,6 +1227,65 @@ Ignite the inboard motor
 Ignite the engine
 Ignite the inboard motor
 ```
+
+### Can we use an interface just to define constants?
+
+Consider the following interfaces.
+
+```java
+package demo;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.ZoneOffset;
+import java.util.Currency;
+import java.util.Locale;
+
+public interface Constants {
+
+  Locale LOCALE = Locale.GERMANY;
+
+  Charset CHARSET = StandardCharsets.UTF_8;
+
+  ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
+
+  Currency CURRENCY = Currency.getInstance( "EUR" );
+}
+```
+
+The above interface defines all constants used by the application.  This is discouraged as we created a new type that we do not intend it to be extended or implemented.  Yet, we have no means to prevent the interface from being implemented by a class or an enum or extended by another interface.
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this too in [Item 22: Use interfaces only to define types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev22).  Prefer classes to define constants as shown next instead.
+
+```java
+package demo;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.ZoneOffset;
+import java.util.Currency;
+import java.util.Locale;
+
+public final class Constants {
+
+  public static final Locale LOCALE = Locale.GERMANY;
+
+  public static final Charset CHARSET = StandardCharsets.UTF_8;
+
+  public static final ZoneOffset ZONE_OFFSET = ZoneOffset.UTC;
+
+  public static final Currency CURRENCY = Currency.getInstance( "EUR" );
+
+  private Constants() { }
+}
+```
+
+The above approach has the following advantages when compared the interface version.
+
+1.  We cannot extend the `Constants` class as this is final.  Furthermore, the `Constants` class does not define any visible constructors which will also prohibits this class to be extended by other classes.
+1. We cannot initialise this `Contacts` class as its sole constructor is `private`.
+
+There are no disadvantages in using the class version of our example.
 
 ## Sorting (the `Comparable` and `Comparator` interfaces)
 
@@ -2964,7 +3024,7 @@ public class Coin {
 }
 ```
 
-Given the both the gold and silver coins are coins, we cannot go without inheritance.  Also, we need to prohibit new types of coins, therefore we cannot use interfaces.  The `Coin` class itself makes us of composition as it contains properties.
+Given the both the gold and silver coins are coins, we cannot go without inheritance.  Also, we need to prohibit new types of coins, therefore we cannot use interfaces as we have no means to prevent an interface from being implemented.  The `Coin` class itself makes us of composition as it contains properties.
 
 ## Overloading and overriding
 
