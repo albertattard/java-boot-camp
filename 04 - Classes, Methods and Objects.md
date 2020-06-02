@@ -75,6 +75,7 @@
     1. [Can we create an instance of an interface?](#can-we-create-an-instance-of-an-interface)
     1. [Functional interface and lambda functions](#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](#what-is-the-relation-between-lambda-and-functional-interfaces)
+        1. [What are the differences between lambda functions and inner anonymous classes?](#what-are-the-differences-between-lambda-functions-and-inner-anonymous-classes)
     1. [Can an interface extend another class or another interface?](#can-an-interface-extend-another-class-or-another-interface)
     1. [How many interfaces can a class implement?](#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
@@ -6512,7 +6513,14 @@ The evaluation of a lambda expression produces an instance of a functional inter
 An inner anonymous class
 ```
 
-While these two approaches display the same thing, these are quite different.  Consider the following source classes.
+#### What are the differences between lambda functions and inner anonymous classes?
+
+While the two approaches shown in the previous section display the same thing, these are quite different.
+
+1. Lambda functions are not bound to a class file
+1. Lambda functions do not have access to `this` and cannot invoke inherited funcitons.
+
+Consider the following source classes.
 
 ```bash
 $ tree src/main/java
@@ -6571,7 +6579,125 @@ build/classes/java
 
 The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.  Everything in Java is a class and lambda are no exceptions.  In Java, classes are the smallest unit of work.  We cannot just have a method outside a class.
 
-Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will compile and create the *lambda runtime class*.  Note that the lambda is only compiled once, when it is first encountered and not every time it is executed.
+Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime using the byte-code produced during compile time.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will create the *lambda runtime class*.  Note that the lambda is only created once, when it is first encountered and not every time it is executed.  Note that lambda functions are compiled into bytecode at compile time while its respective class is create at runtime.
+
+The lambda function does not have access to `this` and all methods invoked will appear as if these where invoked from within the enclosing method or class.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  private void workWithLambda() {
+    final Runnable lambda = () -> {
+      System.out.printf( "Invoke the getClass(): %s%n", getClass() );
+    };
+
+    System.out.printf( "Invoke the getClass(): %s%n", lambda.getClass() );
+    lambda.run();
+  }
+
+  public static void main( final String[] args ) {
+    new App().workWithLambda();
+  }
+}
+```
+
+The lambda has to be created within an instance method as we cannot access the `getClass()` or `this.getClass()` from within a static method.  In the above example we are invoking the `getClass()` method from within the lambda function and through the variable.
+
+```bash
+Invoke the getClass(): class demo.App$$Lambda$14/0x0000000800b7dc40
+Invoke the getClass(): class demo.App
+```
+
+Different to what one may have expected, these print a different value.  When invoking the `getClass()` from within the lambda function, this 
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Runnable innerAnonymousClass = new Runnable() {
+      @Override
+      public void run() {
+        System.out.printf( "Invoke the getClass(): %s%n", getClass() );
+      }
+    };
+
+    System.out.printf( "Invoke the getClass(): %s%n",
+      innerAnonymousClass.getClass() );
+    innerAnonymousClass.run();
+  }
+}
+```
+
+```bash
+Invoke the getClass(): class demo.App$1
+Invoke the getClass(): class demo.App$1
+```
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final PlayingWithLambda lambda = () -> {
+      hello( "from lambda" );
+    };
+    lambda.run();
+  }
+}
+
+@FunctionalInterface
+interface PlayingWithLambda {
+
+  void run();
+
+  default void hello( String name ) {
+    System.out.printf( "Hello %s%n", name );
+  }
+}
+```
+
+```bash
+src/main/java/demo/App.java:7: error: cannot find symbol
+      hello( "from lambda" );
+      ^
+  symbol:   method hello(String)
+  location: class App
+1 error
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final PlayingWithLambda innerAnonymousClass = new PlayingWithLambda() {
+      @Override
+      public void run() {
+        hello( "from inner anonymous class" );
+      }
+    };
+    innerAnonymousClass.run();
+  }
+}
+
+@FunctionalInterface
+interface PlayingWithLambda {
+
+  void run();
+
+  default void hello( String name ) {
+    System.out.printf( "Hello %s%n", name );
+  }
+}
+```
 
 ### Can an interface extend another class or another interface?
 

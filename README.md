@@ -197,6 +197,7 @@ Boot Camp for developers interested to learn Java.
     1. [Can we create an instance of an interface?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-we-create-an-instance-of-an-interface)
     1. [Functional interface and lambda functions](04%20-%20Classes%2C%20Methods%20and%20Objects.md#functional-interface-and-lambda-functions)
         1. [What is the relation between lambda and functional interfaces?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-is-the-relation-between-lambda-and-functional-interfaces)
+        1. [What are the differences between lambda functions and inner anonymous classes?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-are-the-differences-between-lambda-functions-and-inner-anonymous-classes)
     1. [Can an interface extend another class or another interface?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#can-an-interface-extend-another-class-or-another-interface)
     1. [How many interfaces can a class implement?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#how-many-interfaces-can-a-class-implement)
     1. [What happens if a class implements two interfaces that have the same abstract method?](04%20-%20Classes%2C%20Methods%20and%20Objects.md#what-happens-if-a-class-implements-two-interfaces-that-have-the-same-abstract-method)
