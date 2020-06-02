@@ -6518,9 +6518,9 @@ An inner anonymous class
 While the two approaches shown in the previous section display the same thing, these are quite different.
 
 1. Lambda functions are not bound to a class file
-1. Lambda functions do not have access to `this` and cannot invoke inherited funcitons.
+1. Lambda functions do not have access to `this` or `super` and cannot invoke inherited functions.
 
-Consider the following source classes.
+Consider the following source files.
 
 ```bash
 $ tree src/main/java
@@ -6558,7 +6558,7 @@ public class App {
 }
 ```
 
-Running the above we will print the following.
+The above will print the following.
 
 ```bash
 The type of a is class demo.App$1
@@ -6579,9 +6579,14 @@ build/classes/java
 
 The `App$1.class` is the class produced by the inner anonymous class.  We have no class file for the lambda.  Everything in Java is a class and lambda are no exceptions.  In Java, classes are the smallest unit of work.  We cannot just have a method outside a class.
 
-Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime using the byte-code produced during compile time.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will create the *lambda runtime class*.  Note that the lambda is only created once, when it is first encountered and not every time it is executed.  Note that lambda functions are compiled into bytecode at compile time while its respective class is create at runtime.
+Different from a normal Java class files, produced by the Java compiler during the compilation time, lambda classes are created by the Java runtime environment at runtime using the bytecode produced during compile time.  The lambda classes are sometimes referred to as *lambda runtime classes*.  When the lambda is encounter for the first time, the Java runtime will create the *lambda runtime class*.  Note that the lambda is only created once, when it is first encountered and not every time it is executed.  Note that lambda functions are compiled into bytecode at compile time while its respective class is created at runtime.
 
-The lambda function does not have access to `this` and all methods invoked will appear as if these where invoked from within the enclosing method or class.  Consider the following example.
+The lambda function does not have access to `this` or `super` and all methods invoked will appear as if these where invoked from within the enclosing method or class.
+
+"_Unlike code appearing in anonymous class declarations, the meaning of names and the `this` and `super` keywords appearing in a lambda body, along with the accessibility of referenced declarations, are the same as in the surrounding context (except that lambda parameters introduce new names)._"<br/>
+([JLS 15.27.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.27.2))
+
+Consider the following example.
 
 ```java
 package demo;
@@ -6610,7 +6615,9 @@ Invoke the getClass(): class demo.App$$Lambda$14/0x0000000800b7dc40
 Invoke the getClass(): class demo.App
 ```
 
-Different to what one may have expected, these print a different value.  When invoking the `getClass()` from within the lambda function, this 
+Different to what one may have expected, these print a different value.  When invoking the `getClass()` from within the lambda function, we are invoking the `App`'s version of the `getClass()` method.  The Java compiler binds the `getClass()` invocation to the `App` class's `getClass()` method.  When we invoke the `getClass()` through the variable name, we will then obtain the lambda's class.
+
+Now, consider the following version of a similar application, only this time using an inner anonymous class.
 
 ```java
 package demo;
@@ -6625,17 +6632,20 @@ public class App {
       }
     };
 
-    System.out.printf( "Invoke the getClass(): %s%n",
-      innerAnonymousClass.getClass() );
+    System.out.printf( "Invoke the getClass(): %s%n", innerAnonymousClass.getClass() );
     innerAnonymousClass.run();
   }
 }
 ```
 
+Different from lambda, inner anonymous classes have access to `this` (`super` and inherit methods). This time, both messages are the same.
+
 ```bash
 Invoke the getClass(): class demo.App$1
 Invoke the getClass(): class demo.App$1
 ```
+
+Lambda cannot access interface default methods, like inner anonymous classes or other implementations can do.  Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -6663,6 +6673,8 @@ interface PlayingWithLambda {
 }
 ```
 
+The above will not compile as there is no static method named `hello()` that takes one `String` parameter accessible to the `main()` method.
+
 ```bash
 src/main/java/demo/App.java:7: error: cannot find symbol
       hello( "from lambda" );
@@ -6671,6 +6683,8 @@ src/main/java/demo/App.java:7: error: cannot find symbol
   location: class App
 1 error
 ```
+
+Converting the example to make use of inner anonymous class instead, will work.
 
 ```java
 package demo;
@@ -6698,6 +6712,14 @@ interface PlayingWithLambda {
   }
 }
 ```
+
+The above will print, as expected.
+
+```bash
+Hello from inner anonymous class
+```
+
+While we can use lambda instead of functional interfaces, it is important to note that these two differ and you cannot do whatever you are able to do with inner anonymous classes.
 
 ### Can an interface extend another class or another interface?
 
