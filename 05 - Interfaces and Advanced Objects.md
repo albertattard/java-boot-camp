@@ -2718,11 +2718,9 @@ The value of a is: -126
 
 ### What is composition?
 
-**🚧 Pending...**
+The word composition comes from Latin, [*compositio*](https://en.wiktionary.org/wiki/compositio), which means "*to put together*".
 
-The word composition comes form Latin, [*compositio*](https://en.wiktionary.org/wiki/compositio), which means "*to put together*".
-
-In software, composition is the ability of build some elaborate classes by putting together other classes.  We have been using composition throughout the boot camp, without knowing.  Take for example the following `Person` class.
+In software, composition is the ability of creating new, possibly more elaborate, classes by putting together other, possibly simpler, classes.  We have been using composition throughout the boot camp, without knowing.  Take for example the following `Person` class.
 
 ```java
 package demo;
@@ -2739,13 +2737,195 @@ public class Person {
 }
 ```
 
-The `Person` **has a** `name` and **has an** `age`.  The `Person` class is composed from a `String` and an `int`.  Note that an emphasis was made on the **has a** phrase.  In [inheritance](#inheritance), we use the phrase **is a**.  For example, a `LightBox` **is a** `Box`.  The following image shows the difference between inheritance and composition.
+The `Person` **has a** `name` and **has an** `age`.  The `Person` class is composed from a `String` and an `int`.  Note that an emphasis was made on the **has a** phrase.  In the [inheritance section](04%20-%20Classes,%20Methods%20and%20Objects.md#inheritance), we use the phrase **is a** instead.  For example, a `LightBox` **is a** `Box`.  The following image shows the difference between inheritance and composition.
 
 ![Inheritance and composition](assets/images/Inheritance%20and%20composition.png)
 
 ### Why is there a big push in favour of composition over inheritance?
 
-**🚧 Pending...**
+When a class, say `Child`, inherits from another class, say `Parent`, the subclass will inherit all methods that the parent class has.  Consider the [stack data structure](https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues#Stacks) shown next.
+
+![Stack Data Structure](assets/images/Stack%20Data%20Structure.png)
+
+A stack is a data structure that follows the [Last-In-First-Out](https://en.wikipedia.org/wiki/FIFO_and_LIFO_accounting#LIFO) rule.  A stack is similar to a stack of dishes (or plates).  We can put dishes to the top of the stack, we can only task dishes from the top and we cannot see below the top dish.
+
+![Stack of plates](assets/images/Stack%20of%20plates.png)
+
+We can interact with a stack using any of the three functionalities.
+
+1. **push** where an item is added to the top of the stack
+1. **pop** where the last added item is removed from the stack and returned to the caller
+1. **peek** (also referred to *top*) where we can view what's on the top of the stack without removing it
+
+We can create a stack data structure by extending another collection class, such as the [`Vector`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) class.  That's what the Java API did in the past with the [`Stack`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html) class.  The `Stack` class automatically inherited all methods defines by the `Vector` class, which is incorrect.  A stack data structure only provides three methods and definitely should not break the Last-In-First-Out rule.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Stack;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Stack<String> stack = new Stack<>();
+    stack.push( "1" );
+    stack.push( "2" );
+    stack.push( "3" );
+
+    /* This is not a method supported by the stack class */
+    stack.add( 0, "Squeeze me in" );
+
+    System.out.printf( "Stack: %s%n", stack );
+  }
+}
+```
+
+The above example was able to violate the Last-In-First-Out rule as we were able to squeeze an item at the bottom of the stack.
+
+```bash
+Stack: [Squeeze me in, 1, 2, 3]
+```
+
+This breaks our stack class as we are able to make it behave in a way it was not expected to behave.  This example of inheritance breaks encapsulation as we are able to interact with the object's state in a way, we should not be able to.
+
+Here we broke the "*all stacks are vectors*" rule.  A vector is a data structure that allows random access to elements, while stack only allows the consumer to interact with the topmost item of the stack.
+
+An alternative approach would be to use composition instead of inheritance, as shown next.
+
+```java
+package demo;
+
+import java.util.Objects;
+import java.util.Vector;
+import java.util.function.IntFunction;
+
+public class Stack<T> {
+
+  private final Vector<T> vector = new Vector<>();
+
+  public void push( final T item ) {
+    vector.add( item );
+  }
+
+  public T pop() {
+    return withLast( vector::remove );
+  }
+
+  public T peek() {
+    return withLast( vector::get );
+  }
+
+  private T withLast( final IntFunction<T> handler ) {
+    final int size = vector.size();
+    return size == 0 ? null : handler.apply( size - 1 );
+  }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object ) {
+      return true;
+    }
+
+    if ( !( object instanceof Stack ) ) {
+      return false;
+    }
+
+    final Stack<?> stack = (Stack<?>) object;
+    return Objects.equals( vector, stack.vector );
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash( vector );
+  }
+
+  @Override
+  public String toString() {
+    return vector.toString();
+  }
+}
+```
+
+Our version of the stack uses the same `Vector` as a backing data structure.  We are actually storing the stack items within the `Vector`, but we are shielding the `Vector` class and we are not exposing it to the outside word.  This approach takes advantage of encapsulation as the outside world does not know about the `Vector` and cannot bypass our stack as we did before.  We cannot invoke any method defined by the `Vector` class as this is private and never returned by our `Stack` class.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Stack<String> stack = new Stack<>();
+    stack.push( "1" );
+    stack.push( "2" );
+    stack.push( "3" );
+
+    /* This is not a method supported by our stack class */
+    // stack.add( 0, "Squeeze me in" );
+
+    System.out.printf( "Stack: %s%n", stack );
+  }
+}
+```
+
+We cannot invoke the [Vector's add()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html#add(int,E)) method as we did before.  We can only interact with our new `Stack` using the methods available.
+
+![Stack methods when using composition](assets/images/Stack%20methods%20when%20using%20composition.png)
+
+One of the advantages of inheritance is that we can reuse existing code.  We agree that composition reuses existing code, without creating a tight integration between the parent class and its subclasses.  Adding new methods to the `Vector` class, will not impact our `Stack` class.  If we inherit from the `Vector` instead, adding new methods to the `Vector` class will automatically make these methods available to all the vector's children.
+
+Another advantage of composition is that we can swap our data structure with a different one, such as [`LinkedList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html), without changing its consumers.
+
+```java
+package demo;
+
+import java.util.LinkedList;
+import java.util.Objects;
+
+public class Stack<T> {
+
+  private final LinkedList<T> linkedList = new LinkedList<>();
+
+  public void push( final T item ) {
+    linkedList.addLast( item );
+  }
+
+  public T pop() {
+    return linkedList.removeLast();
+  }
+
+  public T peek() {
+    return linkedList.getLast();
+  }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object ) {
+      return true;
+    }
+
+    if ( !( object instanceof Stack ) ) {
+      return false;
+    }
+
+    final Stack<?> stack = (Stack<?>) object;
+    return Objects.equals( linkedList, stack.linkedList );
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash( linkedList );
+  }
+
+  @Override
+  public String toString() {
+    return linkedList.toString();
+  }
+}
+```
+
+The `Stack` method did not gain or lose methods by swapping the backing collection from `Vector` to `LinkedList`.  This gives us the ability to use a better implementation when one becomes available.
 
 ### What are the disadvantages of composition?
 
