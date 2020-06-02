@@ -2743,6 +2743,8 @@ The `Person` **has a** `name` and **has an** `age`.  The `Person` class is compo
 
 ### Why is there a big push in favour of composition over inheritance?
 
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in great depth in [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev18).
+
 When a class inherits from another class, the subclass will inherit all methods that the parent class has.  Consider the [stack data structure](https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues#Stacks) shown next.
 
 ![Stack Data Structure](assets/images/Stack%20Data%20Structure.png)
@@ -2927,28 +2929,42 @@ Our `Stack` class did not gain or lose methods by swapping the backing collectio
 
 ### What are the disadvantages of composition?
 
-**🚧 Pending...**
+Following are two distinctions between inheritance and composition.
 
-`Hashtable` accepts objects as keys to the map, something that does not fit well with the `Properties` class.
+1. [**Liskov substitution principle**](https://en.wikipedia.org/wiki/Liskov_substitution_principle): Composition does not adhere to the Liskov substitution principle.  In our version of the stack, we **cannot** use our `demo.Stack` wherever a `java.util.Vector` is required.  Our `demo.Stack` is not a `java.util.Vector`.
+
+1. **Inheritance**: With inheritance, the subclasses will inherit all of their parent's methods without the subclasses needing to do anything.  If a new method is added to the parent, this becomes automatically available to all subclasses.
+
+Personally, I do not see these two as disadvantages.  Inheritance and compositions are different tools.  Composition is used to enrich our classes with properties, such as the `vector` within the `demo.Stack` class.  There are cases where we need to use inheritance too and, in most cases, we will use both.
+
+Say that our application has two types of coins, *gold coins* and *silver coins*.  Our application should not allow other types of coins.  Consider the following example.
 
 ```java
 package demo;
 
-import java.awt.Point;
-import java.util.Properties;
+public class Coin {
 
-public class App {
-  public static void main( final String[] args ) {
-    final Properties p = new Properties();
-    p.put( "age", 21 );
-    p.put( new Point( 1, 2 ), 7 );
+  private final int quantity;
 
-    System.out.printf( "Properties %s%n", p );
+  private Coin( final int quantity ) {
+    this.quantity = quantity;
+  }
+
+  public static class GoldCoin extends Coin {
+    public GoldCoin( final int quantity ) {
+      super( quantity );
+    }
+  }
+
+  public static class SilverCoin extends Coin {
+    public SilverCoin( final int quantity ) {
+      super( quantity );
+    }
   }
 }
 ```
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 18: Favor composition over inheritance](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev18)
+Given the both the gold and silver coins are coins, we cannot go without inheritance.  Also, we need to prohibit new types of coins, therefore we cannot use interfaces.  The `Coin` class itself makes us of composition as it contains properties.
 
 ## Overloading and overriding
 
