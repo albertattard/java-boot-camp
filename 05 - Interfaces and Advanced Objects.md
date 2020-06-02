@@ -2743,21 +2743,21 @@ The `Person` **has a** `name` and **has an** `age`.  The `Person` class is compo
 
 ### Why is there a big push in favour of composition over inheritance?
 
-When a class, say `Child`, inherits from another class, say `Parent`, the subclass will inherit all methods that the parent class has.  Consider the [stack data structure](https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues#Stacks) shown next.
+When a class inherits from another class, the subclass will inherit all methods that the parent class has.  Consider the [stack data structure](https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues#Stacks) shown next.
 
 ![Stack Data Structure](assets/images/Stack%20Data%20Structure.png)
 
-A stack is a data structure that follows the [Last-In-First-Out](https://en.wikipedia.org/wiki/FIFO_and_LIFO_accounting#LIFO) rule.  A stack is similar to a stack of dishes (or plates).  We can put dishes to the top of the stack, we can only task dishes from the top and we cannot see below the top dish.
+A stack is a data structure that follows the [Last-In-First-Out](https://en.wikipedia.org/wiki/FIFO_and_LIFO_accounting#LIFO) rule.  A stack data structure, similar to a stack of dishes (or plates).  We can put dishes to the top of the stack, we can only task dishes from the top and we cannot see below the top dish.
 
 ![Stack of plates](assets/images/Stack%20of%20plates.png)
 
-We can interact with a stack using any of the three functionalities.
+We can interact with a stack using any of the following three functionalities.
 
 1. **push** where an item is added to the top of the stack
 1. **pop** where the last added item is removed from the stack and returned to the caller
 1. **peek** (also referred to *top*) where we can view what's on the top of the stack without removing it
 
-We can create a stack data structure by extending another collection class, such as the [`Vector`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) class.  That's what the Java API did in the past with the [`Stack`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html) class.  The `Stack` class automatically inherited all methods defines by the `Vector` class, which is incorrect.  A stack data structure only provides three methods and definitely should not break the Last-In-First-Out rule.
+We can create a stack data structure by extending another collection class, such as the [`Vector`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) class.  That's what the Java API did in the past with the [`Stack`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html) class.  The `Stack` class inherits all methods defines by the `Vector` class, **which is incorrect**.  A stack data structure **MUST** only provides three methods and definitely **MUST not** break the Last-In-First-Out rule.
 
 Consider the following example.
 
@@ -2788,9 +2788,7 @@ The above example was able to violate the Last-In-First-Out rule as we were able
 Stack: [Squeeze me in, 1, 2, 3]
 ```
 
-This breaks our stack class as we are able to make it behave in a way it was not expected to behave.  This example of inheritance breaks encapsulation as we are able to interact with the object's state in a way, we should not be able to.
-
-Here we broke the "*all stacks are vectors*" rule.  A vector is a data structure that allows random access to elements, while stack only allows the consumer to interact with the topmost item of the stack.
+This breaks our stack class as we are able to make it behave in a way it was not expected to behave.  This example of *inheritance breaks encapsulation* as we are able to put the object in an invalid state.  Here we broke the "*all stacks are vectors*" rule.  A vector is a data structure that allows random access to elements, while stack only allows the consumer to interact with the topmost item of the stack.
 
 An alternative approach would be to use composition instead of inheritance, as shown next.
 
@@ -2848,7 +2846,7 @@ public class Stack<T> {
 }
 ```
 
-Our version of the stack uses the same `Vector` as a backing data structure.  We are actually storing the stack items within the `Vector`, but we are shielding the `Vector` class and we are not exposing it to the outside word.  This approach takes advantage of encapsulation as the outside world does not know about the `Vector` and cannot bypass our stack as we did before.  We cannot invoke any method defined by the `Vector` class as this is private and never returned by our `Stack` class.
+Our version of the stack uses the same `Vector` as a backing data structure (composition).  We are actually storing the `Stack` items within the `Vector`, but we are shielding the `vector`  property and we are not exposing it to the outside word.  This approach takes advantage of encapsulation as the outside world does not know about the `Vector` class and cannot bypass our `Stack` as we did before.  We cannot invoke any method defined by the `Vector` class as our `vector` property is `private` and is never returned by our `Stack` class.
 
 ```java
 package demo;
@@ -2873,9 +2871,9 @@ We cannot invoke the [Vector's add()](https://docs.oracle.com/en/java/javase/14/
 
 ![Stack methods when using composition](assets/images/Stack%20methods%20when%20using%20composition.png)
 
-One of the advantages of inheritance is that we can reuse existing code.  We agree that composition reuses existing code, without creating a tight integration between the parent class and its subclasses.  Adding new methods to the `Vector` class, will not impact our `Stack` class.  If we inherit from the `Vector` instead, adding new methods to the `Vector` class will automatically make these methods available to all the vector's children.
+One of the advantages of inheritance is that we can reuse existing code.  We agree that composition reuses existing code, without creating a tight coupling between the parent class and its subclasses.  Adding new methods to the `Vector` class, will not impact our `Stack` class.  If we inherit from the `Vector` instead, adding new methods to the `Vector` class will automatically make these methods available to all the vector's children.
 
-Another advantage of composition is that we can swap our data structure with a different one, such as [`LinkedList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html), without changing its consumers.
+Another advantage of composition is that we can swap our backing collection, `Vector`, with a different one, such as [`LinkedList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html), without changing its consumers.
 
 ```java
 package demo;
@@ -2925,7 +2923,7 @@ public class Stack<T> {
 }
 ```
 
-The `Stack` method did not gain or lose methods by swapping the backing collection from `Vector` to `LinkedList`.  This gives us the ability to use a better implementation when one becomes available.
+Our `Stack` class did not gain or lose methods by swapping the backing collection from `Vector` to `LinkedList`.  This gives us the ability to use a better implementation when one becomes available.
 
 ### What are the disadvantages of composition?
 
