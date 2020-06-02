@@ -2774,8 +2774,6 @@ The value of a is: -126
 
 ## Inheritance and composition
 
-**🚧 Pending...**
-
 ### What is composition?
 
 The word composition comes from Latin, [*compositio*](https://en.wiktionary.org/wiki/compositio), which means "*to put together*".
@@ -3031,6 +3029,33 @@ Given the both the gold and silver coins are coins, we cannot go without inherit
 **🚧 Pending...**
 
 ### Overloading
+
+Overloading is the ability to have more than one method with the same name but with different parameters.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int a = 4;
+    final double b = 12.3;
+
+    System.out.printf( "The square of %d is %d%n", a, square( a ) );
+    System.out.printf( "The square of %.2f is %.2f%n", b, square( b ) );
+  }
+
+  private static double square( double number ) {
+    return number * number;
+  }
+
+  private static int square( int number ) {
+    return number * number;
+  }
+}
+```
+
+The `square()` method is defined twice in the `App` class, using different parameter.
 
 **🚧 Pending...**
 
