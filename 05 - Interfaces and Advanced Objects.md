@@ -3379,7 +3379,8 @@ public class BabyDolls implements Toy {
     this.name = name;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return String.format( "BabyDolls{name=%s}", name );
   }
 }
@@ -3431,7 +3432,73 @@ final Toy toy = machine.manufacture();
 
 #### Can we override static methods?
 
-**🚧 Pending...**
+**No**.  Static methods belong to classes and do not participate in inheritance.  Using the `@Override` annotation with a static method will always produce a compiler error.
+
+The answer is quite simple but can create confusion.  Consider the following classes.
+
+1. A generic class representing plants
+
+    ```java
+    package demo;
+
+    public class Plant {
+      public static String describe() {
+        return "Plants are green";
+      }
+
+      @Override
+      public String toString() {
+        return describe();
+      }
+    }
+    ```
+
+1. A specific class representing the [beet plant](https://en.wikipedia.org/wiki/Beetroot)
+
+    ```java
+    package demo;
+
+    public class BeetPlant extends Plant {
+      public static String describe() {
+        return "Beets are red";
+      }
+
+      @Override
+      public String toString() {
+        return describe();
+      }
+    }
+    ```
+
+These classes may seem innocent.  Both the classes have a `describe()` method that **is static** and the `toString()` simply returns what the `describe()` method returns.  Now consider the following example.
+
+**⚠️ NOT RECOMMENDED.  DO NOT INVOKE A STATIC METHOD THROUGH A VARIABLE NAME!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Plant a = new BeetPlant();
+
+    System.out.println( a.describe() );
+    System.out.println( a );
+  }
+}
+```
+
+The type of variable `a` is `Plant`, but this is pointing to an object of type `BeetPlant`.  Given that the `toString()` method returns whatever the `describe()` method returns, one may wrongly assume that the above will print the same thing twice.
+
+```bash
+Plants are green
+Beets are red
+```
+
+Static methods do not participate in object-oriented ceremonies can mislead programmers.
+
+1. Avoid invoking static methods from variable names.
+1. Be careful when invoking static methods from within instance methods as these do not behave polymorphically.
 
 ### Overloading
 
