@@ -3035,9 +3035,17 @@ Given the both the gold and silver coins are coins, we cannot go without inherit
 
 ### Overriding
 
-Overriding is the ability of a subclass to replace a method defined in its parent (or ancestors) class or interfaces it implements and provide a more suitable implementation of this method.
+Overriding is the ability for a subclass to replace a method defined in its parent (or ancestors) class or interfaces it implements and provide a more suitable implementation of this method.  Consider the following image.
 
 ![Method Overriding](assets/images/Method%20Overriding.png)
+
+The above image shows 4 types.
+1. class `A` defines two methods, `pink()` and `yellow()`
+1. class `B` extends class `A` and overrides method `yellow()`
+1. interface `X` defines a method, `cyan()`
+1. class `C` extends class `B` and implements interface `X` and overrides two methods, `pink()` and `cyan()`
+
+**How does this work?**
 
 All objects in Java can be printed to the console or logs files, with no exception.  Consider the following class.
 
