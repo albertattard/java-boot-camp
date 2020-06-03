@@ -3940,6 +3940,8 @@ The `Temperature` class cannot be extended by an external class, which prevents 
 
 **🚧 Pending...**
 
+[Diamond Operator](https://docs.oracle.com/javase/8/docs/technotes/guides/language/type-inference-generic-instance-creation.html)
+
 Are not 100% Erased
 
 ```java

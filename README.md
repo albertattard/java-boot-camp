@@ -328,6 +328,7 @@ Boot Camp for developers interested to learn Java.
         1. [Switch Fallthrough Example](07%20-%20Control%20Flow.md#switch-fallthrough-example)
         1. [Switch Default Example](07%20-%20Control%20Flow.md#switch-default-example)
         1. [Switch Expressions](07%20-%20Control%20Flow.md#switch-expressions)
+        1. [Pattern matching for switch](07%20-%20Control%20Flow.md#pattern-matching-for-switch)
     1. [For Loop](07%20-%20Control%20Flow.md#for-loop)
         1. [Puzzles (In the Loop)](07%20-%20Control%20Flow.md#puzzles-in-the-loop)
     1. [While Loop](07%20-%20Control%20Flow.md#while-loop)

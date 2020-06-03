@@ -49,6 +49,8 @@
 
 **🚧 Pending...**
 
+[JEP 321: HTTP Client (Standard)](https://openjdk.java.net/jeps/321)
+
 ## Miscellaneous
 
 1.https://javaspecialists.teachable.com/courses/enrolled/225263

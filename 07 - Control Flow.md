@@ -14,6 +14,7 @@
         1. [Switch Fallthrough Example](#switch-fallthrough-example)
         1. [Switch Default Example](#switch-default-example)
         1. [Switch Expressions](#switch-expressions)
+        1. [Pattern matching for switch](#pattern-matching-for-switch)
     1. [For Loop](#for-loop)
         1. [Puzzles (In the Loop)](#puzzles-in-the-loop)
     1. [While Loop](#while-loop)
@@ -625,6 +626,12 @@ Both examples will output
 ```bash
 Option 2
 ```
+
+#### Pattern matching for switch
+
+**🚧 Pending...**
+
+[JEP draft: Pattern matching for switch (Preview)](https://openjdk.java.net/jeps/8213076)
 
 ### For Loop
 
