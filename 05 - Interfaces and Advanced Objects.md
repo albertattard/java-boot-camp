@@ -3556,7 +3556,7 @@ Java will find the closest method matching the given parameters.
 
 #### Does Java support return-type-based method overloading?
 
-Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by return type.  Consider the following example.
+**No**.  Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by their return type.  Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -3591,21 +3591,94 @@ public class App {
 }
 ```
 
-Let say that the above code compiles.  We have two `random()` and two `printSquare()` methods.  Which pair are we going to use?  Is it the `int` pair or the `double` pair?
+Let say that, for the sake of this example, the above code compiles.  We have two `random()` and two `printSquare()` methods.  Which pair are we going to use in the above example?  Is it the `int` pair or the `double` pair?  Java has no way to answer this question.
 
-It is not an accident that the `Random` class does not overload the `next()` method and instead it uses methods with different name such as `nextInt()`, `nextDouble()` and the like.
+It is not an accident that the `Random` class does not overload the `next()` method and instead it uses methods with different names, such as `nextInt()`, `nextDouble()` and the like.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
 
 #### Can we overload instance methods?
 
-**🚧 Pending...**
+Yes.  Instance methods can be overloaded in the same manner as static methods are overloaded.
 
-Different from static methods, instance methods are determined at runtime.  Note that the `App` class may be extended and the instance `square()` method overridden.  With that said, the Java compiler determines which of the three methods to be used at compile time.
+Note that instance methods can be overridden too and thus an overridden method may be invoked at runtime.
 
 ### Hiding
 
-**🚧 Pending...**
+Hiding is the ability for a subtype to hide properties defined in the superclass.
+
+I am not a fan of property hiding and I still have to find a good example where this is useful.  The scope of this section is to introduce the concept only.
+
+Consider the following example.
+
+```java
+package demo;
+
+public class Point {
+  int x = 0, y = 0;
+  String colour;
+
+  public void moveBy( int dx, int dy ) {
+    x += dx;
+    y += dy;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Point{x=%d, y=%d, colour=%s}", x, y, colour );
+  }
+}
+```
+
+The `Point` class defined above has three properties.  Now consider the following subtype.
+
+```java
+package demo;
+
+public class RealPoint extends Point {
+  float x = 0.0f, y = 0.0f;
+
+  @Override
+  public void moveBy( int dx, int dy ) {
+    moveBy( (float) dx, (float) dy );
+  }
+
+  public void moveBy( float dx, float dy ) {
+    x += dx;
+    y += dy;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "RealPoint{x=%.2f, y=%.2f, colour=%s}", x, y, colour );
+  }
+}
+```
+
+The `RealPoint` class hides the `x` and `y` properties defined in the parent class, `Point`, with new ones of different type.  The `colour` property was not hidden in this example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final RealPoint a = new RealPoint();
+    a.moveBy( 2.5F, 3.5F );
+    a.colour = "Blue";
+
+    System.out.println( a );
+  }
+}
+```
+
+The above example prints.
+
+```bash
+RealPoint{x=2,50, y=3,50, colour=Blue}
+```
+
+This is not a common practice and one should use it with caution.  The above example breaks the "*all children are parent*" as `RealPoint`s and not `Point`s.
 
 ## Initialisation blocks, outer, inner and anonymous classes
 
