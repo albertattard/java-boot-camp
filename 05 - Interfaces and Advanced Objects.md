@@ -39,7 +39,7 @@
     1. [What is composition?](#what-is-composition)
     1. [Why is there a big push in favour of composition over inheritance?](#why-is-there-a-big-push-in-favour-of-composition-over-inheritance)
     1. [What are the disadvantages of composition?](#what-are-the-disadvantages-of-composition)
-1. [Overloading and overriding](#overloading-and-overriding)
+1. [Overloading, overriding, and hiding](#overloading-overriding-and-hiding)
     1. [Overriding](#overriding)
         1. [Do we need to use the `@Override` annotation?](#do-we-need-to-use-the-override-annotation)
         1. [Can we use the `@Override` annotation when overriding methods defined by an interface?](#can-we-use-the-override-annotation-when-overriding-methods-defined-by-an-interface)
@@ -49,6 +49,9 @@
         1. [Can we return something different when overriding methods?](#can-we-return-something-different-when-overriding-methods)
         1. [Can we override static methods?](#can-we-override-static-methods)
     1. [Overloading](#overloading)
+        1. [Does Java support return-type-based method overloading?](#does-java-support-return-type-based-method-overloading)
+        1. [Can we overload instance methods?](#can-we-overload-instance-methods)
+    1. [Hiding](#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
     1. [Initialisation block](#initialisation-block)
     1. [`static` initialisation block](#static-initialisation-block)
@@ -3031,9 +3034,7 @@ public class Coin {
 
 Given the both the gold and silver coins are coins, we cannot go without inheritance.  Also, we need to prohibit new types of coins, therefore we cannot use interfaces as we have no means to prevent an interface from being implemented.  The `Coin` class itself makes us of composition as it contains properties.
 
-## Overloading and overriding
-
-**🚧 Pending...**
+## Overloading, overriding, and hiding
 
 ### Overriding
 
@@ -3502,8 +3503,6 @@ Static methods do not participate in object-oriented ceremonies can mislead prog
 
 ### Overloading
 
-**🚧 Pending...**
-
 Overloading ([JLS 8.4.9](https://docs.oracle.com/javase/specs/jls/se14/html/jls-8.html#jls-8.4.9)) is the ability to have more than one method with the same name but with different parameters.  Consider the following example.
 
 ```java
@@ -3514,8 +3513,7 @@ public class App {
   public static void main( final String[] args ) {
     printSquare( 12.3 );
     printSquare( 4 );
-
-    new App().printSquare( 5L );
+    printSquare( 5L );
   }
 
   private static void printSquare( final double number ) {
@@ -3526,13 +3524,13 @@ public class App {
     System.out.printf( "The square of (int) %d is %d%n", number, number * number );
   }
 
-  private void printSquare( final long number ) {
+  private static void printSquare( final long number ) {
     System.out.printf( "The square of (long) %d is %d%n", number, number * number );
   }
 }
 ```
 
-The `square()` method is defined thrice in the `App` class, using different parameter.  Note that the first two methods are static method while the third variant is an instance method.
+The `square()` method is defined thrice in the `App` class, using different parameter.
 
 ```bash
 The square of (double) 12,30 is 151,29
@@ -3540,7 +3538,9 @@ The square of (int) 4 is 16
 The square of (long) 5 is 25
 ```
 
-The Java compiler is able to tell apart these methods from their parameters.  If the `square()` method is invoked with `float` or `double`, the Java compiler will use the `square()` method that takes a `double`.  The `square()` method that takes a `long` argument is an instance method.  Different from static methods, instance methods are determined at runtime.  Note that the `App` class may be extended and the instance `square()` method overridden.  With that said, the Java compiler determines which of the three methods to be used at compile time.
+The Java compiler is able to tell apart these methods from their parameters.  If the `square()` method is invoked with `float` or `double`, the Java compiler will use the `square()` method that takes a `double`.
+
+The following table shows how Java would match the above method when invoked with different, matching, types.
 
 | Parameter Type | Method Used      |
 |----------------|------------------|
@@ -3551,6 +3551,10 @@ The Java compiler is able to tell apart these methods from their parameters.  If
 | `long`         | `square(long)`   |
 | `float`        | `square(double)` |
 | `double`       | `square(double)` |
+
+Java will find the closest method matching the given parameters.
+
+#### Does Java support return-type-based method overloading?
 
 Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by return type.  Consider the following example.
 
@@ -3592,6 +3596,16 @@ Let say that the above code compiles.  We have two `random()` and two `printSqua
 It is not an accident that the `Random` class does not overload the `next()` method and instead it uses methods with different name such as `nextInt()`, `nextDouble()` and the like.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
+
+#### Can we overload instance methods?
+
+**🚧 Pending...**
+
+Different from static methods, instance methods are determined at runtime.  Note that the `App` class may be extended and the instance `square()` method overridden.  With that said, the Java compiler determines which of the three methods to be used at compile time.
+
+### Hiding
+
+**🚧 Pending...**
 
 ## Initialisation blocks, outer, inner and anonymous classes
 
