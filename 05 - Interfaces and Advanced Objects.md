@@ -2218,7 +2218,7 @@ public abstract class Pet {
 }
 ```
 
-The `Pet` class defined an abstract method, named `doIt()`.  All subclasses need to override this method and provide a concrete implementation.
+The `Pet` class defined an abstract method, named `doIt()`.  All subtypes need to override this method and provide a concrete implementation.
 
 1. A dog that barks
 
@@ -2262,7 +2262,7 @@ The `Pet` class defined an abstract method, named `doIt()`.  All subclasses need
     }
     ```
 
-Different from before, all subclasses of the `Pet` class have their own implementation of the `doIt()` method.
+Different from before, all subtypes of the `Pet` class have their own implementation of the `doIt()` method.
 
 ```java
 package demo;
@@ -2938,7 +2938,7 @@ We cannot invoke the [Vector's add()](https://docs.oracle.com/en/java/javase/14/
 
 ![Stack methods when using composition](assets/images/Stack%20methods%20when%20using%20composition.png)
 
-One of the advantages of inheritance is that we can reuse existing code.  We agree that composition reuses existing code, without creating a tight coupling between the parent class and its subclasses.  Adding new methods to the `Vector` class, will not impact our `Stack` class.  If we inherit from the `Vector` instead, adding new methods to the `Vector` class will automatically make these methods available to all the vector's children.
+One of the advantages of inheritance is that we can reuse existing code.  We agree that composition reuses existing code, without creating a tight coupling between the parent class and its subtypes.  Adding new methods to the `Vector` class, will not impact our `Stack` class.  If we inherit from the `Vector` instead, adding new methods to the `Vector` class will automatically make these methods available to all the vector's children.
 
 Another advantage of composition is that we can swap our backing collection, `Vector`, with a different one, such as [`LinkedList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedList.html), without changing its consumers.
 
@@ -2998,7 +2998,7 @@ Following are two distinctions between inheritance and composition.
 
 1. [**Liskov substitution principle**](https://en.wikipedia.org/wiki/Liskov_substitution_principle): Composition does not adhere to the Liskov substitution principle.  In our version of the stack, we **cannot** use our `demo.Stack` wherever a `java.util.Vector` is required.  Our `demo.Stack` is not a `java.util.Vector`.
 
-1. **Inheritance**: With inheritance, the subclasses will inherit all of their parent's methods without the subclasses needing to do anything.  If a new method is added to the parent, this becomes automatically available to all subclasses.
+1. **Inheritance**: With inheritance, the subtypes will inherit all of their parent's methods without the subtypes needing to do anything.  If a new method is added to the parent, this becomes automatically available to all subtypes.
 
 Personally, I do not see these two as disadvantages.  Inheritance and compositions are different tools.  Composition is used to enrich our classes with properties, such as the `vector` within the `demo.Stack` class.  There are cases where we need to use inheritance too and, in most cases, we will use both.
 
@@ -3325,7 +3325,24 @@ Note that all methods defined by an interface, such as the [`compareTo()` method
 
 #### Can a parent class prevent a method from being overridden?
 
-**🚧 Pending...**
+**Yes**.  A class can determine what methods can be overridden by its subtypes or not using the `final` keyword.  Adding the `final` keyword to a method signature, will prevent this method from being overridden as shown next.
+
+```java
+package demo;
+
+public class Plant {
+
+  protected final void photosynthesize() {
+    System.out.println( "Convert light energy into chemical energy" );
+  }
+}
+```
+
+The `Plant` class, shown above, has its `photosynthesize()` method marked as `final`.  This means that while its subtypes can invoke this method, the subtypes cannot override it.  This ensures that while a method is visible to others, the method cannot be replaced.
+
+The `final` keyword can be used with `public`, `protected` and *package-private* methods.  While the `final` keyword can be used with `private` methods, this has no effect as `private` methods cannot be overridden.
+
+Needless to say, `abstract` methods cannot be marked `final`.
 
 #### Can we return something more specific when overriding?
 
