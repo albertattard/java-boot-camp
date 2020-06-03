@@ -41,7 +41,11 @@
     1. [What are the disadvantages of composition?](#what-are-the-disadvantages-of-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overriding](#overriding)
+        1. [Do we need to use the @Override annotation?](#do-we-need-to-use-the-override-annotation)
+        1. [Can we override a private method?](#can-we-override-a-private-method)
+        1. [Can a parent class prevent a method from being overridden?](#can-a-parent-class-prevent-a-method-from-being-overridden)
         1. [Can we return something more specific when overriding?](#can-we-return-something-more-specific-when-overriding)
+        1. [Can we override static methods?](#can-we-override-static-methods)
     1. [Overloading](#overloading)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
     1. [Initialisation block](#initialisation-block)
@@ -3031,7 +3035,11 @@ Given the both the gold and silver coins are coins, we cannot go without inherit
 
 ### Overriding
 
-**🚧 Pending...**
+Overriding is the ability of a subclass to replace a method defined in its parent (or ancestors) class or interfaces it implements and provide a more suitable implementation of this method.
+
+![Method Overriding](assets/images/Method%20Overriding.png)
+
+All objects in Java can be printed to the console or logs files, with no exception.  Consider the following class.
 
 ```java
 package demo;
@@ -3046,6 +3054,8 @@ public class Person {
 }
 ```
 
+We can create an instance of our class and print it as shown next.
+
 ```java
 package demo;
 
@@ -3058,9 +3068,13 @@ public class App {
 }
 ```
 
+The above will print the following, meaningless string.
+
 ```
 demo.Person@6ce253f1
 ```
+
+The above comes from the `Object` class.
 
 ```java
 package java.lang;
@@ -3074,6 +3088,10 @@ public class Object {
   /* Other methods removed for brevity */
 }
 ```
+
+The `Object` class defines a method called `toString()` that is used to convert any object to a `String`.
+
+Any subclass can override a method defined in its parent class (or its ancestors) and provide a more appropriate version of the method.
 
 ```java
 package demo;
@@ -3093,14 +3111,94 @@ public class Person {
 }
 ```
 
+The `Person` class overrode the `toString()` method defined in its parent class, `Object`.  Now, our version of the `toString()` method is used when our object is printed to console.
+
 ```bash
 Person{name=Aden}
 ```
 
-#### Can we return something more specific when overriding?
+#### Do we need to use the @Override annotation?
+
+Java supported inheritance and method overloading since its early days.  Annotations, such as the [`@Override`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Override.html) were only added in [Java 1.5](https://docs.oracle.com/javase/1.5.0/docs/relnotes/features.html#annotations).  The `@Override` is optional, **but very much recommended**.  This ensures that the method defined in the subclass is really overriding the method in its parent class.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  public String tostring() {
+    return String.format( "Person{name=%s}", name );
+  }
+}
+```
+
+On purpose, the method `tostring()` is all written in lowercase.  A programmer may think that this method is overriding the method in the parent class, when in reallity it is not.  The compiler cannot not help us here and the code compiles.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Aden" );
+    System.out.println( a );
+  }
+}
+```
+
+The above will print and will not invoke our method.
+
+```bash
+demo.Person@6ce253f1
+```
+
+Using the `@Override` we can communicate our intention and the compiler can use it to prevent such problems.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) { /* ... */ }
+
+  @Override
+  public String tostring() {
+    return String.format( "Person{name=%s}", name );
+  }
+}
+```
+
+The above class will not compile and will produce the following error.
+
+```bash
+src/main/java/demo/Person.java:11: error: method does not override or implement a method from a supertype
+  @Override
+  ^
+```
+
+While the use of `@Override` is optional, it is highly recommended to use it whenever a method is being overridden.  [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch6.xhtml#lev40).  This communicates our intentions to the compiler and to other programmers.
+
+#### Can we override a private method?
 
 **🚧 Pending...**
 
+#### Can a parent class prevent a method from being overridden?
+
+**🚧 Pending...**
+
+#### Can we return something more specific when overriding?
+
+**🚧 Pending...**
 
 ```java
 package demo;
@@ -3175,6 +3273,9 @@ public class App {
 BabyDolls{name=Baby Twins Dolls}
 ```
 
+#### Can we override static methods?
+
+**🚧 Pending...**
 
 ### Overloading
 
