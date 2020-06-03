@@ -2918,7 +2918,38 @@ public class Stack<T> {
 }
 ```
 
-Our version of the stack uses the same `Vector` as a backing data structure (composition).  We are actually storing the `Stack` items within the `Vector`, but we are shielding the `vector`  property and we are not exposing it to the outside word.  This approach takes advantage of encapsulation as the outside world does not know about the `Vector` class and cannot bypass our `Stack` as we did before.  We cannot invoke any method defined by the `Vector` class as our `vector` property is `private` and is never returned by our `Stack` class.
+Our version of the stack uses the same `Vector` as a backing data structure (composition).  We are actually storing the `Stack` items within the `Vector`, but we are shielding the `vector` property and we are not exposing it to the outside word.
+
+A side note above the above example.
+
+* The `withLast()` method makes use of lambda function and behaviour parameterization, as we are passing behaviour as a parameter.
+
+    ```java
+      private T withLast( final IntFunction<T> handler ) {
+        final int size = vector.size();
+        return size == 0 ? null : handler.apply( size - 1 );
+      }
+    ```
+
+    The `withLast()` checks if the vector is empty, in which case returns `null`.  Otherwise, it provides the given function the last index and expected an object in return.
+
+    The `peek()` method returns the element at the last position using the `Vector`'s `get()` method as shown next.
+
+    ```java
+      public T peek() {
+        return withLast( vector::get );
+      }
+    ```
+
+    While the `pop()` method uses the `remove()` method to remove the element at the given index.
+
+    ```java
+      public T pop() {
+        return withLast( vector::remove );
+      }
+    ```
+
+The new version of the `Stack` class takes advantage of encapsulation as the outside world does not know about the `Vector` class and cannot bypass our `Stack` as we did before.  We cannot invoke any method defined by the `Vector` class as our `vector` property is `private` and is never returned by our `Stack` class.
 
 ```java
 package demo;
