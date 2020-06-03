@@ -51,6 +51,8 @@
     1. [Overloading](#overloading)
         1. [Does Java support return-type-based method overloading?](#does-java-support-return-type-based-method-overloading)
         1. [Can we overload instance methods?](#can-we-overload-instance-methods)
+        1. [What are the benefits to method overloading?](#what-are-the-benefits-to-method-overloading)
+        1. [When should we use method overloading and when should we avoid it?](#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
     1. [Initialisation block](#initialisation-block)
@@ -3552,7 +3554,7 @@ The following table shows how Java would match the above method when invoked wit
 | `float`        | `square(double)` |
 | `double`       | `square(double)` |
 
-Java will find the closest method matching the given parameters.
+Java will find the closest method matching the given parameters.  **The choice of which overloaded method to invoke is made at compile time**.
 
 #### Does Java support return-type-based method overloading?
 
@@ -3595,13 +3597,89 @@ Let say that, for the sake of this example, the above code compiles.  We have tw
 
 It is not an accident that the `Random` class does not overload the `next()` method and instead it uses methods with different names, such as `nextInt()`, `nextDouble()` and the like.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
-
 #### Can we overload instance methods?
 
 Yes.  Instance methods can be overloaded in the same manner as static methods are overloaded.
 
 Note that instance methods can be overridden too and thus an overridden method may be invoked at runtime.
+
+#### What are the benefits to method overloading?
+
+Overloading simplifies method naming.  Say that we have a set of methods that do the same thing, such as print numbers, objects, arrays and the like.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    printlnInt( 1 );
+    printlnDouble( 2.3 );
+    printlnIntArray( new int[] { 4, 5, 6, 7, 8 } );
+  }
+
+  private static void printlnInt( int a ) {
+    System.out.println( a );
+  }
+
+  private static void printlnDouble( double a ) {
+    System.out.println( a );
+  }
+
+  private static void printlnIntArray( int[] a ) {
+    System.out.println( Arrays.toString( a ) );
+  }
+}
+```
+
+All the `printlnXyz()`methods are all doing the same thing.  Instead of creating a unique name for each method, we can use a common name, such as `println`, and overload this method with new types.
+
+#### When should we use method overloading and when should we avoid it?
+
+Use overloading when the methods are doing the same thing and need to accommodate different input and avoid overloading when the methods are doing different things.  Try not to use overloading as a means of implementing polymorphism.
+
+Technically, method overloading provides no benefits to the language.  Java can do without method overloading and we would not lose anything.
+
+In some cases, method overloading gets us in trouble too.  The `remove()` method within the [List](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) class is overloaded.  We have two variants of this method
+
+1. [`remove(int)`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#remove(int)) removes an item at the given location
+1. [`remove(T)`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#remove(java.lang.Object)) removes the first item that is equal to the given object
+
+This worked well until [Java 1.5 introduced autoboxing](https://docs.oracle.com/javase/1.5.0/docs/relnotes/features.html#boxing).  Consider the following code example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Integer> numbers = new ArrayList<>();
+    numbers.add( 1 );
+    numbers.add( 2 );
+    numbers.add( 3 );
+
+    numbers.remove( 2 );
+
+    System.out.println( numbers );
+  }
+}
+```
+
+The above example adds three numbers and then removes one.  Which method will be used?  In the example shown above, the `remove()` method that removes an item at a given index is used but that's not clear.
+
+In the above example, the `remove()` methods are removing items using different strategies.  Having the strategy part of the name would make this more meaningful without losing anything.  Following are some alternative names.
+
+1. `removeAt(int)`
+1. `removeFirstEquale(T)`
+
+By just reading the method name, we know what will happen and we do not have to worry about using the wrong method.
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this too in [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52).
 
 ### Hiding
 
