@@ -3642,7 +3642,7 @@ Use overloading when the methods are doing the same thing and need to accommodat
 
 Technically, method overloading provides no benefits to the language.  Java can do without method overloading and we would not lose anything.
 
-In some cases, method overloading gets us in trouble too.  The `remove()` method within the [List](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) class is overloaded.  We have two variants of this method
+In some cases, method overloading gets us in trouble too.  The `remove()` method within the [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) class is overloaded.  We have two variants of this method
 
 1. [`remove(int)`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#remove(int)) removes an item at the given location
 1. [`remove(T)`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#remove(java.lang.Object)) removes the first item that is equal to the given object
@@ -3670,7 +3670,7 @@ public class App {
 }
 ```
 
-The above example adds three numbers and then removes one.  Which method will be used?  In the example shown above, the `remove()` method that removes an item at a given index is used but that's not clear.
+The above example adds three numbers and then removes one.  Which `remove()` method will be used?  Autoboxing allows us to use the primitive `int` where the wrapper equivalent is present.  This means that both methods will do.  In the example shown above, the `remove()` method that removes an item at a given index is used as that's the closest match.
 
 In the above example, the `remove()` methods are removing items using different strategies.  Having the strategy part of the name would make this more meaningful without losing anything.  Following are some alternative names.
 
