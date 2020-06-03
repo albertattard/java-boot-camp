@@ -46,7 +46,7 @@
         1. [Can we override a private method?](#can-we-override-a-private-method)
         1. [Can we change the visibility of an overridden method?](#can-we-change-the-visibility-of-an-overridden-method)
         1. [Can a parent class prevent a method from being overridden?](#can-a-parent-class-prevent-a-method-from-being-overridden)
-        1. [Can we return something more specific when overriding?](#can-we-return-something-more-specific-when-overriding)
+        1. [Can we return something different when overriding methods?](#can-we-return-something-different-when-overriding-methods)
         1. [Can we override static methods?](#can-we-override-static-methods)
     1. [Overloading](#overloading)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
@@ -3344,9 +3344,9 @@ The `final` keyword can be used with `public`, `protected` and *package-private*
 
 Needless to say, `abstract` methods cannot be marked `final`.
 
-#### Can we return something more specific when overriding?
+#### Can we return something different when overriding methods?
 
-**🚧 Pending...**
+A subtype can override a method and return something more specific to what its parent class.   Consider the following interface.
 
 ```java
 package demo;
@@ -3355,6 +3355,18 @@ public interface Toy {
 }
 ```
 
+A machine can be used to produce toys as shown next.
+
+```java
+package demo;
+
+public interface ToyMachine {
+
+  Toy manufacture();
+}
+```
+
+The `manufacture()` method defined in the `ToyMachine` interface shown above returns a `Toy`.  Consider the following toy.
 
 ```java
 package demo;
@@ -3373,15 +3385,7 @@ public class BabyDolls implements Toy {
 }
 ```
 
-
-```java
-package demo;
-
-public interface ToyMachine {
-
-  Toy manufacture();
-}
-```
+The class `BabyDolls` is a subtype of `Toy`.  A machine that produces `BabyDolls` can return this type instead as shown next.
 
 ```java
 package demo;
@@ -3401,6 +3405,8 @@ public class BabyDollsMachine implements ToyMachine {
 }
 ```
 
+The above is valid as the overridden method is returning something more specific.  With that said, the `ToyMachine` returns `Toy`.  Consider the following example.
+
 ```java
 package demo;
 
@@ -3417,8 +3423,10 @@ public class App {
 }
 ```
 
-```bash
-BabyDolls{name=Baby Twins Dolls}
+Even though we only have one implementation, an object of type `ToyMachine` will return an object of type `Toy`.
+
+```java
+final Toy toy = machine.manufacture();
 ```
 
 #### Can we override static methods?
