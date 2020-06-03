@@ -51,7 +51,7 @@
     1. [Overloading](#overloading)
         1. [Does Java support return-type-based method overloading?](#does-java-support-return-type-based-method-overloading)
         1. [Can we overload instance methods?](#can-we-overload-instance-methods)
-        1. [What are the benefits to method overloading?](#what-are-the-benefits-to-method-overloading)
+        1. [What are the benefits of using method overloading?](#what-are-the-benefits-of-using-method-overloading)
         1. [When should we use method overloading and when should we avoid it?](#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
@@ -3603,7 +3603,7 @@ Yes.  Instance methods can be overloaded in the same manner as static methods ar
 
 Note that instance methods can be overridden too and thus an overridden method may be invoked at runtime.
 
-#### What are the benefits to method overloading?
+#### What are the benefits of using method overloading?
 
 Overloading simplifies method naming.  Say that we have a set of methods that do the same thing, such as print numbers, objects, arrays and the like.  Consider the following example.
 

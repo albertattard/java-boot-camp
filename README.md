@@ -239,7 +239,7 @@ Boot Camp for developers interested to learn Java.
     1. [Overloading](05%20-%20Interfaces%20and%20Advanced%20Objects.md#overloading)
         1. [Does Java support return-type-based method overloading?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#does-java-support-return-type-based-method-overloading)
         1. [Can we overload instance methods?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#can-we-overload-instance-methods)
-        1. [What are the benefits to method overloading?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-are-the-benefits-to-method-overloading)
+        1. [What are the benefits of using method overloading?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-are-the-benefits-of-using-method-overloading)
         1. [When should we use method overloading and when should we avoid it?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](05%20-%20Interfaces%20and%20Advanced%20Objects.md#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](05%20-%20Interfaces%20and%20Advanced%20Objects.md#initialisation-blocks-outer-inner-and-anonymous-classes)
