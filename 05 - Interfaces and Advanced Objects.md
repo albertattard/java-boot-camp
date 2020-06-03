@@ -3199,7 +3199,42 @@ While the use of `@Override` is optional, it is highly recommended to use it whe
 
 #### Can we use the `@Override` when overriding methods defined by an interface?
 
-**🚧 Pending...**
+Yes, the `@Override` annotation can be used to indicate that you are overriding a method irrespective from where this was defined.  This was not always the case.  In Java 1.5, when annotations where introduced, we were not able to use `@Override` to indicate that we are overriding a method defined in an interface.
+
+Consider the following interface.
+
+```java
+package demo;
+
+public interface HasName {
+
+  String getName();
+}
+```
+
+In Java 1.5 we could not use the `@Override` to indicate that we are overriding a method defined in an interface.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH VERSIONS OF JAVA PRIOR TO JAVA 1.6!!**
+
+```java
+package demo;
+
+public class Person implements HasName {
+
+  private final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  @Override
+  public String getName() {
+    return name;
+  }
+}
+```
+
+This was fixed in Java 1.6 and the `@Override` annotation can now be used to mark any kind of overriding.
 
 #### Can we override a private method?
 
