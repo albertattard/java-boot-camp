@@ -3274,7 +3274,54 @@ The inner class `VeryImportantPerson` has access to the `Person`'s `getSecret()`
 
 #### Can we change the visibility of an overridden method?
 
-**🚧 Pending...**
+An overridden method can be more visible than the one defined in the parent class.  Consider the following example.
+
+```java
+package demo;
+
+public class Plant {
+
+  protected void photosynthesize() {
+    System.out.println( "Convert light energy into chemical energy" );
+  }
+}
+```
+
+The `Plant` class shown above has one `protected` method, `photosynthesize()`, which means that the method is only visible to its children or other classes within its package.
+
+A child class, such as the `GreenAlgae` class shown next, can override this method and make it `public`.
+
+```java
+package demo;
+
+public class GreenAlgae extends Plant {
+
+  @Override
+  public void photosynthesize() {
+    super.photosynthesize();
+  }
+}
+```
+
+Note, we cannot reduce the visibility of a method.  For example, if a method is defined `public` in a parent class, a subclass cannot override it and make it `protected`, *package-private* or `private`.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class FicusLyrata extends Plant {
+
+  @Override
+  void photosynthesize() {
+    super.photosynthesize();
+  }
+}
+```
+
+The `FicusLyrata` reduced the visibility of the `photosynthesize()` from `protected` to *package-private*.
+
+Note that all methods defined by an interface, such as the [`compareTo()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html#compareTo(T)) defined in the [`Comparable` interface](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) are `public`.  All overridden methods must be public too.
 
 #### Can a parent class prevent a method from being overridden?
 
