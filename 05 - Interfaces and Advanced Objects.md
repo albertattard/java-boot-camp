@@ -42,8 +42,9 @@
 1. [Overloading and overriding](#overloading-and-overriding)
     1. [Overriding](#overriding)
         1. [Do we need to use the `@Override` annotation?](#do-we-need-to-use-the-override-annotation)
-        1. [Can we use the `@Override` when overriding methods defined by an interface?](#can-we-use-the-override-when-overriding-methods-defined-by-an-interface)
+        1. [Can we use the `@Override` annotation when overriding methods defined by an interface?](#can-we-use-the-override-annotation-when-overriding-methods-defined-by-an-interface)
         1. [Can we override a private method?](#can-we-override-a-private-method)
+        1. [Can we change the visibility of an overridden method?](#can-we-change-the-visibility-of-an-overridden-method)
         1. [Can a parent class prevent a method from being overridden?](#can-a-parent-class-prevent-a-method-from-being-overridden)
         1. [Can we return something more specific when overriding?](#can-we-return-something-more-specific-when-overriding)
         1. [Can we override static methods?](#can-we-override-static-methods)
@@ -3197,9 +3198,9 @@ src/main/java/demo/Person.java:11: error: method does not override or implement 
 
 While the use of `@Override` is optional, it is highly recommended to use it whenever a method is being overridden.  [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in [Item 40: Consistently use the Override annotation](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch6.xhtml#lev40).  This communicates our intentions to the compiler and to other programmers.
 
-#### Can we use the `@Override` when overriding methods defined by an interface?
+#### Can we use the `@Override` annotation when overriding methods defined by an interface?
 
-Yes, the `@Override` annotation can be used to indicate that you are overriding a method irrespective from where this was defined.  This was not always the case.  In Java 1.5, when annotations where introduced, we were not able to use `@Override` to indicate that we are overriding a method defined in an interface.
+Yes, the `@Override` annotation can be used to indicate that you are overriding a method irrespective from where this was defined.  This was not always the case.  In Java 1.5, when annotations were introduced, we were not able to use `@Override` to indicate that we are overriding a method defined in an interface.
 
 Consider the following interface.
 
@@ -3212,7 +3213,7 @@ public interface HasName {
 }
 ```
 
-In Java 1.5 we could not use the `@Override` to indicate that we are overriding a method defined in an interface.
+In Java 1.5 we could not use the `@Override` to indicate that we are overriding this method.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH VERSIONS OF JAVA PRIOR TO JAVA 1.6!!**
 
@@ -3237,6 +3238,41 @@ public class Person implements HasName {
 This was fixed in Java 1.6 and the `@Override` annotation can now be used to mark any kind of overriding.
 
 #### Can we override a private method?
+
+**No**.  A `private` method cannot be overridden.  Consider the following example.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) { /* ... */ }
+
+  private String getSecret() {
+    return "a person's secret";
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, secret=%s}", name, getSecret() );
+  }
+
+  static class VeryImportantPerson extends Person {
+
+    public VeryImportantPerson( final String name ) { /* ... */ }
+
+    public String getSecret() {
+      return "a very important person's secret";
+    }
+  }
+}
+```
+
+The inner class `VeryImportantPerson` has access to the `Person`'s `getSecret()` method as both belong to the same class, but still cannot override this method.  This is not an issue of visibility.  Adding the `@Override` annotation will introduce a syntax error and the code will not compile.
+
+#### Can we change the visibility of an overridden method?
 
 **🚧 Pending...**
 
