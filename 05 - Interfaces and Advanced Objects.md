@@ -40,8 +40,9 @@
     1. [Why is there a big push in favour of composition over inheritance?](#why-is-there-a-big-push-in-favour-of-composition-over-inheritance)
     1. [What are the disadvantages of composition?](#what-are-the-disadvantages-of-composition)
 1. [Overloading and overriding](#overloading-and-overriding)
-    1. [Overloading](#overloading)
     1. [Overriding](#overriding)
+        1. [Can we return something more specific when overriding?](#can-we-return-something-more-specific-when-overriding)
+    1. [Overloading](#overloading)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
     1. [Initialisation block](#initialisation-block)
     1. [`static` initialisation block](#static-initialisation-block)
@@ -3028,9 +3029,22 @@ Given the both the gold and silver coins are coins, we cannot go without inherit
 
 **🚧 Pending...**
 
-### Overloading
+### Overriding
 
-Overloading is the ability to have more than one method with the same name but with different parameters.  Consider the following example.
+**🚧 Pending...**
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+}
+```
 
 ```java
 package demo;
@@ -3038,32 +3052,222 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final int a = 4;
-    final double b = 12.3;
-
-    System.out.printf( "The square of %d is %d%n", a, square( a ) );
-    System.out.printf( "The square of %.2f is %.2f%n", b, square( b ) );
-  }
-
-  private static double square( double number ) {
-    return number * number;
-  }
-
-  private static int square( int number ) {
-    return number * number;
+    final Person a = new Person( "Aden" );
+    System.out.println( a );
   }
 }
 ```
 
-The `square()` method is defined twice in the `App` class, using different parameter.
+```
+demo.Person@6ce253f1
+```
+
+```java
+package java.lang;
+
+public class Object {
+
+  public String toString() {
+    return getClass().getName() + "@" + Integer.toHexString(hashCode());
+  }
+
+  /* Other methods removed for brevity */
+}
+```
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s}", name );
+  }
+}
+```
+
+```bash
+Person{name=Aden}
+```
+
+#### Can we return something more specific when overriding?
 
 **🚧 Pending...**
+
+
+```java
+package demo;
+
+public interface Toy {
+}
+```
+
+
+```java
+package demo;
+
+public class BabyDolls implements Toy {
+
+  private final String name;
+
+  public BabyDolls( final String name ) {
+    this.name = name;
+  }
+
+  @Override public String toString() {
+    return String.format( "BabyDolls{name=%s}", name );
+  }
+}
+```
+
+
+```java
+package demo;
+
+public interface ToyMachine {
+
+  Toy manufacture();
+}
+```
+
+```java
+package demo;
+
+public class BabyDollsMachine implements ToyMachine {
+
+  private final String name;
+
+  public BabyDollsMachine( final String name ) {
+    this.name = name;
+  }
+
+  @Override
+  public BabyDolls manufacture() {
+    return new BabyDolls( name );
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    produce( new BabyDollsMachine( "Baby Twins Dolls" ) );
+  }
+
+  private static void produce( final ToyMachine machine ) {
+    final Toy toy = machine.manufacture();
+    System.out.println( toy );
+  }
+}
+```
+
+```bash
+BabyDolls{name=Baby Twins Dolls}
+```
+
+
+### Overloading
+
+**🚧 Pending...**
+
+Overloading ([JLS 8.4.9](https://docs.oracle.com/javase/specs/jls/se14/html/jls-8.html#jls-8.4.9)) is the ability to have more than one method with the same name but with different parameters.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    printSquare( 12.3 );
+    printSquare( 4 );
+
+    new App().printSquare( 5L );
+  }
+
+  private static void printSquare( final double number ) {
+    System.out.printf( "The square of (double) %.2f is %.2f%n", number, number * number );
+  }
+
+  private static void printSquare( final int number ) {
+    System.out.printf( "The square of (int) %d is %d%n", number, number * number );
+  }
+
+  private void printSquare( final long number ) {
+    System.out.printf( "The square of (long) %d is %d%n", number, number * number );
+  }
+}
+```
+
+The `square()` method is defined thrice in the `App` class, using different parameter.  Note that the first two methods are static method while the third variant is an instance method.
+
+```bash
+The square of (double) 12,30 is 151,29
+The square of (int) 4 is 16
+The square of (long) 5 is 25
+```
+
+The Java compiler is able to tell apart these methods from their parameters.  If the `square()` method is invoked with `float` or `double`, the Java compiler will use the `square()` method that takes a `double`.  The `square()` method that takes a `long` argument is an instance method.  Different from static methods, instance methods are determined at runtime.  Note that the `App` class may be extended and the instance `square()` method overridden.  With that said, the Java compiler determines which of the three methods to be used at compile time.
+
+| Parameter Type | Method Used      |
+|----------------|------------------|
+| `byte`         | `square(int)`    |
+| `short`        | `square(int)`    |
+| `char`         | `square(int)`    |
+| `int`          | `square(int)`    |
+| `long`         | `square(long)`   |
+| `float`        | `square(double)` |
+| `double`       | `square(double)` |
+
+Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by return type.  Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    printSquare( random() );
+  }
+
+  private static double random() {
+    return RANDOM.nextDouble();
+  }
+
+  private static int random() {
+    return RANDOM.nextInt();
+  }
+
+  private static void printSquare( final double number ) {
+    System.out.printf( "The square of (double) %.2f is %.2f%n", number, number * number );
+  }
+
+  private static void printSquare( final int number ) {
+    System.out.printf( "The square of (int) %d is %d%n", number, number * number );
+  }
+
+  private static final Random RANDOM = new Random();
+}
+```
+
+Let say that the above code compiles.  We have two `random()` and two `printSquare()` methods.  Which pair are we going to use?  Is it the `int` pair or the `double` pair?
+
+It is not an accident that the `Random` class does not overload the `next()` method and instead it uses methods with different name such as `nextInt()`, `nextDouble()` and the like.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 52: Use overloading judiciously](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev52)
-
-### Overriding
-
-**🚧 Pending...**
 
 ## Initialisation blocks, outer, inner and anonymous classes
 
