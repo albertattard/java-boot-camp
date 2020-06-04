@@ -527,15 +527,26 @@ package demo;
 public class App {
   public static void main( String[] args ) {
     String s = """
-                “This is the day upon which
-                 we are reminded of what we
-                 are on the other 364.”
-                 —Mark Twain
+               “This is the day upon which
+                we are reminded of what we
+                are on the other 364.”
+                —Mark Twain
                """;
     System.out.println(s);
   }
 }
 ```
+
+The above example will print.
+
+```bash
+“This is the day upon which
+ we are reminded of what we
+ are on the other 364.”
+ —Mark Twain
+```
+
+Note how the second, third and fourth lines are indented by one space, preserving the formatting.
 
 ### Primitive Types
 
