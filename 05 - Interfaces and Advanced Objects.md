@@ -55,7 +55,7 @@
         1. [When should we use method overloading and when should we avoid it?](#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
-    1. [`static` initialisation block](#static-initialisation-block)
+    1. [Static initialisation block](#static-initialisation-block)
         1. [Can we invoke a static initialisation block programmatically?](#can-we-invoke-a-static-initialisation-block-programmatically)
         1. [When and how many times is the static initialisation block invoked?](#when-and-how-many-times-is-the-static-initialisation-block-invoked)
     1. [Initialisation block](#initialisation-block)
@@ -3796,7 +3796,7 @@ This is not a common practice and one should use it with caution.  The above exa
 
 **🚧 Pending...**
 
-### `static` initialisation block
+### Static initialisation block
 
 We use constructors to initialise object's properties.  How can we initialise static fields?  Consider the following example.
 
@@ -3820,7 +3820,7 @@ public class App {
 }
 ```
 
-The above example makes use of *static initialisation block* to initialise the `SECRET_NUMBER`.  An instance of `Random` class is created and used to generate a random number.  The instance of the `Random` is not available outside the static initialisation block and will be garbage collected at a later stage.  The above will print.
+The above example makes use of *static initialisation block* to initialise the `SECRET_NUMBER` to a random number.  An instance of `Random` class is created and used to generate a random number.  The instance of the `Random` is not available outside the static initialisation block and will be garbage collected at a later stage.  The above will print.
 
 ```bash
 The secret number is 7
@@ -3850,11 +3850,13 @@ public class App {
 
 #### Can we invoke a static initialisation block programmatically?
 
-**🚧 Pending...**
+**No**.  We cannot interact with the static initialisation block as we do with methods.  The static initialisation block is invoked automatically by the runtime environment.
+
+I tend to stay away from the static initialisation blocks and prefer the methods instead unless I need to assurance that something is only executed once.
 
 #### When and how many times is the static initialisation block invoked?
 
-**🚧 Pending...**
+The static initialisation block is executed. **once**, when the class is loaded.  Consider the following example.
 
 ```java
 package demo;
@@ -3878,91 +3880,103 @@ public class ExecutionOrder {
 }
 ```
 
-1. Class is not initialised
+The above example contains an initialisation block and static field, which is initialised through a static method.  Let's consider several examples and see when the class is actually initialised.
 
-```java
-package demo;
+1. Declaring a variable of type `ExecutionOrder` without interacting with the class nor the varialble.
 
-public class App {
+    ```java
+    package demo;
 
-  public static void main( final String[] args ) {
-    ExecutionOrder a;
-    System.out.println( "Done" );
-  }
-}
-```
+    public class App {
 
-```bash
-Done
-```
+      public static void main( final String[] args ) {
+        ExecutionOrder a;
+        System.out.println( "Done" );
+      }
+    }
+    ```
 
-1.
+    The class is not used, thus will not be loaded.  Therefore, the static initialisation block is not invoked.
 
-```java
-package demo;
+    ```bash
+    Done
+    ```
 
-public class App {
+1. Create a method that takes an `ExecutionOrder` as a parameter
 
-  public static void main( final String[] args ) {
-    doSomething( null );
-    System.out.println( "Done" );
-  }
+    ```java
+    package demo;
 
-  private static void doSomething( ExecutionOrder a ) {
-  }
-}
-```
+    public class App {
 
-```bash
-Done
-```
+      public static void main( final String[] args ) {
+        doSomething( null );
+        System.out.println( "Done" );
+      }
 
-1. Invoke the method several times
+      private static void doSomething( ExecutionOrder a ) {
+      }
+    }
+    ```
 
-```java
-package demo;
+    The class is not used, thus will not be loaded.
 
-public class App {
+    ```bash
+    Done
+    ```
 
-  public static void main( final String[] args ) {
-    ExecutionOrder.printValue();
-    ExecutionOrder.printValue();
-    ExecutionOrder.printValue();
-    System.out.println( "Done" );
-  }
-}
-```
+1. Invoke the `printValue()` method several times
 
-```bash
-Initialisation Block
-Initialise Static Field
-The constant field value is 7
-The constant field value is 7
-The constant field value is 7
-Done
-```
+    ```java
+    package demo;
 
-1. Create instances
+    public class App {
 
-```java
-package demo;
+      public static void main( final String[] args ) {
+        ExecutionOrder.printValue();
+        ExecutionOrder.printValue();
+        ExecutionOrder.printValue();
+        System.out.println( "Done" );
+      }
+    }
+    ```
 
-public class App {
+    This time the class is used as the `printValue()` method is invoked several time.
 
-  public static void main( final String[] args ) {
-    new ExecutionOrder();
-    new ExecutionOrder();
-    new ExecutionOrder();
-    System.out.println( "Done" );
-  }
-}
-```
+    ```bash
+    Initialisation Block
+    Initialise Static Field
+    The constant field value is 7
+    The constant field value is 7
+    The constant field value is 7
+    Done
+    ```
 
-```bash
-Initialisation Block
-Initialise Static Field
-Done
-```
+    Note that the static initialisation block is invoked first followed by the initialising the static fields.  Both of these are invoked once, when the class is loaded.
+
+1. Create instances of type `ExecutionOrder`
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        new ExecutionOrder();
+        new ExecutionOrder();
+        new ExecutionOrder();
+        System.out.println( "Done" );
+      }
+    }
+    ```
+
+    Same as before, the static initialisation block and the initialising the static fields are invoked once, when the class is loaded.
+
+    ```bash
+    Initialisation Block
+    Initialise Static Field
+    Done
+    ```
 
 ### Initialisation block
 

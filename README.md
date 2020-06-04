@@ -243,7 +243,7 @@ Boot Camp for developers interested to learn Java.
         1. [When should we use method overloading and when should we avoid it?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](05%20-%20Interfaces%20and%20Advanced%20Objects.md#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](05%20-%20Interfaces%20and%20Advanced%20Objects.md#initialisation-blocks-outer-inner-and-anonymous-classes)
-    1. [`static` initialisation block](05%20-%20Interfaces%20and%20Advanced%20Objects.md#static-initialisation-block)
+    1. [Static initialisation block](05%20-%20Interfaces%20and%20Advanced%20Objects.md#static-initialisation-block)
         1. [Can we invoke a static initialisation block programmatically?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#can-we-invoke-a-static-initialisation-block-programmatically)
         1. [When and how many times is the static initialisation block invoked?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#when-and-how-many-times-is-the-static-initialisation-block-invoked)
     1. [Initialisation block](05%20-%20Interfaces%20and%20Advanced%20Objects.md#initialisation-block)
