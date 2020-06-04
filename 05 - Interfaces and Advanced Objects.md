@@ -35,6 +35,7 @@
         1. [Type Downcasting](#type-downcasting)
     1. [Can we type cast `null`?](#can-we-type-cast-null)
     1. [Can we type cast primitive types?](#can-we-type-cast-primitive-types)
+    1. [JEP 305: Pattern Matching for `instanceof` (Preview)](#jep-305-pattern-matching-for-instanceof-preview)
 1. [Inheritance and composition](#inheritance-and-composition)
     1. [What is composition?](#what-is-composition)
     1. [Why is there a big push in favour of composition over inheritance?](#why-is-there-a-big-push-in-favour-of-composition-over-inheritance)
@@ -2788,6 +2789,101 @@ All decimal places are dropped with this type casting and the following is print
 ```bash
 The value of a is: -126
 ```
+
+### JEP 305: Pattern Matching for `instanceof` (Preview)
+
+The `instanceof` operator is currently being improved ([JEP 305]( https://openjdk.java.net/jeps/305) and [JEP 375]( https://openjdk.java.net/jeps/375)).  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Object a = "My String";
+
+    if ( a instanceof String ) {
+      final String s = (String) a;
+      System.out.printf( "The string %s is %d Unicode code units long%n", s, s.length() );
+    }
+  }
+}
+```
+
+In most, the cases the `instanceof` operator is followed by a cast as shown above example.  The `instanceof` operator is being improved a shown next.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Object a = "My String";
+
+    if ( a instanceof String s ) {
+      System.out.printf( "The string %s is %d Unicode code units long%n", s, s.length() );
+    }
+  }
+}
+```
+
+The above example shows how the `instanceof` and cast can be combined in one statement.
+
+```java
+if ( a instanceof String s ) {
+```
+
+Note that variable `s` shown above is `final` and thus cannot be modified.
+
+Since Java 12, Java started including preview features.  This enables Oracle to collect feedback about future features from the general public without committing anything.  The preview features can be modified in newer releases.  This new feature is in preview and not available by default.  You may need to change the *Project language level* (`[command] + [;]`) to also include preview features, as shown next.
+
+![JDK 14 Preview](assets/images/JDK%2014%20Preview.png)
+
+Building the application may fail too as we need to tell the Java compiler that we want to enable the preview features.
+
+```bash
+$ ./gradlew build
+
+> Task :compileJava FAILED
+src/main/java/demo/App.java:8: error: pattern matching in instanceof is a preview feature and is disabled by default.
+    if ( a instanceof String s ) {
+                             ^
+  (use --enable-preview to enable pattern matching in instanceof)
+1 error
+```
+
+We can enable the preview features by updating the `gradle.build` file as shown next.
+
+```groovy
+test {
+  useJUnitPlatform()
+  testLogging {
+    events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
+  }
+
+  jvmArgs(['--enable-preview'])
+}
+
+tasks.withType(JavaCompile).each {
+  it.options.compilerArgs.add('--enable-preview')
+}
+```
+
+Running the application may produce a similar error as we need to tell the Java runtime to enable the preview features.
+
+```bash
+$ java -jar build/libs/examples-all.jar
+Error: LinkageError occurred while loading main class demo.App
+	java.lang.UnsupportedClassVersionError: Preview features are not enabled for demo/App (class file version 58.65535). Try running with '--enable-preview'
+```
+
+We can enable the preview features by passing the `--enable-preview` flag to the Java runtime environment as shown next.
+
+```bash
+$ java --enable-preview -jar build/libs/examples-all.jar
+```
+
+Kindly note that preview features may change between releases, thus think twice before investing heavily in them.
 
 ## Inheritance and composition
 

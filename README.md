@@ -224,6 +224,7 @@ Boot Camp for developers interested to learn Java.
         1. [Type Downcasting](05%20-%20Interfaces%20and%20Advanced%20Objects.md#type-downcasting)
     1. [Can we type cast `null`?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#can-we-type-cast-null)
     1. [Can we type cast primitive types?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#can-we-type-cast-primitive-types)
+    1. [JEP 305: Pattern Matching for `instanceof` (Preview)](05%20-%20Interfaces%20and%20Advanced%20Objects.md#jep-305-pattern-matching-for-instanceof-preview)
 1. [Inheritance and composition](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inheritance-and-composition)
     1. [What is composition?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-is-composition)
     1. [Why is there a big push in favour of composition over inheritance?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#why-is-there-a-big-push-in-favour-of-composition-over-inheritance)
