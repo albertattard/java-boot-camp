@@ -18,6 +18,7 @@
     1. [Mutable Strings](#mutable-strings)
         1. [Puzzle (No Pain, No Gain)](#puzzle-no-pain-no-gain)
     1. [Text blocks and multiline strings](#text-blocks-and-multiline-strings)
+        1. [Does Java supports string interpolation?](#does-java-supports-string-interpolation)
     1. [Primitive Types](#primitive-types)
     1. [Signed and Unsigned Integrals](#signed-and-unsigned-integrals)
     1. [Reference Types (the rest)](#reference-types-the-rest)
@@ -547,6 +548,12 @@ The above example will print.
 ```
 
 Note how the second, third and fourth lines are indented by one space, preserving the formatting.
+
+#### Does Java supports string interpolation?
+
+**No**.
+
+**🚧 Pending...**
 
 ### Primitive Types
 

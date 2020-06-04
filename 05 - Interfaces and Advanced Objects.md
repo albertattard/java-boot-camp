@@ -58,6 +58,7 @@
     1. [Static initialisation block](#static-initialisation-block)
         1. [Can we invoke a static initialisation block programmatically?](#can-we-invoke-a-static-initialisation-block-programmatically)
         1. [When and how many times is the static initialisation block invoked?](#when-and-how-many-times-is-the-static-initialisation-block-invoked)
+        1. [What happens if an exception is thrown from within the static initialisation block?](#what-happens-if-an-exception-is-thrown-from-within-the-static-initialisation-block)
     1. [Initialisation block](#initialisation-block)
         1. [When is the initialisation block invoked?](#when-is-the-initialisation-block-invoked)
     1. [Outer class](#outer-class)
@@ -3798,7 +3799,7 @@ This is not a common practice and one should use it with caution.  The above exa
 
 ### Static initialisation block
 
-We use constructors to initialise object's properties.  How can we initialise static fields?  Consider the following example.
+We use constructors to initialise the object's properties.  How can we initialise static fields?  Consider the following example.
 
 ```java
 package demo;
@@ -3850,13 +3851,13 @@ public class App {
 
 #### Can we invoke a static initialisation block programmatically?
 
-**No**.  We cannot interact with the static initialisation block as we do with methods.  The static initialisation block is invoked automatically by the runtime environment.
+**No**.  We cannot interact with the static initialisation block as we do with methods.  The static initialisation block is invoked automatically by the Java runtime environment.
 
-I tend to stay away from the static initialisation blocks and prefer the methods instead unless I need to assurance that something is only executed once.
+I tend to stay away from the static initialisation blocks and prefer the methods instead, unless required.
 
 #### When and how many times is the static initialisation block invoked?
 
-The static initialisation block is executed. **once**, when the class is loaded.  Consider the following example.
+The static initialisation block is executed, **once**, when the class is loaded.  Consider the following example.
 
 ```java
 package demo;
@@ -3977,6 +3978,28 @@ The above example contains an initialisation block and static field, which is in
     Initialise Static Field
     Done
     ```
+
+Alternatively, we can use the JVM flags, such as `-Xlog:class+load=info`, to see what classes are being loaded.
+
+![VM Flags -Xlog-class+load=info](assets/images/VM%20Flags%20-Xlog-class+load=info.png)
+
+This will print all classes that are loaded by the classloader.  You will be surprised by the number of classes loaded just to run a simple program.  The following example truncates all classes, except ours.
+
+```bash
+...
+[0.143s][info][class,load] demo.App source: file:out/production/classes/
+[0.145s][info][class,load] demo.ExecutionOrder source: file:out/production/classes/
+Initialisation Block
+Initialise Static Field
+...
+The constant field value is 7
+Done
+...
+```
+
+#### What happens if an exception is thrown from within the static initialisation block?
+
+**🚧 Pending...**
 
 ### Initialisation block
 
@@ -4403,6 +4426,81 @@ The `Temperature` class cannot be extended by an external class, which prevents 
 ### Inner anonymous class
 
 **🚧 Pending...**
+
+
+
+```java
+package demo;
+
+import java.util.stream.Stream;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    Stream.of(
+      new Person( "Aden", 16 ),
+      new Person( "Jade", 32 ),
+      new Person( "Mary", 57 ),
+      new Person( "Peter", 92 )
+    ).forEach( person -> {
+        final String name = person.getName();
+        final int dogAge = toDogAge( person.getAge() );
+        System.out.printf( "%s would be %d years old%n", name, dogAge );
+      }
+    );
+  }
+
+  private static int toDogAge( int age ) {
+    /* 15 human years equals the first year of a medium-sized dog's life */
+    return age / 15;
+  }
+}
+```
+
+```bash
+Aden would be 1 years old
+Jade would be 2 years old
+Mary would be 3 years old
+Peter would be 6 years old
+```
+
+```java
+package demo;
+
+import java.util.stream.Stream;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    Stream.of(
+      new Person( "Aden", 16 ),
+      new Person( "Jade", 32 ),
+      new Person( "Mary", 57 ),
+      new Person( "Peter", 92 )
+    )
+      .map( person -> new Object() {
+        final String name = person.getName();
+        final int dogAge = toDogAge( person.getAge() );
+      } )
+      .forEach( person -> System.out.printf( "%s would be %d years old%n", person.name, person.dogAge )
+      );
+  }
+
+  private static int toDogAge( int age ) {
+    /* 15 human years equals the first year of a medium-sized dog's life */
+    return age / 15;
+  }
+}
+```
+
+
+```java
+new HashMap(){
+{
+put("", "");
+}
+}
+```
 
 ### Local class
 
