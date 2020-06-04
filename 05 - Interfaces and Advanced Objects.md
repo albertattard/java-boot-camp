@@ -55,8 +55,11 @@
         1. [When should we use method overloading and when should we avoid it?](#when-should-we-use-method-overloading-and-when-should-we-avoid-it)
     1. [Hiding](#hiding)
 1. [Initialisation blocks, outer, inner and anonymous classes](#initialisation-blocks-outer-inner-and-anonymous-classes)
-    1. [Initialisation block](#initialisation-block)
     1. [`static` initialisation block](#static-initialisation-block)
+        1. [Can we invoke a static initialisation block programmatically?](#can-we-invoke-a-static-initialisation-block-programmatically)
+        1. [When and how many times is the static initialisation block invoked?](#when-and-how-many-times-is-the-static-initialisation-block-invoked)
+    1. [Initialisation block](#initialisation-block)
+        1. [When is the initialisation block invoked?](#when-is-the-initialisation-block-invoked)
     1. [Outer class](#outer-class)
     1. [Inner instance class](#inner-instance-class)
     1. [Inner static class](#inner-static-class)
@@ -2208,7 +2211,7 @@ public class App {
 }
 ```
 
-The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](), discussed [later on in *Is there a better approach than relying on `instanceof` and type cast operators?* section](#is-there-a-better-approach-than-relying-on-instanceof-and-type-cast-operators-polymorphism).
+The above example meets the requirements but does not make use of good programming practices.  A better approach is to make use of [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)), discussed next.
 
 ### Is there a better approach than relying on `instanceof` and type cast operators (polymorphism)?
 
@@ -2698,7 +2701,7 @@ The above works, as all `VeryImportantPerson` are `Person`.
 
 ### Can we type cast `null`?
 
-Yes, `null` can be type casted to any object ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5)).  We already saw this when answering the question [can one constructor call another constructor in the same class?](#can-one-constructor-call-another-constructor-in-the-same-class).
+Yes, `null` can be type casted to any object ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5)).  We already saw something similar when answering the question [can one constructor call another constructor in the same class?](04%20-%20Classes,%20Methods%20and%20Objects.md#can-one-constructor-call-another-constructor-in-the-same-class).
 
 ### Can we type cast primitive types?
 
@@ -3269,7 +3272,7 @@ public class Person implements HasName {
 }
 ```
 
-This was fixed in Java 1.6 and the `@Override` annotation can now be used to mark any kind of overriding.
+This was updated in Java 1.6 and the `@Override` annotation can now be used to mark all kinds of overriding.
 
 #### Can we override a private method?
 
@@ -3466,7 +3469,7 @@ final Toy toy = machine.manufacture();
 
 #### Can we override static methods?
 
-**No**.  Static methods belong to classes and do not participate in inheritance.  Using the `@Override` annotation with a static method will always produce a compiler error.
+**No**.  Static methods belong to classes and do not participate in inheritance or any other object oriented ceremonies.  Using the `@Override` annotation with a static method will always produce a compiler error.
 
 The answer is quite simple but can create confusion.  Consider the following classes.
 
@@ -3793,13 +3796,478 @@ This is not a common practice and one should use it with caution.  The above exa
 
 **🚧 Pending...**
 
+### `static` initialisation block
+
+We use constructors to initialise object's properties.  How can we initialise static fields?  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  private static final int SECRET_NUMBER;
+
+  static {
+    final Random random = new Random();
+    SECRET_NUMBER = random.nextInt( 10 );
+  }
+
+  public static void main( final String[] args ) {
+    System.out.printf("The secret number is %d%n", SECRET_NUMBER);
+  }
+}
+```
+
+The above example makes use of *static initialisation block* to initialise the `SECRET_NUMBER`.  An instance of `Random` class is created and used to generate a random number.  The instance of the `Random` is not available outside the static initialisation block and will be garbage collected at a later stage.  The above will print.
+
+```bash
+The secret number is 7
+```
+
+The static initialisation blocks are not very commonly used and other approaches are usually preferred, such as the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  private static final int SECRET_NUMBER = generateSecretNumber();
+
+  private static int generateSecretNumber() {
+    final Random random = new Random();
+    return random.nextInt( 10 );
+  }
+
+  public static void main( final String[] args ) {
+    System.out.printf( "The secret number is %d%n", SECRET_NUMBER );
+  }
+}
+```
+
+#### Can we invoke a static initialisation block programmatically?
+
+**🚧 Pending...**
+
+#### When and how many times is the static initialisation block invoked?
+
+**🚧 Pending...**
+
+```java
+package demo;
+
+public class ExecutionOrder {
+
+  static {
+    System.out.println( "Initialisation Block" );
+  }
+
+  private static final int STATIC_FIELD = initialiseStaticField();
+
+  private static int initialiseStaticField() {
+    System.out.println( "Initialise Static Field" );
+    return 7;
+  }
+
+  public static void printValue() {
+    System.out.printf( "The constant field value is %d%n", STATIC_FIELD );
+  }
+}
+```
+
+1. Class is not initialised
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    ExecutionOrder a;
+    System.out.println( "Done" );
+  }
+}
+```
+
+```bash
+Done
+```
+
+1.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    doSomething( null );
+    System.out.println( "Done" );
+  }
+
+  private static void doSomething( ExecutionOrder a ) {
+  }
+}
+```
+
+```bash
+Done
+```
+
+1. Invoke the method several times
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    ExecutionOrder.printValue();
+    ExecutionOrder.printValue();
+    ExecutionOrder.printValue();
+    System.out.println( "Done" );
+  }
+}
+```
+
+```bash
+Initialisation Block
+Initialise Static Field
+The constant field value is 7
+The constant field value is 7
+The constant field value is 7
+Done
+```
+
+1. Create instances
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    new ExecutionOrder();
+    new ExecutionOrder();
+    new ExecutionOrder();
+    System.out.println( "Done" );
+  }
+}
+```
+
+```bash
+Initialisation Block
+Initialise Static Field
+Done
+```
+
 ### Initialisation block
 
 **🚧 Pending...**
 
-### `static` initialisation block
+Java provides several ways to initialise properties within an object.
 
-**🚧 Pending...**
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class Person {
+
+  private final String name;
+  private final int secretNumber;
+
+  public Person( final String name ) {
+    this.name = name;
+
+    final Random random = new Random();
+    this.secretNumber = random.nextInt( 10 );
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, secretNumber=%d}", name, secretNumber );
+  }
+}
+```
+
+The `Person` class has two properties, the `name` and a `secretNumber`.  The `name` is provided to the constructor while the `secretNumber` is generated in the constructor as shown next.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Jade" );
+    final Person b = new Person( "Aden" );
+
+    System.out.println( a );
+    System.out.println( b );
+  }
+}
+```
+
+When creating new instances of the `Person` class we only pass the person's name while the secret number is generated randomly.
+
+```bash
+Person{name=Jade, secretNumber=2}
+Person{name=Aden, secretNumber=3}
+```
+
+There are other ways to initialise the `secretNumber`.  One other solution is to use initialise blocks as shown next.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class Person {
+
+  private final String name;
+  private final int secretNumber;
+
+  {
+    final Random random = new Random();
+    secretNumber = random.nextInt( 10 );
+  }
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, secretNumber=%d}", name, secretNumber );
+  }
+}
+```
+
+This is not a very common feature.  Other alternatives such as the one shown next are more commonly used.
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class Person {
+
+  private final String name;
+  private final int secretNumber = createSecretNumber();
+
+  public Person( final String name ) {
+    this.name = name;
+  }
+
+  private static int createSecretNumber() {
+    final Random random = new Random();
+    return random.nextInt( 10 );
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Person{name=%s, secretNumber=%d}", name, secretNumber );
+  }
+}
+```
+
+When using methods to initialise fields, please make sure that these cannot be overridden as otherwise you may get into some surprises.
+
+#### When is the initialisation block invoked?
+
+Initialisation block
+
+```java
+package demo;
+
+public class ExecutionOrder {
+
+  {
+    System.out.println( "Initialisation Block" );
+  }
+
+  private final int a = initialiseField();
+
+  public ExecutionOrder() {
+    System.out.println( "Constructor" );
+  }
+
+  private static int initialiseField() {
+    System.out.println( "Initialise Field" );
+    return 7;
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    new ExecutionOrder();
+  }
+}
+```
+
+```bash
+Initialisation Block
+Initialise Field
+Constructor
+```
+
+
+Normally, you would put code to initialize an instance variable in a constructor. There are two alternatives to using a constructor to initialize instance variables: initializer blocks and final methods.
+
+
+
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Person a = new Person( "Jade" );
+    final Person b = new Person( "Aden" );
+
+    System.out.println( a );
+    System.out.println( b );
+  }
+}
+```
+
+```bash
+Person{name=Jade, secretNumber=2}
+Person{name=Aden, secretNumber=3}
+```
+
+
+
+
+```java
+package demo;
+
+public class ExecutionOrder {
+
+  {
+    System.out.println( "Initialisation Block" );
+  }
+
+  public ExecutionOrder() {
+    System.out.println( "Constructor" );
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    new ExecutionOrder();
+  }
+}
+```
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Runnable a = new Runnable() {
+      @Override
+      public void run() {
+        final Random sequenceGenerator = new Random( 1 );
+        int nextNumber = sequenceGenerator.nextInt( 10 );
+        System.out.printf( "Sequence: %d%n", nextNumber );
+      }
+    };
+
+    for ( int i = 0; i < 10; i++ ) {
+      a.run();
+    }
+  }
+}
+```
+
+```bash
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+Sequence: 5
+```
+
+```java
+package demo;
+
+import java.util.Random;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Runnable a = new Runnable() {
+
+      private final Random sequenceGenerator;
+
+      {
+        sequenceGenerator = new Random( 1 );
+      }
+
+      @Override
+      public void run() {
+        final int nextNumber = sequenceGenerator.nextInt( 10 );
+        System.out.printf( "Sequence: %d%n", nextNumber );
+      }
+    };
+
+    for ( int i = 0; i < 10; i++ ) {
+      a.run();
+    }
+  }
+}
+```
+
+```java
+final Runnable a = new Runnable() {
+
+  private final Random sequenceGenerator = new Random( 1 );
+
+  @Override
+  public void run() {
+    final int nextNumber = sequenceGenerator.nextInt( 10 );
+    System.out.printf( "Sequence: %d%n", nextNumber );
+  }
+};
+```
+
+```java
+Sequence: 5
+Sequence: 8
+Sequence: 7
+Sequence: 3
+Sequence: 4
+Sequence: 4
+Sequence: 4
+Sequence: 6
+Sequence: 8
+Sequence: 8
+```
 
 ### Outer class
 
@@ -3813,7 +4281,7 @@ This is not a common practice and one should use it with caution.  The above exa
 
 **🚧 Pending...**
 
-The following example was [used already](#can-abstract-classes-have-private-constructors).
+The following example was [used already](04%20-%20Classes,%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors).
 
 Consider the following example.
 
