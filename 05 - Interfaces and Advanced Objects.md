@@ -3999,7 +3999,45 @@ Done
 
 #### What happens if an exception is thrown from within the static initialisation block?
 
-**🚧 Pending...**
+If an exception is thrown from within static initialisation block, an [`ExceptionInInitializerError`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ExceptionInInitializerError.html) is thrown in return.  Note that this is not an [`Exception`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Exception.html), but an [`Error`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Error.html).
+
+Consider the following example.
+
+```java
+package demo;
+
+public class FaultyStaticInitialisationBlock {
+
+  static {
+    if ( true ) {
+      throw new RuntimeException( "Faulty static initialisation block" );
+    }
+  }
+}
+```
+
+In the above example, we had to trick the compiler using an `if` statement.  Without the `if` statement, the example will not compile.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    new FaultyStaticInitialisationBlock();
+  }
+}
+```
+
+Running the above example will fail with `ExceptionInInitializerError` as shown next.
+
+```bash
+Exception in thread "main" java.lang.ExceptionInInitializerError
+	at demo.App.main(App.java:6)
+Caused by: java.lang.RuntimeException: Faulty static initialisation block
+	at demo.FaultyStaticInitialisationBlock.<clinit>(FaultyStaticInitialisationBlock.java:7)
+	... 1 more
+```
 
 ### Initialisation block
 
