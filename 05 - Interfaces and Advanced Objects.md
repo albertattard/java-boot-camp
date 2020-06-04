@@ -61,6 +61,7 @@
         1. [What happens if an exception is thrown from within the static initialisation block?](#what-happens-if-an-exception-is-thrown-from-within-the-static-initialisation-block)
     1. [Initialisation block](#initialisation-block)
         1. [When is the initialisation block invoked?](#when-is-the-initialisation-block-invoked)
+        1. [What is double brace initialization?](#what-is-double-brace-initialization)
     1. [Outer class](#outer-class)
     1. [Inner instance class](#inner-instance-class)
     1. [Inner static class](#inner-static-class)
@@ -3875,8 +3876,8 @@ public class ExecutionOrder {
     return 7;
   }
 
-  public static void printValue() {
-    System.out.printf( "The constant field value is %d%n", STATIC_FIELD );
+  public static void printStaticField() {
+    System.out.printf( "The static constant field value is %d%n", STATIC_FIELD );
   }
 }
 ```
@@ -3926,7 +3927,7 @@ The above example contains an initialisation block and static field, which is in
     Done
     ```
 
-1. Invoke the `printValue()` method several times
+1. Invoke the `printStaticField()` method several times
 
     ```java
     package demo;
@@ -3934,9 +3935,9 @@ The above example contains an initialisation block and static field, which is in
     public class App {
 
       public static void main( final String[] args ) {
-        ExecutionOrder.printValue();
-        ExecutionOrder.printValue();
-        ExecutionOrder.printValue();
+        ExecutionOrder.printStaticField();
+        ExecutionOrder.printStaticField();
+        ExecutionOrder.printStaticField();
         System.out.println( "Done" );
       }
     }
@@ -3947,9 +3948,9 @@ The above example contains an initialisation block and static field, which is in
     ```bash
     Initialisation Block
     Initialise Static Field
-    The constant field value is 7
-    The constant field value is 7
-    The constant field value is 7
+    The static constant field value is 7
+    The static constant field value is 7
+    The static constant field value is 7
     Done
     ```
 
@@ -3992,7 +3993,7 @@ This will print all classes that are loaded by the classloader.  You will be sur
 Initialisation Block
 Initialise Static Field
 ...
-The constant field value is 7
+The static constant field value is 7
 Done
 ...
 ```
@@ -4041,11 +4042,7 @@ Caused by: java.lang.RuntimeException: Faulty static initialisation block
 
 ### Initialisation block
 
-**🚧 Pending...**
-
-Java provides several ways to initialise properties within an object.
-
-Consider the following example.
+Java provides several ways to initialise properties within an object.  Consider the following example.
 
 ```java
 package demo;
@@ -4071,7 +4068,7 @@ public class Person {
 }
 ```
 
-The `Person` class has two properties, the `name` and a `secretNumber`.  The `name` is provided to the constructor while the `secretNumber` is generated in the constructor as shown next.
+The `Person` class has two properties, the `name` and a `secretNumber`.  The `name` is provided to the constructor while the `secretNumber` is generated in the constructor.
 
 ```java
 package demo;
@@ -4095,7 +4092,7 @@ Person{name=Jade, secretNumber=2}
 Person{name=Aden, secretNumber=3}
 ```
 
-There are other ways to initialise the `secretNumber`.  One other solution is to use initialise blocks as shown next.
+There are other ways to initialise the `secretNumber`.  One other option is to use initialise blocks as shown next.
 
 ```java
 package demo;
@@ -4151,33 +4148,92 @@ public class Person {
 }
 ```
 
-When using methods to initialise fields, please make sure that these cannot be overridden as otherwise you may get into some surprises.
+**When using methods to initialise fields, please make sure that these cannot be overridden as otherwise you may get into some surprises**.
 
 #### When is the initialisation block invoked?
 
-Initialisation block
+The initialisation block is invoked before the properties are initialised but after the static initialisation block.  Consider the following example.
 
 ```java
 package demo;
 
 public class ExecutionOrder {
 
-  {
-    System.out.println( "Initialisation Block" );
+  static {
+    System.out.println( "Initialisation static block" );
   }
 
-  private final int a = initialiseField();
+  {
+    System.out.println( "Initialisation block" );
+  }
+
+  private static final int STATIC_FIELD = initialiseStaticField();
+
+  private final int property = initialiseProperty();
 
   public ExecutionOrder() {
     System.out.println( "Constructor" );
   }
 
-  private static int initialiseField() {
-    System.out.println( "Initialise Field" );
+  private static int initialiseStaticField() {
+    System.out.println( "Initialise static field" );
     return 7;
   }
+
+  private static int initialiseProperty() {
+    System.out.println( "Initialise property" );
+    return 7;
+  }
+
+  public static void printStaticField() {
+    System.out.printf( "The static constant field value is %d%n", STATIC_FIELD );
+  }
 }
 ```
+
+The above example tracks all five initialisation points of a class, shown in the following table.
+
+| # | Name                            |
+|--:|---------------------------------|
+| 1 | Static initialisation block     |
+| 2 | Static fields                   |
+| 3 | Initialisation block (Instance) |
+| 4 | Initialisation property         |
+| 5 | Constructor                     |
+
+The initialisation points are invoked in the order shown in the above table as we will see in the following examples.  Consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    ExecutionOrder.printStaticField();
+    System.out.println( "Done" );
+  }
+}
+```
+
+Note that the above example is not creating a new instance of a class.  None of the instance initialisers points are invoked.
+
+```bash
+Initialisation static block
+Initialise static field
+The static constant field value is 7
+```
+
+The follow table show how each initialisation point was invoked and in which order these were invoked.
+
+| # | Name                            | Invoked              |
+|--:|---------------------------------|----------------------|
+| 1 | Static initialisation block     | Invoked first, once  |
+| 2 | Static fields                   | Invoked second, once |
+| 3 | Initialisation block (Instance) | Not invoked          |
+| 4 | Initialisation property         | Not invoked          |
+| 5 | Constructor                     | Not invoked          |
+
+Now consider the following example.
 
 ```java
 package demo;
@@ -4186,162 +4242,123 @@ public class App {
 
   public static void main( final String[] args ) {
     new ExecutionOrder();
+    new ExecutionOrder();
+    new ExecutionOrder();
+    System.out.println( "Done" );
   }
 }
 ```
 
+This time we are creating three instances of the `ExecutionOrder`.
+
 ```bash
-Initialisation Block
-Initialise Field
+Initialisation static block
+Initialise static field
+Initialisation block
+Initialise property
 Constructor
+Initialisation block
+Initialise property
+Constructor
+Initialisation block
+Initialise property
+Constructor
+Done
 ```
 
+The follow table show how each initialisation point was invoked and in which order these were invoked.
 
-Normally, you would put code to initialize an instance variable in a constructor. There are two alternatives to using a constructor to initialize instance variables: initializer blocks and final methods.
+| # | Name                            | Invoked                                                       |
+|--:|---------------------------------|---------------------------------------------------------------|
+| 1 | Static initialisation block     | Invoked first, once                                           |
+| 2 | Static fields                   | Invoked second, once                                          |
+| 3 | Initialisation block (Instance) | Invoked first (after static), every time an object is created |
+| 4 | Initialisation property         | Invoked second, every time an object is created               |
+| 5 | Constructor                     | Invoked last, every time an object is created                 |
 
 
+#### What is double brace initialization?
 
+Double brace initialization takes advantage of inner anonymous classes and initialisation block to inline the creation and population of some types.  Consider the following example.
 
 ```java
 package demo;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class App {
 
   public static void main( final String[] args ) {
-    final Person a = new Person( "Jade" );
-    final Person b = new Person( "Aden" );
+    final Map<String, Integer> ageByName = new HashMap<>();
+    ageByName.put( "Aden", 11 );
+    ageByName.put( "Jade", 13 );
 
-    System.out.println( a );
-    System.out.println( b );
+    print( ageByName );
+  }
+
+  private static void print( Map<String, Integer> map ) {
+    map.forEach( ( name, age ) -> System.out.printf( "%s is %d years old%n", name, age ) );
   }
 }
 ```
 
-```bash
-Person{name=Jade, secretNumber=2}
-Person{name=Aden, secretNumber=3}
-```
+The above example creates a map that contains persons' names and their respective age and then passes this map to a method to be printed.  Without worry about the syntax used in this example, note that here we created an instance of [`HashMap`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashMap.html), populate it with values and then pass this variable to the method.
 
-
-
+We can "simplify" this by creating the map, populate it and pass it to the method on the fly, without saving it to a variable, as shown next.
 
 ```java
 package demo;
 
-public class ExecutionOrder {
-
-  {
-    System.out.println( "Initialisation Block" );
-  }
-
-  public ExecutionOrder() {
-    System.out.println( "Constructor" );
-  }
-}
-```
-
-```java
-package demo;
+import java.util.HashMap;
+import java.util.Map;
 
 public class App {
 
   public static void main( final String[] args ) {
-    new ExecutionOrder();
+    print( new HashMap<>() {{
+      put( "Aden", 11 );
+      put( "Jade", 13 );
+    }} );
   }
+
+  private static void print( Map<String, Integer> map ) { /* ... */ }
 }
 ```
 
-```java
-package demo;
+**I am not fond of this pattern**, and it is more popular than you may think.  I don't like it as it is a bit cryptic to read and understand, and I consider that as a code smell.
 
-import java.util.Random;
+Let's break this further.
 
-public class App {
+1. Reformat the code to separate the curly brackets
 
-  public static void main( final String[] args ) {
-    final Runnable a = new Runnable() {
-      @Override
-      public void run() {
-        final Random sequenceGenerator = new Random( 1 );
-        int nextNumber = sequenceGenerator.nextInt( 10 );
-        System.out.printf( "Sequence: %d%n", nextNumber );
+    ```java
+    print(
+      new HashMap<>() {
+        {
+          put( "Aden", 11 );
+          put( "Jade", 13 );
+        }
       }
-    };
+    );
+    ```
 
-    for ( int i = 0; i < 10; i++ ) {
-      a.run();
-    }
-  }
-}
-```
+1. Here we are creating an inner class as shown next
 
-```bash
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-Sequence: 5
-```
+    ![IIB - Create anonymous inner class](assets/images/IIB%20-%20Create%20anonymous%20inner%20class.png)
+
+1. Then we take advantage of the initialisation block to add our items
+
+    ![IIB - Populate HashMap](assets/images/IIB%20-%20Populate%20HashMap.png)
+
+The initialisation block is invoked before the properties are initialised and the constructor is called.  **How come this works?  The class must be in an invalid state?**
+
+Note that the anonymous inner class, is a class that extends another class.  The parent class, the `HashMap` in our case, is initialised before the subtypes, our anonymous inner class, and that's why this works.  The map is properly setup before our initialisation block is invoked.
+
+With that said, note how long we had to go to discuss this.  I prefer to use methods instead to create my objects.  Recent versions of Java, such as [`Map.of()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#of(K,V,K,V)), made this approach obsolete in some cases as shown next.
 
 ```java
-package demo;
-
-import java.util.Random;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    final Runnable a = new Runnable() {
-
-      private final Random sequenceGenerator;
-
-      {
-        sequenceGenerator = new Random( 1 );
-      }
-
-      @Override
-      public void run() {
-        final int nextNumber = sequenceGenerator.nextInt( 10 );
-        System.out.printf( "Sequence: %d%n", nextNumber );
-      }
-    };
-
-    for ( int i = 0; i < 10; i++ ) {
-      a.run();
-    }
-  }
-}
-```
-
-```java
-final Runnable a = new Runnable() {
-
-  private final Random sequenceGenerator = new Random( 1 );
-
-  @Override
-  public void run() {
-    final int nextNumber = sequenceGenerator.nextInt( 10 );
-    System.out.printf( "Sequence: %d%n", nextNumber );
-  }
-};
-```
-
-```java
-Sequence: 5
-Sequence: 8
-Sequence: 7
-Sequence: 3
-Sequence: 4
-Sequence: 4
-Sequence: 4
-Sequence: 6
-Sequence: 8
-Sequence: 8
+print( Map.of( "Aden", 11, "Jade", 13 ) );
 ```
 
 ### Outer class

@@ -250,6 +250,7 @@ Boot Camp for developers interested to learn Java.
         1. [What happens if an exception is thrown from within the static initialisation block?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-happens-if-an-exception-is-thrown-from-within-the-static-initialisation-block)
     1. [Initialisation block](05%20-%20Interfaces%20and%20Advanced%20Objects.md#initialisation-block)
         1. [When is the initialisation block invoked?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#when-is-the-initialisation-block-invoked)
+        1. [What is double brace initialization?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-is-double-brace-initialization)
     1. [Outer class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#outer-class)
     1. [Inner instance class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-instance-class)
     1. [Inner static class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-static-class)
