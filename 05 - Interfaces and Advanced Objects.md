@@ -4840,7 +4840,11 @@ The above example shows how we can easily work with rows or columns as required.
 [5, 5, 5]
 ```
 
+Note that both the `Rows` and `Columns` are declared as private, and these types are never returned.  Instead we return the `Iterable<int[]>` from the `rows()` and `columns()` methods.  Our example did not require anything else more than what is provided by the `Iterable<int[]>` interface.  Always start with the least possible visibility and open up only when needed.  We can always refactor this and return something more specific when this is needed.
+
 #### Internal Types
+
+Another use of inner instance classes is to represent a type internally.  Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE MAKE USE OF INNER INSTANCE CLASS, WHERE A INNER STATIC CLASS WOULD HAVE WORKED!!**
 
@@ -4880,6 +4884,8 @@ public class Pairs {
 }
 ```
 
+The `Pairs` class takes pairs of `int`s and collects them in a list a shown in the following example.
+
 ```java
 package demo;
 
@@ -4896,8 +4902,33 @@ public class App {
 }
 ```
 
+The above will print the following.
+
 ```bash
 Pairs: [(1,2), (3,4), (5,6)]
+```
+
+Let's turn back to the `Pairs` class.  The `Pairs` class has an inner instance class which groups the provided ints.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Pairs {
+
+  private final List<Pair> pairs = new ArrayList<>();
+
+  public void add( int a, int b ) {
+    pairs.add( new Pair( a, b ) );
+  }
+
+  private class Pair { /* ... */ }
+
+  @Override
+  public String toString() { /* ... */ }
+}
 ```
 
 #### Why is the use of inner instance class discouraged?
