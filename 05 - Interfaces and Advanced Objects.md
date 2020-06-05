@@ -60,6 +60,7 @@
         1. [Can we invoke a static initialisation block programmatically?](#can-we-invoke-a-static-initialisation-block-programmatically)
         1. [When and how many times is the static initialisation block invoked?](#when-and-how-many-times-is-the-static-initialisation-block-invoked)
         1. [What happens if an exception is thrown from within the static initialisation block?](#what-happens-if-an-exception-is-thrown-from-within-the-static-initialisation-block)
+        1. [Can we have more than one static initialisation block?](#can-we-have-more-than-one-static-initialisation-block)
     1. [Initialisation block](#initialisation-block)
         1. [When is the initialisation block invoked?](#when-is-the-initialisation-block-invoked)
         1. [What is double brace initialization?](#what-is-double-brace-initialization)
@@ -4134,6 +4135,83 @@ Exception in thread "main" java.lang.ExceptionInInitializerError
 Caused by: java.lang.RuntimeException: Faulty static initialisation block
 	at demo.FaultyStaticInitialisationBlock.<clinit>(FaultyStaticInitialisationBlock.java:7)
 	... 1 more
+```
+
+#### Can we have more than one static initialisation block?
+
+Yes.  We can have many static initialisation block.  The static initialisation blocks are executed in the order that they are defined.  Consider the following example.
+
+```java
+package demo;
+
+public class MultipleStaticInitialisationBlocks {
+
+  static {
+    System.out.println( "First static initialisation block" );
+  }
+
+  static {
+    System.out.println( "Second static initialisation block" );
+  }
+}
+```
+
+The above class has two static initialisation blocks.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    new MultipleStaticInitialisationBlocks();
+  }
+}
+```
+
+The initialisation blocks are executed in the order that they are defined.
+
+```bash
+First static initialisation block
+Second static initialisation block
+```
+
+I tend to stay away from static initialisation block and prefer using methods instead.  Note that multiple initialisation block may add to some confusion.  Consider the following class.
+
+```java
+package demo;
+
+public class MultipleStaticInitialisationBlocks {
+
+  public static final int STATIC_FINAL_FIELD;
+  public static int STATIC_FIELD;
+
+  static {
+    STATIC_FINAL_FIELD = 7;
+    STATIC_FIELD = 3;
+  }
+
+  static {
+    STATIC_FIELD = 33;
+  }
+}
+```
+
+The static field, `STATIC_FIELD` is set in both static initialisation block.  The second block will overwrite the values set by the first block as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    System.out.println( MultipleStaticInitialisationBlocks.STATIC_FIELD );
+  }
+}
+```
+
+The above program will print
+
+```bash
+33
 ```
 
 ### Initialisation block
