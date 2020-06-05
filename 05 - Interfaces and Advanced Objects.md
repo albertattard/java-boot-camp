@@ -64,11 +64,12 @@
     1. [Initialisation block](#initialisation-block)
         1. [When is the initialisation block invoked?](#when-is-the-initialisation-block-invoked)
         1. [What is double brace initialization?](#what-is-double-brace-initialization)
-    1. [Outer class](#outer-class)
+    1. [Top level class](#top-level-class)
     1. [Inner instance class](#inner-instance-class)
     1. [Inner static class](#inner-static-class)
     1. [Inner anonymous class](#inner-anonymous-class)
     1. [Local class](#local-class)
+    1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
 1. [Generics](#generics)
@@ -2884,7 +2885,7 @@ We can enable the preview features by passing the `--enable-preview` flag to the
 $ java --enable-preview -jar build/libs/examples-all.jar
 ```
 
-Kindly note that preview features may change between releases, thus think twice before investing heavily in them.
+Kindly note that preview features may change between releases, thus think twice before investing heavily in them.  When the next Java version is released, support for the preview language level may be dropped.
 
 ## Inheritance and composition
 
@@ -4535,9 +4536,12 @@ With that said, note how long we had to go to discuss this.  I prefer to use met
 print( Map.of( "Aden", 11, "Jade", 13 ) );
 ```
 
-### Outer class
+### Top level class
 
 **🚧 Pending...**
+
+```java
+```
 
 ### Inner instance class
 
@@ -4734,6 +4738,12 @@ put("", "");
 ### Local class
 
 **🚧 Pending...**
+
+### JEP 360: Sealed Classes (Preview)
+
+**🚧 Pending...**
+
+[JEP 360](https://openjdk.java.net/jeps/360)
 
 ## Annotations
 
