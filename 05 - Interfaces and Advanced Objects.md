@@ -68,7 +68,7 @@
     1. [Inner instance class](#inner-instance-class)
         1. [How can inner instance classes represent data in a different form?](#how-can-inner-instance-classes-represent-data-in-a-different-form)
         1. [Internal Types](#internal-types)
-        1. [Why is the use of inner instance class is discouraged?](#why-is-the-use-of-inner-instance-class-is-discouraged)
+        1. [Why is the use of inner instance class discouraged?](#why-is-the-use-of-inner-instance-class-discouraged)
     1. [Inner static class](#inner-static-class)
     1. [Inner anonymous class](#inner-anonymous-class)
     1. [Local class](#local-class)
@@ -4592,7 +4592,7 @@ Inner classes, in general, are great to represent data in a different form or to
 
 #### How can inner instance classes represent data in a different form?
 
-Let say that we have a matrix (2 dimensional array) of `int`.
+Let say that we have a matrix of integers.
 
 ```
 ┌───┬───┬───┬───┬───┐
@@ -4604,7 +4604,7 @@ Let say that we have a matrix (2 dimensional array) of `int`.
 └───┴───┴───┴───┴───┘
 ```
 
-The above matrix can be representing as an array of `int` as shown next.
+The above matrix can be representing as a two-dimensional array of `int` (`int[][]`), as shown next.
 
 ```java
 package demo;
@@ -4619,7 +4619,7 @@ public class Data {
 }
 ```
 
-Now say we need to get the data as rows, as shown next. How can we do that?
+Now say that we need to get the data as rows, where each row is represented as an `int[]`, as shown next. How can we do that?
 
 ```
 ┌───┬───┬───┬───┬───┐
@@ -4633,7 +4633,7 @@ Now say we need to get the data as rows, as shown next. How can we do that?
 └───┴───┴───┴───┴───┘
 ```
 
-Furthermore, how can we represent the data as columns?
+Furthermore, how can we represent the data as columns instead, where each column is represented as an `int[]`?
 
 ```
 ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
@@ -4645,7 +4645,9 @@ Furthermore, how can we represent the data as columns?
 └───┘ └───┘ └───┘ └───┘ └───┘
 ```
 
-We can achieve this using inner instance classes as shown next.  Note that the following example make use of matrix transposition and streams.  Do not worry if you do not understand these.  They were added simply to make this example more meaningful.
+We can represent the data in different forms using inner instance classes as shown next.
+
+Note that the following example make use of [matrix transposition](https://en.wikipedia.org/wiki/Transpose) and [Java streams]().  Do not worry if you do not understand these.  These were added to the example to make it more meaningful.
 
 ```java
 package demo;
@@ -4662,15 +4664,15 @@ public class Data {
     this. matrix = matrix;
   }
 
-  public Rows rows() {
+  public Iterable<int[]> rows() {
     return new Rows();
   }
 
-  public Columns columns() {
+  public Iterable<int[]> columns() {
     return new Columns();
   }
 
-  public class Rows implements Iterable<int[]> {
+  private class Rows implements Iterable<int[]> {
     @Override
     public Iterator<int[]> iterator() {
       return Arrays.stream( matrix )
@@ -4679,7 +4681,7 @@ public class Data {
     }
   }
 
-  public class Columns implements Iterable<int[]> {
+  private class Columns implements Iterable<int[]> {
     @Override
     public Iterator<int[]> iterator() {
       return Arrays.stream( transposed() )
@@ -4705,7 +4707,7 @@ public class Data {
 }
 ```
 
-Both rows and columns implement the [`Iterable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html) of `int[]` interface.  Any type that implements the `Iterable` interface, can be used within the for-each loop as shown in the following fragment.
+Both the `Rows` and `Columns` inner instance classes implement the [`Iterable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html) of type `int[]` interface.  Any type that implements the `Iterable` interface, can be used within the for-each loop as shown in the following fragment.
 
 ```java
 final Data data = ...;
@@ -4729,13 +4731,13 @@ Let's break the `Data` class into smaller parts.
 
       public Data( final int[][] matrix ) { /* ... */ }
 
-      public Rows rows() {
+      public Iterable<int[]> rows() {
         return new Rows();
       }
 
-      public Columns columns() { /* ... */ }
+      public Iterable<int[]> columns() { /* ... */ }
 
-      public class Rows implements Iterable<int[]> {
+      private class Rows implements Iterable<int[]> {
         @Override
         public Iterator<int[]> iterator() {
           return Arrays.stream( matrix )
@@ -4744,7 +4746,7 @@ Let's break the `Data` class into smaller parts.
         }
       }
 
-      public class Columns implements Iterable<int[]> { /* ... */ }
+      private class Columns implements Iterable<int[]> { /* ... */ }
     }
     ```
 
@@ -4767,15 +4769,15 @@ Let's break the `Data` class into smaller parts.
 
       public Data( final int[][] matrix ) { /* ... */ }
 
-      public Rows rows() { /* ... */ }
+      public Iterable<int[]> rows() { /* ... */ }
 
-      public Columns columns() {
+      public Iterable<int[]> columns() {
         return new Columns();
       }
 
-      public class Rows implements Iterable<int[]> { /* ... */ }
+      private class Rows implements Iterable<int[]> { /* ... */ }
 
-      public class Columns implements Iterable<int[]> {
+      private class Columns implements Iterable<int[]> {
         @Override
         public Iterator<int[]> iterator() {
           return Arrays.stream( transposed() )
@@ -4788,7 +4790,11 @@ Let's break the `Data` class into smaller parts.
     }
     ```
 
-    `Columns` is almost identical to xxx
+    `Columns` is almost identical to `Rows` with one small difference, it makes use of the transposed version of the matrix as we want to return the columns instead of the rows.  So first we rotate the matrix by 90 degrees and then use the same technique we used when creating the `Rows`.
+
+Both the `Rows` and `Columns` instance classes make use of the `matrix` property defined in the enclosing class, `Data`.  This is an advantage of inner instance classes.  We don't have to pass any values.  With that said this comes with a downside as we will see [in a bit](#why-is-the-use-of-inner-instance-class-discouraged).
+
+Consider the following example.
 
 ```java
 package demo;
@@ -4818,6 +4824,8 @@ public class App {
   }
 }
 ```
+
+The above example shows how we can easily work with rows or columns as required.
 
 ```bash
 -- Rows view of the data -----
@@ -4892,7 +4900,7 @@ public class App {
 Pairs: [(1,2), (3,4), (5,6)]
 ```
 
-#### Why is the use of inner instance class is discouraged?
+#### Why is the use of inner instance class discouraged?
 
 **🚧 Pending...**
 

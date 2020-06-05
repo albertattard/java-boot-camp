@@ -257,7 +257,7 @@ Boot Camp for developers interested to learn Java.
     1. [Inner instance class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-instance-class)
         1. [How can inner instance classes represent data in a different form?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#how-can-inner-instance-classes-represent-data-in-a-different-form)
         1. [Internal Types](05%20-%20Interfaces%20and%20Advanced%20Objects.md#internal-types)
-        1. [Why is the use of inner instance class is discouraged?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#why-is-the-use-of-inner-instance-class-is-discouraged)
+        1. [Why is the use of inner instance class discouraged?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#why-is-the-use-of-inner-instance-class-discouraged)
     1. [Inner static class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-static-class)
     1. [Inner anonymous class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-anonymous-class)
     1. [Local class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#local-class)
