@@ -4842,11 +4842,26 @@ The above example shows how we can easily work with rows or columns as required.
 
 Note that both the `Rows` and `Columns` are declared as private, and these types are never returned.  Instead we return the `Iterable<int[]>` from the `rows()` and `columns()` methods.  Our example did not require anything else more than what is provided by the `Iterable<int[]>` interface.  Always start with the least possible visibility and open up only when needed.  We can always refactor this and return something more specific when this is needed.
 
+The use of inner instance classes to represent the data in different forms is very common and used a lot within the Java collections.  The following code fragment shows how the [`ArrayList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html) makes use of this technique to return an `Iterator<E>` by its [`iterator()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html#iterator()) method using the inner instance class named `Itr`.
+
+```java
+package java.util;
+
+public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, Serializable {
+
+  public Iterator<E> iterator() {
+    return new Itr();
+  }
+
+  private class Itr implements Iterator<E> { /* ... */ }
+}
+```
+
 #### Internal Types
 
 Another use of inner instance classes is to represent a type internally.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF INNER INSTANCE CLASS, WHERE A INNER STATIC CLASS WOULD HAVE WORKED!!**
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF INNER INSTANCE CLASS, WHERE A INNER STATIC CLASS WOULD HAVE SUFFICED!!**
 
 ```java
 package demo;
@@ -4930,6 +4945,8 @@ public class Pairs {
   public String toString() { /* ... */ }
 }
 ```
+
+This is quite a common practice where a class will use internal types, like our `Pair` inner instance class, to represent that data internally.  Note that in the above example the `Pair` is private and never used outside the enclosing class.  The main purpose of this inner instance class is simply to help the enclosing class organising its data.
 
 #### Why is the use of inner instance class discouraged?
 
