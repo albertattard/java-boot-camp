@@ -4577,9 +4577,15 @@ Inner classes, in general, are great to represent data in a different form or to
 
 Let say that we have a matrix (2 dimensional array) of `int`.
 
-| 1 | 2 | 3 | 4 | 5 |
-| 1 | 2 | 3 | 4 | 5 |
-| 1 | 2 | 3 | 4 | 5 |
+```
+┌───┬───┬───┬───┬───┐
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+├───┼───┼───┼───┼───┤
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+├───┼───┼───┼───┼───┤
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+└───┴───┴───┴───┴───┘
+```
 
 ```java
 package demo;
