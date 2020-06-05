@@ -69,7 +69,10 @@
         1. [How can inner instance classes represent data in a different form?](#how-can-inner-instance-classes-represent-data-in-a-different-form)
         1. [Internal Types](#internal-types)
         1. [Why is the use of inner instance class discouraged?](#why-is-the-use-of-inner-instance-class-discouraged)
+        1. [Can we have static methods within inner instance classes?](#can-we-have-static-methods-within-inner-instance-classes)
+        1. [Can we create an instance of an inner instance class from outside the enclosing class?](#can-we-create-an-instance-of-an-inner-instance-class-from-outside-the-enclosing-class)
     1. [Inner static class](#inner-static-class)
+        1. [What's the difference between inner instance classes and inner static classes?](#whats-the-difference-between-inner-instance-classes-and-inner-static-classes)
     1. [Inner anonymous class](#inner-anonymous-class)
     1. [Local class](#local-class)
     1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
@@ -5076,7 +5079,7 @@ class demo/Data$Rows implements java/lang/Iterable {
 }
 ```
 
-We don't need to understand the whole bytecode.  Let's focus on the parts relevant to us.
+We don't need to understand the whole this.  Let's instead just focus on the parts relevant to us.
 
 1. The bytecode of the `Rows` class shows that the `Rows` class actually has a property of type `demo.Data` as shown in the following fragment.
 
@@ -5095,124 +5098,185 @@ We don't need to understand the whole bytecode.  Let's focus on the parts releva
         ALOAD 0
     ```
 
-When compiling an inner instance class, the Java compiler adds a parameter of the enclosing class as the first parameter to each constructor, and the default constructor is not an exception.
+When compiling an inner instance class, the Java compiler adds a parameter of the enclosing class type, `Data` in our case, as the first parameter to each constructor, and the default constructor is not an exception.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) dives into this too in [Item 24: Favor static member classes over nonstatic](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev24)
 
-### Inner static class
+#### Can we have static methods within inner instance classes?
 
-**🚧 Pending...**
+**No**.  Inner instance classes, like inner anonymous classes, cannot have static members.
 
-The following example was [used already](04%20-%20Classes,%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors).
+#### Can we create an instance of an inner instance class from outside the enclosing class?
 
-Consider the following example.
+Yes, **but I never saw this used anywhere apart from books and the syntax looks weird**.  Consider the following class that also contains an inner instance class.
 
 ```java
 package demo;
 
-public abstract class Temperature {
+public class ClassWithAnInnerClass {
 
-  private Temperature() { }
+  private int a = 7;
 
-  public abstract boolean isTooCold();
-
-  public abstract boolean isTooHot();
-
-
-  public static final Temperature FAHRENHEIT = new Fahrenheit();
-
-  public static final Temperature CELSIUS = new Celsius();
-
-  public static final Temperature KELVIN = new Kelvin();
-
-
-  private static class Fahrenheit extends Temperature { /* ... */ }
-
-  private static class Celsius extends Temperature { /* ... */ }
-
-  private static class Kelvin extends Temperature { /* ... */ }
-
+  public class AnInnerClass {
+    public void printValue() {
+      System.out.printf( "The value of a is %d%n", a );
+    }
+  }
 }
 ```
 
-According to [wikipedia](https://en.wikipedia.org/wiki/Temperature), "_*temperature* is a physical property of matter that quantitatively expresses hot and cold_".  The `Temperature` class is an abstract class that defines two methods, `isTooCold()` and `isTooHot()`.  The temperature is measured (or represented) in *Fahrenheit*, *Celsius* or other units.
-
-The above example looks a lot like enums.  And that is correct.  It can be used in a similar way enums can be used.
+We can create an instance of the inner class, `AnInnerClass`, from outside the enclosing class, as shown in the following example.
 
 ```java
-final Temperature t = Temperature.FAHRENHEIT;
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final ClassWithAnInnerClass a = new ClassWithAnInnerClass();
+
+    final ClassWithAnInnerClass.AnInnerClass b = a.new AnInnerClass();
+    b.printValue();
+  }
+}
 ```
 
-This was an alternative to enums, before enums where supported by Java.  Note that the above approach cannot be used with a `switch` statement.
+Note that an inner instance class needs to be linked to an object of its enclosing class.  That is why we need to create the inner instance class through the variable of the enclosing class, `ClassWithAnInnerClass` in our case.
+
+```java
+a.new AnInnerClass()
+```
+
+I would avoid this and instead I would use a method within the enclosing class that will return an instance of the inner class, as shown next.
+
+```java
+package demo;
+
+public class ClassWithAnInnerClass {
+
+  private int a = 7;
+
+  public AnInnerClass newInnerClass() {
+    return new AnInnerClass();
+  }
+
+  public class AnInnerClass {
+
+    private AnInnerClass() { }
+
+    public void printValue() { /* ... */ }
+  }
+}
+```
+
+Note that constructor of the inner instance class, `AnInnerClass`, is private to prevent it from being initialised from outside the enclosing class.  We cannot create an instance of `AnInnerClass` from the `App` class anymore.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final ClassWithAnInnerClass a = new ClassWithAnInnerClass();
+
+    final ClassWithAnInnerClass.AnInnerClass b = a.newInnerClass();
+    b.printValue();
+  }
+}
+```
+
+The above example reads better as it uses a code style that every is accustom to.
+
+### Inner static class
+
+An inner static class is a class within a class which is marked as `static`.  Different from a top-level class, an inner static class is another class member, like a method is for example.  The following example shows a very simple example of an inner static class.
+
+```java
+package demo;
+
+public class ClassWithAnInnerStaticClass {
+
+  public static class AnInnerStaticClass {
+  }
+}
+```
+
+An inner static class *cannot* access the state of the enclosing class.  These behave similar to static methods within the same class.
+
+```java
+package demo;
+
+public class ClassWithAnInnerStaticClass {
+
+  private static int A = 7;
+
+  public static class AnInnerStaticClass {
+    public static void printValue() {
+      System.out.printf( "The value of the static field A is %d%n", A );
+    }
+  }
+}
+```
+
+#### What's the difference between inner instance classes and inner static classes?
+
+Difference for inner instance classes, an inner static class is not automatically linked to the parent object.  Therefore, an inner static class, cannot access the state of the enclosing object as the inner instance class does.
+
+Consider the following example.
 
 **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
 ```java
 package demo;
 
-import static demo.Temperature.FAHRENHEIT;
+public class ClassWithInnerClasses {
 
-public class App {
-  public static void main( final String[] args ) {
-    final Temperature t = FAHRENHEIT;
-    switch ( t ) {
-      case FAHRENHEIT:
-        System.out.println( "The temperature is in Fahrenheit!!" );
+  private final int a = 7;
+
+  public class InnerClass {
+    public void printValue() {
+      System.out.printf( "The value of the property a is %d%n", a );
+    }
+  }
+
+  public static class InnerStaticClass {
+    public void printValue() {
+      /* ⚠️ cannot access instance properties of the enclosing class */
+      System.out.printf( "The value of the property a is %d%n", a );
     }
   }
 }
 ```
 
-The above approached can be relaxed a bit and allows the creation of different instances of temperature that contain the temperature value and contain different state (something that cannot be achieved with enums).
-
 ```java
 package demo;
 
-public abstract class Temperature {
+public class ClassWithInnerClasses {
 
-  private Temperature() { /* ... */ }
+  private final int a = 7;
 
-  public abstract boolean isTooCold();
+  public class InnerClass { /* ... */ }
 
-  public abstract boolean isTooHot();
+  public static class InnerStaticClass {
 
+    private final ClassWithInnerClasses enclosingObject;
 
-  public static Temperature withFahrenheit( double fahrenheit ) { /* ... */ }
+    private InnerStaticClass( final ClassWithInnerClasses enclosingObject ) {
+      this.enclosingObject = enclosingObject;
+    }
 
-  public static Temperature withCelsius( double celsius ) { /* ... */ }
-
-  public static Temperature withKelvin( double kelvin ) { /* ... */ }
-
-
-  private static class Fahrenheit extends Temperature { /* ... */ }
-
-  private static class Celsius extends Temperature { /* ... */ }
-
-  private static class Kelvin extends Temperature { /* ... */ }
-}
-```
-
-The static factory methods can be used to create different variations of the `Temperature` class.
-
-```java
-package demo;
-
-import static demo.Temperature.withFahrenheit;
-
-public class App {
-  public static void main( final String[] args ) {
-    final Temperature t = withFahrenheit( 68.8 );
+    public void printValue() {
+      System.out.printf( "The value of the property a is %d%n", enclosingObject.a );
+    }
   }
 }
 ```
 
-The `Temperature` class cannot be extended by an external class, which prevents some funny code added to the application.
+Inner static classes can be seen as a super set of the inner instance classes as they can also have static members.  We can convert all inner instance classes with inner static classes, but not vice versa.  Note that inner instance classes cannot have static members as [discussed before](#can-we-have-static-methods-within-inner-instance-classes).
 
 ### Inner anonymous class
 
 **🚧 Pending...**
-
-
 
 ```java
 package demo;
