@@ -66,7 +66,7 @@
         1. [What is double brace initialization?](#what-is-double-brace-initialization)
     1. [Top level class](#top-level-class)
     1. [Inner instance class](#inner-instance-class)
-        1. [Provides a different view of the data](#provides-a-different-view-of-the-data)
+        1. [How can inner instance classes represent data in a different form?](#how-can-inner-instance-classes-represent-data-in-a-different-form)
         1. [Internal Types](#internal-types)
         1. [Why is the use of inner instance class is discouraged?](#why-is-the-use-of-inner-instance-class-is-discouraged)
     1. [Inner static class](#inner-static-class)
@@ -4573,7 +4573,15 @@ public class ClassWithAnInnerClass {
 
 Inner classes, in general, are great to represent data in a different form or to simplify internal data handling.
 
-#### Provides a different view of the data
+#### How can inner instance classes represent data in a different form?
+
+Let say that we have a matrix (2 dimensional array) of `int`.
+
+|   |   |   |   |   |
+|:-:|:-:|:-:|:-:|:-:|
+| 1 | 2 | 3 | 4 | 5 |
+| 1 | 2 | 3 | 4 | 5 |
+| 1 | 2 | 3 | 4 | 5 |
 
 ```java
 package demo;
@@ -4584,10 +4592,10 @@ import java.util.stream.Collectors;
 
 public class Data {
 
-  private final int[][] table;
+  private final int[][] matrix;
 
-  public Data( final int[][] table ) {
-    this.table = table;
+  public Data( final int[][] matrix ) {
+    this. matrix = matrix;
   }
 
   public Rows rows() {
@@ -4601,7 +4609,7 @@ public class Data {
   public class Rows implements Iterable<int[]> {
     @Override
     public Iterator<int[]> iterator() {
-      return Arrays.stream( table )
+      return Arrays.stream( matrix )
         .collect( Collectors.toList() )
         .iterator();
     }
@@ -4616,14 +4624,14 @@ public class Data {
     }
 
     private int[][] transposed() {
-      final int m = table.length;
-      final int n = table[0].length;
+      final int m = matrix.length;
+      final int n = matrix[0].length;
 
       final int[][] transposed = new int[n][m];
 
       for ( int x = 0; x < n; x++ ) {
         for ( int y = 0; y < m; y++ ) {
-          transposed[x][y] = table[y][x];
+          transposed[x][y] = matrix[y][x];
         }
       }
 

@@ -255,7 +255,7 @@ Boot Camp for developers interested to learn Java.
         1. [What is double brace initialization?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#what-is-double-brace-initialization)
     1. [Top level class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#top-level-class)
     1. [Inner instance class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-instance-class)
-        1. [Provides a different view of the data](05%20-%20Interfaces%20and%20Advanced%20Objects.md#provides-a-different-view-of-the-data)
+        1. [How can inner instance classes represent data in a different form?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#how-can-inner-instance-classes-represent-data-in-a-different-form)
         1. [Internal Types](05%20-%20Interfaces%20and%20Advanced%20Objects.md#internal-types)
         1. [Why is the use of inner instance class is discouraged?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#why-is-the-use-of-inner-instance-class-is-discouraged)
     1. [Inner static class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#inner-static-class)
