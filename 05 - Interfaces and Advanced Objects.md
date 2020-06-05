@@ -4804,13 +4804,13 @@ import java.util.Arrays;
 public class App {
   public static void main( final String[] args ) {
 
-    final int[][] table = {
+    final int[][] matrix = {
       { 1, 2, 3, 4, 5 },
       { 1, 2, 3, 4, 5 },
       { 1, 2, 3, 4, 5 }
     };
 
-    final Data data = new Data( table );
+    final Data data = new Data( matrix );
 
     System.out.println( "-- Rows view of the data -----" );
     for ( final int[] row : data.rows() ) {
@@ -4856,6 +4856,8 @@ public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAcce
   private class Itr implements Iterator<E> { /* ... */ }
 }
 ```
+
+As in our example the `Itr` is private and never exposed to the outside word.
 
 #### Internal Types
 
@@ -4950,7 +4952,152 @@ This is quite a common practice where a class will use internal types, like our 
 
 #### Why is the use of inner instance class discouraged?
 
-**🚧 Pending...**
+Inner instance classes have a reference to the object from where these where created.  This is not seen in the code.  We were able to access the parent's object state without had to think about it.
+
+With reference to the `Data` class mentioned before.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] table;
+
+  public Data( final int[][] matrix ) { /* ... */ }
+
+  public Iterable<int[]> rows() { /* ... */ }
+
+  public Iterable<int[]> columns() { /* ... */ }
+
+  private class Rows implements Iterable<int[]> { /* ... */ }
+
+  private class Columns implements Iterable<int[]> { /* ... */ }
+}
+```
+
+Now consider the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+
+    final int[][] matrix = {
+      { 1, 2, 3, 4, 5 },
+      { 1, 2, 3, 4, 5 },
+      { 1, 2, 3, 4, 5 }
+    };
+
+    final Iterable<int[]> rows = new Data( matrix ).rows();
+  }
+}
+```
+
+In the above example, we create an instance of `Data` and then simply return the rows, by invoking the `rows()` method.  The instance of `Data`, created by the `new Data()`, is never saved in a variable and therefore we have no variables pointing to this object in the heap as shown next.
+
+![Inner instance classes have a reference to the object from which these are created](assets/images/Inner%20instance%20classes%20have%20a%20reference%20to%20the%20object%20from%20which%20these%20are%20created.png)
+
+Some programmers will mistakenly think that the data object will be garbage collected as we are not referring to it.  After all, there are no reference to the `Data` class from within the `Rows` inner class, shown next.
+
+```java
+private class Rows implements Iterable<int[]> {
+  @Override
+  public Iterator<int[]> iterator() {
+    return Arrays.stream( matrix )
+      .collect( Collectors.toList() )
+      .iterator();
+  }
+}
+```
+
+The `Rows` class shown next has no state after all.  Appearances cannot be more deceiving.  The `Rows` class has a reference to the parent class even though it is not visible.  Let's see the `Rows`' class bytecode (`View > Show Bytecode`).
+
+```bytecode
+// class version 58.65535 (-65478)
+// access flags 0x20
+// signature Ljava/lang/Object;Ljava/lang/Iterable<[I>;
+// declaration: demo/Data$Rows implements java.lang.Iterable<int[]>
+class demo/Data$Rows implements java/lang/Iterable {
+
+  // compiled from: Data.java
+  NESTHOST demo/Data
+  // access flags 0x2
+  private INNERCLASS demo/Data$Rows demo/Data Rows
+
+  // access flags 0x1010
+  final synthetic Ldemo/Data; this$0
+
+  // access flags 0x2
+  private <init>(Ldemo/Data;)V
+   L0
+    LINENUMBER 23 L0
+    ALOAD 0
+    ALOAD 1
+    PUTFIELD demo/Data$Rows.this$0 : Ldemo/Data;
+    ALOAD 0
+    INVOKESPECIAL java/lang/Object.<init> ()V
+    RETURN
+   L1
+    LOCALVARIABLE this Ldemo/Data$Rows; L0 L1 0
+    MAXSTACK = 2
+    MAXLOCALS = 2
+
+  // access flags 0x1
+  // signature ()Ljava/util/Iterator<[I>;
+  // declaration: java.util.Iterator<int[]> iterator()
+  public iterator()Ljava/util/Iterator;
+   L0
+    LINENUMBER 26 L0
+    ALOAD 0
+    GETFIELD demo/Data$Rows.this$0 : Ldemo/Data;
+    GETFIELD demo/Data.table : [[I
+    INVOKESTATIC java/util/Arrays.stream ([Ljava/lang/Object;)Ljava/util/stream/Stream;
+   L1
+    LINENUMBER 27 L1
+    INVOKESTATIC java/util/stream/Collectors.toList ()Ljava/util/stream/Collector;
+    INVOKEINTERFACE java/util/stream/Stream.collect (Ljava/util/stream/Collector;)Ljava/lang/Object; (itf)
+    CHECKCAST java/util/List
+   L2
+    LINENUMBER 28 L2
+    INVOKEINTERFACE java/util/List.iterator ()Ljava/util/Iterator; (itf)
+   L3
+    LINENUMBER 26 L3
+    ARETURN
+   L4
+    LOCALVARIABLE this Ldemo/Data$Rows; L0 L4 0
+    MAXSTACK = 2
+    MAXLOCALS = 1
+}
+```
+
+We don't need to understand the whole bytecode.  Let's focus on the parts relevant to us.
+
+1. The bytecode of the `Rows` class shows that the `Rows` class actually has a property of type `demo.Data` as shown in the following fragment.
+
+    ```bytecode
+      // access flags 0x1010
+      final synthetic Ldemo/Data; this$0
+    ```
+
+1. The bytecode also indicates that we have a constructor that takes an instance of `demo.Data` as shown in the following fragment.
+
+    ```bytecode
+      // access flags 0x2
+      private <init>(Ldemo/Data;)V
+       L0
+        LINENUMBER 23 L0
+        ALOAD 0
+    ```
+
+When compiling an inner instance class, the Java compiler adds a parameter of the enclosing class as the first parameter to each constructor, and the default constructor is not an exception.
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) dives into this too in [Item 24: Favor static member classes over nonstatic](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev24)
 
 ### Inner static class
 
