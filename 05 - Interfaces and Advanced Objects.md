@@ -66,6 +66,9 @@
         1. [What is double brace initialization?](#what-is-double-brace-initialization)
     1. [Top level class](#top-level-class)
     1. [Inner instance class](#inner-instance-class)
+        1. [Provides a different view of the data](#provides-a-different-view-of-the-data)
+        1. [Internal Types](#internal-types)
+        1. [Why is the use of inner instance class is discouraged?](#why-is-the-use-of-inner-instance-class-is-discouraged)
     1. [Inner static class](#inner-static-class)
     1. [Inner anonymous class](#inner-anonymous-class)
     1. [Local class](#local-class)
@@ -4555,6 +4558,184 @@ The above source file, `src/main/java/demo/TopLevelClass.java`, has two top-leve
 Having multiple top-level classes in one source file adds little advantages and is it not a recommended practice.  [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this too in [Item 25: Limit source files to a single top-level class](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev25).
 
 ### Inner instance class
+
+An inner instance class is a class within a class.  Different from a top-level class, an inner class is another class member, like a method is for example.  The following example shows a very simple example of an inner instance class.
+
+```java
+package demo;
+
+public class ClassWithAnInnerClass {
+
+  public class AnInnerClass {
+  }
+}
+```
+
+Inner classes, in general, are great to represent data in a different form or to simplify internal data handling.
+
+#### Provides a different view of the data
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] table;
+
+  public Data( final int[][] table ) {
+    this.table = table;
+  }
+
+  public Rows rows() {
+    return new Rows();
+  }
+
+  public Columns columns() {
+    return new Columns();
+  }
+
+  public class Rows implements Iterable<int[]> {
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( table )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+  }
+
+  public class Columns implements Iterable<int[]> {
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( transposed() )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+
+    private int[][] transposed() {
+      final int m = table.length;
+      final int n = table[0].length;
+
+      final int[][] transposed = new int[n][m];
+
+      for ( int x = 0; x < n; x++ ) {
+        for ( int y = 0; y < m; y++ ) {
+          transposed[x][y] = table[y][x];
+        }
+      }
+
+      return transposed;
+    }
+  }
+}
+```
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+
+    final int[][] table = {
+      { 1, 2, 3, 4, 5 },
+      { 1, 2, 3, 4, 5 },
+      { 1, 2, 3, 4, 5 }
+    };
+
+    final Data data = new Data( table );
+
+    System.out.println( "-- Rows view of the data -----" );
+    for ( final int[] row : data.rows() ) {
+      System.out.printf( "%s%n", Arrays.toString( row ) );
+    }
+
+    System.out.println( "-- Columns view of the data --" );
+    for ( final int[] column : data.columns() ) {
+      System.out.printf( "%s%n", Arrays.toString( column ) );
+    }
+  }
+}
+```
+
+```bash
+-- Rows view of the data -----
+[1, 2, 3, 4, 5]
+[1, 2, 3, 4, 5]
+[1, 2, 3, 4, 5]
+-- Columns view of the data --
+[1, 1, 1]
+[2, 2, 2]
+[3, 3, 3]
+[4, 4, 4]
+[5, 5, 5]
+```
+
+#### Internal Types
+
+**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF INNER INSTANCE CLASS, WHERE A INNER STATIC CLASS WOULD HAVE WORKED!!**
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Pairs {
+
+  private final List<Pair> pairs = new ArrayList<>();
+
+  public void add( int a, int b ) {
+    pairs.add( new Pair( a, b ) );
+  }
+
+  private class Pair {
+    final int a;
+    final int b;
+
+    private Pair( final int a, final int b ) {
+      this.a = a;
+      this.b = b;
+    }
+
+    @Override
+    public String toString() {
+      return String.format( "(%d,%d)", a, b );
+    }
+  }
+
+  @Override
+  public String toString() {
+    return pairs.toString();
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Pairs pairs = new Pairs();
+    pairs.add( 1, 2 );
+    pairs.add( 3, 4 );
+    pairs.add( 5, 6 );
+
+    System.out.printf( "Pairs: %s%n", pairs );
+  }
+}
+```
+
+```bash
+Pairs: [(1,2), (3,4), (5,6)]
+```
+
+#### Why is the use of inner instance class is discouraged?
 
 **🚧 Pending...**
 
