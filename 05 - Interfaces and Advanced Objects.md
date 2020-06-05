@@ -5220,7 +5220,7 @@ public class ClassWithAnInnerStaticClass {
 
 #### What's the difference between inner instance classes and inner static classes?
 
-Difference for inner instance classes, an inner static class is not automatically linked to the parent object.  Therefore, an inner static class, cannot access the state of the enclosing object as the inner instance class does.
+Difference for inner instance classes, an inner static class is not automatically linked to the enclosing object.  Therefore, an inner static class, cannot access the state of the enclosing object as the inner instance class does.
 
 Consider the following example.
 
@@ -5247,6 +5247,8 @@ public class ClassWithInnerClasses {
   }
 }
 ```
+
+As mentioned in an earlier section, titled [why is the use of inner instance class discouraged?](#why-is-the-use-of-inner-instance-class-discouraged), the inner instance class is provided a reference to the enclosing object automatically by the compiler.  We can refactor the inner static class and pass an instance of the enclosing object to it, as shown next.
 
 ```java
 package demo;
