@@ -4571,6 +4571,23 @@ public class ClassWithAnInnerClass {
 }
 ```
 
+An inner instance class can access the state of the enclosing class like any other instance method as shown in the following example.
+
+```java
+package demo;
+
+public class ClassWithAnInnerClass {
+
+  private int a = 7;
+
+  public class AnInnerClass {
+    public void printValue() {
+      System.out.printf( "The value of a is %d%n", a );
+    }
+  }
+}
+```
+
 Inner classes, in general, are great to represent data in a different form or to simplify internal data handling.
 
 #### How can inner instance classes represent data in a different form?
@@ -4586,6 +4603,49 @@ Let say that we have a matrix (2 dimensional array) of `int`.
 │ 1 │ 2 │ 3 │ 4 │ 5 │
 └───┴───┴───┴───┴───┘
 ```
+
+The above matrix can be representing as an array of `int` as shown next.
+
+```java
+package demo;
+
+public class Data {
+
+  private final int[][] matrix;
+
+  public Data( final int[][] matrix ) {
+    this. matrix = matrix;
+  }
+}
+```
+
+Now say we need to get the data as rows, as shown next. How can we do that?
+
+```
+┌───┬───┬───┬───┬───┐
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+└───┴───┴───┴───┴───┘
+┌───┬───┬───┬───┬───┐
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+└───┴───┴───┴───┴───┘
+┌───┬───┬───┬───┬───┐
+│ 1 │ 2 │ 3 │ 4 │ 5 │
+└───┴───┴───┴───┴───┘
+```
+
+Furthermore, how can we represent the data as columns?
+
+```
+┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐
+│ 1 │ │ 2 │ │ 3 │ │ 4 │ │ 5 │
+├───┤ ├───┤ ├───┤ ├───┤ ├───┤
+│ 1 │ │ 2 │ │ 3 │ │ 4 │ │ 5 │
+├───┤ ├───┤ ├───┤ ├───┤ ├───┤
+│ 1 │ │ 2 │ │ 3 │ │ 4 │ │ 5 │
+└───┘ └───┘ └───┘ └───┘ └───┘
+```
+
+We can achieve this using inner instance classes as shown next.  Note that the following example make use of matrix transposition and streams.  Do not worry if you do not understand these.  They were added simply to make this example more meaningful.
 
 ```java
 package demo;
@@ -4644,6 +4704,91 @@ public class Data {
   }
 }
 ```
+
+Both rows and columns implement the [`Iterable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Iterable.html) of `int[]` interface.  Any type that implements the `Iterable` interface, can be used within the for-each loop as shown in the following fragment.
+
+```java
+final Data data = ...;
+for ( final int[] row : data.rows() ) { /* ... */ }
+```
+
+Let's break the `Data` class into smaller parts.
+
+1. `Rows`
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+    import java.util.Iterator;
+    import java.util.stream.Collectors;
+
+    public class Data {
+
+      private final int[][] matrix;
+
+      public Data( final int[][] matrix ) { /* ... */ }
+
+      public Rows rows() {
+        return new Rows();
+      }
+
+      public Columns columns() { /* ... */ }
+
+      public class Rows implements Iterable<int[]> {
+        @Override
+        public Iterator<int[]> iterator() {
+          return Arrays.stream( matrix )
+            .collect( Collectors.toList() )
+            .iterator();
+        }
+      }
+
+      public class Columns implements Iterable<int[]> { /* ... */ }
+    }
+    ```
+
+    `Rows` is an inner instance class that represents an `Iterable` of type `int[]`.  It takes the `matrix` and creates a list with each row as the list elements and then takes advantage of the [`List.iterator()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#iterator()).
+
+    As mentioned before, do not worry about the implementation details here as these may be beyond our pay grade.  The most important thing is that, using inner classes we are able to navigate the data in a different manner, rows in this case.
+
+1. `Columns`
+
+    ```java
+    package demo;
+
+    import java.util.Arrays;
+    import java.util.Iterator;
+    import java.util.stream.Collectors;
+
+    public class Data {
+
+      private final int[][] matrix;
+
+      public Data( final int[][] matrix ) { /* ... */ }
+
+      public Rows rows() { /* ... */ }
+
+      public Columns columns() {
+        return new Columns();
+      }
+
+      public class Rows implements Iterable<int[]> { /* ... */ }
+
+      public class Columns implements Iterable<int[]> {
+        @Override
+        public Iterator<int[]> iterator() {
+          return Arrays.stream( transposed() )
+            .collect( Collectors.toList() )
+            .iterator();
+        }
+
+        private int[][] transposed() { /* ... */ }
+      }
+    }
+    ```
+
+    `Columns` is almost identical to xxx
 
 ```java
 package demo;
