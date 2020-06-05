@@ -5248,7 +5248,7 @@ public class ClassWithInnerClasses {
 }
 ```
 
-As mentioned in an earlier section, titled [why is the use of inner instance class discouraged?](#why-is-the-use-of-inner-instance-class-discouraged), the inner instance class is provided a reference to the enclosing object automatically by the compiler.  We can refactor the inner static class and pass an instance of the enclosing object to it, as shown next.
+As mentioned in an earlier section, titled [*why is the use of inner instance class discouraged?*](#why-is-the-use-of-inner-instance-class-discouraged), the inner instance class is provided a reference to the enclosing object automatically by the compiler.  We can refactor the inner static class and pass an instance of the enclosing object to it, as shown next.
 
 ```java
 package demo;
