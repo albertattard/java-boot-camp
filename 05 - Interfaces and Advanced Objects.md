@@ -4538,10 +4538,21 @@ print( Map.of( "Aden", 11, "Jade", 13 ) );
 
 ### Top level class
 
-**🚧 Pending...**
+Top level classes are class declarations at the top-level of the source file.  A source file can have one, or more, top-level classes, as shown next.
 
 ```java
+package demo;
+
+public class TopLevelClass {
+}
+
+class AnotherTopLevelClass {
+}
 ```
+
+The above source file, `src/main/java/demo/TopLevelClass.java`, has two top-level classes.  Note that there can be only one `public` top-level class within one source file and that top-level class must have the same name as the source file, `TopLevelClass` in our example.
+
+Having multiple top-level classes in one source file adds little advantages and is it not a recommended practice.  [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this too in [Item 25: Limit source files to a single top-level class](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch4.xhtml#lev25).
 
 ### Inner instance class
 
