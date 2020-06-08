@@ -5375,21 +5375,7 @@ We have already seen many annotations like `@Override`, `@DisplayName`, `@Test`,
 
 [Project Lombok](https://projectlombok.org)
 
-In order to use Lombok, we need to add the library to our gradle dependencies.
-
-```groovy
-dependencies {
-  compileOnly 'org.projectlombok:lombok:1.18.12'
-  annotationProcessor 'org.projectlombok:lombok:1.18.12'
-
-  testCompileOnly 'org.projectlombok:lombok:1.18.12'
-  testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
-}
-```
-
-You can find a list of all stable features with examples here: [Project Lombok Documentation](https://projectlombok.org/features/all)
-
-It also shows how an equivalent implementation would look like in Vanilla Java to compare it with.
+The idea of Lombok is to make Java less verbose. Often, when we create a new Class, we expect it to have a simple constructor and override `equals` and `hashCode`. This can make up many lines of code and decrease the readability. Lombok aims to make these base features more readable, and easier to understand and change.
 
 We revisit now our example of the `Person` class. It has the private final fields `name` and `surname`, and an `age` which can be changed through a setter. The fields can be accessed through getters. Two `Person`s are considered equal, if their `name` and `surname` are the same (`equals` and `hashCode` method). Finally, the `Person` can be converted to a String using `toString`.
 
@@ -5466,6 +5452,22 @@ public class Person {
 }
 ```
 
+In order to use Lombok, we need to add the library to our gradle dependencies.
+
+```groovy
+dependencies {
+  compileOnly 'org.projectlombok:lombok:1.18.12'
+  annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+  testCompileOnly 'org.projectlombok:lombok:1.18.12'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+```
+
+You can find a list of all stable features with examples here: [Project Lombok Documentation](https://projectlombok.org/features/all)
+
+It also shows how an equivalent implementation would look like in Vanilla Java to compare it with.
+
 Work through the next few subsections and then try it for yourself without looking it up.
 
 #### @ToString
@@ -5477,13 +5479,23 @@ public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 
     @Override
     public String toString() {
@@ -5504,15 +5516,23 @@ public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
 
-    // The constructor will be left out in the rest of this section for simplicity;
-    // you still need it though!
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 
@@ -5539,7 +5559,23 @@ public class Person {
 
     private final String name;
     @ToString.Exclude private final String surname;
-    private final int age;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 
@@ -5555,7 +5591,23 @@ public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 
@@ -5566,7 +5618,23 @@ If we only want to use a few of the fields, we can either set them in the annota
 public class Person {
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 and
@@ -5575,7 +5643,23 @@ and
 public class Person {
     @ToString.Include private final String name;
     private final String surname;
-    private final int age;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 
@@ -5594,7 +5678,23 @@ public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 ```
 
@@ -5609,8 +5709,24 @@ It also works, if other entities are involved:
 public class Person {
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
     private Person neighbor;
+
+    public Person( final String name, final String surname, final int age, final Person neighbor ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+
+    @Override
+    public boolean equals(Object o) {/* ... */}
+
+    @Override
+    public int hashCode() {/* ... */}
 }
 
 public class App {
@@ -5633,17 +5749,22 @@ Be careful with this, as it can cause an endless loop (if `a`'s neighbor is `b` 
 Lombok's `@EqualsAndHashCode` annotation takes all the fields of an entity and checks them for equality when calling the `equals` method. Furthermore, it generates a hash code using all the fields.
 
 ```java
+@ToString
 public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
 
     @Override
     public boolean equals(Object o) {
@@ -5665,22 +5786,48 @@ public class Person {
 becomes
 
 ```java
+@ToString
 @EqualsAndHashCode
 public class Person {
 
     private final String name;
     private final String surname;
-    private final int age;
+    private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
 }
 ```
 
 Like for `@ToString`, we can explicitly include or exclude fields using the same parameters as for the `@ToString` annotation.
+
+```java
+@ToString
+@EqualsAndHashCode(exclude = "age")
+public class Person {
+
+    private final String name;
+    private final String surname;
+    private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
+
+    public String getName() {/* ... */}
+
+    public String getSurname() {/* ... */}
+
+    public int getAge() {/* ... */}
+
+    public void setAge(int age) {/* ... */}
+}
+```
 
 #### @Getter and @Setter
 
@@ -5689,17 +5836,15 @@ When we access fields or want to manipulate them, it is highly recommended to us
 With `@Getter`, all fields of a class will receive a getter:
 
 ```java
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
     private final String surname;
     private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
 
     public String getName() {
         return name;
@@ -5723,17 +5868,15 @@ becomes
 
 ```java
 @Getter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
     private final String surname;
     private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
 
     public void setAge(int age) {
         this.age = age;
@@ -5746,17 +5889,15 @@ With @Setter, all non-final fields of a class receive a setter method.
 ```java
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
     private final String surname;
     private int age;
 
-    public Person( final String name, final String surname, final int age ) {
-        this.name = name;
-        this.surname = surname;
-        this.age = age;
-    }
+    public Person( final String name, final String surname, final int age ) {/* ... */}
 }
 ```
 
@@ -5764,10 +5905,14 @@ If getters or setters are only required for certain fields, the can be explicitl
 
 ```java
 @Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
     @Getter private final String name;
     @Getter private final String surname;
     private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
 }
 ```
 
@@ -5775,10 +5920,14 @@ By default, all getters and setters can be publicly accessed. If you want to red
 
 ```java
 @Setter(value = AccessLevel.PRIVATE)
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
     @Getter(value = AccessLevel.PROTECTED) private final String name;
     @Getter private final String surname;
     private int age;
+
+    public Person( final String name, final String surname, final int age ) {/* ... */}
 }
 ```
 
@@ -5791,6 +5940,10 @@ Another feature of the `@Getter` annotation is the caching of values to improve 
 Instead of writing out all the constructors, we can use the Lombok constructor annotations. The `@AllArgsConstructor` creates a constructor which has all fields as input:
 
 ```java
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
@@ -5809,6 +5962,10 @@ becomes
 
 ```java
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
@@ -5820,6 +5977,10 @@ public class Person {
 Often, we want to only create an object with the final fields and set the non-final fields later on (e.g. when we have more information). For this, we can use the `@RequiredArgsConstructor`:
 
 ```java
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
@@ -5837,6 +5998,10 @@ becomes
 
 ```java
 @RequiredArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
@@ -5849,6 +6014,10 @@ When we have defined a constructor of a class, the empty default constructor is 
 
 
 ```java
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private String name;
@@ -5871,6 +6040,10 @@ becomes
 ```java
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(exclude = "age")
 public class Person {
 
     private final String name;
@@ -5883,6 +6056,24 @@ Note: If all fields are final, `@RequiredArgsConstructor` is the same as `@AllAr
 
 Note: If the class has no fields at all, `@NoArgsConstructor`, `@RequiredArgsConstructor`, and `@AllArgsConstructor` are all equivalent. Don't use more than one of them at the same time.
 
+```java
+// Don't do this! Runtime error!
+@AllArgsConstructor
+@RequiredArgsConstructor
+public class Person {
+    private final String name;
+    private final String surname;
+}
+```
+
+```java
+// Don't do this! Runtime error!
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Person {
+}
+```
+
 #### @Data
 
 A common combination of the aforementioned annotations is:
@@ -5894,7 +6085,9 @@ A common combination of the aforementioned annotations is:
 @Setter //on all non-final fields
 @RequiredArgsConstructor
 public class Person {
-  //...
+    private final String name;
+    private final String surname;
+    private int age;
 }
 ```
 
@@ -5903,7 +6096,9 @@ This can be shortened using the `@Data` annotation:
 ```java
 @Data
 public class Person {
-  //...
+    private final String name;
+    private final String surname;
+    private int age;
 }
 ```
 
@@ -5914,7 +6109,7 @@ Excluding certain fields from `@ToString` or `@EqualsAndHashCode` can still be d
 public class Person {
   private final String name;
   @ToString.Exclude private final String surname;
-  @EqualsAndHashCode.Exclude private final int age;
+  @EqualsAndHashCode.Exclude private int age;
 }
 ```
 
