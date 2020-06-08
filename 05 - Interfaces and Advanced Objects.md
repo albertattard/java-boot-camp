@@ -6752,18 +6752,129 @@ public class App {
     }
 }
 ```
+```bash
+Exception in thread "main" java.lang.NullPointerException: name is marked non-null but is null
+	at demo.Person.<init>(Person.java:7)
+	at demo.Person$PersonBuilder.build(Person.java:7)
+	at demo.App.main(App.java:11)
+```
 
-#### @With
+#### @Value and @With
 
-**🚧 Pending...**
+Similarly to `@Data`, `@Value` gives basic functionality to a class. Value classes are immutable, meaning they are created once and never changed. Hence, we can omid the `private final`, as these are set for every field anyway.
 
-#### @Value
+`@Value` combines `@RequiredArgsConstructor`, `@Getter`, `@ToString`, and `@EqualsAndHashCode`.
 
-**🚧 Pending...**
+```java
+@Value
+public class Person {
+    String name;
+    String surname;
+    int age;
+}
+```
+
+In case we want to change one of the fields, we need to copy the entity with the new field set.
+
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = new Person("Paul", "Börding", 29);
+        // Birthday happens
+        paul = new Person(paul.getName(), paul.getSurname(), paul.getAge() + 1);
+        System.out.println(paul.toString());
+    }
+}
+```
+
+Luckily, Lombok provides the `@With` annotation, which grants methods to create a copy with a changed field value, such that we do not need to call the constructor and getters each time:
+
+```java
+@With
+@Value
+public class Person {
+    String name;
+    String surname;
+    int age;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = new Person("Paul", "Börding", 29);
+        // Birthday happens
+        paul = paul.withAge(paul.getAge() + 1);
+        System.out.println(paul.toString());
+    }
+}
+```
+
+Like the builder, the with-calls can be piped in case we want to change multiple properties:
+
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = new Person("Paul", "Börding", 29);
+        // Birthday happens and Paul gets a new surname
+        paul = paul
+                .withAge(paul.getAge() + 1)
+                .withSurname("Attard");
+        System.out.println(paul.toString());
+    }
+}
+```
 
 #### @SneakyThrows
 
-**🚧 Pending...**
+`@SneakyThrows` can be used to shorten try-catch-blocks. Especially, when you expect problems to occur rarely and you think, you do not need proper exception handling.
+
+Consider the following code and the result it prints:
+
+```java
+@AllArgsConstructor
+public class Person {
+    private final String name;
+    private final String surname;
+    private int age;
+
+    public void superRiskyOperation() {
+        try {
+            int divideByZero = age / 0;
+        } catch(ArithmeticException arithmeticException) {
+            arithmeticException.printStackTrace();
+        }
+    }
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = new Person("Paul", "Börding", 29);
+        paul.superRiskyOperation();
+    }
+}
+```
+```bash
+java.lang.ArithmeticException: / by zero
+	at demo.Person.superRiskyOperation(Person.java:13)
+	at demo.App.main(App.java:11)
+```
+
+With `@SneakyThrows`, the code is more lightweight with the same result:
+
+```java
+@AllArgsConstructor
+public class Person {
+    private final String name;
+    private final String surname;
+    private int age;
+
+    @SneakyThrows
+    public void superRiskyOperation() {
+        int divideByZero = age / 0;
+    }
+}
+```
 
 ## Generics
 
