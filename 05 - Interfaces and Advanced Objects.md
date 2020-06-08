@@ -6817,6 +6817,39 @@ Notice here how Lombok automatically uses the singular of the word `hobbies`, wh
 
 Again, this functionality is very useful in testing for creating test objects in the code.
 
+We can set the property `toBuilder` to `true` to get another method which allows us to convert entities back into a builder. That way we can add field values later on, change them, or create copies easily.
+
+```java
+@Builder(toBuilder = true)
+@Data
+public class Person {
+  private final String name;
+  private final String surname;
+  private int age;
+  private String country;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = Person.builder()
+                .name("Paul")
+                .surname("Börding")
+                .age(29)
+                .build();
+        //Birthday happens
+        Person agedPaul = paul.toBuilder()
+                .age(paul.getAge() + 1)
+                .build();
+        Person germanPaul = paul.toBuilder()
+                .country("Germany")
+                .build();
+        System.out.println(paul.toString());
+        System.out.println(agedPaul.toString());
+    }
+}
+```
+
 #### @NonNull
 
 Lombok has it's own implementation of the `@NonNull` annotation. If you are in a context of using Lombok, you should prefer to use this one. With this annotation, you can make sure that certain fields cannot be `null`.
