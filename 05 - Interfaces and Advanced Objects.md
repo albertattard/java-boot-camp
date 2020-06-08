@@ -6115,11 +6115,162 @@ public class Person {
 
 #### @Builder
 
-**🚧 Pending...**
+Sometimes in Java, we see a class growing and getting more fields over time. If we use constructor calls in our production or test code, this can mean a lot of annoying rework, since we either need to add a field to every single call or we need to maintain all of our old constructors with less parameters.
+
+To avoid that, the builder-pattern can be introduced. We will cover the concrete implementation of this pattern in the [Common Design Patterns] section. For now, all you need to know is that it solves our problem, and it is very verbose. In the following, we will show you how to use classes that utilize the builder-pattern.
+
+The `@Builder` annotation from Lombok improves this situation:
+
+```java
+@Builder
+@Data
+public class Person {
+  private final String name;
+  private final String surname;
+  private int age;
+}
+```
+
+When we have annotated a class with `@Builder`, we can construct it through a static `builder()`-method instead of a constructor:
+
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paulBuilder = Person.builder()
+                .name("Paul")
+                .surname("Börding")
+                .age(29)
+                .build();
+
+        Person paulConstructor = new Person("Paul", "Börding", 29);
+
+        System.out.println(paulBuilder.toString());
+        System.out.println(paulConstructor.toString());
+    }
+}
+```
+
+In this example, we first call the builder, then we assign (in any order) all the fields, and finally we call `build()` to construct the `Person`. You might notice, that this is more readable than the constructor, since the field names are right there in the code.
+
+Now let's extend our example from above with the field `country`:
+
+```java
+@Builder
+@Data
+public class Person {
+  private final String name;
+  private final String surname;
+  private int age;
+  private String country;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paulBuilder = Person.builder()
+                .name("Paul")
+                .surname("Börding")
+                .age(29)
+                .build();
+
+        Person paulConstructor = new Person("Paul", "Börding", 29, null);
+
+        System.out.println(paulBuilder.toString());
+        System.out.println(paulConstructor.toString());
+    }
+}
+```
+
+Notice how we need to extend the constructor call but no change needs to be done to the builder call. Any unassigned field is automatically considered `null`. This is especially useful for tests, as only the fields under test need to be assigned, making the test more understandable.
+
+Let's add another field `hobbies` which shall be a list of activities:
+
+```java
+@Builder
+@Data
+public class Person {
+  private final String name;
+  private final String surname;
+  private int age;
+  private String country;
+  private List<String> hobbies;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paulBuilder = Person.builder()
+                .surname("Börding")
+                .age(29)
+                .hobbies(List.of("Board Games", "Movies", "Coding"))
+                .build();
+
+        System.out.println(paulBuilder.toString());
+    }
+}
+```
+
+Notice how we create a `List` of `String`s within our builder. Depending on the context or personal preference, it can be better to add them one by one instead of instantiating the `List`. For that, we need to add the `@Singular` annotation to the `hobbies` field:
+
+
+```java
+@Builder
+@Data
+public class Person {
+  private final String name;
+  private final String surname;
+  private int age;
+  private String country;
+  @Singular private List<String> hobbies;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paulBuilder = Person.builder()
+                .surname("Börding")
+                .age(29)
+                .hobby("Board Games")
+                .hobby("Movies")
+                .hobby("Coding")
+                .build();
+
+        System.out.println(paulBuilder.toString());
+    }
+}
+```
+
+Notice here how Lombok automatically uses the singular of the word `hobbies`, which is `hobby`, to name the method. This can be irritating in practice, be aware. You can still use the `hobbies(...)` method to add the hobbies as a `List`.
+
+Again, this functionality is very useful in testing for creating test objects in the code.
 
 #### @NonNull
 
-**🚧 Pending...**
+Lombok has it's own implementation of the `@NonNull` annotation. If you are in a context of using Lombok, you should prefer to use this one. With this annotation, you can make sure that certain fields cannot be `null`.
+
+The following example throws a `NullPointerException` (but with a relatively useful error message):
+
+```java
+@Builder
+@Data
+public class Person {
+    @NonNull private final String name;
+    private final String surname;
+    private int age;
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paulBuilder = Person.builder()
+                .surname("Börding")
+                .age(29)
+                .build();
+
+        System.out.println(paulBuilder.toString());
+    }
+}
+```
 
 #### @With
 
