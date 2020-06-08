@@ -74,6 +74,7 @@
     1. [Inner static class](#inner-static-class)
         1. [What's the difference between inner instance classes and inner static classes?](#whats-the-difference-between-inner-instance-classes-and-inner-static-classes)
     1. [Inner anonymous class](#inner-anonymous-class)
+        1. [What is the difference between lambda functions and inner](#what-is-the-difference-between-lambda-functions-and-inner)
         1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
@@ -5516,16 +5517,15 @@ Not exposing the `Rows` and `Columns` inner static class, enable us to drop one 
 
 ### Inner anonymous class
 
+Consider the following method.
+
 ```java
-package demo;
-
-public class App {
-
-  private static void runMyJob( final Runnable runnable ) {
-    runnable.run();
-  }
+private static void runMyJob( final Runnable runnable ) {
+  runnable.run();
 }
 ```
+
+We can pass anything to this method that implements the [Runnable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Runnable.html) interface.  Consider the following class.
 
 ```java
 package demo;
@@ -5538,6 +5538,8 @@ public class SimpleJob implements Runnable {
   }
 }
 ```
+
+We can pass an instance of `SimpleJob`, as shown next.
 
 ```java
 package demo;
@@ -5553,6 +5555,8 @@ public class App {
   }
 }
 ```
+
+Instead, we can replace the `SimpleJob` with an inner anonymous class as shown next.
 
 ```java
 package demo;
@@ -5574,11 +5578,19 @@ public class App {
 }
 ```
 
+When the interface in question is a [functional interface](#functional-interface-and-lambda-functions), we can replace the inner anonymous class with a lambda function as shown next.
+
 ```java
 runMyJob( () -> System.out.println( "My simple job" ) );
 ```
 
+#### What is the difference between lambda functions and inner
+
+**🚧 Pending...**
+
 #### How many methods can an inner anonymous class override?
+
+**🚧 Pending...**
 
 ```java
 public interface Pet {
