@@ -5205,7 +5205,7 @@ The above example reads better as it uses a code style that every is accustom to
 
 ### Inner static class
 
-An inner static class is a class within a class which is marked as `static`.  Different from a top-level class, an inner static class is another class member, like a method is for example.  The following example shows a very simple example of an inner static class.
+An inner static class is a class within a class which is marked as `static`.  Different from a top-level class, an inner static class is another class member, like a static method is for example.  The following example shows a very simple example of an inner static class.
 
 ```java
 package demo;
@@ -5290,10 +5290,249 @@ public class ClassWithInnerClasses {
 }
 ```
 
-Inner static classes can be seen as a super set of the inner instance classes as they can also have static members.  We can convert all inner instance classes with inner static classes, but not vice versa.  Note that inner instance classes cannot have static members as [discussed before](#can-we-have-static-methods-within-inner-instance-classes).
+Inner static classes can be seen as a super set of the inner instance classes as they can also have static members.  We can convert all inner instance classes with inner static classes, but not vice versa as inner instance classes cannot have static members as [discussed before](#can-we-have-static-methods-within-inner-instance-classes), while inner static class do.
 
+We can refactor the `Data` class, shown [before when we discussed *how can inner instance classes represent data in a different form?*](#how-can-inner-instance-classes-represent-data-in-a-different-form), to make use of inner static class instead.
 
-XXX How can inner instance classes represent data in a different form?
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] matrix;
+
+  public Data( final int[][] matrix ) {
+    this. matrix = matrix;
+  }
+
+  public Iterable<int[]> rows() {
+    return new Rows();
+  }
+
+  public Iterable<int[]> columns() {
+    return new Columns();
+  }
+
+  private class Rows implements Iterable<int[]> {
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( matrix )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+  }
+
+  private class Columns implements Iterable<int[]> {
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( transposed() )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+
+    private int[][] transposed() {
+      final int m = matrix.length;
+      final int n = matrix[0].length;
+
+      final int[][] transposed = new int[n][m];
+
+      for ( int x = 0; x < n; x++ ) {
+        for ( int y = 0; y < m; y++ ) {
+          transposed[x][y] = matrix[y][x];
+        }
+      }
+
+      return transposed;
+    }
+  }
+}
+```
+Let's start with the simplest class, `Rows`.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] matrix;
+
+  public Data( final int[][] matrix ) { /* ... */ }
+
+  public Iterable<int[]> rows() {
+    return new Rows( matrix );
+  }
+
+  public Iterable<int[]> columns() { /* ... */ }
+
+  private static class Rows implements Iterable<int[]> {
+
+    private final int[][] matrix;
+
+    private Rows( final int[][] matrix ) {
+      this.matrix = matrix;
+    }
+
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( matrix )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+  }
+
+  private class Columns implements Iterable<int[]> { /* ... */ }
+}
+```
+
+Now, when initialising the `Rows`, we need to pass an instance of the matrix.
+
+```java
+return new Rows( matrix );
+```
+
+Note that here we are not passing an instance of Data, but an instance of the two-dimensional array instead.  This means that the `Rows` does not have a reference to the enclosing object.
+
+We can refactor the `Columns` too.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] matrix;
+
+  public Data( final int[][] matrix ) {
+    this.matrix = matrix;
+  }
+
+  public Iterable<int[]> rows() {
+    return new Rows( matrix );
+  }
+
+  public Iterable<int[]> columns() {
+    return new Columns( matrix );
+  }
+
+  private static class Rows implements Iterable<int[]> {
+
+    private final int[][] matrix;
+
+    private Rows( final int[][] matrix ) {
+      this.matrix = matrix;
+    }
+
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( matrix )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+  }
+
+  private class Columns implements Iterable<int[]> {
+
+    private final int[][] matrix;
+
+    private Columns( final int[][] matrix ) {
+      this.matrix = matrix;
+    }
+
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( transposed() )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+
+    private int[][] transposed() {
+      final int m = matrix.length;
+      final int n = matrix[0].length;
+
+      final int[][] transposed = new int[n][m];
+
+      for ( int x = 0; x < n; x++ ) {
+        for ( int y = 0; y < m; y++ ) {
+          transposed[x][y] = matrix[y][x];
+        }
+      }
+
+      return transposed;
+    }
+  }
+}
+```
+
+Note that the `Rows` and `Columns` are quite similar and can be consolidated as one inner static class, as shown next.
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.stream.Collectors;
+
+public class Data {
+
+  private final int[][] matrix;
+
+  public Data( final int[][] matrix ) {
+    this.matrix = matrix;
+  }
+
+  public Iterable<int[]> rows() {
+    return new Rows( matrix );
+  }
+
+  public Iterable<int[]> columns() {
+    return new Rows( transposed() );
+  }
+
+  private int[][] transposed() {
+    final int m = matrix.length;
+    final int n = matrix[0].length;
+
+    final int[][] transposedMatrix = new int[n][m];
+
+    for ( int x = 0; x < n; x++ ) {
+      for ( int y = 0; y < m; y++ ) {
+        transposedMatrix[x][y] = matrix[y][x];
+      }
+    }
+
+    return transposedMatrix;
+  }
+
+  private static class Rows implements Iterable<int[]> {
+
+    private final int[][] matrix;
+
+    private Rows( final int[][] matrix ) {
+      this.matrix = matrix;
+    }
+
+    @Override
+    public Iterator<int[]> iterator() {
+      return Arrays.stream( matrix )
+        .collect( Collectors.toList() )
+        .iterator();
+    }
+  }
+}
+```
+
+Not exposing the `Rows` and `Columns` inner static class, enable us to drop one of the inner static classes, without having to worry about other external usage.  All external usage, relied on the `Iterable<int[]>` interface instead.
 
 ### Inner anonymous class
 
