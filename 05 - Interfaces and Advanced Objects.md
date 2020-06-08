@@ -5586,7 +5586,7 @@ runMyJob( () -> System.out.println( "My simple job" ) );
 
 #### What is the difference between lambda functions and inner anonymous class?
 
-In some cases, lambda and inner anonymous classes can be used interchangeably.  With reference to the example shown before, the Runnable interface is a functional interface, thus can be replaced by a lambda function.  Lambda cannot be used to replace classes or interfaces that have more than one abstract method (non-functional interface).
+In some cases, lambda functions and inner anonymous classes can be used interchangeably.  With reference to the example shown before, the `Runnable` interface is a functional interface, thus can be replaced by a lambda function.  Lambda cannot be used to replace classes or interfaces that have more than one abstract method (non-functional interface).
 
 Consider the following three classes.
 
@@ -5620,6 +5620,7 @@ Consider the following three classes.
     public class App {
 
       public static void main( final String[] args ) {
+        /* Nothing is happening yet */
       }
 
       private static void execute( final Worker worker ) {
@@ -5634,7 +5635,7 @@ Consider the following three classes.
 
 Following are some key differences between lambda functions and inner anonymous class, in the above context.
 
-1. Inner anonymous classes are typed, and will only fit one type.  We can create an inner anonymous class for either `Worker` or `Task`, but one inner anonymous class cannot extend or implement two types.
+1. Inner anonymous classes are typed and will only fit one type.  We can create an inner anonymous class for either `Worker` or `Task`, but not for both.  One inner anonymous class cannot extend or implement two or more types.
 
     ```java
     package demo;
@@ -5660,7 +5661,7 @@ Following are some key differences between lambda functions and inner anonymous 
     }
     ```
 
-    Given that the inner anonymous class is typed, the `execute()` method that takes a `Worker` is invoked.  On the contracry, lambda functions are not typed as we cannot simply replaced the above with a lambda, as shown next.
+    Given that the inner anonymous class is typed, the `execute()` method that takes a `Worker` is invoked.  On the contrary, lambda functions are not typed as we cannot simply replaced the above with a lambda function, as shown next.
 
     **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
 
@@ -5670,7 +5671,7 @@ Following are some key differences between lambda functions and inner anonymous 
     public class App {
 
       public static void main( final String[] args ) {
-        /* ⚠️ Both execute() methods will match  */
+        /* ⚠️ Both execute() methods will match!! */
         execute( () -> System.out.println( "My worker" ) );
       }
 
@@ -5684,13 +5685,85 @@ Following are some key differences between lambda functions and inner anonymous 
     }
     ```
 
-    We can address the above issue by casting the lambda function to an interface of type `Worker` as shown next.
+    We can address the above issue by casting the lambda function to an interface of type `Worker`, as shown next.
 
     ```java
     execute( (Worker) () -> System.out.println( "My worker" ) );
     ```
 
-**🚧 Pending...**
+    Alternatively, we can cast type the lambda function to a `Task`, as shown next.
+
+    ```java
+    execute( (Task) () -> System.out.println( "My task" ) );
+    ```
+
+    We can cast type a lambda function to any functional interface.
+
+1. The inner anonymous class are bound to a class file, while lambda functions are not bound to a class file.
+
+    Consider the following example
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        execute( (Worker) () -> System.out.println( "My worker" ) );
+
+        execute( new Task() {
+          @Override
+          public void execute() {
+            System.out.println( "My task" );
+          }
+        } );
+      }
+
+      private static void execute( final Worker worker ) {
+        worker.work();
+      }
+
+      private static void execute( final Task task ) {
+        task.execute();
+      }
+    }
+    ```
+
+    In the above example, we have an inner anonymous class and a lambda function.
+
+    We have three source files, as shown next.
+
+    ```bash
+    $ tree src/main/java
+    src/main/java
+    └── demo
+        ├── App.java
+        ├── Task.java
+        └── Worker.java
+    ```
+
+    Clean and then build the project to remove any residual from any previous builds.
+
+    ```bash
+    $ ./gradlew clean build
+    ```
+
+    The [`clean` Gradle task](https://docs.gradle.org/current/userguide/base_plugin.html#sec:base_tasks) will delete any previously generated classes.  List all generated classes.
+
+    ```bash
+    $ tree build/classes/java
+      build/classes/java
+      └── main
+          └── demo
+              ├── App$1.class
+              ├── App.class
+              ├── Task.class
+              └── Worker.class
+    ```
+
+    Note that here we have a class file, `Task.class` and `Worker.class`, for each interface, `Task` and `Worker`.  We have the `App.class` class file and another class file for the inner anonymous class, `App$1.class`.  We have no class files for the lambda function.
+
+    Lambda functions are not bound to a class file.  Java creates a class, also referred to as *runtime classes*, when the lambda function is first invoked.  In Java you cannot escape classes, as classes in Java are the smallest unit of work.
 
 #### How many methods can an inner anonymous class override?
 
