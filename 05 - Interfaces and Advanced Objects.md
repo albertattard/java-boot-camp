@@ -74,7 +74,7 @@
     1. [Inner static class](#inner-static-class)
         1. [What's the difference between inner instance classes and inner static classes?](#whats-the-difference-between-inner-instance-classes-and-inner-static-classes)
     1. [Inner anonymous class](#inner-anonymous-class)
-        1. [What is the difference between lambda functions and inner](#what-is-the-difference-between-lambda-functions-and-inner)
+        1. [What is the difference between lambda functions and inner anonymous class?](#what-is-the-difference-between-lambda-functions-and-inner-anonymous-class)
         1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
@@ -5584,7 +5584,111 @@ When the interface in question is a [functional interface](#functional-interface
 runMyJob( () -> System.out.println( "My simple job" ) );
 ```
 
-#### What is the difference between lambda functions and inner
+#### What is the difference between lambda functions and inner anonymous class?
+
+In some cases, lambda and inner anonymous classes can be used interchangeably.  With reference to the example shown before, the Runnable interface is a functional interface, thus can be replaced by a lambda function.  Lambda cannot be used to replace classes or interfaces that have more than one abstract method (non-functional interface).
+
+Consider the following three classes.
+
+1. A functional interface that represents a worker
+
+    ```java
+    package demo;
+
+    public interface Worker {
+
+      void work();
+    }
+    ```
+
+1. A functional interface that represents a task
+
+    ```java
+    package demo;
+
+    public interface Task {
+
+      void execute();
+    }
+    ```
+
+1. An application that uses these two interfaces
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+      }
+
+      private static void execute( final Worker worker ) {
+        worker.work();
+      }
+
+      private static void execute( final Task task ) {
+        task.execute();
+      }
+    }
+    ```
+
+Following are some key differences between lambda functions and inner anonymous class, in the above context.
+
+1. Inner anonymous classes are typed, and will only fit one type.  We can create an inner anonymous class for either `Worker` or `Task`, but one inner anonymous class cannot extend or implement two types.
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        execute( new Worker() {
+          @Override
+          public void work() {
+            System.out.println( "My worker" );
+          }
+        } );
+      }
+
+      private static void execute( final Worker worker ) {
+        worker.work();
+      }
+
+      private static void execute( final Task task ) {
+        task.execute();
+      }
+    }
+    ```
+
+    Given that the inner anonymous class is typed, the `execute()` method that takes a `Worker` is invoked.  On the contracry, lambda functions are not typed as we cannot simply replaced the above with a lambda, as shown next.
+
+    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+    ```java
+    package demo;
+
+    public class App {
+
+      public static void main( final String[] args ) {
+        /* ⚠️ Both execute() methods will match  */
+        execute( () -> System.out.println( "My worker" ) );
+      }
+
+      private static void execute( final Worker worker ) {
+        worker.work();
+      }
+
+      private static void execute( final Task task ) {
+        task.execute();
+      }
+    }
+    ```
+
+    We can address the above issue by casting the lambda function to an interface of type `Worker` as shown next.
+
+    ```java
+    execute( (Worker) () -> System.out.println( "My worker" ) );
+    ```
 
 **🚧 Pending...**
 
