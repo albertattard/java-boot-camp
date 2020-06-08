@@ -78,7 +78,6 @@
         1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
-    1. [Local class](#local-class)
     1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
