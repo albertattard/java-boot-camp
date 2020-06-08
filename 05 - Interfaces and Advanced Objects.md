@@ -74,7 +74,7 @@
     1. [Inner static class](#inner-static-class)
         1. [What's the difference between inner instance classes and inner static classes?](#whats-the-difference-between-inner-instance-classes-and-inner-static-classes)
     1. [Inner anonymous class](#inner-anonymous-class)
-        1. [What is the difference between lambda functions and inner anonymous class?](#what-is-the-difference-between-lambda-functions-and-inner-anonymous-class)
+        1. [What are the differences between lambda functions and inner anonymous classes (revised)?](#what-are-the-differences-between-lambda-functions-and-inner-anonymous-classes-revised)
         1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
@@ -5583,7 +5583,9 @@ When the interface in question is a [functional interface](#functional-interface
 runMyJob( () -> System.out.println( "My simple job" ) );
 ```
 
-#### What is the difference between lambda functions and inner anonymous class?
+#### What are the differences between lambda functions and inner anonymous classes (revised)?
+
+This question was already answered in some depth before, when answering the question: [*What are the differences between lambda functions and inner anonymous classes?*](#what-are-the-differences-between-lambda-functions-and-inner-anonymous-classes)  In this section we will be answering the same question using different examples.
 
 In some cases, lambda functions and inner anonymous classes can be used interchangeably.  With reference to the example shown before, the `Runnable` interface is a functional interface, thus can be replaced by a lambda function.  Lambda cannot be used to replace classes or interfaces that have more than one abstract method (non-functional interface).
 
@@ -5762,11 +5764,22 @@ Following are some key differences between lambda functions and inner anonymous 
 
     Note that here we have a class file, `Task.class` and `Worker.class`, for each interface, `Task` and `Worker`.  We have the `App.class` class file and another class file for the inner anonymous class, `App$1.class`.  We have no class files for the lambda function.
 
-    Lambda functions are not bound to a class file.  Java creates a class, also referred to as *runtime classes*, when the lambda function is first invoked.  In Java you cannot escape classes, as classes in Java are the smallest unit of work.
+    Lambda functions are not bound to a class file.  Java creates a class, also referred to as *runtime classes*, when the lambda function is first invoked.  In Java, you cannot escape classes, as classes in Java are the smallest unit of work.
+
+1. Inner anonymous classes have access to `this` and `super` like any other class.  Lambda functions on the other hand do not have access to `this` or `super`.
+
+    "_Unlike code appearing in anonymous class declarations, the meaning of names and the `this` and `super` keywords appearing in a lambda body, along with the accessibility of referenced declarations, are the same as in the surrounding context (except that lambda parameters introduce new names)._"<br/>
+    ([JLS 15.27.2](https://docs.oracle.com/javase/specs/jls/se14/html/jls-15.html#jls-15.27.2))
+
+1. While lambda functions are bound to functional interfaces, inner anonymous classes can extend or implements any class or interface on the fly.  Inner anonymous classes are not bound to just functional interfaces.  Instead we can use inner anonymous classes with anything that can be extended.
+
+    Note that while we can use inner anonymous classes with classes too, we cannot create an inner anonymous class of a final class.
 
 #### How many methods can an inner anonymous class override?
 
-**🚧 Pending...**
+An inner anonymous class can override as many methods it needs.  An inner anonymous class is very similar to an inner instance class and as such, an inner anonymous class cannot have static members.
+
+Consider the following example.
 
 ```java
 public interface Pet {
@@ -5776,6 +5789,8 @@ public interface Pet {
   String getFavouriteFood();
 }
 ```
+
+The above `Pet` interface has two abstract methods.  As shown in the following example, we can create an inner anonymous class and override two abstract methods.
 
 ```java
 package demo;
@@ -5800,9 +5815,13 @@ public class App {
 }
 ```
 
+The above example will print.
+
 ```bash
 My pet's name is Fido, and it likes Sausage pizza
 ```
+
+We can override any method that can be overridden using an inner anonymous class.  Consider the following example.
 
 ```java
 package demo;
@@ -5828,6 +5847,7 @@ public class App {
 }
 ```
 
+The above example shows how an inner anonymous class overrides concrete methods such as the `toString()` method.
 
 #### Can we add methods to an inner anonymous class?
 
