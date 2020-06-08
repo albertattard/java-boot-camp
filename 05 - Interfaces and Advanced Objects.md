@@ -5851,7 +5851,83 @@ The above example shows how an inner anonymous class overrides concrete methods 
 
 #### Can we add methods to an inner anonymous class?
 
-**🚧 Pending...**
+Yes, inner anonymous classes can have other instance methods, and not just those inherited from the class it is extending or the interface it is implementing.
+
+Consider the following example.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Object a = new Object() {
+      public void sayHello( final String name ) {
+        System.out.printf( "Hello %s%n", name );
+      }
+    };
+
+    /* ⚠️ The object class does not have a sayHello() method!! */
+    a.sayHello( "Jade" );
+  }
+}
+```
+
+The above example will not compile as the Object class has no method called `sayHello()`.  Inner anonymous classes do not define a new type and thus we cannot create a variable of type of the inner anonymous class.
+
+Java 10, introduced [JEP 286: Local-Variable Type Inference](https://openjdk.java.net/jeps/286) which changed the whole game.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final var a = new Object() {
+      public void sayHello( final String name ) {
+        System.out.printf( "Hello %s%n", name );
+      }
+    };
+
+    a.sayHello( "Jade" );
+  }
+}
+```
+
+Using the `var` keyword, Java will determine the type by looking at the right-hand side of the assignment operator.  The above now compiles and will print.
+
+```bash
+Hello Jade
+```
+
+Inner anonymous classes can be used within streams as we will see next.  Consider the following class.
+
+```java
+package demo;
+
+public class Person {
+
+  private final String name;
+  private final int age;
+
+  public Person( final String name, final int age ) {
+    this.name = name;
+    this.age = age;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public String getName() {
+    return name;
+  }
+}
+```
+
+Now let say that we would like to print the age of a person in dog years.  For the sake of this example, let us assume that 15 dog years is 1 human year.  Consider the following, overly complicated, example.
 
 ```java
 package demo;
@@ -5866,20 +5942,22 @@ public class App {
       new Person( "Jade", 32 ),
       new Person( "Mary", 57 ),
       new Person( "Peter", 92 )
-    ).forEach( person -> {
+    ).map( person -> new Object() {
         final String name = person.getName();
-        final int dogAge = toDogAge( person.getAge() );
-        System.out.printf( "%s would be %d years old%n", name, dogAge );
-      }
-    );
-  }
 
-  private static int toDogAge( int age ) {
-    /* 15 human years equals the first year of a medium-sized dog's life */
-    return age / 15;
+        public int getDogAge() {
+          /* 15 human years equals the first year of a medium-sized dog's life */
+          return person.getAge() / 15;
+        }
+      }
+    ).forEach( a -> {
+      System.out.printf( "%s would be %d years old%n", a.name, a.getDogAge() );
+    } );
   }
 }
 ```
+
+Here we have a stream of persons, is then mapped to an inner anonymous class.  The inner anonymous class adds a new property, `name` and a new instance method, `getDogAge()`.  This new method can be then invoked as we saw in the `foreach` termination part of the stream.
 
 ```bash
 Aden would be 1 years old
@@ -5888,43 +5966,7 @@ Mary would be 3 years old
 Peter would be 6 years old
 ```
 
-```java
-package demo;
-
-import java.util.stream.Stream;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    Stream.of(
-      new Person( "Aden", 16 ),
-      new Person( "Jade", 32 ),
-      new Person( "Mary", 57 ),
-      new Person( "Peter", 92 )
-    )
-      .map( person -> new Object() {
-        final String name = person.getName();
-        final int dogAge = toDogAge( person.getAge() );
-      } )
-      .forEach( person -> System.out.printf( "%s would be %d years old%n", person.name, person.dogAge )
-      );
-  }
-
-  private static int toDogAge( int age ) {
-    /* 15 human years equals the first year of a medium-sized dog's life */
-    return age / 15;
-  }
-}
-```
-
-
-```java
-new HashMap(){
-{
-put("", "");
-}
-}
-```
+While yes, we can have new methods within an inner anonymous class, I recommend keeping the inner anonymous classes as small as possible.  Once an inner anonymous class starts to get big, then it starts losing its benefit, and it is best to convert it to an inner anonymous type or move it to a separate class.  The latter will make it testable.
 
 ### Local class
 
