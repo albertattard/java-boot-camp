@@ -267,6 +267,7 @@ Boot Camp for developers interested to learn Java.
         1. [How many methods can an inner anonymous class override?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](05%20-%20Interfaces%20and%20Advanced%20Objects.md#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#local-class)
+    1. [Local class](05%20-%20Interfaces%20and%20Advanced%20Objects.md#local-class)
     1. [JEP 360: Sealed Classes (Preview)](05%20-%20Interfaces%20and%20Advanced%20Objects.md#jep-360-sealed-classes-preview)
 1. [Annotations](05%20-%20Interfaces%20and%20Advanced%20Objects.md#annotations)
     1. [Project Lombok](05%20-%20Interfaces%20and%20Advanced%20Objects.md#project-lombok)

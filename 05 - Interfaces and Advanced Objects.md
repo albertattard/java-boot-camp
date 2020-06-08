@@ -78,6 +78,7 @@
         1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
         1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
+    1. [Local class](#local-class)
     1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
@@ -5968,69 +5969,6 @@ Peter would be 6 years old
 
 While yes, we can have new methods within an inner anonymous class, I recommend keeping the inner anonymous classes as small as possible.  Once an inner anonymous class starts to get big, then it starts losing its benefit, and it is best to convert it to an inner anonymous type or move it to a separate class.  The latter will make it testable.
 
-### Local class
-
-Strangly enough we can create a class within a method as shown in the following example.
-
-```java
-package demo;
-
-public class App {
-
-  public static void main( final String[] args ) {
-
-    class Person {
-      private final String name;
-      private final int age;
-
-      public Person( final String name, final int age ) {
-        this.name = name;
-        this.age = age;
-      }
-
-      @Override
-      public String toString() {
-        return String.format( "Person{name=%s, age=%d}", name, age );
-      }
-    }
-
-    final Person a = new Person( "Aden", 11 );
-    final Person b = new Person( "Jade", 13 );
-
-    System.out.println( a );
-    System.out.println( b );
-  }
-}
-```
-
-The `main()` method has defined a local class named `Person`;
-
-```bash
-Person{name=Aden, age=11}
-Person{name=Jade, age=13}
-```
-
-```bash
-$ tree src/main/java
-  src/main/java
-  └── demo
-      └── App.java
-```
-
-```bash
-$ ./gradlew clean build
-```
-
-```bash
-$ tree build/classes/java
-build/classes/java
-└── main
-    └── demo
-        ├── App$1Person.class
-        └── App.class
-```
-
-Can be created within initialisation blocks or constructors.
 ### Local class
 
 Strangely enough, we can create a class within a method, initialisation blocks or constructors, as shown in the following example.
