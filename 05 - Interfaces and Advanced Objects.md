@@ -6048,7 +6048,8 @@ public class App {
 
   public static void main( final String[] args ) {
 
-    final boolean hasNameAndAge = false;
+    final Random random = new Random();
+    final boolean hasNameAndAge = random.nextBoolean();
 
     if ( hasNameAndAge ) {
       class Person {
@@ -6093,7 +6094,17 @@ public class App {
 }
 ```
 
-The above example is an extreme example.
+The above example is an extreme example.  The above example makes use of two local classes and these will have their own respective class file when compiled, as shown next.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1Person.class
+        ├── App$2Person.class
+        └── App.class
+```
 
 I do not like local classes and don't recall any usage of these outside books.  The reason I do not like them is that they are quite cryptic and make it hard to read the method.  When needed, I use inner static classes, which gives the same benefit without polluting methods.
 
@@ -6101,9 +6112,61 @@ Note that local classes are inaccessible from outside the method.  This means th
 
 ### JEP 360: Sealed Classes (Preview)
 
-**🚧 Pending...**
+Java 15 will preview a new feature as defined by [JEP 360: Sealed Classes (Preview)](https://openjdk.java.net/jeps/360).
 
-[JEP 360](https://openjdk.java.net/jeps/360)
+**What will sealed classes provide us?**  Say that our application has two types of coins, gold coins and silver coins and by design we cannot have other types of coins.  Consider the following example.
+
+```java
+package demo;
+
+public class Coin {
+
+  private Coin() {
+  }
+
+  public static class GoldCoin extends Coin {
+  }
+
+  public static class SilverCoin extends Coin {
+  }
+}
+```
+
+Up to now, we can control our types using a combination of private constructors and inner static classes.  We saw this setup [before in previous examples](04%20-%20Classes,%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors).
+
+One of the downsides of the above approach is that the `Coin` class may become a bit bulky especially once we start pouring in logic.  Java 15 will introduce a new concept of sealed classes, where the sealed class will define the classes that it permits to extend it, as shown next.
+
+**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH JAVA 14 OR BEFORE!!**
+
+```java
+package demo;
+
+public sealed class Coin
+  permits GoldCoin, SilverCoin {
+}
+```
+
+The above example will not yet work as of now, Java 15 is still in early access.  With the preview enabled, the `Coin` class only permits the `GoldCoin` and the `SilverCoin` to extend it.  The `GoldCoin` class and the `SilverCoin` class can simply extend the sealed `Coin` class, as shown next.
+
+1. The gold coin class
+
+    ```java
+    package demo;
+
+    public class GoldCoin extends Coin {
+    }
+    ```
+
+1. The sildeer coid class
+
+    ```java
+    package demo;
+
+    public class SilverCoin extends Coin {
+    }
+    ```
+
+Note that this feature will be released in preview, and you will need to enable the preview mode while compiling and running the application.
 
 ## Annotations
 
