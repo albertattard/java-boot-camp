@@ -2785,8 +2785,8 @@ import java.awt.Point;
 
 public class MagicBox {
 
-  public String name;
-  public Point location;
+  public final String name;
+  public final Point location;
 
   public MagicBox() {
     this( null );
@@ -2871,9 +2871,9 @@ package demo;
 
 public class BoxDimensions {
 
-  private int width;
-  private int height;
-  private int depth;
+  private final int width;
+  private final int height;
+  private final int depth;
 
 }
 ```
@@ -2905,9 +2905,9 @@ package demo;
 
 public class BoxDimensions {
 
-  private int width;
-  private int height;
-  private int depth;
+  private final int width;
+  private final int height;
+  private final int depth;
 
   public BoxDimensions( final int base, final int height ) {
     this.width = base;
@@ -2940,13 +2940,13 @@ package demo;
 
 public class BoxDimensions {
 
-  private int width;
-  private int height;
-  private int depth;
+  private final int width;
+  private final int height;
+  private final int depth;
 
-  public BoxDimensions( int base, float height ) { /* ... */ }
+  public BoxDimensions( final int base, final float height ) { /* ... */ }
 
-  public BoxDimensions( int side, int depth ) { /* ... */ }
+  public BoxDimensions( final int side, final int depth ) { /* ... */ }
 }
 ```
 
@@ -2981,9 +2981,9 @@ package demo;
 
 public class BoxDimensions {
 
-  private int width;
-  private int height;
-  private int depth;
+  private final int width;
+  private final int height;
+  private final int depth;
 
   public BoxDimensions( final int width, final int height, final int depth ) {
     this.width = width;
