@@ -78,6 +78,16 @@
     1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
 1. [Annotations](#annotations)
     1. [Project Lombok](#project-lombok)
+        1. [@ToString](#-tostring)
+        1. [@EqualsAndHashCode](#-equalsandhashcode)
+        1. [@Getter and @Setter](#-getter-and-setter)
+        1. [Constructors](#constructors)
+        1. [@Data](#-data)
+        1. [@Builder](#-builder)
+        1. [@NonNull](#-nonnull)
+        1. [@With](#-with)
+        1. [@Value](#-value)
+        1. [@SneakyThrows](#-sneakythrows)
 1. [Generics](#generics)
 1. [Miscellaneous](#miscellaneous)
     1. [Objects have two words headers](#objects-have-two-words-headers)
@@ -4182,7 +4192,7 @@ First static initialisation block
 Second static initialisation block
 ```
 
-I tend to stay away from static initialisation block and prefer using methods instead.  Note that multiple initialisation block may add to some confusion.  Consider the following class.
+I tend to stay away from static initialisation block and prefer using methods instead.  Note that multiple initialisation block may add to the confusion.  Consider the following class.
 
 ```java
 package demo;
@@ -4220,6 +4230,8 @@ The above program will print
 ```bash
 33
 ```
+
+Whenever I find myself asking "*what will happen...*", I consider refactoring instead of testing it out.
 
 ### Initialisation block
 
@@ -4301,7 +4313,7 @@ public class Person {
 }
 ```
 
-This is not a very common feature.  Other alternatives such as the one shown next are more commonly used.
+This is not commonly used.  Other alternatives, such as the one shown next, are more commonly used.
 
 ```java
 package demo;
@@ -4478,7 +4490,7 @@ public class App {
     print( ageByName );
   }
 
-  private static void print( Map<String, Integer> map ) {
+  private static void print( final Map<String, Integer> map ) {
     map.forEach( ( name, age ) -> System.out.printf( "%s is %d years old%n", name, age ) );
   }
 }
@@ -4503,7 +4515,7 @@ public class App {
     }} );
   }
 
-  private static void print( Map<String, Integer> map ) { /* ... */ }
+  private static void print( final Map<String, Integer> map ) { /* ... */ }
 }
 ```
 
@@ -4581,7 +4593,7 @@ package demo;
 
 public class ClassWithAnInnerClass {
 
-  private int a = 7;
+  private final int a = 7;
 
   public class AnInnerClass {
     public void printValue() {
@@ -4878,7 +4890,7 @@ public class Pairs {
 
   private final List<Pair> pairs = new ArrayList<>();
 
-  public void add( int a, int b ) {
+  public void add( final int a, final int b ) {
     pairs.add( new Pair( a, b ) );
   }
 
@@ -4940,7 +4952,7 @@ public class Pairs {
 
   private final List<Pair> pairs = new ArrayList<>();
 
-  public void add( int a, int b ) {
+  public void add( final int a, final int b ) {
     pairs.add( new Pair( a, b ) );
   }
 
@@ -4957,7 +4969,7 @@ This is quite a common practice where a class will use internal types, like our 
 
 Inner instance classes have a reference to the object from where these where created.  This is not seen in the code.  We were able to access the parent's object state without had to think about it.
 
-With reference to the `Data` class mentioned before.
+With reference to the `Data` class [mentioned before](#how-can-inner-instance-classes-represent-data-in-a-different-form).
 
 ```java
 package demo;
@@ -5006,7 +5018,7 @@ In the above example, we create an instance of `Data` and then simply return the
 
 ![Inner instance classes have a reference to the object from which these are created](assets/images/Inner%20instance%20classes%20have%20a%20reference%20to%20the%20object%20from%20which%20these%20are%20created.png)
 
-Some programmers will mistakenly think that the data object will be garbage collected as we are not referring to it.  After all, there are no reference to the `Data` class from within the `Rows` inner class, shown next.
+Some programmers will mistakenly think that the data object will be garbage collected as we are not referring to it.  After all, there is no reference to the `Data` class from within the `Rows` inner class, shown next.
 
 ```java
 private class Rows implements Iterable<int[]> {
@@ -5019,7 +5031,11 @@ private class Rows implements Iterable<int[]> {
 }
 ```
 
-The `Rows` class shown next has no state after all.  Appearances cannot be more deceiving.  The `Rows` class has a reference to the parent class even though it is not visible.  Let's see the `Rows`' class bytecode (`View > Show Bytecode`).
+The `Rows` class shown next has no state after all.  Appearances cannot be more deceiving.
+
+![Source Code is not the same as Bytecode](assets/images/Source%20Code%20is%20not%20the%20same%20as%20Bytecode.png)
+
+The `Rows` class has a reference to the parent class even though it is not visible.  Let's see the `Rows`' class bytecode (`View > Show Bytecode`).
 
 ```bytecode
 // class version 58.65535 (-65478)
@@ -5115,7 +5131,7 @@ package demo;
 
 public class ClassWithAnInnerClass {
 
-  private int a = 7;
+  private final int a = 7;
 
   public class AnInnerClass {
     public void printValue() {
@@ -5154,7 +5170,7 @@ package demo;
 
 public class ClassWithAnInnerClass {
 
-  private int a = 7;
+  private final int a = 7;
 
   public AnInnerClass newInnerClass() {
     return new AnInnerClass();
@@ -5169,7 +5185,7 @@ public class ClassWithAnInnerClass {
 }
 ```
 
-Note that constructor of the inner instance class, `AnInnerClass`, is private to prevent it from being initialised from outside the enclosing class.  We cannot create an instance of `AnInnerClass` from the `App` class anymore.
+Note that the constructor of the inner instance class, `AnInnerClass`, is private to prevent it from being initialised from outside the enclosing class.  We cannot create an instance of `AnInnerClass` from the `App` class as we did in the the other example.
 
 ```java
 package demo;
@@ -5275,6 +5291,9 @@ public class ClassWithInnerClasses {
 ```
 
 Inner static classes can be seen as a super set of the inner instance classes as they can also have static members.  We can convert all inner instance classes with inner static classes, but not vice versa.  Note that inner instance classes cannot have static members as [discussed before](#can-we-have-static-methods-within-inner-instance-classes).
+
+
+XXX How can inner instance classes represent data in a different form?
 
 ### Inner anonymous class
 
