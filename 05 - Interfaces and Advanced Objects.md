@@ -74,6 +74,8 @@
     1. [Inner static class](#inner-static-class)
         1. [What's the difference between inner instance classes and inner static classes?](#whats-the-difference-between-inner-instance-classes-and-inner-static-classes)
     1. [Inner anonymous class](#inner-anonymous-class)
+        1. [How many methods can an inner anonymous class override?](#how-many-methods-can-an-inner-anonymous-class-override)
+        1. [Can we add methods to an inner anonymous class?](#can-we-add-methods-to-an-inner-anonymous-class)
     1. [Local class](#local-class)
     1. [JEP 360: Sealed Classes (Preview)](#jep-360-sealed-classes-preview)
 1. [Annotations](#annotations)
@@ -5413,33 +5415,15 @@ public class Data {
 
   private final int[][] matrix;
 
-  public Data( final int[][] matrix ) {
-    this.matrix = matrix;
-  }
+  public Data( final int[][] matrix ) { /* ... */ }
 
-  public Iterable<int[]> rows() {
-    return new Rows( matrix );
-  }
+  public Iterable<int[]> rows() { /* ... */ }
 
   public Iterable<int[]> columns() {
     return new Columns( matrix );
   }
 
-  private static class Rows implements Iterable<int[]> {
-
-    private final int[][] matrix;
-
-    private Rows( final int[][] matrix ) {
-      this.matrix = matrix;
-    }
-
-    @Override
-    public Iterator<int[]> iterator() {
-      return Arrays.stream( matrix )
-        .collect( Collectors.toList() )
-        .iterator();
-    }
-  }
+  private static class Rows implements Iterable<int[]> { /* ... */ }
 
   private class Columns implements Iterable<int[]> {
 
@@ -5487,13 +5471,9 @@ public class Data {
 
   private final int[][] matrix;
 
-  public Data( final int[][] matrix ) {
-    this.matrix = matrix;
-  }
+  public Data( final int[][] matrix ) { /* ... */ }
 
-  public Iterable<int[]> rows() {
-    return new Rows( matrix );
-  }
+  public Iterable<int[]> rows() { /* ... */ }
 
   public Iterable<int[]> columns() {
     return new Rows( transposed() );
@@ -5535,6 +5515,133 @@ public class Data {
 Not exposing the `Rows` and `Columns` inner static class, enable us to drop one of the inner static classes, without having to worry about other external usage.  All external usage, relied on the `Iterable<int[]>` interface instead.
 
 ### Inner anonymous class
+
+```java
+package demo;
+
+public class App {
+
+  private static void runMyJob( final Runnable runnable ) {
+    runnable.run();
+  }
+}
+```
+
+```java
+package demo;
+
+public class SimpleJob implements Runnable {
+
+  @Override
+  public void run() {
+    System.out.println( "My simple job" );
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    runMyJob( new SimpleJob() );
+  }
+
+  private static void runMyJob( final Runnable runnable ) {
+    runnable.run();
+  }
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    runMyJob( new Runnable() {
+      @Override
+      public void run() {
+        System.out.println( "My simple job" );
+      }
+    } );
+  }
+
+  private static void runMyJob( final Runnable runnable ) {
+    runnable.run();
+  }
+}
+```
+
+```java
+runMyJob( () -> System.out.println( "My simple job" ) );
+```
+
+#### How many methods can an inner anonymous class override?
+
+```java
+public interface Pet {
+
+  String getName();
+
+  String getFavouriteFood();
+}
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Pet pet = new Pet() {
+      @Override
+      public String getName() {
+        return "Fido";
+      }
+
+      @Override
+      public String getFavouriteFood() {
+        return "Sausage pizza";
+      }
+    };
+
+    System.out.printf( "My pet's name is %s, and it likes %s%n", pet.getName(), pet.getFavouriteFood() );
+  }
+}
+```
+
+```bash
+My pet's name is Fido, and it likes Sausage pizza
+```
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Pet pet = new Pet() {
+      @Override
+      public String getName() { /* ... */ }
+
+      @Override
+      public String getFavouriteFood() { /* ... */ }
+
+      @Override
+      public String toString() {
+        return String.format( "My pet's name is %s and it likes %s%n", getName(), getFavouriteFood() );
+      }
+    };
+
+    System.out.println( pet );
+  }
+}
+```
+
+
+#### Can we add methods to an inner anonymous class?
 
 **🚧 Pending...**
 
