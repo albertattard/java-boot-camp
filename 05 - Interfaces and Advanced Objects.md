@@ -5970,7 +5970,196 @@ While yes, we can have new methods within an inner anonymous class, I recommend 
 
 ### Local class
 
-**🚧 Pending...**
+Strangly enough we can create a class within a method as shown in the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+
+    class Person {
+      private final String name;
+      private final int age;
+
+      public Person( final String name, final int age ) {
+        this.name = name;
+        this.age = age;
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "Person{name=%s, age=%d}", name, age );
+      }
+    }
+
+    final Person a = new Person( "Aden", 11 );
+    final Person b = new Person( "Jade", 13 );
+
+    System.out.println( a );
+    System.out.println( b );
+  }
+}
+```
+
+The `main()` method has defined a local class named `Person`;
+
+```bash
+Person{name=Aden, age=11}
+Person{name=Jade, age=13}
+```
+
+```bash
+$ tree src/main/java
+  src/main/java
+  └── demo
+      └── App.java
+```
+
+```bash
+$ ./gradlew clean build
+```
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1Person.class
+        └── App.class
+```
+
+Can be created within initialisation blocks or constructors.
+### Local class
+
+Strangely enough, we can create a class within a method, initialisation blocks or constructors, as shown in the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+
+    class Person {
+      private final String name;
+      private final int age;
+
+      public Person( final String name, final int age ) {
+        this.name = name;
+        this.age = age;
+      }
+
+      @Override
+      public String toString() {
+        return String.format( "Person{name=%s, age=%d}", name, age );
+      }
+    }
+
+    final Person a = new Person( "Aden", 11 );
+    final Person b = new Person( "Jade", 13 );
+
+    System.out.println( a );
+    System.out.println( b );
+  }
+}
+```
+
+The `main()` method has defined a local class named `Person`;
+
+```bash
+Person{name=Aden, age=11}
+Person{name=Jade, age=13}
+```
+
+The new local class, `Person` is only available within the method.  Similar to other types of inner classes, the local class is bound to a class file.  We only have one source file in our application as shown next.
+
+```bash
+$ tree src/main/java
+  src/main/java
+  └── demo
+      └── App.java
+```
+
+Build the application to produce all class files.
+
+```bash
+$ ./gradlew clean build
+```
+
+Note that we have two class files.
+
+```bash
+$ tree build/classes/java
+build/classes/java
+└── main
+    └── demo
+        ├── App$1Person.class
+        └── App.class
+```
+
+The `App$1Person.class` class file represents the local class.
+
+Local classes can be defined within inner scopes such as an if statement block, as shown next.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+
+    final boolean hasNameAndAge = false;
+
+    if ( hasNameAndAge ) {
+      class Person {
+        private final String name;
+        private final int age;
+
+        public Person( final String name, final int age ) {
+          this.name = name;
+          this.age = age;
+        }
+
+        @Override public String toString() {
+          return String.format( "Person{name=%s, age=%d}", name, age );
+        }
+      }
+
+      final Person a = new Person( "Aden", 11 );
+      final Person b = new Person( "Jade", 13 );
+
+      System.out.println( a );
+      System.out.println( b );
+    } else {
+      class Person {
+        private final String name;
+
+        public Person( final String name ) {
+          this.name = name;
+        }
+
+        @Override public String toString() {
+          return String.format( "Person{name=%s}", name );
+        }
+      }
+
+      final Person a = new Person( "Aden" );
+      final Person b = new Person( "Jade" );
+
+      System.out.println( a );
+      System.out.println( b );
+    }
+  }
+}
+```
+
+The above example is an extreme example.
+
+I do not like local classes and don't recall any usage of these outside books.  The reason I do not like them is that they are quite cryptic and make it hard to read the method.  When needed, I use inner static classes, which gives the same benefit without polluting methods.
+
+Note that local classes are inaccessible from outside the method.  This means that we cannot test these classes outside the method.
 
 ### JEP 360: Sealed Classes (Preview)
 
