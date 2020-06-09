@@ -6171,9 +6171,112 @@ Note that this feature will be released in preview, and you will need to enable 
 
 **🚧 Pending...**
 
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
+
 We have already seen many annotations like `@Override`, `@DisplayName`, `@Test`, or `@ParameterizedTest`.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
+Let's create our own annotation now. We want to hide certain fields from the returned message when we call the `toString()`-method. Consider the following code:
+
+```java
+public class Person {
+    private final String name;
+    private final String surname;
+    private int age;
+
+    public Person(String name, String surname, int age) { /* ... */ }
+
+    @Override
+    public String toString() {
+        Field[] fields = this.getClass().getDeclaredFields();
+        StringBuilder builder = new StringBuilder("Person: ");
+        for (Field field : fields) {
+            builder.append(fieldToString(field));
+        }
+        return builder.toString();
+    }
+
+    private String fieldToString(Field field) {
+        try {
+            return field.getName() + "='" + field.get(this).toString() + "' ";
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return "can't print " + field.getName();
+    }
+}
+```
+```java
+public class App {
+    public static void main( final String[] args ) {
+        Person paul = new Person("Paul", "Börding", 29);
+        System.out.println(paul.toString());
+    }
+}
+```
+```bash
+Person: name='Paul' surname='Börding' age='29'
+```
+
+This code prints the values of all fields using reflections to access the fields. We will see in the following why this is useful when we are introducing our annotation.
+
+Next, we create an annotation interface, which we want to add to some of our declared fields:
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface HideMeWhenPrinting {
+}
+```
+
+Now we add this annotation to one of our fields which we do not want to be printed within our `toString()` method:
+
+```java
+public class Person {
+    private final String name;
+    @HideMeWhenPrinting private final String surname;
+    private int age;
+
+    public Person(String name, String surname, int age) { /* ... */ }
+
+    @Override
+    public String toString() { /* ... */ }
+
+    private String fieldToString(Field field) { /* ... */ }
+}
+```
+
+However, this does nothing, because Java does not know what we mean by this. We need to check for the annotation in our code.
+
+```java
+public class Person {
+    private final String name;
+    @HideMeWhenPrinting private final String surname;
+    private int age;
+
+    public Person(String name, String surname, int age) { /* ... */ }
+
+    @Override
+    public String toString() {
+        Field[] fields = this.getClass().getDeclaredFields();
+        StringBuilder builder = new StringBuilder("Person: ");
+        for (Field field : fields) {
+            if (Arrays.stream(field.getAnnotations()).anyMatch(annotation -> annotation instanceof HideMeWhenPrinting)) {
+                continue;
+            }
+            builder.append(fieldToString(field));
+        }
+        return builder.toString();
+    }
+
+    private String fieldToString(Field field) { /* ... */ }
+}
+```
+
+From now on, within the `Person` class, we can add or remove the `@HideMeWhenPrinting` annotation anytime we like to hide one of the fields from our printed string.
+
+This is an example which is not very close to reality. Normally, custom annotations would be used in scenarios which are way more complex and need simplification. Here, we just illustrate a way to access annotations at runtime.
+
+In the upcoming section, we see a way to also exclude fields from being printed, but in a more convenient way.
 
 ### Project Lombok
 
