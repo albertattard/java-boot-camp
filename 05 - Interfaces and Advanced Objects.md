@@ -6156,7 +6156,7 @@ The above example will not yet work as of now, Java 15 is still in early access.
     }
     ```
 
-1. The sildeer coid class
+1. The silver coin class
 
     ```java
     package demo;
