@@ -6169,114 +6169,272 @@ Note that this feature will be released in preview, and you will need to enable 
 
 ## Annotations
 
-**🚧 Pending...**
-
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 39: Prefer annotations to naming patterns](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev39)
 
 We have already seen many annotations like `@Override`, `@DisplayName`, `@Test`, or `@ParameterizedTest`.
 
-Let's create our own annotation now. We want to hide certain fields from the returned message when we call the `toString()`-method. Consider the following code:
+Let's create our own annotation now. We want to convert an object to a map which contains the annotated fields and their values. We start by creating the annotation interface.
+
+```java
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.FIELD )
+public @interface MapField {
+}
+```
+
+The `@Retention` specifies whether the annotation is relevant only at compile time (like `@Override`, which is only relevant to check whether the overridden function exists in the super class), or needs to be considered at runtime (in this case we want to collect the annotated fields at runtime).
+
+The `@Target` defines what kind of things we want to annotate with this (e.g. fields, methods, or classes). We can also define multiple targets.
+
+Now we can use it already to annotate the fields which we want to add to the map:
 
 ```java
 public class Person {
+
+    @MapField
     private final String name;
+
+    @MapField
     private final String surname;
-    private int age;
 
-    public Person(String name, String surname, int age) { /* ... */ }
+    public Person( final String name, final String surname ) {
+        this.name = name;
+        this.surname = surname;
+    }
+}
+```
 
-    @Override
-    public String toString() {
-        Field[] fields = this.getClass().getDeclaredFields();
-        StringBuilder builder = new StringBuilder("Person: ");
-        for (Field field : fields) {
-            builder.append(fieldToString(field));
-        }
-        return builder.toString();
+Only annotating the fields has almost no effect. We have only marked the fields so far. What is left, is using the accessing the annotation to utilize it.
+
+As a first step, let's get the first of the annotated fields and create a map from it.
+
+```java
+public class App {
+
+    public static void main( final String[] args ) {
+        final Map<String, Object> personMap = toMap( new Person( "Aden", "Attard" ) );
+
+        System.out.printf( "Person: %s%n", personMap );
     }
 
-    private String fieldToString(Field field) {
+    private static Map<String, Object> toMap( final Object object ) {
+        List<Field> fields = FieldUtils.getFieldsListWithAnnotation(object.getClass(), MapField.class);
+        Field someField = fields.get(0);
+        String name = someField.getName();
+        Object value = someField;
+        return Map.of(name, value);
+    }
+}
+```
+```bash
+Person: {name=private final java.lang.String demo.Person.name}
+```
+
+This is however not the result we had in mind. Instead of using `field`, we need to access the fields value. That is only possible if we make it accessible first, as the field is private and its value invisible from other classes.
+
+```java
+public class App {
+
+    public static void main( final String[] args ) {
+        final Map<String, Object> personMap = toMap( new Person( "Aden", "Attard" ) );
+
+        System.out.printf( "Person: %s%n", personMap );
+    }
+
+    private static Map<String, Object> toMap( final Object object ) {
+        List<Field> fieldsListWithAnnotation = FieldUtils.getFieldsListWithAnnotation(object.getClass(), MapField.class);
+        Field field = fieldsListWithAnnotation.get(0);
+        String name = someField.getName();
+        Object value = readValue(someField, object);
+        return Map.of(name, value);
+    }
+
+    private static Object readValue( final Field property, final Object object ) {
         try {
-            return field.getName() + "='" + field.get(this).toString() + "' ";
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            /* Access private properties */
+            property.setAccessible( true );
+
+            /* Get the property value */
+            return property.get( object );
+        } catch ( final Exception e ) {
+            /* Ignore error for this example */
+            return "shouldntHappen";
         }
-        return "can't print " + field.getName();
+    }
+
+}
+```
+```bash
+Person: {name=Aden}
+```
+
+Now that we can read one field, we want to read all the annotated fields next. For that, we refactor what we did a bit:
+
+```java
+public class App {
+
+    public static void main( final String[] args ) {
+        final Map<String, Object> personMap = toMap( new Person( "Aden", "Attard" ) );
+
+        System.out.printf( "Person: %s%n", personMap );
+    }
+
+    private static Map<String, Object> toMap( final Object object ) {
+        return FieldUtils
+                .getFieldsListWithAnnotation( object.getClass(), MapField.class )
+                .stream()
+                .collect( Collectors.toMap(
+                        field -> readName( field ),
+                        field -> readValue( field, object )
+                ) );
+    }
+
+    private static String readName( final Field property ) {
+        return property.getName();
+    }
+
+    private static Object readValue( final Field property, final Object object ) { /* ... */ }
+}
+```
+```bash
+Person: {surname=Attard, name=Aden}
+```
+
+Let's create a second class `Pet`, where not every field is annotated.
+
+```java
+public class Pet {
+
+    private final String name;
+
+    @MapField
+    private final String favouriteFood;
+
+    public Pet( final String name, final String favouriteFood ) {
+        this.name = name;
+        this.favouriteFood = favouriteFood;
     }
 }
 ```
 ```java
 public class App {
+
     public static void main( final String[] args ) {
-        Person paul = new Person("Paul", "Börding", 29);
-        System.out.println(paul.toString());
+        final Map<String, Object> personMap = toMap( new Person( "Aden", "Attard" ) );
+        final Map<String, Object> petMap = toMap( new Pet( "Fido", "Sausage Pizza" ) );
+
+        System.out.printf( "Person: %s%n", personMap );
+        System.out.printf( "Pet: %s%n", petMap );
     }
+
+    private static Map<String, Object> toMap( final Object object ) { /* ... */ }
+
+    private static String readName( final Field property ) { /* ... */ }
+
+    private static Object readValue( final Field property, final Object object ) { /* ... */ }
 }
 ```
 ```bash
-Person: name='Paul' surname='Börding' age='29'
+Person: {surname=Attard, name=Aden}
+Pet:    {favouriteFood=Sausage Pizza}
 ```
 
-This code prints the values of all fields using reflections to access the fields. We will see in the following why this is useful when we are introducing our annotation.
-
-Next, we create an annotation interface, which we want to add to some of our declared fields:
+As expected, only the value of the annotated field is being printed. However, we do not like the camel case formatting for the map key and want to have it represented by another string. To achieve that, we can add the `value()` method to the annotation interface:
 
 ```java
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface HideMeWhenPrinting {
+@Retention( RetentionPolicy.RUNTIME )
+@Target( ElementType.FIELD )
+public @interface MapFieldTo {
+
+    String value();
 }
 ```
 
-Now we add this annotation to one of our fields which we do not want to be printed within our `toString()` method:
+(Note: We also rename the `@MapField` to `@MapFieldTo` as its a better fitting name for what we are about to do)
+
+To use this method, we add the preferred map key to our `Person` and `Pet` class:
 
 ```java
 public class Person {
+
+    @MapFieldTo( "name" )
     private final String name;
-    @HideMeWhenPrinting private final String surname;
-    private int age;
 
-    public Person(String name, String surname, int age) { /* ... */ }
+    @MapFieldTo( "surname" )
+    private final String surname;
 
-    @Override
-    public String toString() { /* ... */ }
+    public Person( final String name, final String surname ) { /* ... */ }
+}
+```
+```java
+public class Pet {
 
-    private String fieldToString(Field field) { /* ... */ }
+    private final String name;
+
+    @MapFieldTo( "favourite-food" )
+    private final String favouriteFood;
+
+    public Pet( final String name, final String favouriteFood ) {
+        this.name = name;
+        this.favouriteFood = favouriteFood;
+    }
 }
 ```
 
-However, this does nothing, because Java does not know what we mean by this. We need to check for the annotation in our code.
+As when we added the annotation, this alone has no effect. We need to adjust our implementation on how we get the name for the map keys:
 
 ```java
-public class Person {
-    private final String name;
-    @HideMeWhenPrinting private final String surname;
-    private int age;
+public class App {
 
-    public Person(String name, String surname, int age) { /* ... */ }
+    public static void main( final String[] args ) { /* ... */ }
 
-    @Override
-    public String toString() {
-        Field[] fields = this.getClass().getDeclaredFields();
-        StringBuilder builder = new StringBuilder("Person: ");
-        for (Field field : fields) {
-            if (Arrays.stream(field.getAnnotations()).anyMatch(annotation -> annotation instanceof HideMeWhenPrinting)) {
-                continue;
-            }
-            builder.append(fieldToString(field));
-        }
-        return builder.toString();
+    private static Map<String, Object> toMap( final Object object ) { /* ... */ }
+
+    private static String readName( final Field property ) {
+        /* Get the MapFieldTo annotation to retrieve the value that was set */
+        final MapFieldTo mapFieldTo = property.getAnnotation( MapFieldTo.class );
+        return mapFieldTo.value();
     }
 
-    private String fieldToString(Field field) { /* ... */ }
+    private static Object readValue( final Field property, final Object object ) { /* ... */ }
 }
 ```
+```bash
+Person: {surname=Attard, name=Aden}
+Pet:    {favourite-food=Sausage Pizza}
+```
 
-From now on, within the `Person` class, we can add or remove the `@HideMeWhenPrinting` annotation anytime we like to hide one of the fields from our printed string.
+Finally, we can try to see if the `toMap(...)` function is stable even with objects that do not have any annotated fields:
 
-This is an example which is not very close to reality. Normally, custom annotations would be used in scenarios which are way more complex and need simplification. Here, we just illustrate a way to access annotations at runtime.
+```java
+public class App {
 
-In the upcoming section, we see a way to also exclude fields from being printed, but in a more convenient way.
+    public static void main( final String[] args ) {
+        final Map<String, Object> personMap = toMap( new Person( "Aden", "Attard" ) );
+        final Map<String, Object> petMap = toMap( new Pet( "Fido", "Sausage Pizza" ) );
+        final Map<String, Object> pointMap = toMap( new Point( 1, 2 ) );
+
+        System.out.printf( "Person: %s%n", personMap );
+        System.out.printf( "Pet:    %s%n", petMap );
+        System.out.printf( "Point:  %s%n", pointMap );
+    }
+
+    private static Map<String, Object> toMap( final Object object ) { /* ... */ }
+
+    private static String readName( final Field property ) { /* ... */ }
+
+    private static Object readValue( final Field property, final Object object ) { /* ... */ }
+}
+```
+```bash
+Person: {surname=Attard, name=Aden}
+Pet:    {favourite-food=Sausage Pizza}
+Point:  {}
+```
+
+With annotations, we can build ourselves comfortable ways to work with objects. We could also achieve these through other means (e.g. by implementing an interface).
+
+The next section will show annotations introduced by Lombok that serve a similar purpose as the annotation we created here.
 
 ### Project Lombok
 
