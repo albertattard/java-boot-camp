@@ -3912,8 +3912,6 @@ This is not a common practice and one should use it with caution.  The above exa
 
 ## Initialisation blocks, outer, inner and anonymous classes
 
-**🚧 Pending...**
-
 ### Static initialisation block
 
 We use constructors to initialise the object's properties.  How can we initialise static fields?  Consider the following example.
