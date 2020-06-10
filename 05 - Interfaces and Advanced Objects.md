@@ -3827,7 +3827,7 @@ The above example adds three numbers and then removes one.  Which `remove()` met
 In the above example, the `remove()` methods are removing items using different strategies.  Having the strategy part of the name would make this more meaningful without losing anything.  Following are some alternative names.
 
 1. `removeAt(int)`
-1. `removeFirstEquale(T)`
+1. `removeFirstEqual(T)`
 
 By just reading the method name, we know what will happen and we do not have to worry about using the wrong method.
 
