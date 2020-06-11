@@ -325,6 +325,7 @@ For more details, please refer to: [https://gradle.org/install/](https://gradle.
 
     Plugins
     1. [Nyan Progress Bar](https://plugins.jetbrains.com/plugin/8575-nyan-progress-bar)
+    1. [Key Promoter X](https://plugins.jetbrains.com/plugin/9792-key-promoter-x)
     1. [jclasslib Bytecode viewer](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer)
     1. [Lombok](https://plugins.jetbrains.com/plugin/6317-lombok)
     1. [Rainbow Brackets](https://plugins.jetbrains.com/plugin/10080-rainbow-brackets)
