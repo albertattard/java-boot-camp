@@ -117,7 +117,7 @@
   @include container;
 
   @include mq(md) {
-    padding-top: $sp-8;
+    padding-top: $sp-4;
     padding-bottom: $gutter-spacing-sm;
     overflow-y: auto;
     flex: 1 1 auto;
