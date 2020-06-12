@@ -21,12 +21,6 @@ $logo: "{{ site.logo | absolute_url }}";
 @import "./support/support";
 
 //
-// Import custom overrides
-//
-
-@import "./custom/custom";
-
-//
 // Import custom color scheme scss
 //
 
@@ -47,3 +41,9 @@ $logo: "{{ site.logo | absolute_url }}";
 @import "./code";
 @import "./utilities/utilities";
 @import "./overrides";
+
+//
+// Import custom overrides
+//
+@import "./custom/custom";
+@import "./custom/copy-code";

@@ -1,0 +1,23 @@
+<!-- https://www.aleksandrhovhannisyan.com/blog/dev/how-to-add-a-copy-to-clipboard-button-to-your-jekyll-blog/ -->
+<div class="code-header">
+    {% if include.file %}
+    <div class="file-name-container">
+        <span class="file-name"
+            aria-label="File name: {{ include.file }}">
+            {{ include.file }}
+        </span>
+    </div>
+    {% endif %}
+    {% unless include.copyable == false %}
+    <div class="copy-code-container">
+        <button class="copy-code-button"
+                aria-label="Copy code block to your clipboard"
+                data-code="{{ include.code | escape }}"
+                onclick="copyCode"
+        ></button>
+    </div>
+    {% endunless %}
+</div>
+```{{ include.lang }}
+{{ include.code }}
+```
