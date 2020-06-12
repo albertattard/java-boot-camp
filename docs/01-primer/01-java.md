@@ -62,10 +62,9 @@ With the understanding that this may be too technical and do not worry if you do
 
 Consider the following code fragment.
 
-```java
-int a = -7;
-int b = +a;
-```
+{% capture code %}{% raw %}int a = -7;
+int b = +a;{% endraw %}{% endcapture %}
+{% include code.html code=code lang="java" file="Unary Operator Example" %}
 
 The above code fragment shows the use of the `+` unary operator. This operator is rarely used, and its behaviour is unknown to many. The description provided by an official [Java tutorial](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/op1.html) is:
 
