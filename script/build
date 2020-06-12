@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "Packaging gem... \n"
+gem build java-boot-camp.gemspec
+
+echo "Cleaning up... \n"
+git add *.gem
+git commit -m 'Bump java-boot-camp gem package'

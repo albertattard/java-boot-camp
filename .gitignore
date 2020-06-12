@@ -1,8 +1,10 @@
-**/.DS_Store
+*.gem
+.bundle
+.sass-cache
+_site
+Gemfile.lock
+node_modules
+
+.jekyll-cache
+package-lock.json
 .idea
-
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build

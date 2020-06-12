@@ -2724,7 +2724,7 @@ The above works, as all `VeryImportantPerson` are `Person`.
 
 ### Can we type cast `null`?
 
-Yes, `null` can be type casted to any object ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5)).  We already saw something similar when answering the question [can one constructor call another constructor in the same class?](04%20-%20Classes,%20Methods%20and%20Objects.md#can-one-constructor-call-another-constructor-in-the-same-class).
+Yes, `null` can be type casted to any object ([JLS-5.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.5)).  We already saw something similar when answering the question [can one constructor call another constructor in the same class?](_original/04 - Classes, Methods and Objects.mde-constructor-call-another-constructor-in-the-same-class).
 
 ### Can we type cast primitive types?
 
@@ -2784,7 +2784,7 @@ The maximum byte value is `127` ([`Byte.MAX_VALUE`](https://docs.oracle.com/en/j
 |                         `2` | `-127` |
 |                         `3` | `-126` |
 
-We can try this in [JShell](02%20-%20Java%20Light.md#jshell).
+We can try this in [JShell](_original/02 - Java Light.md).
 
 ```java
 jshell> (byte) (127 + 3)
@@ -2928,7 +2928,7 @@ public class Person {
 }
 ```
 
-The `Person` **has a** `name` and **has an** `age`.  The `Person` class is composed from a `String` and an `int`.  Note that an emphasis was made on the **has a** phrase.  In the [inheritance section](04%20-%20Classes,%20Methods%20and%20Objects.md#inheritance), we use the phrase **is a** instead.  For example, a `LightBox` **is a** `Box`.  The following image shows the difference between inheritance and composition.
+The `Person` **has a** `name` and **has an** `age`.  The `Person` class is composed from a `String` and an `int`.  Note that an emphasis was made on the **has a** phrase.  In the [inheritance section](_original/04 - Classes, Methods and Objects.mdtance), we use the phrase **is a** instead.  For example, a `LightBox` **is a** `Box`.  The following image shows the difference between inheritance and composition.
 
 ![Inheritance and composition](assets/images/Inheritance%20and%20composition.png)
 
@@ -6129,7 +6129,7 @@ public class Coin {
 }
 ```
 
-Up to now, we can control our types using a combination of private constructors and inner static classes.  We saw this setup [before in previous examples](04%20-%20Classes,%20Methods%20and%20Objects.md#can-abstract-classes-have-private-constructors).
+Up to now, we can control our types using a combination of private constructors and inner static classes.  We saw this setup [before in previous examples](_original/04 - Classes, Methods and Objects.mdstract-classes-have-private-constructors).
 
 One of the downsides of the above approach is that the `Coin` class may become a bit bulky especially once we start pouring in logic.  Java 15 will introduce a new concept of sealed classes, where the sealed class will define the classes that it permits to extend it, as shown next.
 
