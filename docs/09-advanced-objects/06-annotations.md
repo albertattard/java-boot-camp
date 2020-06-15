@@ -25,12 +25,13 @@ We have already seen many annotations like `@Override`, `@DisplayName`, `@Test`,
 
 Let's create our own annotation now. We want to convert an object to a map which contains the annotated fields and their values. We start by creating the annotation interface.
 
-```java
+{% capture code %}package demo;
+
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.FIELD )
 public @interface MapField {
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="MapField" %}
 
 The `@Retention` specifies whether the annotation is relevant only at compile time (like `@Override`, which is only relevant to check whether the overridden function exists in the super class), or needs to be considered at runtime (in this case we want to collect the annotated fields at runtime).
 
@@ -38,7 +39,8 @@ The `@Target` defines what kind of things we want to annotate with this (e.g. fi
 
 Now we can use it already to annotate the fields which we want to add to the map:
 
-```java
+{% capture code %}package demo;
+
 public class Person {
 
   @MapField
@@ -51,14 +53,15 @@ public class Person {
     this.name = name;
     this.surname = surname;
   }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Only annotating the fields has almost no effect. We have only marked the fields so far. What is left, is using the accessing the annotation to utilize it.
 
 As a first step, let's get the first of the annotated fields and create a map from it.
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) {
@@ -74,8 +77,8 @@ public class App {
         Object value = someField;
         return Map.of(name, value);
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -85,7 +88,8 @@ Person: {name=private final java.lang.String demo.Person.name}
 
 This is however not the result we had in mind. Instead of using `field`, we need to access the fields value. That is only possible if we make it accessible first, as the field is private and its value invisible from other classes.
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) {
@@ -115,8 +119,8 @@ public class App {
         }
     }
 
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -126,7 +130,8 @@ Person: {name=Aden}
 
 Now that we can read one field, we want to read all the annotated fields next. For that, we refactor what we did a bit:
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) {
@@ -150,8 +155,8 @@ public class App {
     }
 
     private static Object readValue( final Field property, final Object object ) { /* ... */ }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -161,7 +166,8 @@ Person: {surname=Attard, name=Aden}
 
 Let's create a second class `Pet`, where not every field is annotated.
 
-```java
+{% capture code %}package demo;
+
 public class Pet {
 
     private final String name;
@@ -173,10 +179,11 @@ public class Pet {
         this.name = name;
         this.favouriteFood = favouriteFood;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Pet" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) {
@@ -192,8 +199,8 @@ public class App {
     private static String readName( final Field property ) { /* ... */ }
 
     private static Object readValue( final Field property, final Object object ) { /* ... */ }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -204,20 +211,22 @@ Pet:    {favouriteFood=Sausage Pizza}
 
 As expected, only the value of the annotated field is being printed. However, we do not like the camel case formatting for the map key and want to have it represented by another string. To achieve that, we can add the `value()` method to the annotation interface:
 
-```java
+{% capture code %}package demo;
+
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.FIELD )
 public @interface MapFieldTo {
 
     String value();
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="MapFieldTo" %}
 
 (Note: We also rename the `@MapField` to `@MapFieldTo` as it's a better fitting name for what we are about to do)
 
 To use this method, we add the preferred map key to our `Person` and `Pet` class:
 
-```java
+{% capture code %}package demo;
+
 public class Person {
 
     @MapFieldTo( "name" )
@@ -227,10 +236,11 @@ public class Person {
     private final String surname;
 
     public Person( final String name, final String surname ) { /* ... */ }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class Pet {
 
     private final String name;
@@ -242,12 +252,13 @@ public class Pet {
         this.name = name;
         this.favouriteFood = favouriteFood;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Pet" %}
 
 As when we added the annotation, this alone has no effect. We need to adjust our implementation on how we get the name for the map keys:
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) { /* ... */ }
@@ -261,8 +272,8 @@ public class App {
     }
 
     private static Object readValue( final Field property, final Object object ) { /* ... */ }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -273,7 +284,8 @@ Pet:    {favourite-food=Sausage Pizza}
 
 Finally, we can try to see if the `toMap(...)` function is stable even with objects that do not have any annotated fields:
 
-```java
+{% capture code %}package demo;
+
 public class App {
 
     public static void main( final String[] args ) {
@@ -291,8 +303,8 @@ public class App {
     private static String readName( final Field property ) { /* ... */ }
 
     private static Object readValue( final Field property, final Object object ) { /* ... */ }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -314,7 +326,8 @@ The idea of Lombok is to make Java less verbose. Often, when we create a new Cla
 
 We revisit now our example of the `Person` class. It has the private final fields `name` and `surname`, and an `age` which can be changed through a setter. The fields can be accessed through getters. Two `Person`s are considered equal, if their `name` and `surname` are the same (`equals` and `hashCode` method). Finally, the `Person` can be converted to a String using `toString`.
 
-```java
+{% capture code %}package demo;
+
 import java.util.Objects;
 
 public class Person {
@@ -367,12 +380,13 @@ public class Person {
                 ", age=" + age +
                 '}';
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Within this section, we learn how to shorten this class utilizing Lombok to this:
 
-```java
+{% capture code %}package demo;
+
 import lombok.*;
 
 @Getter
@@ -384,8 +398,8 @@ public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 In order to use Lombok, we need to add the library to our gradle dependencies.
 
@@ -409,7 +423,8 @@ Work through the next few subsections and then try it for yourself without looki
 
 Lombok's `@ToString` annotation takes all the fields of an entity and converts them to a readable String.
 
-```java
+{% capture code %}package demo;
+
 public class Person {
 
     private final String name;
@@ -440,12 +455,13 @@ public class Person {
                 ", age=" + age +
                 '}';
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @ToString
 public class Person {
 
@@ -468,19 +484,20 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 This sample application prints the `String` representation of a `Person`:
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person a = new Person("Paul", "Börding", 29);
         System.out.println(a.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 The above will print.
 
@@ -490,7 +507,8 @@ Person(name=Paul, surname=Börding, age=29)
 
 We can explicitly exclude fields using the `@ToString.Exclude`:
 
-```java
+{% capture code %}package demo;
+
 @ToString
 public class Person {
 
@@ -513,8 +531,8 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 The above will print.
 
@@ -524,7 +542,8 @@ Person(name=Paul, age=29)
 
 or by defining the excluded fields at the `@ToString` annotation directly:
 
-```java
+{% capture code %}package demo;
+
 @ToString(exclude = "surname")
 public class Person {
 
@@ -547,12 +566,13 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 If we only want to use a few of the fields, we can either set them in the annotation using `of` or set `onlyExplicitlyIncluded = true` and use the `@ToString.Include` annotation:
 
-```java
+{% capture code %}package demo;
+
 @ToString(of = "name")
 public class Person {
     private final String name;
@@ -574,12 +594,13 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 and
 
-```java
+{% capture code %}package demo;
+
 @ToString(onlyExplicitlyIncluded = true)
 public class Person {
     @ToString.Include private final String name;
@@ -601,8 +622,8 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 both print:
 
@@ -612,7 +633,8 @@ Person(name=Paul)
 
 If we have a static value which we also want to include, we can use the `@ToString.Include` annotation on it:
 
-```java
+{% capture code %}package demo;
+
 @ToString
 public class Person {
     @ToString.Include private final static String SPECIES = "Human";
@@ -636,8 +658,8 @@ public class Person {
 
     @Override
     public int hashCode() {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 The above will print.
 
@@ -647,7 +669,8 @@ Person(SPECIES=Human, name=Paul, surname=Börding, age=29)
 
 It also works, if other entities are involved:
 
-```java
+{% capture code %}package demo;
+
 @ToString
 public class Person {
     private final String name;
@@ -678,8 +701,8 @@ public class App {
         Person b = new Person("Someone", "Else", 35, a);
         System.out.println(b.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 The above will print.
 
@@ -693,7 +716,8 @@ Be careful with this, as it can cause an endless loop (if `a`'s neighbor is `b` 
 
 Lombok's `@EqualsAndHashCode` annotation takes all the fields of an entity and checks them for equality when calling the `equals` method. Furthermore, it generates a hash code using all the fields.
 
-```java
+{% capture code %}package demo;
+
 @ToString
 public class Person {
 
@@ -725,12 +749,13 @@ public class Person {
     public int hashCode() {
         return Objects.hash(name, surname, age);
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @ToString
 @EqualsAndHashCode
 public class Person {
@@ -748,12 +773,13 @@ public class Person {
     public int getAge() {/* ... */}
 
     public void setAge(int age) {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Like for `@ToString`, we can explicitly include or exclude fields using the same parameters as for the `@ToString` annotation.
 
-```java
+{% capture code %}package demo;
+
 @ToString
 @EqualsAndHashCode(exclude = "age")
 public class Person {
@@ -771,8 +797,8 @@ public class Person {
     public int getAge() {/* ... */}
 
     public void setAge(int age) {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 ### @Getter and @Setter
 
@@ -780,7 +806,8 @@ When we access fields or want to manipulate them, it is highly recommended to us
 
 With `@Getter`, all fields of a class will receive a getter:
 
-```java
+{% capture code %}package demo;
+
 @ToString
 @EqualsAndHashCode(exclude = "age")
 public class Person {
@@ -806,12 +833,13 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @Getter
 @ToString
 @EqualsAndHashCode(exclude = "age")
@@ -826,12 +854,13 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 With `@Setter`, all non-final fields of a class receive a setter method.
 
-```java
+{% capture code %}package demo;
+
 @Getter
 @Setter
 @ToString
@@ -843,12 +872,13 @@ public class Person {
     private int age;
 
     public Person( final String name, final String surname, final int age ) {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 If getters or setters are only required for certain fields, the can be explicitly defined where they are needed. In the following scenario, `age` has only a setter, but no getter:
 
-```java
+{% capture code %}package demo;
+
 @Setter
 @ToString
 @EqualsAndHashCode(exclude = "age")
@@ -858,12 +888,13 @@ public class Person {
     private int age;
 
     public Person( final String name, final String surname, final int age ) {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 By default, all getters and setters can be publicly accessed. If you want to reduce the access, you can set the `value` parameter:
 
-```java
+{% capture code %}package demo;
+
 @Setter(value = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode(exclude = "age")
@@ -873,8 +904,8 @@ public class Person {
     private int age;
 
     public Person( final String name, final String surname, final int age ) {/* ... */}
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Now, only the surname can be publicly accessed; the name can be accessed by subclasses; the age can only be set within the same class.
 
@@ -884,7 +915,8 @@ Another feature of the `@Getter` annotation is the caching of values to improve 
 
 Instead of writing out all the constructors, we can use the Lombok constructor annotations. The `@AllArgsConstructor` creates a constructor which has all fields as input:
 
-```java
+{% capture code %}package demo;
+
 @Getter
 @Setter
 @ToString
@@ -900,12 +932,13 @@ public class Person {
         this.surname = surname;
         this.age = age;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -916,12 +949,13 @@ public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Often, we want to only create an object with the final fields and set the non-final fields later on (e.g. when we have more information). For this, we can use the `@RequiredArgsConstructor`:
 
-```java
+{% capture code %}package demo;
+
 @Getter
 @Setter
 @ToString
@@ -936,12 +970,13 @@ public class Person {
         this.name = name;
         this.surname = surname;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @RequiredArgsConstructor
 @Getter
 @Setter
@@ -952,13 +987,14 @@ public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 When we have defined a constructor of a class, the empty default constructor is no longer available. If we still want to have it, we can create it using the annotation `@NoArgsConstructor`. Be aware, this is only possible if we have no unset final fields, as final fields need to be defined when creating an object.
 
 
-```java
+{% capture code %}package demo;
+
 @Getter
 @Setter
 @ToString
@@ -977,12 +1013,13 @@ public class Person {
         this.surname = surname;
         this.age = age;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 becomes
 
-```java
+{% capture code %}package demo;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -994,36 +1031,39 @@ public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Note: If all fields are final, `@RequiredArgsConstructor` is the same as `@AllArgsConstructor`. Don't use both at the same time.
 
 Note: If the class has no fields at all, `@NoArgsConstructor`, `@RequiredArgsConstructor`, and `@AllArgsConstructor` are all equivalent. Don't use more than one of them at the same time.
 
-```java
+{% capture code %}package demo;
+
 // Don't do this! Runtime error!
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Person {
     private final String name;
     private final String surname;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 // Don't do this! Runtime error!
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Person {
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 ### `@Data`
 
 A common combination of the aforementioned annotations is:
 
-```java
+{% capture code %}package demo;
+
 @ToString
 @EqualsAndHashCode
 @Getter
@@ -1033,30 +1073,32 @@ public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 This can be shortened using the `@Data` annotation:
 
-```java
+{% capture code %}package demo;
+
 @Data
 public class Person {
     private final String name;
     private final String surname;
     private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 Excluding certain fields from `@ToString` or `@EqualsAndHashCode` can still be done by excluding them explicitly on the field:
 
-```java
+{% capture code %}package demo;
+
 @Data
 public class Person {
   private final String name;
   @ToString.Exclude private final String surname;
   @EqualsAndHashCode.Exclude private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 ### `@Builder`
 
@@ -1066,19 +1108,21 @@ To avoid that, the builder-pattern can be introduced. We will cover the concrete
 
 The `@Builder` annotation from Lombok improves this situation:
 
-```java
+{% capture code %}package demo;
+
 @Builder
 @Data
 public class Person {
   private final String name;
   private final String surname;
   private int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 When we have annotated a class with `@Builder`, we can construct it through a static `builder()`-method instead of a constructor:
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paulBuilder = Person.builder()
@@ -1092,14 +1136,15 @@ public class App {
         System.out.println(paulBuilder.toString());
         System.out.println(paulConstructor.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 In this example, we first call the builder, then we assign (in any order) all the fields, and finally we call `build()` to construct the `Person`. You might notice, that this is more readable than the constructor, since the field names are right there in the code.
 
 Now let's extend our example from above with the field `country`:
 
-```java
+{% capture code %}package demo;
+
 @Builder
 @Data
 public class Person {
@@ -1107,9 +1152,11 @@ public class Person {
   private final String surname;
   private int age;
   private String country;
-}
-```
-```java
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
+
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paulBuilder = Person.builder()
@@ -1123,14 +1170,15 @@ public class App {
         System.out.println(paulBuilder.toString());
         System.out.println(paulConstructor.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 Notice how we need to extend the constructor call but no change needs to be done to the builder call. Any unassigned field is automatically considered `null`. This is especially useful for tests, as only the fields under test need to be assigned, making the test more understandable.
 
 Let's add another field `hobbies` which shall be a list of activities:
 
-```java
+{% capture code %}package demo;
+
 @Builder
 @Data
 public class Person {
@@ -1139,10 +1187,11 @@ public class Person {
   private int age;
   private String country;
   private List<String> hobbies;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paulBuilder = Person.builder()
@@ -1153,13 +1202,14 @@ public class App {
 
         System.out.println(paulBuilder.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 Notice how we create a `List` of `String`s within our builder. Depending on the context or personal preference, it can be better to add them one by one instead of instantiating the `List`. For that, we need to add the `@Singular` annotation to the `hobbies` field:
 
 
-```java
+{% capture code %}package demo;
+
 @Builder
 @Data
 public class Person {
@@ -1168,10 +1218,11 @@ public class Person {
   private int age;
   private String country;
   @Singular private List<String> hobbies;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paulBuilder = Person.builder()
@@ -1184,8 +1235,8 @@ public class App {
 
         System.out.println(paulBuilder.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 Notice here how Lombok automatically uses the singular of the word `hobbies`, which is `hobby`, to name the method. This can be irritating in practice, be aware. You can still use the `hobbies(...)` method to add the hobbies as a `List`.
 
@@ -1193,7 +1244,8 @@ Again, this functionality is very useful in testing for creating test objects in
 
 We can set the property `toBuilder` to `true` to get another method which allows us to convert entities back into a builder. That way we can add field values later on, change them, or create copies easily.
 
-```java
+{% capture code %}package demo;
+
 @Builder(toBuilder = true)
 @Data
 public class Person {
@@ -1201,10 +1253,11 @@ public class Person {
   private final String surname;
   private int age;
   private String country;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paul = Person.builder()
@@ -1222,8 +1275,8 @@ public class App {
         System.out.println(paul.toString());
         System.out.println(agedPaul.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 ### `@NonNull`
 
@@ -1231,16 +1284,19 @@ Lombok has it's own implementation of the `@NonNull` annotation. If you are in a
 
 The following example throws a `NullPointerException` (but with a relatively useful error message):
 
-```java
+{% capture code %}package demo;
+
 @Builder
 @Data
 public class Person {
     @NonNull private final String name;
     private final String surname;
     private int age;
-}
-```
-```java
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
+
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paulBuilder = Person.builder()
@@ -1250,8 +1306,8 @@ public class App {
 
         System.out.println(paulBuilder.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 ```bash
 Exception in thread "main" java.lang.NullPointerException: name is marked non-null but is null
@@ -1266,18 +1322,20 @@ Similarly to `@Data`, `@Value` gives basic functionality to a class. Value class
 
 `@Value` combines `@RequiredArgsConstructor`, `@Getter`, `@ToString`, and `@EqualsAndHashCode`.
 
-```java
+{% capture code %}package demo;
+
 @Value
 public class Person {
     String name;
     String surname;
     int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
 In case we want to change one of the fields, we need to copy the entity with the new field set.
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paul = new Person("Paul", "Börding", 29);
@@ -1285,22 +1343,24 @@ public class App {
         paul = new Person(paul.getName(), paul.getSurname(), paul.getAge() + 1);
         System.out.println(paul.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 Luckily, Lombok provides the `@With` annotation, which grants methods to create a copy with a changed field value, such that we do not need to call the constructor and getters each time:
 
-```java
+{% capture code %}package demo;
+
 @With
 @Value
 public class Person {
     String name;
     String surname;
     int age;
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paul = new Person("Paul", "Börding", 29);
@@ -1308,12 +1368,13 @@ public class App {
         paul = paul.withAge(paul.getAge() + 1);
         System.out.println(paul.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 Like the builder, the with-calls can be piped in case we want to change multiple properties:
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paul = new Person("Paul", "Börding", 29);
@@ -1323,8 +1384,8 @@ public class App {
                 .withSurname("Attard");
         System.out.println(paul.toString());
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 ### `@SneakyThrows`
 
@@ -1332,7 +1393,8 @@ public class App {
 
 Consider the following code and the result it prints:
 
-```java
+{% capture code %}package demo;
+
 @AllArgsConstructor
 public class Person {
     private final String name;
@@ -1346,17 +1408,18 @@ public class Person {
             arithmeticException.printStackTrace();
         }
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}
 
-```java
+{% capture code %}package demo;
+
 public class App {
     public static void main( final String[] args ) {
         Person paul = new Person("Paul", "Börding", 29);
         paul.superRiskyOperation();
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="App" %}
 
 ```bash
 java.lang.ArithmeticException: / by zero
@@ -1366,7 +1429,8 @@ java.lang.ArithmeticException: / by zero
 
 With `@SneakyThrows`, the code is more lightweight with the same result:
 
-```java
+{% capture code %}package demo;
+
 @AllArgsConstructor
 public class Person {
     private final String name;
@@ -1377,5 +1441,5 @@ public class Person {
     public void superRiskyOperation() {
         int divideByZero = age / 0;
     }
-}
-```
+}{% endcapture %}
+{% include code.html code=code lang="java" file="Person" %}

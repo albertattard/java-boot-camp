@@ -1,9 +1,12 @@
 function getTextContent(copyCodeButton) {
-    const dataCode = copyCodeButton.getAttribute('data-code');
+    let dataCode = copyCodeButton.getAttribute('data-code');
 
     // Did not find another way to detect line breaks
     // than converting them to <br>s and back again
-    return dataCode.replace("<br /> ", "\n");
+    while(dataCode.indexOf("<br /> ") !== -1) {
+      dataCode = dataCode.replace("<br /> ", "\n");
+    }
+    return dataCode;
 }
 
 const copyCode = (copyCodeButton) => {
