@@ -1058,7 +1058,7 @@ public class Person {
 }{% endcapture %}
 {% include code.html code=code lang="java" file="Person" %}
 
-### `@Data`
+### @Data
 
 A common combination of the aforementioned annotations is:
 
@@ -1100,7 +1100,7 @@ public class Person {
 }{% endcapture %}
 {% include code.html code=code lang="java" file="Person" %}
 
-### `@Builder`
+### @Builder
 
 Sometimes in Java, we see a class growing and getting more fields over time. If we use constructor calls in our production or test code, this can mean a lot of annoying rework, since we either need to add a field to every single call or we need to maintain all of our old constructors with less parameters.
 
@@ -1278,7 +1278,7 @@ public class App {
 }{% endcapture %}
 {% include code.html code=code lang="java" file="App" %}
 
-### `@NonNull`
+### @NonNull
 
 Lombok has it's own implementation of the `@NonNull` annotation. If you are in a context of using Lombok, you should prefer to use this one. With this annotation, you can make sure that certain fields cannot be `null`.
 
@@ -1316,7 +1316,7 @@ Exception in thread "main" java.lang.NullPointerException: name is marked non-nu
 	at demo.App.main(App.java:11)
 ```
 
-### `@Value` and `@With`
+### @Value and @With
 
 Similarly to `@Data`, `@Value` gives basic functionality to a class. Value classes are immutable, meaning they are created once and never changed. Hence, we can omid the `private final`, as these are set for every field anyway.
 
@@ -1387,7 +1387,7 @@ public class App {
 }{% endcapture %}
 {% include code.html code=code lang="java" file="App" %}
 
-### `@SneakyThrows`
+### @SneakyThrows
 
 `@SneakyThrows` can be used to shorten try-catch-blocks. Especially, when you expect problems to occur rarely and you think, you do not need proper exception handling.
 
