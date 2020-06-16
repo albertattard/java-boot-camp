@@ -24,6 +24,8 @@ $logo: "{{ site.logo | absolute_url }}";
 // Import custom color scheme scss
 //
 
+@import "./color_schemes/java.scss";
+
 {% if site.color_scheme == "dark" %}
 @import "./color_schemes/dark.scss";
 {% endif %}
