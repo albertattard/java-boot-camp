@@ -11,6 +11,10 @@ code {
   border-radius: $border-radius;
 }
 
+pre {
+  line-height: 1em;
+}
+
 pre.highlight,
 figure.highlight {
   padding: $sp-3;
