@@ -1,0 +1,31 @@
+.warning {
+  padding: 0.2em 0.15em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-weight: 400;
+  text-transform: uppercase;
+  background-color: $yellow-000;
+  border: $border $grey-dk-100;
+  border-radius: $border-radius;
+}
+
+.warning .title {
+  padding-right: 1em;
+  font-weight: bold;
+}
+
+.note {
+  padding: 0.2em 0.15em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-weight: 400;
+  background-color: $yellow-000;
+  border: $border $grey-dk-100;
+  border-radius: $border-radius;
+}
+
+.note .title {
+  padding-right: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}

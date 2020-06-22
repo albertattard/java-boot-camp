@@ -43,6 +43,7 @@ $logo: "{{ site.logo | absolute_url }}";
 @import "./code";
 @import "./utilities/utilities";
 @import "./overrides";
+@import "./notifications";
 
 //
 // Import custom overrides

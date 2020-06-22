@@ -17,6 +17,25 @@ permalink: docs/advanced-objects/generics/
 
 ---
 
+## Raw Types
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List children = Arrays.asList( "Jade", "Aden" );
+    System.out.printf( "Children: %s%n", children );
+  }
+}
+```
+
+{% include custom/dose_not_compile.html %}
+
 ## Generics
 
 **🚧 Pending...**
