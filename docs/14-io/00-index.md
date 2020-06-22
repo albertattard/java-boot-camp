@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Testing
-nav_order: 12
+title: IO (Streams and Readers)
+nav_order: 14
 has_children: true
-permalink: docs/testing/
+permalink: docs/io/
 ---
 
-# Testing
+# IO (Streams and Readers)
 
 ## Setup
 

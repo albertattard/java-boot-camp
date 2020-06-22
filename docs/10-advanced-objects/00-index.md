@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Design patterns
-nav_order: 16
+title: Advanced Objects
+nav_order: 10
 has_children: true
-permalink: docs/design-patterns/
+permalink: docs/advanced-objects/
 ---
 
-# Design patterns
+# Advanced Objects
 
 ## Setup
 

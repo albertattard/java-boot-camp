@@ -1,12 +1,12 @@
 ---
 layout: default
-title: IO (Streams and Readers)
-nav_order: 13
+title: Databases
+nav_order: 15
 has_children: true
-permalink: docs/io/
+permalink: docs/databases/
 ---
 
-# IO (Streams and Readers)
+# Databases
 
 ## Setup
 

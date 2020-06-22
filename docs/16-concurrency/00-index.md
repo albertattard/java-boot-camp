@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Advanced Objects
-nav_order: 9
+title: Concurrency
+nav_order: 16
 has_children: true
-permalink: docs/advanced-objects/
+permalink: docs/concurrency/
 ---
 
-# Advanced Objects
+# Concurrency
 
 ## Setup
 

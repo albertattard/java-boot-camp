@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Concurrency
-nav_order: 15
+title: Design patterns
+nav_order: 17
 has_children: true
-permalink: docs/concurrency/
+permalink: docs/design-patterns/
 ---
 
-# Concurrency
+# Design patterns
 
 ## Setup
 
