@@ -188,3 +188,40 @@ The above method will print the following.
 ```bash
 The last child, Aden, is 11 years old
 ```
+
+## Can we use generics as the parameter type?
+
+Yes.  The method parameters can be of generic types too.
+
+Consider the example where we need to use a default value if the given one is `null`.  This is quite common, and it is good to capture it as a method, both from a readability point of view and code reuse.  Consider the following fragment.
+
+```java
+  private static <T> T defaultIfNull( final T value, final T defaultValue ) {
+    return value == null ? defaultValue : value;
+  }
+```
+
+The method shown above takes two parameters of the same type and returns the first parameters if it is not `null`, otherwise the method returns the second parameters.  Following is a complete example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final String a = defaultIfNull( "a", "DEFAULT" );
+    final String b = defaultIfNull( null, "DEFAULT" );
+    final int c = defaultIfNull( null, 7 );
+
+    System.out.printf( "a: %s%n", a );
+    System.out.printf( "b: %s%n", b );
+    System.out.printf( "c: %d%n", c );
+  }
+
+  private static <T> T defaultIfNull( final T value, final T defaultValue ) {
+    return value == null ? defaultValue : value;
+  }
+}
+```
+
+We can use primitives too, as these are automatically converted to their respective wrapper.  Note that if we provide `null` as the `defaultValue`, then we will cause a `NullPointerException` to be thrown as `null` cannot be converted to the primitive type `int`.
