@@ -1403,9 +1403,9 @@ public class Person {
 
     public void superRiskyOperation() {
         try {
-            int divideByZero = age / 0;
+            new FileReader(new File("/path/that/does/not/exist"));
         } catch(ArithmeticException arithmeticException) {
-            arithmeticException.printStackTrace();
+            System.out.println("Reading the file failed!");
         }
     }
 }{% endcapture %}
@@ -1422,12 +1422,10 @@ public class App {
 {% include code.html code=code lang="java" file="App" %}
 
 ```bash
-java.lang.ArithmeticException: / by zero
-	at demo.Person.superRiskyOperation(Person.java:13)
-	at demo.App.main(App.java:11)
+Reading the file failed!
 ```
 
-With `@SneakyThrows`, the code is more lightweight with the same result:
+With `@SneakyThrows`, the code is more lightweight, but using the default catch exception behaviour (print stack trace):
 
 {% capture code %}package demo;
 
@@ -1439,7 +1437,7 @@ public class Person {
 
     @SneakyThrows
     public void superRiskyOperation() {
-        int divideByZero = age / 0;
+        new FileReader(new File("/path/that/does/not/exist"));
     }
 }{% endcapture %}
 {% include code.html code=code lang="java" file="Person" %}
