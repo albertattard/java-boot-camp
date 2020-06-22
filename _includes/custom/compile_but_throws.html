@@ -1,0 +1,8 @@
+<div class="warning">
+  <span class="title">
+    &#9888; The following example will compile but will throw <code>{{ include.e }}</code>!!
+  </span>
+  {%- if include.details -%}
+  <span class="details">{{ include.details }}</span>
+  {%- endif -%}
+</div>
