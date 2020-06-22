@@ -225,3 +225,34 @@ public class App {
 ```
 
 We can use primitives too, as these are automatically converted to their respective wrapper.  Note that if we provide `null` as the `defaultValue`, then we will cause a `NullPointerException` to be thrown as `null` cannot be converted to the primitive type `int`.
+
+## Can we use different generic types?
+
+Yes.  We can use more than one generic type.
+
+Consider the following, meaningless function
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    print( true, "string", 7 );
+    print( false, "string", 4 );
+  }
+
+  private static <A, B> void print( final boolean printFirst, final A first, final B second ) {
+    if ( printFirst ) {
+      System.out.println( first );
+    } else {
+      System.out.println( second );
+    }
+  }
+}
+```
+
+```bash
+string
+4
+```
