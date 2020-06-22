@@ -19,9 +19,9 @@ permalink: docs/advanced-objects/generics/
 
 ## Raw Types
 
-Consider a list of names as shown in the following example.
+Consider a list of names, as shown in the following example.
 
-{% include custom/not_recommended.html details="The following example makes use of raw types, which are now discouraged" %}
+{% include custom/not_recommended.html details="The following example makes use of <em>raw types</em>, which are now discouraged" %}
 
 ```java
 package demo;
@@ -40,13 +40,13 @@ public class App {
 }
 ```
 
-The above example will print the following.
+The above example makes use of _raw types_, where we create a list without providing any hints to Java about the contents of the lists.  Our list will contain names, represented by the `String` type. This example will print the following.
 
 ```bash
 Children: [Jade, Aden]
 ```
 
-Before Java 1.5, we no means to indicate to Java what's the content of the list.  This was quite annoying as we could not use the output of the list without casting it.  Consider the following example.
+Before Java 1.5, we had no means to indicate to Java what's the content of the list.  This was quite annoying as we could not use the output of the list without casting it.  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -70,7 +70,7 @@ public class App {
 }
 ```
 
-The above does not compile as Java assumes that the list contains `Object`s and not `String`s.
+The above example does not compile.  The list may contain anything and thus Java has no way to be certain that the given element is of type `String`.
 
 ```bash
 src/main/java/demo/App.java:12: error: incompatible types: Object cannot be converted to String
@@ -78,7 +78,13 @@ src/main/java/demo/App.java:12: error: incompatible types: Object cannot be conv
                                           ^
 ```
 
+Despite teh fact that we know what the content of the list is, we have to type cast the result to the required type, as shown in the following fragment.
 
+```java
+    final String firstChild = (String) children.get( 0 );
+```
+
+Following is the complete example.
 
 ```java
 package demo;
@@ -100,55 +106,7 @@ public class App {
 }
 ```
 
-
-
-Item 26: Don’t use raw types
-https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev26
-
-
-Item 27: Eliminate unchecked warnings
-https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev27
-
-
-```bash
-Note: src/main/java/demo/App.java uses unchecked or unsafe operations.
-Note: Recompile with -Xlint:unchecked for details.
-```
-
-```groovy
-tasks.withType(JavaCompile).each {
-  it.options.deprecation = true
-  it.options.compilerArgs.add('-Xlint:unchecked')
-}
-```
-
-```groovy
-tasks.withType(JavaCompile).each {
-  it.options.deprecation = true
-  it.options.compilerArgs.add('-Xlint:unchecked')
-  it.options.compilerArgs.add('--enable-preview')
-}
-```
-
-```bash
-$ ./gradlew clean build
-
-> Task :compileJava
-src/main/java/demo/App.java:10: warning: [unchecked] unchecked call to add(E) as a member of the raw type List
-    children.add( "Jade" );
-                ^
-  where E is a type-variable:
-    E extends Object declared in interface List
-src/main/java/demo/App.java:11: warning: [unchecked] unchecked call to add(E) as a member of the raw type List
-    children.add( "Aden" );
-                ^
-  where E is a type-variable:
-    E extends Object declared in interface List
-2 warnings
-
-BUILD SUCCESSFUL in 2s
-10 actionable tasks: 10 executed
-```
+While casting elements was annoying this was not the main problem with raw types.  Consider the following example.
 
 {% include custom/compile_but_throws.html e="ClassCastException" %}
 
@@ -177,11 +135,63 @@ public class App {
 }
 ```
 
+In the above example, we are adding a new element in the list as the first element of type `Integer`.  Later on, we are retrieving the first element and casting it into a `String`, which will cause a `ClassCastException` to be thrown, as shown next.
+
 ```bash
 Children: [7, Jade, Aden]
 Exception in thread "main" java.lang.ClassCastException: class java.lang.Integer cannot be cast to class java.lang.String (java.lang.Integer and java.lang.String are in module java.base of loader 'bootstrap')
 	at demo.App.main(App.java:19)
 ```
+
+Raw types are quite error prone as the compiler cannot help us here.  The compiler produces warnings whenever these are used.
+
+```bash
+Note: src/main/java/demo/App.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+```
+
+We can see the warnings by adding a new flag to the compiler within the `build.gradle` file, as shown next.
+
+```groovy
+tasks.withType(JavaCompile).each {
+  it.options.deprecation = true
+  it.options.compilerArgs.add('-Xlint:unchecked')
+}
+```
+
+We can have more than one compiler flag.  For example, when using preview features, we also as the `--enable-preview` flag as shown next.
+
+```groovy
+tasks.withType(JavaCompile).each {
+  it.options.deprecation = true
+  it.options.compilerArgs.add('-Xlint:unchecked')
+  it.options.compilerArgs.add('--enable-preview')
+}
+```
+
+Compiling the class with the `-Xlint:unchecked` flag will show all warnings.
+
+```bash
+$ ./gradlew clean build
+
+> Task :compileJava
+src/main/java/demo/App.java:10: warning: [unchecked] unchecked call to add(E) as a member of the raw type List
+    children.add( "Jade" );
+                ^
+  where E is a type-variable:
+    E extends Object declared in interface List
+src/main/java/demo/App.java:11: warning: [unchecked] unchecked call to add(E) as a member of the raw type List
+    children.add( "Aden" );
+                ^
+  where E is a type-variable:
+    E extends Object declared in interface List
+2 warnings
+
+BUILD SUCCESSFUL in 2s
+10 actionable tasks: 10 executed
+```
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097) advise against usage of raw types, in [Item 26: Don’t use raw types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev26), and recommends the use of [Generics, discussed next](#generics).  The next item in the same chapter, [Item 27: Eliminate unchecked warnings](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev27), strongly recommends getting rid of unchecked warnings too.
 
 ## Generics
 
