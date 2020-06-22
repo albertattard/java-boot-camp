@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Generics
-parent: Advanced Objects
+parent: Generics
 nav_order: 7
-permalink: docs/advanced-objects/generics/
+permalink: docs/generics/generics/
 ---
 
 # Generics
