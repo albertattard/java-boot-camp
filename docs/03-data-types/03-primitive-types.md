@@ -17,7 +17,7 @@ permalink: docs/data-types/primitive-types/
 
 ---
 
-# What are the primitive types?
+## What are the primitive types?
 
 Java has eight primitive types and **no more can be added**.
 
@@ -36,7 +36,11 @@ The primitive types in Java, are all in lower case.  It is an `int` and not `Int
 
 Note that the `String` type is not in the above list.
 
-## Signed and unsigned integrals
+## What are the wrapper types?
+
+{% include custom/pending.html %}
+
+## Does Java support unsigned integrals?
 
 Java 8 introduces unsigned `int` and `long` as shown in the following example.
 

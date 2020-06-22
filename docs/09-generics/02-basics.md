@@ -245,3 +245,34 @@ public class App {
 ```
 
 The above example, compiles as the list can contain `Object`s and not just `String`s.  **Avoid using the diamond operator when the type cannot be deducted from the left-hand side of the expression**.
+
+## Can we use generics with primitive types?
+
+
+**No**.  Generics only work with reference types.
+
+Java 1.5 also introduced [autoboxing]({{ '/docs/data-types/autoboxing/' | absolute_url }}), which simplifies the use of [primitive types]({{ '/docs/data-types/primitive-types/' | absolute_url }}).  In a nutshell, Java converts our primitives into reference type through the respective [wrapper]({{ '/docs/data-types/primitive-types/#what-are-the-wrapper-types' | absolute_url }}).
+
+Generics work only with reference types and primitives are converted to reference types.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Integer> numbers = new ArrayList<>();
+    numbers.add( 7 );
+    numbers.add( 4 );
+
+    System.out.printf( "Numbers: %s%n", numbers );
+  }
+}
+```
+
+The variable `numbers` is a list of type `Integer` (reference type) and not `int` (reference type).  The `int` literals `7` and `4` are converted to `Integer`s using the [`Integer.valueOf()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#valueOf(int)) method.
+
+Creating an object from a primitive takes more space as objects carry an overhead.  With that said, the [static factory method]({{ '/docs/simple-objects/constructors/#what-are-static-factory-methods' | absolute_url }}) `valueOf()` caches some values to save up memory.
