@@ -2,7 +2,7 @@
 layout: default
 title: Raw Types
 parent: Generics
-nav_order: 7
+nav_order: 1
 permalink: docs/generics/raw-types/
 ---
 
@@ -42,13 +42,13 @@ public class App {
 }
 ```
 
-The above example makes use of _raw types_, where we create a list without providing any hints to Java about the type of content of the lists.  Our list will contain names, represented by the `String` type.  This example will print the following.
+The above example makes use of _raw types_, where we create a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) without providing any hints to Java about the type of content of the `List`.  Our `List` will contain names, represented by the `String` type.  This example will print the following.
 
 ```bash
 Children: [Jade, Aden]
 ```
 
-Before Java 1.5, we had no means to indicate to Java what's the content of the list.  This was quite annoying as we could not use the output of the list without casting it.  Consider the following example.
+Before Java 1.5, we had no means to indicate to Java what's the content of the `List`.  This was quite annoying as we could not use the output of the list without casting it.  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
