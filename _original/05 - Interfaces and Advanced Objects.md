@@ -304,7 +304,7 @@ The ability to determine what method will be executed is referred to as a [polym
 
 We cannot create an instance of an interface, as interfaces are abstract by nature.  The following example will not compile.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -375,7 +375,7 @@ public interface CanShoot {
 
 The above is a valid functional interface as it only has one abstract method, `shoot()`.  The other methods are not abstract.  Now consider the following interface example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -564,7 +564,7 @@ Invoke the getClass(): class demo.App$1
 
 Lambda cannot access interface default methods, like inner anonymous classes or other implementations can do.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -933,7 +933,7 @@ public interface CanShareWithClient {
 
 We can refactor the method `sendToClient()` such that it takes an instance of `CanShareWithClient` instead of `Object`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -953,7 +953,7 @@ class NonSensitiveInformation { /* ... */ }
 
 Our `SensitiveInformation` and `NonSensitiveInformation` classes do not implement the marker interface `CanShareWithClient`, thus we cannot call the `sendToClient()` method and pass our objects, as yet.  We can have any class that can be safely shared with the client implement the marker interface `CanShareWithClient` and then use the `sendToClient()` method.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1192,7 +1192,7 @@ Both interfaces have a default method, `ignite()`.  Note that the methods need t
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -2670,7 +2670,7 @@ public class App {
 
 In the above example, we create a `Person` and then assign it to the variable `a`, of type `Object`.  It is important to understand that variable `a` is of type `Object`.  Variable `b` is of type `Person`, which is more specific than `Object`.  We cannot simply assign `a` to `b`.  The following example will not compile.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3325,7 +3325,7 @@ demo.Person@6ce253f1
 
 Using the `@Override` annotation, we can communicate our intention to the compiler, which can then check and make sure that our method is really overriding a method in the parent class.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3460,7 +3460,7 @@ public class GreenAlgae extends Plant {
 
 Note, we cannot reduce the visibility of a method.  For example, if a method is defined `public` in a parent class, a subclass cannot override it and make it `protected`, *package-private* or `private`.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3712,7 +3712,7 @@ Java will find the closest method matching the given parameters.  **The choice o
 
 **No**.  Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by their return type.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -5240,7 +5240,7 @@ Difference for inner instance classes, an inner static class is not automaticall
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -5662,7 +5662,7 @@ Following are some key differences between lambda functions and inner anonymous 
 
     Given that the inner anonymous class is typed, the `execute()` method that takes a `Worker` is invoked.  On the contrary, lambda functions are not typed as we cannot simply replaced the above with a lambda function, as shown next.
 
-    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+    {% include custom/dose_not_compile.html %}
 
     ```java
     package demo;
@@ -5853,7 +5853,7 @@ Yes, inner anonymous classes can have other instance methods, and not just those
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -7493,7 +7493,7 @@ public class Person {
 
 ## Generics
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 [Diamond Operator](https://docs.oracle.com/javase/8/docs/technotes/guides/language/type-inference-generic-instance-creation.html)
 

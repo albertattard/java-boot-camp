@@ -703,7 +703,7 @@ Difference for inner instance classes, an inner static class is not automaticall
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1124,7 +1124,7 @@ Following are some key differences between lambda functions and inner anonymous 
 
     Given that the inner anonymous class is typed, the `execute()` method that takes a `Worker` is invoked.  On the contrary, lambda functions are not typed as we cannot simply replaced the above with a lambda function, as shown next.
 
-    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+    {% include custom/dose_not_compile.html %}
 
     ```java
     package demo;
@@ -1315,7 +1315,7 @@ Yes, inner anonymous classes can have other instance methods, and not just those
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1629,4 +1629,4 @@ Note that this feature will be released in preview, and you will need to enable 
 
 ## What is effectively final variables?
 
-**🚧 Pending...**
+{% include custom/pending.html %}

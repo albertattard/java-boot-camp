@@ -19,7 +19,7 @@ permalink: docs/java-light/introduction-to-collections/
 
 ## Arrays
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -48,7 +48,7 @@ Last number: 6
 
 ## Lists
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -77,8 +77,8 @@ First name: Jade
 
 ## Sets
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Maps
 
-**🚧 Pending...**
+{% include custom/pending.html %}

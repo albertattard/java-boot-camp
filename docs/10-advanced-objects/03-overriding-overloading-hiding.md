@@ -152,7 +152,7 @@ demo.Person@6ce253f1
 
 Using the `@Override` annotation, we can communicate our intention to the compiler, which can then check and make sure that our method is really overriding a method in the parent class.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -287,7 +287,7 @@ public class GreenAlgae extends Plant {
 
 Note, we cannot reduce the visibility of a method.  For example, if a method is defined `public` in a parent class, a subclass cannot override it and make it `protected`, *package-private* or `private`.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -539,7 +539,7 @@ Java will find the closest method matching the given parameters.  **The choice o
 
 **No**.  Java does not support return-type-based method overloading.  The Java compiler cannot determine which method to use by observing the return type.  This means that a class cannot have two methods that differ only by their return type.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

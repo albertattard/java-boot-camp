@@ -221,7 +221,7 @@ Is `void` a type?  No, the keyword `void` is not a type.
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

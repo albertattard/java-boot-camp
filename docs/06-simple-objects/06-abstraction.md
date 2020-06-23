@@ -153,7 +153,7 @@ Similar to the shapes, we cannot create a temperature without specifying its sca
 
 Like enums, we can only have the types defined, `Fahrenheit`, `Celsius` and `Kelvin` and we cannot add new types (outside from the `Temperature` class).  The following will not work.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 public class MyNewTemperatureType extends Temperature {

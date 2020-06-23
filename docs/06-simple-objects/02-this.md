@@ -105,7 +105,7 @@ Different from some other programming languages, like [JavaScript](https://devel
 
 In Java, we can have objects within objects in the form of inner anonymous classes.  Consider the following (*possibly advanced*) example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -196,7 +196,7 @@ As before, we can always prefix the `this` keywords with the class name as shown
 
 Consider the following challenge.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

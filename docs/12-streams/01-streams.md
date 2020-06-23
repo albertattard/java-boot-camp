@@ -296,39 +296,39 @@ public class App {
 
 ### Map
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### FlatMap
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Mapping and Filtering
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Collectors
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Optionals
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Common Uses
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Sum numbers in List
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Sum content in List based on property
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Create Map from List
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

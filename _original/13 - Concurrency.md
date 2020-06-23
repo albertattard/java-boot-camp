@@ -33,115 +33,115 @@
 
 ## Setup
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Java Memory Model
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Threads
 
 ![Thread Lifecycle](assets/images/Thread%20Lifecycle.png)
 Image copied from: [Theory: Operating Systems and Code Execution](https://learning.oreilly.com/videos/optimizing-java/9781492044673/9781492044673-video323887)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Daemons
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Waiting for a thread to finish (Join)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### ThreadLocal
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Stale Caches
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Race Conditions
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Methods that should never be used.
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 1. `stop()`
 1. `suspend()`
 
 ## Concurrent Data Classes
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Primitive Wrappers
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### List
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Set
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Map
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Queue
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Exchanger
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Classic Concurrency Control
 
 ### Volatile
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Synchronized
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Deadlocks
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## New Approach to Concurrency
 
 ### Executors and Schedulers
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Lock and ReentrantLock
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Latch
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### CyclicBarrier
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Fork Join Framework
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Cost of Concurrency
 
 Cost of context switching
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

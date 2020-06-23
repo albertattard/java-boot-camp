@@ -276,6 +276,6 @@ Option 2
 
 ## Pattern matching for switch
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 [JEP draft: Pattern matching for switch (Preview)](https://openjdk.java.net/jeps/8213076)

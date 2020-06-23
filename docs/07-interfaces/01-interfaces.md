@@ -213,7 +213,7 @@ The ability to determine what method will be executed is referred to as a [polym
 
 We cannot create an instance of an interface, as interfaces are abstract by nature.  The following example will not compile.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -284,7 +284,7 @@ public interface CanShoot {
 
 The above is a valid functional interface as it only has one abstract method, `shoot()`.  The other methods are not abstract.  Now consider the following interface example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -473,7 +473,7 @@ Invoke the getClass(): class demo.App$1
 
 Lambda cannot access interface default methods, like inner anonymous classes or other implementations can do.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -842,7 +842,7 @@ public interface CanShareWithClient {
 
 We can refactor the method `sendToClient()` such that it takes an instance of `CanShareWithClient` instead of `Object`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -862,7 +862,7 @@ class NonSensitiveInformation { /* ... */ }
 
 Our `SensitiveInformation` and `NonSensitiveInformation` classes do not implement the marker interface `CanShareWithClient`, thus we cannot call the `sendToClient()` method and pass our objects, as yet.  We can have any class that can be safely shared with the client implement the marker interface `CanShareWithClient` and then use the `sendToClient()` method.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1101,7 +1101,7 @@ Both interfaces have a default method, `ignite()`.  Note that the methods need t
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

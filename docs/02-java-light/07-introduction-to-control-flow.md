@@ -19,7 +19,7 @@ permalink: docs/java-light/introduction-to-control-flow/
 
 ## If-Else
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;

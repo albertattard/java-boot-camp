@@ -24,75 +24,75 @@
 
 ## Setup
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Lambda Expressions
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Function as Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Constructor as Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Multiple Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Dealing with Exceptions
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Foreach Loops
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Streams (Lambda)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Filter
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### ForEach
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Map
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### FlatMap
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Mapping and Filtering
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Collectors
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Common Uses
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Sum numbers in List
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Sum content in List based on property
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Create Map from List
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

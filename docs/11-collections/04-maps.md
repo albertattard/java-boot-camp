@@ -248,8 +248,8 @@ Is point java.awt.Point[x=1,y=10] in map? false
 
 ## Double brace initialization
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Mutable and immutable maps
 
-**🚧 Pending...**
+{% include custom/pending.html %}

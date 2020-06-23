@@ -418,7 +418,7 @@ Note that the `Math` class in not in our package and yet we did not import it.  
 
 Java has two `Date` classes, one found in the `java.util` package and the other one in the `java.sql` package.  We cannot import them both.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

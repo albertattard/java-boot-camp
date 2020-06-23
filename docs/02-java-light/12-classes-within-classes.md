@@ -8,4 +8,4 @@ permalink: docs/java-light/inner-classes/
 
 # Classed within classes
 
-**🚧 Pending...**
+{% include custom/pending.html %}

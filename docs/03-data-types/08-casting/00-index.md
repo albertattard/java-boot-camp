@@ -8,7 +8,7 @@ permalink: docs/data-types/casting/
 
 # Casting
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;

@@ -253,7 +253,7 @@ The following example makes use of the [`@CsvSource` annotation](https://junit.o
 
 ## Load test data from files (`@CsvFileSource`)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Custom converters
 
@@ -365,11 +365,11 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
 ## Tests tagging
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Nested tests
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## How to verify that an exception is thrown?
 

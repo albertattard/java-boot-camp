@@ -8,4 +8,4 @@ permalink: docs/collections/java-collections-framework/
 
 # Java Collections Framework
 
-**🚧 Pending...**
+{% include custom/pending.html %}

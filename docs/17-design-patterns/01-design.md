@@ -21,19 +21,19 @@ permalink: docs/design-patterns/common/
 
 ### Factory Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Abstract Factory Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Singleton Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Prototype Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Builder Pattern.
 
@@ -41,74 +41,74 @@ permalink: docs/design-patterns/common/
 
 ### Adapter Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Bridge Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Composite Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Decorator Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Facade Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Flyweight Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Proxy Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Behavioral Design Pattern
 
 ### Chain Of Responsibility Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Command Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Interpreter Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Iterator Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Mediator Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Memento Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Observer Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### State Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Strategy Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Template Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Visitor Pattern
 
-**🚧 Pending...**
+{% include custom/pending.html %}

@@ -291,7 +291,7 @@ The [gist x_init](https://gist.github.com/albertattard/3f9a66faf2a90dc2bf6376d37
 
 ### Source and class files
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -339,7 +339,7 @@ Hello world!!
 
 ### Methods
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -383,7 +383,7 @@ Today's date is 2020-04-27
 
 ## Introduction to variables and types
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -422,7 +422,7 @@ Aden was born on 2011-04-12
 
 ### Arrays
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -451,7 +451,7 @@ Last number: 6
 
 ### Lists
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -482,7 +482,7 @@ First name: Jade
 
 ### If-Else
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -592,4 +592,4 @@ Names in array
 
 ## Annotations
 
-**🚧 Pending...**
+{% include custom/pending.html %}

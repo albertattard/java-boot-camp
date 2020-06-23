@@ -12,7 +12,7 @@
 
 ## Setup
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Single-responsibility Principle
 
@@ -40,23 +40,23 @@ The `calculateGrade()` is used by the *Enrollment Management* department while t
 Say that a change requested by *Academic Advising* department introduces a bug
 
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Open–closed principle
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Liskov substitution principle
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Interface segregation principle
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Dependency inversion principle
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

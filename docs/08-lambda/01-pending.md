@@ -19,20 +19,20 @@ permalink: docs/lambda/pending/
 
 ## Lambda Expressions
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Function as Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Constructor as Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Multiple Parameters
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Dealing with Exceptions
 
-**🚧 Pending...**
+{% include custom/pending.html %}

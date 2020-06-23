@@ -929,7 +929,7 @@ public class LightBox extends Box {
 
 The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this belongs to the `Box` class.  A child class can access its parent's methods using the `super` keyword.  Without the `super` keyword, the above method will call itself recursively until a `StackOverflowException` is thrown.
 
-**🚧 Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
+{% include custom/pending.html %} Should we talk about why we are not overriding `isValidLabel()` instead?
 
 ## Can we prevent a class from being extended (the `final` keyword)?
 
@@ -946,7 +946,7 @@ public final class LightBox extends Box { /* ... */ }
 
 The `LightBox` class cannot be extended by another class as the `LightBox` class is marked `final`.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -962,7 +962,7 @@ The `FeatherBox` cannot extend `LightBox` as the latter is marked as `final`.
 
 The `Box` class provides two constructors, a default constructor and a constructor that takes a `Box.` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -995,7 +995,7 @@ public class Parent {
 
 The class is not `final`, but still cannot be extended by another class as its sole constructor is `private`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

@@ -8,4 +8,4 @@ permalink: docs/collections/google-guava/
 
 # Google Guava (Collections)
 
-**🚧 Pending...**
+{% include custom/pending.html %}

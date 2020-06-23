@@ -119,7 +119,7 @@ public class Dice {
 
 The attacker cannot now access the `random` field.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -176,7 +176,7 @@ Note that inner classes are class members and thus do not make use of the above 
 
 Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

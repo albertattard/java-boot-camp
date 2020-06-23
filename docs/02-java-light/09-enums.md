@@ -8,4 +8,4 @@ permalink: docs/java-light/enums/
 
 # Enums
 
-**🚧 Pending...**
+{% include custom/pending.html %}

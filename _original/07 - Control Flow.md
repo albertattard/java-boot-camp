@@ -629,7 +629,7 @@ Option 2
 
 #### Pattern matching for switch
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 [JEP draft: Pattern matching for switch (Preview)](https://openjdk.java.net/jeps/8213076)
 
@@ -1559,7 +1559,7 @@ I am always called before the try/catch block exists
 
 ### Alternative Approach
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 Java exceptions are an expensive operation and alternative approach should be preferred to signal failures when possible.
 

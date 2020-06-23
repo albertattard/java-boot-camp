@@ -20,11 +20,11 @@ permalink: docs/data-types/strings/
 
 ## Strings
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Mutable strings (`StringBuilder` and `StringBuffer`)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Text blocks and multiline strings
 
@@ -63,4 +63,4 @@ Note how the second, third and fourth lines are indented by one space, preservin
 
 **No**.
 
-**🚧 Pending...**
+{% include custom/pending.html %}

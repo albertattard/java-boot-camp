@@ -156,7 +156,7 @@ List [a, b, c]
 
 ## Which list to use?
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 Array based collections are faster and take less space when compare to linked list based. Linked list has higher overheads per item when compared to arrays based.  The only one place linked list out performs the array is FIFO queue.  Iterating is faster with arrays as items in the array are close to each other.  ArrayList is slow when we need to add or remove elements as we need to shift things down.
 

@@ -14,36 +14,36 @@
 
 ## Setup
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## H2, MySQL and PostgreSQL
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Data Sources (Hikari Connection Pool)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Flyway (Database Migration)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Statements, Prepared Statements, Result Sets
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Transactions
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## JOOQ
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Query DSL
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## JPA and Hibernate
 
-**🚧 Pending...**
+{% include custom/pending.html %}

@@ -195,15 +195,15 @@ Points [java.awt.Point[x=1,y=2]]
 
 ## Which set to use?
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Set values **MUST BE** immutable
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Double brace initialization
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Mutable and immutable sets
 

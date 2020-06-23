@@ -377,11 +377,11 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
 ### Tests Tagging
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Nested Tests
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Hamcrest
 

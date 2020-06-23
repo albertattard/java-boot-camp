@@ -239,7 +239,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
 1. How can we us the `WeightedDice`?
 
-    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+    {% include custom/dose_not_compile.html %}
 
     ```java
     package demo;

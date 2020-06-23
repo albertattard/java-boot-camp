@@ -296,7 +296,7 @@ class AnotherTopLevelClassInTheSameSourceFile { /* ... */ }
 
 1. **local variables** (missing in the above example)
 
-    **🚧 Pending...**  Should we have a method anatomy?
+    {% include custom/pending.html %}  Should we have a method anatomy?
 
 ## Classes, methods and properties (static no OOP)
 
@@ -502,7 +502,7 @@ Is `void` a type?  No, the keyword `void` is not a type.
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -787,7 +787,7 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
 1. How can we us the `WeightedDice`?
 
-    **⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+    {% include custom/dose_not_compile.html %}
 
     ```java
     package demo;
@@ -1139,7 +1139,7 @@ public class Dice {
 
 The attacker cannot now access the `random` field.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1196,7 +1196,7 @@ Note that inner classes are class members and thus do not make use of the above 
 
 Note that there can be more than one class within the same file.  Two or more classes in the same file are considered as classes in the same package.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -2304,7 +2304,7 @@ Different from some other programming languages, like [JavaScript](https://devel
 
 In Java, we can have objects within objects in the form of [inner anonymous classes, discussed in depth later on](#inner-anonymous-class).  Consider the following (*possibly advanced*) example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -2395,7 +2395,7 @@ As before, we can always prefix the `this` keywords with the class name as shown
 
 Consider the following challenge.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -2776,7 +2776,7 @@ src/main/java/demo/Box.java:13: error: call to this must be first statement in c
 
 While constructors calling each other is quite a common practice to have constructors calling each other, note that we can find ourselves in some tricky situations.  Consider the following class.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3005,7 +3005,7 @@ public class BoxDimensions {
 
 There is no point to initialise stateless classes, also referred to as utilities classes, such as the `Math` class. These classes were meant to serve a different purpose than being initialised as objects.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3079,7 +3079,7 @@ Box: an open box labelled 'No Label'
 
 The variable `a` is immutable and cannot be modified.  We cannot create a new `Box` and assign it to the variable `a` or set the variable `a` to `null`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -4144,7 +4144,7 @@ public class LightBox extends Box {
 
 The `changeLabelTo()` in the `LightBox` cannot set the `label` directly as this belongs to the `Box` class.  A child class can access its parent's methods using the `super` keyword.  Without the `super` keyword, the above method will call itself recursively until a `StackOverflowException` is thrown.
 
-**🚧 Pending...** Should we talk about why we are not overriding `isValidLabel()` instead?
+{% include custom/pending.html %} Should we talk about why we are not overriding `isValidLabel()` instead?
 
 ### Can we prevent a class from being extended (the `final` keyword)?
 
@@ -4161,7 +4161,7 @@ public final class LightBox extends Box { /* ... */ }
 
 The `LightBox` class cannot be extended by another class as the `LightBox` class is marked `final`.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -4177,7 +4177,7 @@ The `FeatherBox` cannot extend `LightBox` as the latter is marked as `final`.
 
 The `Box` class provides two constructors, a default constructor and a constructor that takes a `Box.` parameter.  The `LightBox` and the `HeavyBox` do not have constructors, therefore a default is added to each respectively.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -4210,7 +4210,7 @@ public class Parent {
 
 The class is not `final`, but still cannot be extended by another class as its sole constructor is `private`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -4758,7 +4758,7 @@ Similar to the shapes, we cannot create a temperature without specifying its sca
 
 Like enums, we can only have the types defined, `Fahrenheit`, `Celsius` and `Kelvin` and we cannot add new types (outside from the `Temperature` class).  The following will not work.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 public class MyNewTemperatureType extends Temperature {

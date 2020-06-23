@@ -19,8 +19,8 @@ permalink: docs/collections/queue-stack/
 
 ## Queues
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Stacks
 
-**🚧 Pending...**
+{% include custom/pending.html %}

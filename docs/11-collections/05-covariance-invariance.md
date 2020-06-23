@@ -8,4 +8,4 @@ permalink: docs/collections/covariance-invariance/
 
 ## Covariance and invariance
 
-**🚧 Pending...**
+{% include custom/pending.html %}

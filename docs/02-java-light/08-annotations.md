@@ -8,4 +8,4 @@ permalink: docs/java-light/annotations/
 
 # Annotations
 
-**🚧 Pending...**
+{% include custom/pending.html %}

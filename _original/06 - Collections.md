@@ -990,7 +990,7 @@ List [a, b, c]
 
 #### Which List to Use?
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 Array based collections are faster and take less space when compare to linked list based.
 Linked list has higher overheads per item when compared to arrays based
@@ -1143,7 +1143,7 @@ List b: [a, b, c, d]
 
 ### Set values MUST BE Immutable
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Types of Sets
 
@@ -1298,7 +1298,7 @@ Points [java.awt.Point[x=1,y=2]]
 
 #### Which Set to Use?
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Mutable and Immutable Sets
 
@@ -1607,7 +1607,7 @@ To successfully store and retrieve objects from a HashTable, the objects used as
 
 ## Covariance and invariance
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Relation between Collections the Objects they contain
 
@@ -1925,19 +1925,19 @@ Set contains 1 elements
 
 ### Queues
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Stacks
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Java Collections Framework
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Google Guava (Collections)
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

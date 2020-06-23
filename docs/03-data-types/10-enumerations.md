@@ -391,7 +391,7 @@ Refactor the current solution into using enums
 
 Java does not allow us to create new instances of any enum.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -1239,7 +1239,7 @@ enum BatchTask {
 
 Like the first enum, `Task`, the `BatchTask` has a method called `execute()`.  Can we reuse the `run()` method to run the `BatchTask`?
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

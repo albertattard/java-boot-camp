@@ -340,4 +340,4 @@ This example was taken from [PUZZLE 8: DOS EQUIS in Java™ Puzzlers: Traps, Pit
 
 ## Can we throw an exception from a ternary operator?
 
-**🚧 Pending...**
+{% include custom/pending.html %}

@@ -8,7 +8,7 @@ permalink: docs/java-light/introduction-to-variables-and-types/
 
 # Introduction to variables and types
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;

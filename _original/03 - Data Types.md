@@ -477,7 +477,7 @@ This example was taken from [PUZZLE 21: WHAT’S MY CLASS, TAKE 2 in Java™ Puz
 
 ### Mutable Strings
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 #### Puzzle (No Pain, No Gain)
 
@@ -553,7 +553,7 @@ Note how the second, third and fourth lines are indented by one space, preservin
 
 **No**.
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ### Primitive Types
 
@@ -1941,7 +1941,7 @@ Refactor the current solution into using enums
 
 Java does not allow us to create new instances of any enum.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -2789,7 +2789,7 @@ enum BatchTask {
 
 Like the first enum, `Task`, the `BatchTask` has a method called `execute()`.  Can we reuse the `run()` method to run the `BatchTask`?
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -3310,7 +3310,7 @@ Note that the `Math` class in not in our package and yet we did not import it.  
 
 Java has two `Date` classes, one found in the `java.util` package and the other one in the `java.sql` package.  We cannot import them both.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

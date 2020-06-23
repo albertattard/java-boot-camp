@@ -19,7 +19,7 @@ permalink: docs/java-light/introduction-to-classes-and-methods/
 
 ## Source and class files
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;
@@ -67,7 +67,7 @@ Hello world!!
 
 ## Methods
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ```java
 package demo;

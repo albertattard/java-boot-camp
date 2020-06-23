@@ -126,7 +126,7 @@ true || false = true
 
 ## Why does the `+` does not return `byte`, `short` or `char`?
 
-**🚧 Pending...**
+{% include custom/pending.html %}
 
 ## Miscellaneous
 

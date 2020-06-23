@@ -8,4 +8,4 @@ permalink: docs/java-light/exceptions/
 
 # Exceptions
 
-**🚧 Pending...**
+{% include custom/pending.html %}

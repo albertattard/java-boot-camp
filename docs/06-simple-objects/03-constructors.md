@@ -326,7 +326,7 @@ src/main/java/demo/Box.java:13: error: call to this must be first statement in c
 
 While constructors calling each other is quite a common practice to have constructors calling each other, note that we can find ourselves in some tricky situations.  Consider the following class.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -555,7 +555,7 @@ public class BoxDimensions {
 
 There is no point to initialise stateless classes, also referred to as utilities classes, such as the `Math` class. These classes were meant to serve a different purpose than being initialised as objects.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -598,4 +598,4 @@ public class PreferStaticFactoryMethods {
 
 ## Desctructors
 
-**🚧 Pending...**
+{% include custom/pending.html %}
