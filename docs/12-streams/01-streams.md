@@ -19,6 +19,10 @@ permalink: docs/streams/Streams/
 
 ## Streams
 
+Note: This section is about the data sequence concept, not about Input/OutputStreams that are used to e.g. read/write files. 
+
+Streams are conceptually a sequence of data of any kind. They are not a data structure like a list. You can imagine a Stream like a conveyor belt in a factory: At the beginning of the first belt, the material is raw. Then it gets modified, combined, unused material is filtered out, and finally you have one or multiple new products created from the material. The set of material in the beginning and the set of products in the end are like data structures (e.g. a List, Set, Map ...), while the conveyor belts in between are the Streams which transformed them from one data structure to the other.
+
 Streams were introduced in Java 8 as a wrapper for collections. Streams are typically used to access all elements of a collection and filter them or use them in functions. Streams are usually a lot shorter than equivalent code not utilizing them, and easier to read.
 
 Most Stream functions expect an implementation of a functional interface as input, which we simplify to either a method reference (e.g. `String::isBlank`) or a lambda (e.g. `someString -> someString.contains("Hello")`).
@@ -86,7 +90,7 @@ IntelliJ often allows us to do this with one simple command (Option+Enter on the
 
 In this section, we will use the most common functions of Streams. However, there are too many to cover them all.
 
-### Filter
+### Filter and Predicates
 
 When we want to filter a collection of items, we can do that with a Stream. The filter function works very similar to the one from JavaScript.
 
@@ -245,7 +249,7 @@ public class App {
 }
 ```
 
-### ForEach
+### ForEach and Consumers
 
 Another type of Lambda is the `Consumer`. It takes an input but provides no output and can be used in Streams in the `forEach` function. For every element that is in the Stream, the `Consumer` lambda will be executed.
 
