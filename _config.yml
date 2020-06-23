@@ -44,9 +44,8 @@ footer_content: 'Copyright &copy; 2020-2020 Albert Attard. Distributed by an <a 
 # Color scheme currently only supports "dark" or nil (default)
 color_scheme: nil
 
-# Google Analytics Tracking (optional)
-# e.g, UA-1234567-89
-# ga_tracking: UA-2709176-10
+# Google Analytics Tracking
+ga_tracking: UA-12098401-5
 
 plugins:
   - jekyll-seo-tag
