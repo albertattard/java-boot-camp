@@ -2,7 +2,7 @@
 layout: default
 title: Type Erasure
 parent: Generics
-nav_order: 7
+nav_order: 6
 permalink: docs/generics/erasure/
 ---
 
