@@ -465,6 +465,8 @@ src/main/java/demo/App.java:14: error: incompatible types: CAP#1 cannot be conve
     CAP#1 extends Object super: Shape from capture of ? super Shape
 ```
 
+Contravariance focus on consumption.  Consider the following example.
+
 ```java
 package demo;
 
@@ -484,6 +486,8 @@ public class App {
   }
 }
 ```
+
+The `populate()` method accepts any list that can contain shapes.  A list of objects can contain shapes, thus it is accepted.  A list of rectangles on the other hand does not accept any shape, only rectangles, thus not accepted, as shown next.
 
 {% include custom/dose_not_compile.html %}
 
@@ -505,6 +509,8 @@ public class App {
   }
 }
 ```
+
+The above example is not provide a list that can contain the required type and will fails as shown next.
 
 ```bash
 src/main/java/demo/App.java:9: error: incompatible types: ArrayList<Rectangle> cannot be converted to List<? super Shape>
@@ -556,7 +562,7 @@ public class App {
 
 ## Bi-variance
 
-There are cases where we need to operate on a collection without interacting with its content.  Say we need to write a function that verifies whether the _i_th element in a collection is not `null`.  Consider the following example.
+There are cases where we need to operate on a collection without interacting with its content.  Say we need to write a function that verifies whether the <em>i</em><sup>th</sup> element in a collection is not `null`.  Consider the following example.
 
 ```java
 package demo;
@@ -566,41 +572,22 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-
     final List<String> names = List.of( "Jade", "Aden" );
-    final List<Pet> pets = List.of( new Dog(), new Cat() );
+    final List<Shape> shapes = List.of( new Circle( 7 ), new Square( 4 ) );
 
     isSet( names, 3 );
-    isSet( pets, 1 );
+    isSet( shapes, 1 );
   }
 
-  public static boolean isSet( final List<?> list, final int index ) {
+  public static boolean isValueSet( final List<?> list, final int index ) {
     return index < list.size() && list.get( index ) != null;
   }
 }
 ```
 
-The `isSet()` method takes a list of any type, `List<?>`.  This is bi-variant, as it has not upper or lower bound.
+The `isValueSet()` method takes a list of any type, `List<?>`.  This is bi-variant, as it has not upper or lower bounds.  The list can be of any type.
 
-```java
-package demo;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    final List<Pet> pets = new ArrayList<>();
-    pets.add( new Dog( "Fido" ) );
-    pets.add( new Cat( "Fluffy" ) );
-  }
-
-  private static void call( final List<?> pets ) {
-    pets.forEach( pet -> System.out.printf( "Hello %s%n", pet ) );
-  }
-}
-```
+This is ideal when we need to operate on the collection itself, irrespective from the content type.
 
 ## Examples
 
@@ -616,13 +603,82 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    final List<String> names = new ArrayList<>();
-    names.add( "b" );
-    names.add( "a" );
-    names.add( "c" );
+    final List<String> name = new ArrayList<>();
+    name.add( "Mary" );
+    name.add( "James" );
 
-    Collections.sort( names );
-    System.out.println( names );
+    Collections.sort( name );
+    name.forEach( System.out::println );
+  }
+}
+```
+
+```bash
+James
+Mary
+```
+
+```java
+public class Collections {
+  public static <T extends Comparable<? super T>> void sort(List<T> list) { /* ... */ }
+}
+```
+
+```java
+package demo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+@Data
+@AllArgsConstructor
+public class Person implements Comparable<Person> {
+
+  private final String name;
+
+  @Override
+  public int compareTo( final Person that ) {
+    return StringUtils.compareIgnoreCase( this.name, that.name );
+  }
+}
+```
+
+```java
+package demo;
+
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString( callSuper = true, includeFieldNames = true )
+public class Employee extends Person {
+
+  private final String employeeNumber;
+
+  public Employee( final String name, final String employeeNumber ) {
+    super( name );
+    this.employeeNumber = employeeNumber;
+  }
+}
+```
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Employee> employees = new ArrayList<>();
+    employees.add( new Employee( "Mary", "ENG-0700" ) );
+    employees.add( new Employee( "James", "MNG-0906" ) );
+
+    Collections.sort( employees );
+    employees.forEach( System.out::println );
   }
 }
 ```
@@ -631,4 +687,9 @@ public class App {
 public class Collections {
   public static <T extends Comparable<? super T>> void sort(List<T> list) { /* ... */ }
 }
+```
+
+```bash
+Employee(super=Person(name=James), employeeNumber=MNG-0906)
+Employee(super=Person(name=Mary), employeeNumber=ENG-0700)
 ```
