@@ -158,7 +158,7 @@ public class App {
 }
 ```
 
-{% include custom/note.html details="We are not using the <a href='/java-boot-camp/docs/generics/basics/#diamond-operator'>diamond operator</a> on purpose in these examples." %}
+{% include custom/note.html details="Some examples shown here do not use the <a href='/java-boot-camp/docs/generics/basics/#diamond-operator'>diamond operator</a> on purpose." %}
 
 Now consider the following example.
 
@@ -181,7 +181,7 @@ public class App {
 }
 ```
 
-[Variance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) defines how subtyping between containers types, such as lists, or methods' types (parameters and return values) relates to subtyping.  In Java, arrays are covariant while generics are invariant.  There are four types of variance that effect the behaviour of generics.
+[Variance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) defines how subtyping between containers types (lists), or methods' types (parameters and return values) relates to subtyping.  In Java, arrays are covariant while generics are invariant.  There are four types of variance that effect the behaviour of generics.
 
 1. [Invariance](#invariance)
 1. [Covariance](#covariance)
@@ -256,9 +256,9 @@ public class App {
   private static double totalArea( final List<Shape> shapes ) {
     return shapes
       .stream()
-      .map( Shape::area )
-      .reduce( Double::sum )
-      .orElse( 0D );
+      .map( Shape::area )    /* calculate the area of each shape in the list */
+      .reduce( Double::sum ) /* sum all areas calculated before */
+      .orElse( 0D );         /* return 0 if the list was empty */
   }
 }
 ```
@@ -290,7 +290,7 @@ Exception in thread "main" java.lang.ArrayStoreException: demo.Circle
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28), whereas the title suggests, it recommends lists over arrays as much as possible.
 
-We can still achieve the same degree of flexibility with Generics without having to pay the same price as arrays as we will see in [Covariance](#covariance), [Contravariance](#contravariance) and [Bi-variance](#bi-variance)
+We can still achieve the same degree of flexibility with generics without having to pay the same price as arrays as we will see in [Covariance](#covariance), [Contravariance](#contravariance) and [Bi-variance](#bi-variance)
 
 ## Covariance
 
@@ -425,6 +425,10 @@ src/main/java/demo/App.java:12: error: incompatible types: Circle cannot be conv
   where CAP#1 is a fresh type-variable:
     CAP#1 extends Shape from capture of ? extends Shape
 ```
+
+This is very convenient as while the `totalArea()` method can iterate the given list, it cannot add values to it.
+
+{% include custom/note.html details="" %}  
 
 ## Contravariance
 
