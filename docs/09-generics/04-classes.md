@@ -19,6 +19,41 @@ permalink: docs/generics/classes/
 
 ## Classes
 
+We can use generics with classes too.  Consider the following example.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.math.BigDecimal;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final String childName = "Jade";
+    final int childAge = 13;
+
+    final String productName = "Crisps";
+    final BigDecimal productPrice = new BigDecimal( "1.99" );
+
+    final String originName = "Origin";
+    final Point originPoint = new Point( 0, 0 );
+
+    System.out.printf( "%s: %s%n", childName, childAge );
+    System.out.printf( "%s: %s%n", productName, productPrice );
+    System.out.printf( "%s: %s%n", originName, originPoint );
+  }
+}
+```
+
+The above example has three pairs of values.
+
+* A child name and age
+* A product and its price
+* A point and its coordinates  
+
+These two pairs of variables can be bound together by a class, `Pair`.  Before generics this was annoying as we had to manually cast the type and the compiler did not provide any safety, as discussed in the [raw types]({{ '/docs/generics/raw-types/' | absolute_url }}) section.  Generics made this simpler, as shown next. 
+
 ```java
 package demo;
 
@@ -32,6 +67,43 @@ public class Pair<N, V> {
 }
 ```
 
+The `Pair` class, shown above, is an immutable class that has two generic types.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.math.BigDecimal;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Pair<String, Integer> child = Pair.of( "Jade", 13 );
+    final Pair<String, BigDecimal> product = Pair.of( "Crisps", new BigDecimal( "1.99" ) );
+    final Pair<String, Point> origin = Pair.of( "Origin", new Point( 0, 0 ) );
+
+    System.out.printf( "%s%n", child );
+    System.out.printf( "%s%n", product );
+    System.out.printf( "%s%n", origin );
+  }
+}
+```
+
+Each pair of variables, such as `childName` and `childAge`, are now grouped into one variable, such as `child`.
+
+* From
+   ```java
+       final String childName = "Jade";
+       final int childAge = 13;
+   ```
+
+* To
+   ```java
+       final Pair<String, Integer> child = Pair.of( "Jade", 13 );
+   ```
+
+The example can be simplified further, by using the `var` as shown next.
+
 ```java
 package demo;
 
@@ -40,36 +112,26 @@ import java.awt.Point;
 public class App {
 
   public static void main( final String[] args ) {
-    final Pair<String, Integer> a = Pair.of( "Jade", 13 );
-    final Pair<String, Point> b = Pair.of( "Origin", new Point( 0, 0 ) );
+    final var child = Pair.of( "Jade", 13 );
+    final var product = Pair.of( "Crisps", new BigDecimal( "1.99" ) );
+    final var origin = Pair.of( "Origin", new Point( 0, 0 ) );
 
-    System.out.printf( "a: %s%n", a );
-    System.out.printf( "b: %s%n", b );
+    System.out.printf( "%s%n", child );
+    System.out.printf( "%s%n", product );
+    System.out.printf( "%s%n", origin );
   }
 }
 ```
+
+The example will print.
 
 ```bash
-a: Pair(name=Jade, value=13)
-b: Pair(name=Origin, value=java.awt.Point[x=0,y=0])
+Pair(name=Jade, value=13)
+Pair(name=Crisps, value=1.99)
+Pair(name=Origin, value=java.awt.Point[x=0,y=0])
 ```
 
-```java
-package demo;
-
-import java.awt.Point;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    final var a = Pair.of( "Jade", 13 );
-    final var b = Pair.of( "Origin", new Point( 0, 0 ) );
-
-    System.out.printf( "a: %s%n", a );
-    System.out.printf( "b: %s%n", b );
-  }
-}
-```
+Our new class can be used in another generic context, as shown next.
 
 ```java
 package demo;
@@ -89,7 +151,7 @@ public class App {
 }
 ```
 
-Not the same!!
+The type of the `children` variable is quite verbose, `List<Pair<String, Integer>>`, and we may be tempted to use `var` instead, as shown next.
 
 {% include custom/proceed_with_caution.html details="The list named, <code>children</code> can contain any <code>Object</code>." %}
 
@@ -111,6 +173,4 @@ public class App {
 }
 ```
 
-```java
-    final var children = new ArrayList<Object>();
-```
+As hinted already in a previous example in this page, this is not the same as the one that defined the type.  Using `var` in this case, the `children` variable is now an `ArrayList` of type `Object`.
