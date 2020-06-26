@@ -2,7 +2,7 @@
 layout: default
 title: Variance
 parent: Generics
-nav_order: 5
+nav_order: 6
 permalink: docs/generics/variance/
 ---
 
@@ -38,6 +38,10 @@ Consider the following classes.
    package demo;
 
    public class Dog extends Pet {
+     @Override
+     public String toString() {
+       return "woof";
+     }
    }
    ```
 
@@ -47,6 +51,10 @@ Consider the following classes.
    package demo;
 
    public class Cat extends Pet {
+     @Override
+     public String toString() {
+       return "meao";
+     }
    }
    ```
 
@@ -128,9 +136,13 @@ public class App {
     final List<Pet> pets = new ArrayList<Pet>();
     pets.add( new Dog() );
     pets.add( new Cat() );
+
+    final Pet firstPet = pets.get( 0 );
   }
 }
 ```
+
+We can also read from the same list as we did with the `firstPet`.
 
 Generics are invariant which means that, if `S` is a subtype of `T`, then `GenericType<S>` is not a subtype of `GenericType<T>` and vice versa.
 
@@ -164,6 +176,8 @@ public class App {
 
   public static void main( final String[] args ) {
     final Pet[] pets = new Dog[2];
+
+    /* ⚠️ This will fail at runtime!! */
     pets[0] = new Cat();
   }
 }
@@ -180,6 +194,8 @@ Exception in thread "main" java.lang.ArrayStoreException: demo.Cat
 
 ## Covariance
 
+Generics support covariance without having the pitfalls of arrays.  Consider the following example. 
+
 ```java
 package demo;
 
@@ -189,11 +205,19 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    final List<Pet> pets = new ArrayList<>();
-    pets.add( new Dog( "Fido" ) );
-    pets.add( new Cat( "Fluffy" ) );
+    final List<Pet> pets = new ArrayList<Pet>();
+    pets.add( new Dog() );
+    pets.add( new Cat() );
+
+    final List<Dog> dogs = new ArrayList<Dog>();
+    dogs.add( new Dog() );
+
+    final List<Cat> cats = new ArrayList<Cat>();
+    cats.add( new Cat() );
 
     call( pets );
+    call( dogs );
+    call( cats );
   }
 
   private static void call( final List<? extends Pet> pets ) {
@@ -201,6 +225,39 @@ public class App {
   }
 }
 ```
+
+The `call()` takes an instance of `List<? extends Pet>`.  This means that the given list will contain `Pet` or any subtype of `Pet`, such as `Dog` or `Cat`.  We are able to invoke the `call()` method with lists of all types.
+
+This means, if `S` is a subtype of `T`, then `GenericType<S>` is a subtype of `GenericType<? extends T>`.  We can use `List<Pet>`, `List<Cat>` or `List<Dog>` where a `List<? extends Pet>` is required.
+
+**Does this make generics suseptable to the same problem we saw with arrays before?**
+
+**No**.
+
+Let's revise our previous example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Pet[] pets = new Dog[2];
+
+    /* ⚠️ This will fail at runtime!! */
+    pets[0] = new Cat();
+  }
+}
+```
+
+The issue with covariance happens when we try to add something to the array.
+
+```java
+    /* ⚠️ This will fail at runtime!! */
+    pets[0] = new Cat();
+```
+
+When using the `<? extends T>`, generics does not allow us to assign values.  **We can read, but we cannot write**.  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -214,25 +271,30 @@ public class App {
 
   public static void main( final String[] args ) {
     final List<? extends Pet> pets = new ArrayList<>();
-    pets.add( new Dog( "Fido" ) );
-    pets.add( new Cat( "Fluffy" ) );
 
-    call( pets );
+    /* ⚠️ This will not compile!! */
+    pets.add( new Dog() );
   }
-
-  private static void call( final List<? extends Pet> pets ) { /* ... */ }
 }
 ```
 
+The above example does not compile as we cannot add anything to the list `pets`.
+
 ```bash
-src/main/java/demo/App.java:10: error: incompatible types: Dog cannot be converted to CAP#1
-    pets.add( new Dog( "Fido" ) );
+src/main/java/demo/App.java:12: error: incompatible types: Dog cannot be converted to CAP#1
+    pets.add( new Dog() );
               ^
   where CAP#1 is a fresh type-variable:
     CAP#1 extends Pet from capture of ? extends Pet
 ```
 
+**Where can we use covariance?**
+
+Using covariance, we can communicate our intenet when working with generics.  If our function is only going to read the list and do something with it, without modifying the list, then we can use this approach to communicate that. 
+
 ## Contravariance
+
+We can use generics to control what we can do and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot write to the list.  Using contravariance we can achieve the opposite.  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -246,21 +308,27 @@ public class App {
 
   public static void main( final String[] args ) {
     final List<? super Pet> pets = new ArrayList<>();
-    pets.add( new Dog( "Fido" ) );
-    pets.add( new Cat( "Fluffy" ) );
+    pets.add( new Pet() );
+    pets.add( new Dog() );
+    pets.add( new Cat() );
 
-    final Pet pet = pets.get( 0 );
+    /* ⚠️ This will not compile!! */
+    final Pet firstPet = pets.get( 0 );
   }
 }
 ```
 
+While we can add pets to the list, we cannot read a `Pet` from the list.
+
 ```bash
-src/main/java/demo/App.java:13: error: incompatible types: CAP#1 cannot be converted to Pet
+src/main/java/demo/App.java:15: error: incompatible types: CAP#1 cannot be converted to Pet
     final Pet pet = pets.get( 0 );
                           ^
   where CAP#1 is a fresh type-variable:
     CAP#1 extends Object super: Pet from capture of ? super Pet
 ```
+
+In Java everything is an object, which means we can read from the `pets` list, only that we need to save it in a variable of type `Object`.
 
 ```java
 package demo;
@@ -272,17 +340,34 @@ public class App {
 
   public static void main( final String[] args ) {
     final List<? super Pet> pets = new ArrayList<>();
-    pets.add( new Dog( "Fido" ) );
-    pets.add( new Cat( "Fluffy" ) );
+    pets.add( new Pet() );
+    pets.add( new Dog() );
+    pets.add( new Cat() );
 
-    final var pet = pets.get( 0 );
-    System.out.printf( "My pet is %s%n", pet );
+    final Object firstPet = pets.get( 0 );
   }
 }
 ```
 
-```bash
-My pet is Dog(name=Fido)
+Alternatively, we can use the `var` keyword which will achieve the same result.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<? super Pet> pets = new ArrayList<>();
+    pets.add( new Pet() );
+    pets.add( new Dog() );
+    pets.add( new Cat() );
+
+    final var firstPet = pets.get( 0 );
+  }
+}
 ```
 
 ## Bi-variance
