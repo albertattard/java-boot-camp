@@ -428,11 +428,11 @@ src/main/java/demo/App.java:12: error: incompatible types: Circle cannot be conv
 
 This is very convenient as while the `totalArea()` method can iterate the given list, it cannot add values to it.
 
-{% include custom/note.html details="" %}  
+{% include custom/note.html details="This is not equivalent to immutable lists and items can still be removed from the list.  This only prevents new items to be added to the list." %}
 
 ## Contravariance
 
-We can use generics to control what we can do and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot write to the list.  Using contravariance we can (_somewhat_) achieve the opposite.  Consider the following example.
+We can use generics to control what we can add and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot add items to the list.  Using contravariance we can achieve the _opposite_: we are able add to the list, but we are not expected to read items from the list (at least in the type we expect these items to be).  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -445,25 +445,44 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    final List<? super Pet> pets = new ArrayList<>();
-    pets.add( new Pet() );
-    pets.add( new Dog() );
-    pets.add( new Cat() );
+    final List<? super Shape> shapes = new ArrayList<Shape>();
+    shapes.add( new Circle( 7 ) );
+    shapes.add( new Square( 4 ) );
 
     /* ⚠️ This will not compile!! */
-    final Pet firstPet = pets.get( 0 );
+    final Shape firstShape = shapes.get( 0 );
   }
 }
 ```
 
-While we can add pets to the list, we cannot read a `Pet` from the list.
+While we can add shapes to the list, we cannot read a `Shape` from the list despite the fact that this is of type `Shape`.
 
 ```bash
-src/main/java/demo/App.java:15: error: incompatible types: CAP#1 cannot be converted to Pet
-    final Pet pet = pets.get( 0 );
-                          ^
+src/main/java/demo/App.java:14: error: incompatible types: CAP#1 cannot be converted to Shape
+    final Shape firstShape = shapes.get( 0 );
+                                       ^
   where CAP#1 is a fresh type-variable:
-    CAP#1 extends Object super: Pet from capture of ? super Pet
+    CAP#1 extends Object super: Shape from capture of ? super Shape
+```
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Object> shapes = new ArrayList<Object>();
+    populate( shapes );
+  }
+
+  public static void populate( List<? super Shape> shapes ) {
+    shapes.add( new Circle( 7 ) );
+    shapes.add( new Square( 4 ) );
+  }
+}
 ```
 
 {% include custom/dose_not_compile.html %}
@@ -477,25 +496,25 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    call( new ArrayList<Object>() );
-    call( new ArrayList<Pet>() );
-
-    /* ⚠️ This will not compile!! */
-    call( new ArrayList<Dog>() );
+    populate( new ArrayList<Rectangle>() );
   }
 
-  public static void call( List<? super Pet> pets ) {
+  public static void populate( List<? super Shape> shapes ) {
+    shapes.add( new Circle( 7 ) );
+    shapes.add( new Square( 4 ) );
   }
 }
 ```
 
-In
+```bash
+src/main/java/demo/App.java:9: error: incompatible types: ArrayList<Rectangle> cannot be converted to List<? super Shape>
+    populate( new ArrayList<Rectangle>() );
+              ^
+```
 
-The use-site must have an open upper bound on the type parameter.
+This is quite counterintuative.  If `S` is a subtype of `T`, then `GenericType<T>` is a subtype of `GenericType<? super S>`.  In our example, `ArrayList<Object>` is a subtype of `List<? super Shape>`, despite from the fact that `Shape` is subtype of `Object`.
 
-    If S is a subtype of T, then GenericType<S> is a supertype of GenericType<? super B>.
-
-In Java everything is an object, which means we can read from the `pets` list, only that we need to save it in a variable of type `Object`.
+In Java everything is an `Object`, which means we can read from the `shapes` list.  Consider the following example.
 
 ```java
 package demo;
@@ -506,12 +525,11 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    final List<? super Pet> pets = new ArrayList<>();
-    pets.add( new Pet() );
-    pets.add( new Dog() );
-    pets.add( new Cat() );
+    final List<? super Shape> shapes = new ArrayList<Shape>();
+    shapes.add( new Circle( 7 ) );
+    shapes.add( new Square( 4 ) );
 
-    final Object firstPet = pets.get( 0 );
+    final Object firstShape = shapes.get( 0 );
   }
 }
 ```
@@ -527,12 +545,11 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
-    final List<? super Pet> pets = new ArrayList<>();
-    pets.add( new Pet() );
-    pets.add( new Dog() );
-    pets.add( new Cat() );
+    final List<? super Shape> shapes = new ArrayList<Shape>();
+    shapes.add( new Circle( 7 ) );
+    shapes.add( new Square( 4 ) );
 
-    final var firstPet = pets.get( 0 );
+    final var firstShape = shapes.get( 0 );
   }
 }
 ```
@@ -582,5 +599,36 @@ public class App {
   private static void call( final List<?> pets ) {
     pets.forEach( pet -> System.out.printf( "Hello %s%n", pet ) );
   }
+}
+```
+
+## Examples
+
+### Sorting a collection
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<String> names = new ArrayList<>();
+    names.add( "b" );
+    names.add( "a" );
+    names.add( "c" );
+
+    Collections.sort( names );
+    System.out.println( names );
+  }
+}
+```
+
+```java
+public class Collections {
+  public static <T extends Comparable<? super T>> void sort(List<T> list) { /* ... */ }
 }
 ```
