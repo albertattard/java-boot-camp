@@ -21,7 +21,7 @@ This section provides an introduction to generics and compares these to [raw typ
 
 ## Generics
 
-Java 1.5 introduced [generics](https://docs.oracle.com/javase/tutorial/java/generics/index.html).  Generics allows us to provide hints to the Java compiler about the contents of our list, as shown in the following example.
+Java 1.5 introduced [generics](https://docs.oracle.com/javase/tutorial/java/generics/index.html).  Generics allows us to provide hints to the Java compiler about the contents of our containers, such as [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) or [`Set`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html) to name two, as shown in the following example.
 
 ```java
 package demo;
@@ -159,7 +159,7 @@ As already discuses in the [raw types section]({{ '/docs/generics/raw-types/' | 
 
 ## Diamond Operator
 
-[Java 7]( https://openjdk.java.net/projects/jdk7/features/) provided a new operator, called the [diamond operator](https://docs.oracle.com/javase/8/docs/technotes/guides/language/type-inference-generic-instance-creation.html) as part of [JSR 334](https://jcp.org/en/jsr/detail?id=334).
+[Java 7]( https://openjdk.java.net/projects/jdk7/features/) provided a new operator, called the [diamond operator](https://docs.oracle.com/javase/8/docs/technotes/guides/language/type-inference-generic-instance-creation.html) as part of [JSR 334: Small Enhancements to the JavaTM Programming Language (a.k.a _project coin_)](https://jcp.org/en/jsr/detail?id=334).
 
 Consider the following code fragment.
 
@@ -196,7 +196,7 @@ The compilers can use the variable declaration to determine the type of the list
 
 The diamond operator can be safely used anywhere where the type can be inferred from the left-hand side of the expression.  Consider the following example.
 
-{% include custom/proceed_with_caution.html details="Do not use the diamond operator where the type cannot be easily inferred as this may lead to surprises" %}
+{% include custom/proceed_with_caution.html details="Do not use the diamond operator where the type cannot be easily inferred, as this may lead to surprises" %}
 
 ```java
 package demo;

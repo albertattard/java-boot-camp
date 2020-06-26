@@ -56,6 +56,8 @@ The `printNames()` method does not need to type cast the contents of the list as
 
 ## Can we overload method using generics?
 
+**NO**
+
 Returning the last element of a list is a tedious operation as we need to check whether the list is empty and if it is not empty, then we need to determine the size of the list and return the element at the size of the list less 1, as shown in the following fragment.
 
 ```java
@@ -123,7 +125,7 @@ public class App {
 }
 ```
 
-The above example, will not compile as the signature of the `last()` methods is the same.  Java cannot tell these two methods apart by using the generic types.  We can refactor these methods and use a different name for each or make better use of generics as discussed [next](#method-returning-a-generic-type).
+The above example, will not compile as the signature of the `last()` methods is the same.  Java cannot tell these two methods apart by using the generic types.  We can refactor these methods and use a different name for each method (such as `lastSring()` and `lastInt()`) or make better use of generics as discussed [next](#method-returning-a-generic-type).
 
 ## Method returning a generic type
 
@@ -145,7 +147,7 @@ The `last()` methods, shown in the [previous](#can-we-overload-method-using-gene
      }
    ```
 
-These two methods are not working with the list's content.  These methods are simply returning the last element.  These two variations can be combined into one method using generics, as shown next.
+These two methods are not working with the list's content.  These methods are simply returning the last element of the list if one exists.  These two variations can be combined into one method using generics, as shown next.
 
 ```java
   private static <T> T last( final List<T> list ) {
@@ -183,7 +185,7 @@ public class App {
 }
 ```
 
-The above method will print the following.
+The above example will print the following.
 
 ```bash
 The last child, Aden, is 11 years old
@@ -224,13 +226,13 @@ public class App {
 }
 ```
 
-We can use primitives too, as these are automatically converted to their respective wrapper.  Note that if we provide `null` as the `defaultValue`, then we will cause a `NullPointerException` to be thrown as `null` cannot be converted to the primitive type `int`.
+We can use primitives too, as these are automatically converted to their respective wrapper using [autoboxing]({{ '/docs/data-types/autoboxing/' | absolute_url }}).  Note that if we provide `null` as the `defaultValue`, then we will cause a `NullPointerException` to be thrown as `null` cannot be converted to the primitive type `int`.
 
 ## Can we use different generic types?
 
 Yes.  We can use more than one generic type.
 
-Consider the following, meaningless function
+Consider the following, _meaningless_, example.
 
 ```java
 package demo;
@@ -251,6 +253,8 @@ public class App {
   }
 }
 ```
+
+The `print()` method will print the one of the other depending on the first (`boolean`) parameter.  The example will print.
 
 ```bash
 string
