@@ -228,9 +228,32 @@ public class App {
 
 The `call()` takes an instance of `List<? extends Pet>`.  This means that the given list will contain `Pet` or any subtype of `Pet`, such as `Dog` or `Cat`.  We are able to invoke the `call()` method with lists of all types.
 
-This means, if `S` is a subtype of `T`, then `GenericType<S>` is a subtype of `GenericType<? extends T>`.  We can use `List<Pet>`, `List<Cat>` or `List<Dog>` where a `List<? extends Pet>` is required.
+This means, if `S` is a subtype of `T`, then `GenericType<S>` is a subtype of `GenericType<? extends T>`.  We can use `List<Pet>`, `List<Cat>` or `List<Dog>` where a `List<? extends Pet>` is required.  In this example we are defining an upper bound and saying that the list will contain types that are subtypes of `Pet` (including `Pet`).  The receiver of the list must have an open lower bound as the list may contain anything that extends `Pet` (including `Pet`).
 
-**Does this make generics suseptable to the same problem we saw with arrays before?**
+{% include custom/dose_not_compile.html %}
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    call( new ArrayList<Dog>() );
+    call( new ArrayList<Pet>() );
+
+    /* ⚠️ This will not compile!! */
+    call( new ArrayList<Object>() );
+  }
+
+  public static void call( List<? extends Pet> pets ) {
+  }
+}
+```
+
+**Does this make generics susseptable to the same problem we saw with arrays before?**
 
 **No**.
 
@@ -294,7 +317,7 @@ Using covariance, we can communicate our intenet when working with generics.  If
 
 ## Contravariance
 
-We can use generics to control what we can do and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot write to the list.  Using contravariance we can achieve the opposite.  Consider the following example.
+We can use generics to control what we can do and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot write to the list.  Using contravariance we can (_somewhat_) achieve the opposite.  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -327,6 +350,35 @@ src/main/java/demo/App.java:15: error: incompatible types: CAP#1 cannot be conve
   where CAP#1 is a fresh type-variable:
     CAP#1 extends Object super: Pet from capture of ? super Pet
 ```
+
+{% include custom/dose_not_compile.html %}
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    call( new ArrayList<Object>() );
+    call( new ArrayList<Pet>() );
+
+    /* ⚠️ This will not compile!! */
+    call( new ArrayList<Dog>() );
+  }
+
+  public static void call( List<? super Pet> pets ) {
+  }
+}
+```
+
+In 
+
+The use-site must have an open upper bound on the type parameter.
+
+    If S is a subtype of T, then GenericType<S> is a supertype of GenericType<? super B>. 
 
 In Java everything is an object, which means we can read from the `pets` list, only that we need to save it in a variable of type `Object`.
 
@@ -371,6 +423,32 @@ public class App {
 ```
 
 ## Bi-variance
+
+There are cases where we need to operate on a collection without interacting with its content.  Say we need to write a function that verifies whether the _i_th element in a collection is not `null`.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.List;
+
+public class App {
+
+  public static void main( final String[] args ) {
+
+    final List<String> names = List.of( "Jade", "Aden" );
+    final List<Pet> pets = List.of( new Dog(), new Cat() );
+
+    isSet( names, 3 );
+    isSet( pets, 1 );
+  }
+
+  public static boolean isSet( final List<?> list, final int index ) {
+    return index < list.size() && list.get( index ) != null;
+  }
+}
+```
+
+The `isSet()` method takes a list of any type, `List<?>`.  This is bi-variant, as it has not upper or lower bound.
 
 ```java
 package demo;
