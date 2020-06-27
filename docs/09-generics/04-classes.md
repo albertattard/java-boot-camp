@@ -17,7 +17,7 @@ permalink: docs/generics/classes/
 
 ---
 
-## Classes
+## Generic types
 
 We can use generics with classes too.  Consider the following example.
 
