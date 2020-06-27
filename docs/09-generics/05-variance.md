@@ -101,7 +101,7 @@ Consider the following classes.
    }
    ```
 
-* A subtype, `Triangle` (_may be removed if not used in the examples_)
+* A subtype, `Triangle`
 
    ```java
    package demo;
@@ -128,7 +128,7 @@ Consider the following classes.
    }
    ```
 
-According to the LSP, we can use an instance of `Triangle` (or `Circle` or `Rectangle` or `Square`) , wherever a `Shape` is required, as shown next.
+According to the LSP, we can use an instance of `Triangle` (or `Circle` or `Rectangle` or `Square`), wherever a `Shape` is required, as shown next.
 
 ```java
 package demo;
@@ -181,7 +181,9 @@ public class App {
 }
 ```
 
-[Variance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) defines how subtyping between containers types (lists), or methods' types (parameters and return values) relates to subtyping.  In Java, arrays are covariant while generics are invariant.  There are four types of variance that effect the behaviour of generics.
+[Variance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) defines how subtyping between containers types (collections or generic types), or methods' types (parameters and return values) relate to subtyping.
+
+There are four types of variance that effect the behaviour of generics.
 
 1. [Invariance](#invariance)
 1. [Covariance](#covariance)
@@ -192,7 +194,7 @@ Each of these is discussed in depth in the following sections.
 
 ## Invariance
 
-The types `Triangle`, `Circle`, `Rectangle`, and `Square` are both subtypes of `Shape` and we can add them to a list of type `Shape`, as shown next.
+The types `Triangle`, `Circle`, `Rectangle`, and `Square` are all subtypes of `Shape` and we can add them to a list of type `Shape`, as shown next.
 
 ```java
 package demo;
@@ -234,7 +236,7 @@ public class App {
 }
 ```
 
-Generics are invariant which means that `ArrayList<Circle>` is not a subtype of `ArrayList<Shape>` (or `List<Shape>`), therefore we cannot use `ArrayList<Circle>` where `List<Shape>` this is required.  The same applies to method parameters.  You cannot pass a `ArrayList<Circle>` to a method that requires a `List<Shape>`.
+`ArrayList<Circle>` is not a subtype of `ArrayList<Shape>` (or `List<Shape>`), therefore we cannot use `ArrayList<Circle>` where `List<Shape>` this is required.  The same applies to method parameters.  You cannot pass a `ArrayList<Circle>` to a method that requires a `List<Shape>`.
 
 ```java
 package demo;
@@ -263,7 +265,7 @@ public class App {
 }
 ```
 
-The above is quite annoying as `Circle` is a `Shape` and thus the above should work.  Before we continue ranting, let consider a different example.
+The above is quite annoying as `Circle` is a `Shape` and thus the above should work.  Before we continue ranting about this, let's consider a different example using arrays.
 
 {% include custom/compile_but_throws.html e="ArrayStoreException" %}
 
@@ -281,16 +283,16 @@ public class App {
 }
 ```
 
-Arrays on the other hand are covariant, which means that `Circle[]` is a subtype of `Shape[]`.  Being so flexible, we have opened ourselves to new set os problems.  While compiling, the above example fails at runtime with a `ArrayStoreException`, as shown next.
+Arrays on the other hand are covariant, which means that `Circle[]` is a subtype of `Shape[]`.  Being so flexible, we have opened ourselves to new set of problems.  While compiling, the above example fails at runtime with a `ArrayStoreException`, as shown next.
 
 ```bash
 Exception in thread "main" java.lang.ArrayStoreException: demo.Circle
 	at demo.App.main(App.java:9)
 ```
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28), whereas the title suggests, it recommends lists over arrays as much as possible.
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about this in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28), whereas the title suggests, it recommends lists over arrays as much as possible to avoid such problems.
 
-We can still achieve the same degree of flexibility with generics without having to pay the same price as arrays as we will see in [Covariance](#covariance), [Contravariance](#contravariance) and [Bi-variance](#bi-variance)
+Generics are not inflexible and we can still achieve the same degree of flexibility with generics without having to pay the same price as arrays as we will see in [Covariance](#covariance), [Contravariance](#contravariance) and [Bi-variance](#bi-variance)
 
 ## Covariance
 
@@ -368,6 +370,8 @@ public class App {
 }
 ```
 
+`Object` is not a subtype `Shape`, therefore, `GenericType<Object>` is not a subtype of `GenericType<? extends Shape>`.
+
 ### Does covariance make generics susceptible to the same problem we saw with arrays before?
 
 **No**.
@@ -388,7 +392,7 @@ public class App {
 }
 ```
 
-The issue with covariance happens when we try to add something to the array.
+The issue with covariance happens when we try to add something to the array as we are able to add an different subtype.
 
 ```java
     /* ⚠️ This will fail at runtime!! */
@@ -416,7 +420,7 @@ public class App {
 }
 ```
 
-The above example does not compile as we cannot add anything to the list `shapes`.
+The above example does not compile as we cannot add anything to the variable `shapes` (of type `List<? extends Shape>`).
 
 ```bash
 src/main/java/demo/App.java:12: error: incompatible types: Circle cannot be converted to CAP#1
@@ -432,7 +436,7 @@ This is very convenient as while the `totalArea()` method can iterate the given 
 
 ## Contravariance
 
-We can use generics to control what we can add and cannot do to a collection.  Using [covariance](#covariance) we can read from a list but we cannot add items to the list.  Using contravariance we can achieve the _opposite_: we are able add to the list, but we are not expected to read items from the list (at least in the type we expect these items to be).  Consider the following example.
+We can use generics to control what we can add and cannot add to a collection.  Using [covariance](#covariance) we can read from a list, but we cannot add items to the list.  Using contravariance we can achieve the _opposite_: we are able add to the list, but we are not expected to read items from the list (at least in the type we expect these items to be).  Consider the following example.
 
 {% include custom/dose_not_compile.html %}
 
@@ -487,7 +491,7 @@ public class App {
 }
 ```
 
-The `populate()` method accepts any list that can contain shapes.  A list of objects can contain shapes, thus it is accepted.  A list of rectangles on the other hand does not accept any shape, only rectangles, thus not accepted, as shown next.
+The `populate()` method accepts any list that can contain shapes.  A list of objects can contain shapes, thus it is accepted.  A list of rectangles, on the other hand, does not accept any shape, only rectangles, thus not accepted, as shown next.
 
 {% include custom/dose_not_compile.html %}
 
@@ -500,6 +504,7 @@ import java.util.List;
 public class App {
 
   public static void main( final String[] args ) {
+    /* ⚠️ This will not compile!! */
     populate( new ArrayList<Rectangle>() );
   }
 
@@ -510,7 +515,7 @@ public class App {
 }
 ```
 
-The above example is not provide a list that can contain the required type and will fails as shown next.
+The above example is not providing a list that can contain the required type and will fail to compile as shown next.
 
 ```bash
 src/main/java/demo/App.java:9: error: incompatible types: ArrayList<Rectangle> cannot be converted to List<? super Shape>
@@ -518,9 +523,9 @@ src/main/java/demo/App.java:9: error: incompatible types: ArrayList<Rectangle> c
               ^
 ```
 
-This is quite counterintuative.  If `S` is a subtype of `T`, then `GenericType<T>` is a subtype of `GenericType<? super S>`.  In our example, `ArrayList<Object>` is a subtype of `List<? super Shape>`, despite from the fact that `Shape` is subtype of `Object`.
+This may be quite counterintuitive.  If `S` is a subtype of `T`, then `GenericType<T>` is a subtype of `GenericType<? super S>`.  In our example, `ArrayList<Object>` is a subtype of `List<? super Shape>`, despite from the fact that `Shape` is subtype of `Object`.
 
-In Java everything is an `Object`, which means we can read from the `shapes` list.  Consider the following example.
+In Java everything is an `Object`, which means we can read from the variable `shapes`.  Consider the following example.
 
 ```java
 package demo;
@@ -562,7 +567,7 @@ public class App {
 
 ## Bi-variance
 
-There are cases where we need to operate on a collection without interacting with its content.  Say we need to write a function that verifies whether the <em>i</em><sup>th</sup> element in a collection is not `null`.  Consider the following example.
+There are cases where we need to operate on a collection (generic type) without interacting with its content.  Say we need to write a function that verifies whether the <em>i</em><sup>th</sup> element in a collection is not `null`.  Consider the following example.
 
 ```java
 package demo;
@@ -585,13 +590,13 @@ public class App {
 }
 ```
 
-The `isValueSet()` method takes a list of any type, `List<?>`.  This is bi-variant, as it has not upper or lower bounds.  The list can be of any type.
-
-This is ideal when we need to operate on the collection itself, irrespective from the content type.
+The `isValueSet()` method takes a list of any type, `List<?>`.  This is bi-variant, as it has no upper or lower bounds.  The list can be of any type.  This is ideal when we need to operate on the collection itself, irrespective from the content type.
 
 ## Examples
 
 ### Sorting a collection
+
+Consider the following example.
 
 ```java
 package demo;
@@ -613,16 +618,26 @@ public class App {
 }
 ```
 
+The names are sorted alphabetically using the [`Collections.sort()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html#sort(java.util.List)) method.
+
 ```bash
 James
 Mary
 ```
+
+The `Collections.sort()` method makes use of generics as shown next.
 
 ```java
 public class Collections {
   public static <T extends Comparable<? super T>> void sort(List<T> list) { /* ... */ }
 }
 ```
+
+The list needs to be of a type `T`, that extends [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) of a supertype of `T`.
+
+**What does this mean?**
+
+This may be a bit cryptic.  Consider the following `Person` class.
 
 ```java
 package demo;
@@ -644,6 +659,8 @@ public class Person implements Comparable<Person> {
 }
 ```
 
+The `Person` class implements `Comparable` of type `Person` (`implements Comparable<Person>`).  Now consider the `Employee` class that extends the `Person` class, shown next.
+
 ```java
 package demo;
 
@@ -662,6 +679,50 @@ public class Employee extends Person {
   }
 }
 ```
+
+The `Employee` class extends `Person` but does not implement `Comparable`.  The `Employee` class is a `Person` and also is a `Comparable<Person>`.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Employee a = new Employee( "Albert", "JVM-0110" );
+    final Person b = new Employee( "Albert", "JVM-0110" );
+    final Comparable<Person> c = new Employee( "Albert", "JVM-0110" );
+    final Object d = new Employee( "Albert", "JVM-0110" );
+  }
+}
+```
+
+Each assignment is explained next.
+
+* An `Employee` is an `Employee`
+
+   ```java
+       final Employee a = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* An `Employee` is an `Person`, as `Employee` inherits from `Person`
+
+   ```java
+       final Person b = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* An `Employee` is a `Comparable<Person>` transitively.  `Employee` inherits from `Person`, which in turn implements `Comparable<Person>`
+
+   ```java
+       final Comparable<Person> c = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* Everything in Java is an `Object`
+
+   ```java
+       final Object d = new Employee( "Albert", "JVM-0110" );
+   ```
+
+We can sort a list of employees, because the `Employee` (`T`) implements a `Comparable` of its supertype, `Person`, (`Comparable<? super T>`).  Following is an example.
 
 ```java
 package demo;
@@ -683,11 +744,7 @@ public class App {
 }
 ```
 
-```java
-public class Collections {
-  public static <T extends Comparable<? super T>> void sort(List<T> list) { /* ... */ }
-}
-```
+The employees are sorted using the `Person`'s comparator as shown next.
 
 ```bash
 Employee(super=Person(name=James), employeeNumber=MNG-0906)
