@@ -276,3 +276,56 @@ public class App {
 The variable `numbers` is a list of type `Integer` (reference type) and not `int` (reference type).  The `int` literals `7` and `4` are converted to `Integer`s using the [`Integer.valueOf()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Integer.html#valueOf(int)) method.
 
 Creating an object from a primitive takes more space as objects carry an overhead.  With that said, the [static factory method]({{ '/docs/simple-objects/constructors/#what-are-static-factory-methods' | absolute_url }}) `valueOf()` caches some values to save up memory.
+
+## Are there cases where we cannot use generics?
+
+**Yes**
+
+There are some cases where we cannot use generics.
+
+1. Cannot have generic static fields
+
+   {% include custom/dose_not_compile.html %}
+
+   ```java
+   /* pending example */
+   ```
+
+1. Cannot create generic instance
+
+   {% include custom/dose_not_compile.html %}
+
+   ```java
+   /* pending example */
+   ```
+
+1. Cannot create generic arrays
+
+   {% include custom/dose_not_compile.html %}
+
+   ```java
+   package demo;
+
+   public class App {
+
+     public static void main( final String[] args ) {
+       final String[] array = createArray();
+     }
+
+     private static <T> T[] createArray() {
+       /* ⚠️ cannot create generic arrays */
+       final T[] array = new T[0];
+       return array;
+     }
+   }
+   ```
+
+   We cannot use raw types in this example, but worth noting that we cannot create generic arrays.
+
+1. Cannot catch a generic exception
+
+   {% include custom/dose_not_compile.html %}
+
+   ```java
+   /* pending example */
+   ```
