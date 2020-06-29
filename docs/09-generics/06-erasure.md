@@ -541,20 +541,7 @@ public class Box<T> {
 }
 ```
 
-```java
-package demo;
-
-public class App {
-
-  public static void main( final String[] args ) {
-    final Box<String> box = new StringBox();
-    box.put( "Bicycle" );
-
-    final String item = box.get();
-    System.out.printf( "The box contains a: %s%n", item );
-  }
-}
-```
+The `get()` method returns the type parameter `T`, which is compiled to an `Object` as shown in the following bytecode fragment.
 
 ```
   // access flags 0x1
@@ -574,6 +561,25 @@ public class App {
     MAXLOCALS = 1
 ```
 
+With that said, we can still retrieve the type parameter without having to cast it, as shown in the following example.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Box<String> box = new StringBox();
+    box.put( "Bicycle" );
+
+    final String item = box.get();
+    System.out.printf( "The box contains a: %s%n", item );
+  }
+}
+```
+
+The Java compiler will introduce a cast at the consumer side for us as shown in the following bytecode fragment.
+
 ```
    L2
     LINENUMBER 9 L2
@@ -583,7 +589,76 @@ public class App {
     ASTORE 2
 ```
 
-## Covariant return types
+The Java compilers verifies that the right type is passed and we can safely assume that the return type can be safely casted back to the required type.
+
+## How does type erasure effect return types?
+
+Consider the following example of the `StringBox` class.
+
+```java
+package demo;
+
+public class StringBox extends Box<String> {
+  @Override
+  public void put( final String item ) {
+    System.out.printf( "Adding string: %s%n", item );
+    super.put( item );
+  }
+
+  @Override
+  public String get() {
+    System.out.println( "Retuning string" );
+    return super.get();
+  }
+}
+```
+
+In the above example, the `StringBox` overrides the generic `get()` method defined in the `Box` class.
+
+```bash
+$ javap -p build/classes/java/main/demo/StringBox.class
+Compiled from "StringBox.java"
+public class demo.StringBox extends demo.Box<java.lang.String> {
+  public demo.StringBox();
+  public void put(java.lang.String);
+  public void put(java.lang.Object);
+  public java.lang.String get();
+  public java.lang.Object get();
+}
+```
+
+Before Java 1.5, when a method overrides another method, it needed to match the method signature and the return type.  If the method defined in the supertype returns an `Object`, the overriding method in the subtype must return an `Object`.  It cannot return a `String`, for example.
+
+Generics break this as the subtype `StringBox` returns a `String`, when the overriden method in the `Box` class returns an `Object`.
+
+As of Java 1.5, this was relaxed and **covariant return types** ([JLS-8.4.5](https://docs.oracle.com/javase/specs/jls/se14/html/jls-8.html#jls-8.4.5)) were introduced.
+
+"_Return types may vary among methods that override each other if the return types are reference types. The notion of return-type-substitutability supports covariant returns, that is, the specialization of the return type to a subtype._"<br />
+([Reference](https://docs.oracle.com/javase/specs/jls/se14/html/jls-8.html#jls-8.4.5))
+
+This was made possible by simply overloading the `get()` method by creating a new bridge method in the `StringBox`, as shown in the following bytecode fragment.
+
+```
+  // access flags 0x1041
+  public synthetic bridge get()Ljava/lang/Object;
+   L0
+    LINENUMBER 3 L0
+    ALOAD 0
+    INVOKEVIRTUAL demo/StringBox.get ()Ljava/lang/String;
+    ARETURN
+   L1
+    LOCALVARIABLE this Ldemo/StringBox; L0 L1 0
+    MAXSTACK = 1
+    MAXLOCALS = 1
+```
+
+Similar to other bridge methods, the method shown above simple calls the original method.
+
+This is actually required as Java will be looking for a method with the same signature and **same return type**, otherwise a [`NoSuchMethodError`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/NoSuchMethodError.html) is thrown.
+
+### Is this only related to generics?
+
+**NO**.
 
 ```java
 package demo;
@@ -643,91 +718,6 @@ public class demo.Subtype extends demo.Supertype {
     MAXSTACK = 1
     MAXLOCALS = 1
 ```
-
-`NoSuchMethodError`
-
-## How does type erasure effect return types?
-
-```java
-package demo;
-
-public interface Worker<T> {
-  T produce();
-}
-```
-
-```java
-package demo;
-
-public class PiWorker implements Worker<Double> {
-  @Override
-  public Double produce() {
-    return Math.PI;
-  }
-}
-```
-
-```bash
-$ javap build/classes/java/main/demo/PiWorker.class
-```
-
-```bash
-Compiled from "PiWorker.java"
-public class demo.PiWorker implements demo.Worker<java.lang.Double> {
-  public demo.PiWorker();
-  public java.lang.Double produce();
-  public java.lang.Object produce();
-}
-```
-
-```
-// class version 58.65535 (-65478)
-// access flags 0x21
-// signature Ljava/lang/Object;Ldemo/Worker<Ljava/lang/Double;>;
-// declaration: demo/PiWorker implements demo.Worker<java.lang.Double>
-public class demo/PiWorker implements demo/Worker {
-
-  // compiled from: PiWorker.java
-
-  // access flags 0x1
-  public <init>()V
-   L0
-    LINENUMBER 3 L0
-    ALOAD 0
-    INVOKESPECIAL java/lang/Object.<init> ()V
-    RETURN
-   L1
-    LOCALVARIABLE this Ldemo/PiWorker; L0 L1 0
-    MAXSTACK = 1
-    MAXLOCALS = 1
-
-  // access flags 0x1
-  public produce()Ljava/lang/Double;
-   L0
-    LINENUMBER 6 L0
-    LDC 3.141592653589793
-    INVOKESTATIC java/lang/Double.valueOf (D)Ljava/lang/Double;
-    ARETURN
-   L1
-    LOCALVARIABLE this Ldemo/PiWorker; L0 L1 0
-    MAXSTACK = 2
-    MAXLOCALS = 1
-
-  // access flags 0x1041
-  public synthetic bridge produce()Ljava/lang/Object;
-   L0
-    LINENUMBER 3 L0
-    ALOAD 0
-    INVOKEVIRTUAL demo/PiWorker.produce ()Ljava/lang/Double;
-    ARETURN
-   L1
-    LOCALVARIABLE this Ldemo/PiWorker; L0 L1 0
-    MAXSTACK = 1
-    MAXLOCALS = 1
-}
-```
-
-Some generic information is retained for linking purposes, otherwise the compiler will not be able to determine whether this is the correct generic.
 
 ## Are there cases where we cannot use generics?
 
