@@ -19,7 +19,7 @@ permalink: docs/generics/variance/
 
 ## Variance
 
-The [Liskov substitution principle (LSP)](https://en.wikipedia.org/wiki/Liskov_substitution_principle) tells us that any subtypes of `T` can be used when `T` is required.
+The [Liskov substitution principle (LSP)](https://en.wikipedia.org/wiki/Liskov_substitution_principle) tells us that any subtype of `T` can be used when `T` is required.
 
 Consider the following classes.
 
@@ -433,6 +433,76 @@ src/main/java/demo/App.java:12: error: incompatible types: Circle cannot be conv
 This is very convenient as while the `totalArea()` method can iterate the given list, it cannot add values to it.
 
 {% include custom/note.html details="This is not equivalent to immutable lists and items can still be removed from the list.  This only prevents new items to be added to the list." %}
+
+### Can a generic type implement two or more interfaces?
+
+Yes.
+
+Consider the following classes
+
+1. An interface
+
+   ```java
+   package demo;
+
+   public interface HasName {
+
+     String getName();
+   }
+   ```
+
+1. Another interface
+
+   ```java
+   package demo;
+
+   import java.math.BigDecimal;
+
+   public interface HasPrice {
+
+     BigDecimal getPrice();
+   }
+   ```
+
+1. A class that implements these two interfaces
+
+   ```java
+   package demo;
+
+   import lombok.AllArgsConstructor;
+   import lombok.Data;
+
+   import java.math.BigDecimal;
+
+   @Data
+   @AllArgsConstructor
+   public class LineItem implements HasName, HasPrice {
+
+     private final String name;
+     private final BigDecimal price;
+   }
+   ```
+
+We can define a type that needs to extend both the `HasName` and `HasPrice` interfaces as shown in the following example.
+
+```java
+package demo;
+
+import java.math.BigDecimal;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    print( new LineItem( "Foldable Bicycle", new BigDecimal( "395.00" ) ) );
+  }
+
+  private static <T extends HasName & HasPrice> void print( final T t ) {
+    System.out.printf( "%s costs %.2f€%n", t.getName(), t.getPrice() );
+  }
+}
+```
+
+The `print()` method can take anything that implement both interfaces, such as the `LineItem`.  Furthermore, given that the generic type `T` implements both interfaces, we are able to invoke the methods defined by the interfaces, such as `getName()` and `getPrice()`.
 
 ## Contravariance
 
