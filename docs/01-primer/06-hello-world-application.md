@@ -209,11 +209,11 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
     Alternatively, we can use the [IntelliJ Jclasslib plugin](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer).
 
-    Click on `View > Show Bytecode with Jclasslib`
+    Click on _View > Show Bytecode with Jclasslib_
 
     ![Show Bytecode With Jclasslib]({{site.baseurl}}/assets/images/Show-Bytecode-With-Jclasslib.png)
 
-    Expand `Methods > main > Code`
+    Expand _Methods > main > Code_
 
     ![Bytecode]({{site.baseurl}}/assets/images/App-Main-Method-Bytecode.png)
 

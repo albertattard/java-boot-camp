@@ -498,7 +498,7 @@ The `Rows` class shown next has no state after all.  Appearances cannot be more 
 
 ![Source Code is not the same as Bytecode]({{site.baseurl}}/assets/images/Source-Code-is-not-the-same-as-Bytecode.png)
 
-The `Rows` class has a reference to the parent class even though it is not visible.  Let's see the `Rows`' class bytecode (`View > Show Bytecode`).
+The `Rows` class has a reference to the parent class even though it is not visible.  Let's see the `Rows`' class bytecode (_View > Show Bytecode_).
 
 ```bytecode
 // class version 58.65535 (-65478)
