@@ -194,3 +194,9 @@ BUILD SUCCESSFUL in 2s
 ```
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097) advise against usage of raw types, in [Item 26: Don’t use raw types](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev26), and recommends the use of [Generics, discussed next]({{ 'docs/generics/basics/' | absolute_url }}).  The next item in the same chapter, [Item 27: Eliminate unchecked warnings](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev27), strongly recommends getting rid of unchecked warnings too.
+
+## Are there cases where we cannot use generics?
+
+There are a few minor exceptions to the rule that you should not use raw types. You must use raw types in class literals. The specification does not permit the use of parameterized types (though it does permit array types and primitive types) [JLS, 15.8.2]. In other words, List.class, String[].class, and int.class are all legal, but List<String>.class and List<?>.class are not.
+
+A second exception to the rule concerns the instanceof operator. Because generic type information is erased at runtime, it is illegal to use the instanceof operator on parameterized types other than unbounded wildcard types. The use of unbounded wildcard types in place of raw types does not affect the behavior of the instanceof operator in any way. In this case, the angle brackets and question marks are just noise. This is the preferred way to use the instanceof operator with generic types:
