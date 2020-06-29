@@ -236,7 +236,7 @@ public class App {
 }
 ```
 
-`ArrayList<Circle>` is not a subtype of `ArrayList<Shape>` (or `List<Shape>`), therefore we cannot use `ArrayList<Circle>` where `List<Shape>` this is required.  The same applies to method parameters.  You cannot pass a `ArrayList<Circle>` to a method that requires a `List<Shape>`.
+`ArrayList<Circle>` is not a subtype of `ArrayList<Shape>` (or `List<Shape>`), therefore we cannot use `ArrayList<Circle>` where `List<Shape>` is required.  The same applies to method parameters.  You cannot pass a `ArrayList<Circle>` to a method that requires a `List<Shape>`.
 
 ```java
 package demo;
@@ -371,6 +371,78 @@ public class App {
 ```
 
 `Object` is not a subtype `Shape`, therefore, `GenericType<Object>` is not a subtype of `GenericType<? extends Shape>`.
+
+### Can we use the covariant type?
+
+**Yes**.
+
+Consider a method that returns the shape with the largest area, as shown in the following example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Circle> circles = new ArrayList<Circle>();
+    circles.add( new Circle( 7 ) );
+    circles.add( new Circle( 4 ) );
+
+    final Circle largest = largest( circles ).orElse( null );
+    System.out.printf( "The largest circle has an area of %.2f%n", largest.area() );
+  }
+
+  private static <T extends Shape> Optional<T> largest( final List<T> shapes ) {
+    return shapes
+      .stream()
+      .max( Comparator.comparingDouble( Shape::area ) );
+  }
+}
+```
+
+The `largest()` method will return the shape with the largest area, if the given list is not empty, otherwise it returns an [empty optional](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Optional.html#empty()).
+
+```bash
+The largest circle has an area of 38,48
+```
+
+The `largest()` method returned an [`Optional`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Optional.html) of type `Circle`, in the above example, because the type of the provided list is `Circle`.  We can use any type that is a subtype of `Shape`.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final List<Rectangle> rectangles = new ArrayList<Rectangle>();
+    rectangles.add( new Square( 2 ) );
+    rectangles.add( new Square( 7 ) );
+
+    final Rectangle largest = largest( rectangles ).orElse( null );
+    System.out.printf( "The largest rectangle has an area of %.2f%n", largest.area() );
+  }
+
+  private static <T extends Shape> Optional<T> largest( final List<T> shapes ) { /* ... */ }
+}
+```
+
+In the above example works with the `Rectangle` type. 
+
+```bash
+The largest rectangle has an area of 49,00
+```
+
+The method `largest()` can be seen as a function that takes a `List<T>`, where `T` is a subtype of `Shape`, and returns an `Optional<T>`: <em>f(List&lt;T&gt;) &#8594; Optional&lt;T&gt;</em>
 
 ### Does covariance make generics susceptible to the same problem we saw with arrays before?
 
