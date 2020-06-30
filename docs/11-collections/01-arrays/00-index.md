@@ -22,7 +22,7 @@ An array is a contiguous collection of homogeneous elements that can be accessed
 
 ## Arrays Declaration
 
-To declare an array we use square brackets (`[]`) after the type of the elements we will store in array.  The following code fragment shows an _`int` array_ (or as some times is referred to, _an array of type `int`_). 
+To declare an array we use square brackets (`[]`) after the type of the elements we will store in array.  The following code fragment shows an _`int` array_ (or as some times is referred to, _an array of type `int`_).
 
 ```java
 int[] a;
@@ -279,11 +279,64 @@ Array of int: [1, 1, 1, 1, 1]
 
 ### Can we manipulate an array using the foreach loop?
 
+**NO**
+
+The [foreach loop]({{ '/docs/control-flow/' | absolute_url }}) cannot be used to manipulate the elements of an array.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int[] a = new int[] { 1, 2, 3, 4, 5 };
+
+    /* ⚠️ This will not increment the array's elements as one would expect */
+    for ( int i : a ) {
+      i += 2;
+    }
+
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
+
+The array `a` elements are left unchanged after the loop and will print.
+
+```bash
+Array of int: [1, 2, 3, 4, 5]
+```
+
+The example shown above is equivalent to the following example that makes use of the normal for-loop.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int[] a = new int[] { 1, 2, 3, 4, 5 };
+
+    for ( int i = 0; i < a.length; i++ ) {
+      int x = a[i];
+      /* ⚠️ This only increments x and not the array element */
+      x += 2;
+    }
+
+    System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+  }
+}
+```
+
 ## Read past the array's length
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `ArrayIndexOutOfBoundsException`!!**
+{% include custom/compile_but_throws.html e="ArrayIndexOutOfBoundsException" %}
 
 ```java
 package demo;
@@ -292,7 +345,7 @@ public class App {
   public static void main( final String[] args ) {
     final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
-    /* Throws ArrayIndexOutOfBoundsException */
+    /* ⚠️ Throws ArrayIndexOutOfBoundsException */
     a[a.length] = 10;
   }
 }
@@ -309,12 +362,18 @@ Array's range is always between `0` (inclusive) and the array's length (exclusiv
 
 ## Two dimensional array
 
+Java supports multidimentional arrays.  Consider the following example.
+
 ```java
 package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int[][] a = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
 
     for ( int i = 0; i < a.length; i++ ) {
       for ( int j = 0; j < a[i].length; j++ ) {
@@ -325,6 +384,8 @@ public class App {
   }
 }
 ```
+
+The above example creates a two-dimensional array, a matrix, and iterate over each element.
 
 Output
 
@@ -344,12 +405,18 @@ a[2][2]=9
 
 ## Irregular Arrays
 
+Multi-dimensional arrays can be irregular.  This means that the arrays have different lengths.  Consider the following example.
+
 ```java
 package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int[][] a = { { 1, 2, 3, 4 }, { 5, 6 }, { 7, 8, 9 } };
+    final int[][] a = {
+      { 1, 2, 3, 4 },
+      { 5, 6 },
+      { 7, 8, 9 }
+    };
 
     for ( int i = 0; i < a.length; i++ ) {
       for ( int j = 0; j < a[i].length; j++ ) {
@@ -361,7 +428,9 @@ public class App {
 }
 ```
 
-Output
+The first array, has 4 elements, while the second array has only 2.  The nested for-loop still works as expected, as `j` will stop when it reaches the length of the current row (`j < a[i].length`).
+
+The above code will print the following.
 
 ```bash
 a[0][0]=1
@@ -379,6 +448,8 @@ a[2][2]=9
 
 ## Arrays are reference types
 
+Arrays are reference types.  Like any other reference type, modifying an array from one variable will effect all other variables pointing to the same array.  Consider the following example.
+
 ```java
 package demo;
 
@@ -395,7 +466,8 @@ public class App {
   }
 }
 ```
-Output
+
+Both variables, `a` and `b`, are pointing to the same object in the Java heap.  Modifying the array from either variable will effect both as shown in the following output.
 
 ```bash
 Array a contains: [10, 2, 3, 4, 5]
@@ -404,7 +476,7 @@ Array b contains: [10, 2, 3, 4, 5]
 
 ## Arrays are always mutable
 
-**Making and array variable `final` does not make it immutable**.
+{% include custom/note.html details="Making and array variable <code>final</code> does not make the array immutable" %}
 
 ```java
 package demo;
@@ -427,18 +499,15 @@ Output
 Array of int: [10, 2, 3, 4, 5]
 ```
 
-**Java arrays are always mutable and there is nothing preventing that**.
-[Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28)
+{% include custom/note.html details="Java arrays are always mutable and there is nothing preventing that." %}
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) recommends using lists instead of arrays in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28).  A `List`, different from an array, can be immutable.
 
 ## Defensive Copying
 
-**Defensive copying** is a technique which mitigates the negative effects caused by unintentional (or intentional) modifications of shared objects. Instead of sharing the original object, we share a copy of it and thus any modification made to the copy will not affect the original object.
+Defensive copying is a technique which mitigates the negative effects caused by unintentional (_or intentional_) modifications of shared objects.  Instead of sharing the reference to the original object, we create a new object and share the reference to the newly created copy of it.  Thus, any modification made to the copy will not affect the original object.
 
-Note that while this may sound bad, there may be valid cases when we need to modify data and no need to apply defensive copying.
-
-**⚠️ THE FOLLOWING EXAMPLE MAKES USE OF OBJECTS and TESTING WHICH IS COVERED LATER ON!!**
-
-Consider the following class.
+Consider the following example.
 
 ```java
 package demo;
@@ -457,15 +526,16 @@ public class Data {
     return sample;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return String.format( "Data: %s", Arrays.toString( sample ) );
   }
 }
 ```
 
-The `Data` class holds a set of sample measurements as an array of `int`, named `sample`.  This array of `int` can be modified from outside the data objects **breaking encapsulation**.
+The `Data` class holds a set of sample measurements, as an array of `int`, named `sample`.  This array of `int` can be modified from outside the data objects, thus **breaking encapsulation**.
 
-The `Data` class should not be effected by changes made to the source past its creation.  The Data class should not be immune from side effects.
+The `Data` class should not be effected by changes made to the source past its creation.  The `Data` class should not be immune from side effects.  Consider the following test class.
 
 ```java
 package demo;
@@ -475,19 +545,21 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DataTest {
+public class DataTest {
 
   @Test
-  @DisplayName( "should be immune from side effects as changes made to the sample source should not affect the data" )
-  public void shouldBeImmuneToSideEffects() {
+  @DisplayName( "should be immune from side effects after the object is created" )
+  public void shouldBeImmuneToSideEffectsPastCreation() {
     final int[] source = { 1, 2, 3, 4, 5 };
     final Data data = new Data( source );
 
     /* The value of the first element should be 1 */
     assertEquals( 1, data.getSample()[0] );
 
-    /* Modify the source and verify that the value of the first element is still 1 */
+    /* Modify the source after passing creating the Data object */
     source[0] = 10;
+
+    /* Verify that the value of the first element is still 1 */
     assertEquals( 1, data.getSample()[0] );
   }
 }
@@ -496,7 +568,7 @@ class DataTest {
 The above test will fail.
 
 ```bash
-DataTest > should be immune from side effects as changes made to the sample source should not affect the data FAILED
+DataTest > should be immune from side effects after the object is created FAILED
     org.opentest4j.AssertionFailedError at DataTest.java:21
 ```
 
@@ -515,14 +587,10 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int[] source = new int[] { 1, 2, 3, 4, 5 };
-    final Data data = new Data( source );
-
-    /* Modify the source from outside the data object */
-    source[0] = 10;
+    final Data data = new Data( new int[] { 1, 2, 3, 4, 5 } );
 
     /* Modifying the sample returned by the data object */
-    int[] sample = data.getSample();
+    final int[] sample = data.getSample();
     sample[2] = 30;
 
     System.out.printf( "%s%n", data );
@@ -538,7 +606,39 @@ Data: [10, 2, 30, 4, 5]
 
 When in doubt always write a test, as the test will stay with the code and can be used as documentation.
 
-This can be prevented using **Defensive Copying**.
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class DataTest {
+
+  @Test
+  @DisplayName( "should be immune from side effects after the object is created" )
+  public void shouldBeImmuneToSideEffectsPastCreation() { /* ... */ }
+
+  @Test
+  @DisplayName( "should be immune from side effects after the sample data is returned" )
+  public void shouldBeImmuneToSideEffectsPastReturningData() {
+    final Data data = new Data( new int[] { 1, 2, 3, 4, 5 } );
+
+    /* The value of the first element should be 1 */
+    assertEquals( 1, data.getSample()[0] );
+
+    /* Modify the array after retrieving it from the data */
+    final int[] sample = data.getSample();
+    sample[0] = 10;
+
+    /* Verify that the value of the first element is still 1 */
+    assertEquals( 1, data.getSample()[0] );
+  }
+}
+```
+
+This problem can be prevented using defensive copying.  Consider the following example.
 
 ```java
 package demo;
@@ -557,15 +657,20 @@ public class Data {
     return Arrays.copyOf( sample, sample.length );
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return String.format( "Data: %s", Arrays.toString( sample ) );
   }
 }
 ```
 
-Running the same test now, will work and will not fail.  Note that we are also creating a copy when the sample is returned by the `getSample()` method.
+The [`copyOf()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#copyOf(int%5B%5D,int)) method define in the [`Arrays`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html) class creates a new array of the same size and copies the elements from the source array to the newly created copy.
 
-[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) - [Item 50: Make defensive copies when needed](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev50)
+Running the same tests now, will pass.
+
+{% include custom/note.html details="We are creating a copy when the array is received and another copy every time the array is returned." %}
+
+[Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about defensive copying in [Item 50: Make defensive copies when needed](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev50) and describes how this can be used to protect against unexpected side effects.
 
 ## Arrays of Objects
 
