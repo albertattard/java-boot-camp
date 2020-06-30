@@ -197,7 +197,7 @@ BUILD SUCCESSFUL in 2s
 
 ## Are there cases where we must use raw types?
 
-**Yes**
+**YES**
 
 There are two cases where generics are not supported and instead, we need to use the raw types.
 

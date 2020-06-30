@@ -307,7 +307,9 @@ Note that all methods defined by an interface, such as the [`compareTo()` method
 
 ### Can a parent class prevent a method from being overridden?
 
-**Yes**.  A class can determine what methods can be overridden by its subtypes or not using the `final` keyword.  Adding the `final` keyword to a method signature, will prevent this method from being overridden as shown next.
+**YES**
+
+A class can determine what methods can be overridden by its subtypes or not using the `final` keyword.  Adding the `final` keyword to a method signature, will prevent this method from being overridden as shown next.
 
 ```java
 package demo;

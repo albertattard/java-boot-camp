@@ -374,7 +374,7 @@ public class App {
 
 ### Can we use the covariant type?
 
-**Yes**.
+**YES**
 
 Consider a method that returns the shape with the largest area, as shown in the following example.
 

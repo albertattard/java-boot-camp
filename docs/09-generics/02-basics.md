@@ -279,7 +279,7 @@ Creating an object from a primitive takes more space as objects carry an overhea
 
 ## Are there cases where we cannot use generics?
 
-**Yes**
+**YES**
 
 There are some cases where we cannot use generics.
 

@@ -10,7 +10,7 @@ permalink: docs/collections/arrays/
 # Arrays
 {: .no_toc }
 
-Arrays are data structures that enables you to store a set of objects of the same type. Arrays are static data structures: we should define it's size when initializing it and it can not be changed.
+An array is a contiguous collection of homogeneous elements that can be accessed using an index.  By contiguous, we mean the elements of the array are adjacent to one another in memory with no gaps between them.  Arrays are static data structures, were their size is defined at initialisation and cannot be changed.
 
 ## Table of contents
 {: .no_toc .text-delta }
@@ -22,13 +22,13 @@ Arrays are data structures that enables you to store a set of objects of the sam
 
 ## Arrays Declaration
 
-To declare an array we use square brackets after the type of the elements we will store in array
+To declare an array we use square brackets (`[]`) after the type of the elements we will store in array.  The following code fragment shows an _`int` array_ (or as some times is referred to, _an array of type `int`_). 
 
 ```java
 int[] a;
 ```
 
-Alternatively the square brackets can be placed after the variable name instead of the type
+Alternatively, the square brackets can be placed after the variable name instead of the type, as shown in the following code fragment.
 
 ```java
 int a[];
@@ -36,7 +36,7 @@ int a[];
 
 ## Create Arrays
 
-Create an integer array of 5 elements
+Create an integer array of 5 elements and initialise it.
 
 ```java
 package demo;
@@ -49,7 +49,7 @@ public class App {
 }
 ```
 
-Output
+The above will print the following (meaningless) string.
 
 ```bash
 Array of int: [I@279f2327
@@ -68,7 +68,7 @@ public class App {
 }
 ```
 
-Output
+The program will now print the array's elements, as shown next.
 
 ```bash
 Array of int: [1, 2, 3, 4, 5]
@@ -80,55 +80,59 @@ Alternative methods of array creation
 
 1. Use the `new` operator and provide the array's length
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Arrays;
+   import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[5];
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+   public class App {
+     public static void main( final String[] args ) {
+       final int[] a = new int[5];
+       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+     }
+   }
+   ```
 
-    The array is filled with the data type default value, `0` for numbers.
+   The array is filled with the data type default value, `0` for numbers.
 
-    ```bash
-    Array of int: [0, 0, 0, 0, 0]
-    ```
+   ```bash
+   Array of int: [0, 0, 0, 0, 0]
+   ```
 
 1. Use the `new` operator and provide the values too.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Arrays;
+   import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+   public class App {
+     public static void main( final String[] args ) {
+       final int[] a = new int[] { 1, 2, 3, 4, 5 };
+       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+     }
+   }
+   ```
 
-    Output
+   Output
 
-    ```bash
-    Array of int: [1, 2, 3, 4, 5]
-    ```
+   ```bash
+   Array of int: [1, 2, 3, 4, 5]
+   ```
 
-    Note that the array's length was not included.  The following is invalid and will not compile.
+   {% include custom/note.html details="The above example did not include the array's length.  The following code fragment makes use of invalid syntax and will not compile." %}
 
-    ```java
-    final int[] a = new int[5] { 1, 2, 3, 4, 5 };
-    ```
+   ```java
+   final int[] a = new int[5] { 1, 2, 3, 4, 5 };
+   ```
 
-When creating and passing array to a function, the `new` keyword needs to be used.
+### Can we create and pass arrays to a method on the fly?
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
+**YES**
+
+When creating and passing array to a method, the `new` keyword needs to be used.  Consider the following example.
+
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -168,7 +172,11 @@ The above will now work and print.
 The last element of the array is 5
 ```
 
-The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) function can be used to fill an array with a set of values.
+### Can we create a new array and use a different initial value?
+
+**YES** (but not directly)
+
+The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) method can be used to fill an array with a set of values, as shown in the following example.
 
 ```java
 package demo;
@@ -184,7 +192,7 @@ public class App {
 }
 ```
 
-Output
+The `int` array is filled with the value of `1`.
 
 ```bash
 Array of int: [1, 1, 1, 1, 1]
@@ -194,82 +202,82 @@ Array of int: [1, 1, 1, 1, 1]
 
 1. Access each element by its index (zero based)
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Arrays;
+   import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
-        a[0] = 7;
-        a[1]++;
-        a[2] += 2;
+   public class App {
+     public static void main( final String[] args ) {
+       final int[] a = new int[] { 1, 2, 3, 4, 5 };
+       a[0] = 7;
+       a[1]++;
+       a[2] += 2;
 
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+     }
+   }
+   ```
 
-    Output
+   The above will print.
 
-    ```bash
-    Array of int: [7, 3, 5, 4, 5]
-    ```
+   ```bash
+   Array of int: [7, 3, 5, 4, 5]
+   ```
 
 1. Modify all arrays's elements
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Arrays;
+   import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
+   public class App {
+     public static void main( final String[] args ) {
+       final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
-        /* Increment all elements by two */
-        a[0] += 2;
-        a[1] += 2;
-        a[2] += 2;
-        a[3] += 2;
-        a[4] += 2;
+       /* Increment all elements by two */
+       a[0] += 2;
+       a[1] += 2;
+       a[2] += 2;
+       a[3] += 2;
+       a[4] += 2;
 
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+     }
+   }
+   ```
 
-    Output
+   Output
 
-    ```bash
-    Array of int: [3, 4, 5, 6, 7]
-    ```
+   ```bash
+   Array of int: [3, 4, 5, 6, 7]
+   ```
 
-    The above example does not scale well.  Imagine updating an array of 100 elements.  A for-loop is a better fit for this task.
+   The above example does not scale well.  Imagine updating an array of 100 elements.  A for-loop is a better fit for this task.
 
-    **⚠️ THE EXAMPLE MAKES REFERENCE TO FOR LOOP WHICH IS DISCUSSED LATER ON!!**
+   ```java
+   package demo;
 
-    ```java
-    package demo;
+   import java.util.Arrays;
 
-    import java.util.Arrays;
+   public class App {
+     public static void main( final String[] args ) {
+       final int[] a = new int[] { 1, 2, 3, 4, 5 };
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = new int[] { 1, 2, 3, 4, 5 };
+       /* Increment all elements by two */
+       for ( int i = 0; i < a.length; i++ ) {
+         a[i] += 2;
+       }
 
-        /* Increment all elements by two */
-        for ( int i = 0; i < a.length; i++ ) {
-          a[i] += 2;
-        }
+       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+     }
+   }
+   ```
 
-        System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+   This program will produce the same result and scales better.
 
-    This program will produce the same result and scales better.
+### Can we manipulate an array using the foreach loop?
 
 ## Read past the array's length
 

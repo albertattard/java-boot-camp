@@ -9,7 +9,7 @@ permalink: docs/collections/lists/
 # Lists
 {: .no_toc }
 
-The `List` interface is the base interface for collections which allows to store an ordered collection of elements in a resizable container.
+The [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) interface is the base interface for collections which allows to store an ordered collection of elements in a resizable container.
 
 ## Table of contents
 {: .no_toc .text-delta }
