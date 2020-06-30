@@ -20,9 +20,9 @@ An array is a contiguous collection of homogeneous elements that can be accessed
 
 ---
 
-## Arrays Declaration
+## Arrays declaration
 
-To declare an array we use square brackets (`[]`) after the type of the elements we will store in array.  The following code fragment shows an _`int` array_ (or as some times is referred to, _an array of type `int`_).
+To declare an array we use square brackets (`[]`) after the type of the elements we will store in array.  The following code fragment shows an _`int` array_ (or as sometimes is referred to, _an array of type `int`_).
 
 ```java
 int[] a;
@@ -34,7 +34,7 @@ Alternatively, the square brackets can be placed after the variable name instead
 int a[];
 ```
 
-## Create Arrays
+## Create arrays
 
 Create an integer array of 5 elements and initialise it.
 
@@ -198,7 +198,7 @@ The `int` array is filled with the value of `1`.
 Array of int: [1, 1, 1, 1, 1]
 ```
 
-## Working with Arrays
+## Working with arrays
 
 1. Access each element by its index (zero based)
 
@@ -225,7 +225,7 @@ Array of int: [1, 1, 1, 1, 1]
    Array of int: [7, 3, 5, 4, 5]
    ```
 
-1. Modify all arrays's elements
+1. Modify all array's elements
 
    ```java
    package demo;
@@ -281,7 +281,7 @@ Array of int: [1, 1, 1, 1, 1]
 
 **NO**
 
-The [foreach loop]({{ '/docs/control-flow/' | absolute_url }}) cannot be used to manipulate the elements of an array.  Consider the following example.
+The [foreach-loop]({{ '/docs/control-flow/' | absolute_url }}) cannot be used to manipulate the elements of an array.  Consider the following example.
 
 ```java
 package demo;
@@ -360,9 +360,9 @@ Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 5 out
 
 Array's range is always between `0` (inclusive) and the array's length (exclusive).
 
-## Two dimensional array
+## Two-dimensional array
 
-Java supports multidimentional arrays.  Consider the following example.
+Java supports multidimensional arrays.  Consider the following example.
 
 ```java
 package demo;
@@ -403,7 +403,7 @@ a[2][1]=8
 a[2][2]=9
 ```
 
-## Irregular Arrays
+## Irregular arrays
 
 Multi-dimensional arrays can be irregular.  This means that the arrays have different lengths.  Consider the following example.
 
@@ -428,7 +428,7 @@ public class App {
 }
 ```
 
-The first array, has 4 elements, while the second array has only 2.  The nested for-loop still works as expected, as `j` will stop when it reaches the length of the current row (`j < a[i].length`).
+The first array has 4 elements, while the second array has only 2 elements.  The nested for-loop still works as expected, as `j` will stop when it reaches the length of the current row (`j < a[i].length`).
 
 The above code will print the following.
 
@@ -448,7 +448,7 @@ a[2][2]=9
 
 ## Arrays are reference types
 
-Arrays are reference types.  Like any other reference type, modifying an array from one variable will effect all other variables pointing to the same array.  Consider the following example.
+Arrays are reference types.  Like any other reference type, modifying an array from one variable will affect all other variables pointing to the same array.  Consider the following example.
 
 ```java
 package demo;
@@ -457,8 +457,8 @@ import java.util.Arrays;
 
 public class App {
   public static void main( final String[] args ) {
-    int[] a = { 1, 2, 3, 4, 5 };
-    int[] b = a;
+    final int[] a = { 1, 2, 3, 4, 5 };
+    final int[] b = a;
     b[0] = 10;
 
     System.out.printf( "Array a contains: %s%n", Arrays.toString( a ) );
@@ -467,7 +467,7 @@ public class App {
 }
 ```
 
-Both variables, `a` and `b`, are pointing to the same object in the Java heap.  Modifying the array from either variable will effect both as shown in the following output.
+Both variables, `a` and `b`, are pointing to the same object in the Java heap.  Modifying the array from either variable will affect both as shown in the following output.
 
 ```bash
 Array a contains: [10, 2, 3, 4, 5]
@@ -503,7 +503,7 @@ Array of int: [10, 2, 3, 4, 5]
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) recommends using lists instead of arrays in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28).  A `List`, different from an array, can be immutable.
 
-## Defensive Copying
+## Defensive copying
 
 Defensive copying is a technique which mitigates the negative effects caused by unintentional (_or intentional_) modifications of shared objects.  Instead of sharing the reference to the original object, we create a new object and share the reference to the newly created copy of it.  Thus, any modification made to the copy will not affect the original object.
 
@@ -535,7 +535,7 @@ public class Data {
 
 The `Data` class holds a set of sample measurements, as an array of `int`, named `sample`.  This array of `int` can be modified from outside the data objects, thus **breaking encapsulation**.
 
-The `Data` class should not be effected by changes made to the source past its creation.  The `Data` class should not be immune from side effects.  Consider the following test class.
+The `Data` class should not be affected by changes made to the source past its creation.  The `Data` class should not be immune from side effects.  Consider the following test class.
 
 ```java
 package demo;
@@ -668,85 +668,89 @@ The [`copyOf()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/ja
 
 Running the same tests now, will pass.
 
-{% include custom/note.html details="We are creating a copy when the array is received and another copy every time the array is returned." %}
+{% include custom/note.html details="We are creating a copy when the array is received, and another copy every time the array is returned." %}
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about defensive copying in [Item 50: Make defensive copies when needed](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev50) and describes how this can be used to protect against unexpected side effects.
 
-## Arrays of Objects
+## Arrays of objects
 
-1. Arrays are objects
+Arrays are objects
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.lang.reflect.Array;
+import java.lang.reflect.Array;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = { 1, 2, 3, 4, 5 };
-        final Object b = a;
-        System.out.printf( "Array of %d elements%n", Array.getLength( b ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 1, 2, 3, 4, 5 };
+    final Object b = a;
+    System.out.printf( "Array of %d elements%n", Array.getLength( b ) );
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    Array of 5 elements
-    ```
+```bash
+Array of 5 elements
+```
 
-1. An array of objects can hold any type
+An array of objects can hold any type.  Consider the following example.
 
-    **⚠️ PROCEED WITH CAUTION!!**
+{% include custom/proceed_with_caution.html %}
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final Object[] a = new Object[5];
-        a[0] = "A String";
-        a[1] = 21; /* Integer */
-        a[2] = 42L; /* Long */
-        a[3] = true; /* Boolean */
-        a[4] = 'c'; /* Character */
-        System.out.printf( "Array: %s%n", Arrays.toString( a ) );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final Object[] a = new Object[5];
 
-    Output
+    a[0] = "A String"; /* String */
+    a[1] = 21;         /* Integer */
+    a[2] = 42L;        /* Long */
+    a[3] = true;       /* Boolean */
+    a[4] = 'c';        /* Character */
 
-    ```bash
-    Array: [A String, 21, 42, true, c]
-    ```
+    System.out.printf( "Array: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-1. A word of caution
+Output
 
-    **⚠️ PROCEED WITH CAUTION!!**
+```bash
+Array: [A String, 21, 42, true, c]
+```
 
-    ```java
-    package demo;
+## Arrays in Java are covariant
 
-    public class App {
-      public static void main( final String[] args ) {
-        final Object[] a = new Long[5];
+As discussed in [the generics section]({{ '/docs/generics/variance/#covariance' | absolute_url }}), arrays in Java are covariant.  Consider the following example.
 
-        /* Throws ArrayStoreException!! */
-        a[0] = "A String";
-      }
-    }
-    ```
+{% include custom/compile_but_throws.html e="ArrayStoreException" %}
 
-    An array of object can be instantiated with any other array, but then can only accept types of that type.  The above will fail.
+```java
+package demo;
 
-    ```bash
-    Exception in thread "main" java.lang.ArrayStoreException: java.lang.String
-      at demo.App.main(App.java:6)
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final Object[] a = new Long[5];
+
+    /* ⚠️ Throws ArrayStoreException!! */
+    a[0] = "A String";
+  }
+}
+```
+
+An array of object can be instantiated with any other array type.  This is because arrays in Java are covariant.  This is quite dangerous as we are able to assign any value to the array as we saw able.  When doing so, the compiler will work but then it fails at runtime.
+
+```bash
+Exception in thread "main" java.lang.ArrayStoreException: java.lang.String
+  at demo.App.main(App.java:6)
+```
 
 ## Working title!!
 
@@ -789,7 +793,7 @@ Object[] b = a;
     Index of 4: -2
     ```
 
-    The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to b inserted in position `1`, that it `1 + the negative index`.
+    The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to be inserted in position `1`, that it `1 + the negative index`.
 
 1. Searching on an unsorted array may produce unexpected results
 
@@ -823,7 +827,7 @@ Object[] b = a;
     Index of 4: -4
     ```
 
-    The binary search was not able to find `9`, and provided the wrong insertion point for the value `4`.
+    The binary search was not able to find `9` and provided the wrong insertion point for the value `4`.
 
 ## An array of characters is not a String
 
@@ -846,7 +850,7 @@ Strings (or char arrays) in Java are terminated by the `'\u0000'` (`NUL`) charac
 
 A `String` object is immutable but an array of `char` is mutable (as discussed in the [arrays are always mutable](#arrays-are-always-mutable) section).
 
-The [`String` class has a char array constructor](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#%3Cinit%3E(char%5B%5D)) and a [`toCharArray()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#toCharArray()) that returns an array of characters containing the same character sequence as a `String`.  Modifying the source to the constructor or the returned value will not effect the string.
+The [`String` class has a char array constructor](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#%3Cinit%3E(char%5B%5D)) and a [`toCharArray()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#toCharArray()) that returns an array of characters containing the same character sequence as a `String`.  Modifying the source to the constructor or the returned value will not affect the string.
 
 Consider the following example.
 
