@@ -843,7 +843,7 @@ public class App {
 
 The primitive `char`, is not an `Object`, thus it does not take part in any inheritance.  An array primitive type `P` is not a subtype of any other array.
 
-## Sorting and searching arrays
+## Sorting
 
 Arrays can be sorted using the [`Arrays.sort()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(int%5B%5D)) method, as shown next.
 
@@ -925,9 +925,130 @@ Exception in thread "main" java.lang.ClassCastException: class java.awt.Point ca
 
 **YES**
 
-The `Arrays.sort()` can take an instance of [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) of a supertype
+The `Arrays.sort()` can take an instance of [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) of a supertype of the type being sorted.  Using the `Comparator`, the `Array.sort()` method can determine what should come before what and sort the given array accordingly.
 
-### Others ...
+**What does this mean?**
+
+A similar example was already discuss in a [previous section]({{ '/docs/generics/variance/#sorting-a-collection' | absolute_url }}).
+
+This may be a bit cryptic.  Consider the following `Person` class.
+
+```java
+package demo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+@Data
+@AllArgsConstructor
+public class Person implements Comparable<Person> {
+
+  private final String name;
+
+  @Override
+  public int compareTo( final Person that ) {
+    return StringUtils.compareIgnoreCase( this.name, that.name );
+  }
+}
+```
+
+The `Person` class implements `Comparable` of type `Person` (`implements Comparable<Person>`).  Now consider the `Employee` class that extends the `Person` class, shown next.
+
+```java
+package demo;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@Data
+@EqualsAndHashCode( callSuper = false )
+@ToString( callSuper = true, includeFieldNames = true )
+public class Employee extends Person {
+
+  private final String employeeNumber;
+
+  public Employee( final String name, final String employeeNumber ) {
+    super( name );
+    this.employeeNumber = employeeNumber;
+  }
+}
+```
+
+The `Employee` class extends `Person` but does not implement `Comparable`.  The `Employee` class is a `Person` and also is a `Comparable<Person>`.
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Employee a = new Employee( "Albert", "JVM-0110" );
+    final Person b = new Employee( "Albert", "JVM-0110" );
+    final Comparable<Person> c = new Employee( "Albert", "JVM-0110" );
+    final Object d = new Employee( "Albert", "JVM-0110" );
+  }
+}
+```
+
+Each assignment is explained next.
+
+* An `Employee` is an `Employee`
+
+   ```java
+       final Employee a = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* An `Employee` is an `Person`, as `Employee` inherits from `Person`
+
+   ```java
+       final Person b = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* An `Employee` is a `Comparable<Person>` transitively.  `Employee` inherits from `Person`, which in turn implements `Comparable<Person>`
+
+   ```java
+       final Comparable<Person> c = new Employee( "Albert", "JVM-0110" );
+   ```
+
+* Everything in Java is an `Object`
+
+   ```java
+       final Object d = new Employee( "Albert", "JVM-0110" );
+   ```
+
+We can sort an array of employees, because the `Employee` (`T`) implements a `Comparable` of its supertype, `Person`, (`Comparable<? super T>`).  Following is an example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Employee[] employees = new Employee[] {
+      new Employee( "Mary", "ENG-0700" ),
+      new Employee( "James", "MNG-0906" )
+    };
+
+    Arrays.sort( employees );
+    Arrays.stream( employees ).forEach( System.out::println );
+  }
+}
+```
+
+The employees are sorted using the `Person`'s comparator as shown next.
+
+```bash
+Employee(super=Person(name=James), employeeNumber=MNG-0906)
+Employee(super=Person(name=Mary), employeeNumber=ENG-0700)
+```
+
+## Searching
+
+{% include custom/note.html details="Search depends on the array being sorted.  Searching will not work well if the given array is not sorted and may produce unexpected results." %}
 
 ```java
 package demo;
@@ -949,15 +1070,15 @@ public class App {
 }
 ```
 
-    Output
+Output
 
-    ```bash
-    Sorted array a: [2, 5, 9, 10, 12]
-    Index of 9: 2
-    Index of 4: -2
-    ```
+```bash
+Sorted array a: [2, 5, 9, 10, 12]
+Index of 9: 2
+Index of 4: -2
+```
 
-    The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to be inserted in position `1`, that it `1 + the negative index`.
+The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to be inserted in position `1`, that it `1 + the negative index`.
 
 1. Searching on an unsorted array may produce unexpected results
 

@@ -811,7 +811,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode( callSuper = false )
 @ToString( callSuper = true, includeFieldNames = true )
 public class Employee extends Person {
 
