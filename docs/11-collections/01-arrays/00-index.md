@@ -10,7 +10,7 @@ permalink: docs/collections/arrays/
 # Arrays
 {: .no_toc }
 
-An array is a contiguous collection of homogeneous elements that can be accessed using an index.  By contiguous, we mean the elements of the array are adjacent to one another in memory with no gaps between them.  Arrays are static data structures, were their size is defined at initialisation and cannot be changed.
+An [array](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html) is a contiguous collection of homogeneous elements that can be accessed using an index.  By contiguous, we mean the elements of the array are adjacent to one another in memory with no gaps between them.  Arrays are static data structures, were their size is defined at initialisation and cannot be changed.
 
 ## Table of contents
 {: .no_toc .text-delta }
@@ -198,7 +198,57 @@ The `int` array is filled with the value of `1`.
 Array of int: [1, 1, 1, 1, 1]
 ```
 
+### Can an array contain elements of different types?
+
+**NO**
+
+We cannot create an array of `int` and put `long` in it.  With that said, we can store `char`, `short` and `byte` in an array of `int`.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final byte b = 1;
+    final short s = 2;
+    final char c = 'c'; /* ASCII 99 */
+    final int i = 4;
+
+    final int[] array = { b, s, c, i };
+    System.out.printf( "Array of ints %s%n", Arrays.toString( array ) );
+  }
+}
+```
+
+{% include custom/note.html details="While the above may give the impression that the array contains different types, the contents of the arrays are considered as <code>int</code>." %}
+
+We cannot create an array of `String`s and put numbers in it.
+
+{% include custom/dose_not_compile.html %}
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Long number = 7L;
+
+    /* ⚠️ Cannot add a number to an array of String!! */
+    final String[] array = { number };
+    System.out.printf( "Array of strings %s%n", Arrays.toString( array ) );
+  }
+}
+```
+
 ## Working with arrays
+
+An array contains a number of elements.  The number of elements may be zero, in which case the array is said to be empty.  The elements contained in an array have no names.  Instead, these are referenced by array access expressions that use non-negative integer index values. If an array has _n_ components, we say _n_ is the length of the array.  The elements of the array are referenced using integer indices from `0` to `n - 1`, inclusive ([JLS-10](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html)).
 
 1. Access each element by its index (zero based)
 
@@ -728,7 +778,27 @@ Array: [A String, 21, 42, true, c]
 
 ## Arrays in Java are covariant
 
-As discussed in [the generics section]({{ '/docs/generics/variance/#covariance' | absolute_url }}), arrays in Java are covariant.  Consider the following example.
+As discussed in [the generics section]({{ '/docs/generics/variance/#covariance' | absolute_url }}), arrays in Java are covariant.  This means, that if `S` is a subtype of `T`, then `S[]` is a subtype of `T[]`.  Consider the following example.
+
+{% include custom/proceed_with_caution.html %}
+
+```java
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    /* Long is a Number */
+    final Number[] a = new Long[5];
+
+    /* String and StringBuilder are CharSequence */
+    final CharSequence[] b = new String[5];
+    final CharSequence[] c = new StringBuilder[5];
+  }
+}
+```
+
+Be very careful with covariance as this can lead to unforseen problems.  Consider teh following example.
 
 {% include custom/compile_but_throws.html e="ArrayStoreException" %}
 
@@ -752,38 +822,132 @@ Exception in thread "main" java.lang.ArrayStoreException: java.lang.String
   at demo.App.main(App.java:6)
 ```
 
-## Working title!!
+### Primitives are not objects
 
-Does not work
+All classes inherit form the `Object` class, directly or indirectly.  Primitives do not take part of inheritance.  Therefore, while all arrays are covariant, primitive arrays have no alternative type, making them immune.  Consider the following example.
+
+{% include custom/dose_not_compile.html %}
 
 ```java
-char[] a = {'a', 'b', 'c'};
-Object[] b = a;
+package demo;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    /* ⚠️ Both of these are wrong!! */
+    final int[] a = new char[5];
+    final Object[] b = new char[5];
+  }
+}
 ```
+
+The primitive `char`, is not an `Object`, thus it does not take part in any inheritance.  An array primitive type `P` is not a subtype of any other array.
 
 ## Sorting and searching arrays
 
-1. Sorting and Searching
+Arrays can be sorted using the [`Arrays.sort()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#sort(int%5B%5D)) method, as shown next.
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = { 9, 10, 2, 5, 12 };
-        Arrays.sort( a );
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 9, 10, 2, 5, 12 };
+    Arrays.sort( a );
 
-        final int b = Arrays.binarySearch( a, 9 );
-        final int c = Arrays.binarySearch( a, 4 );
+    System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
+  }
+}
+```
 
-        System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
-        System.out.printf( "Index of 9: %d%n", b );
-        System.out.printf( "Index of 4: %d%n", c );
-      }
-    }
-    ```
+The `sort()` is able to sort all primitives in ascending order, and all objects that implement [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html).  Strings, for example, implement `Comparable` and can be sorted using the `Arrays.sort()`, as shown in the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final String[] names = { "Jade", "Aden", "Mary", "John" };
+    System.out.printf( "Before sorting: %s%n", Arrays.toString( names ) );
+
+    Arrays.sort( names );
+    System.out.printf( "After sorting: %s%n", Arrays.toString( names ) );
+  }
+}
+```
+
+### What will happen if we sort an array that is not `Comparable`?
+
+The `Arrays.sort()` cannot sort objects that do not implement `Comparable`.  Consider the following example.
+
+{% include custom/compile_but_throws.html e="ClassCastException" %}
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Point[] points = {
+      new Point( 2, 3 ),
+      new Point( 4, 1 ),
+      new Point( 1, 4 ),
+      new Point( 1, 2 )
+    };
+    System.out.printf( "Before sorting: %s%n", Arrays.toString( points ) );
+
+    Arrays.sort( points );
+    System.out.printf( "After sorting: %s%n", Arrays.toString( points ) );
+  }
+}
+```
+
+The above example will fail with a `ClassCastException`, as shown next.
+
+```bash
+Before sorting: [java.awt.Point[x=2,y=3], java.awt.Point[x=4,y=1], java.awt.Point[x=1,y=4], java.awt.Point[x=1,y=2]]
+Exception in thread "main" java.lang.ClassCastException: class java.awt.Point cannot be cast to class java.lang.Comparable (java.awt.Point is in module java.desktop of loader 'bootstrap'; java.lang.Comparable is in module java.base of loader 'bootstrap')
+	at java.base/java.util.ComparableTimSort.countRunAndMakeAscending(ComparableTimSort.java:320)
+	at java.base/java.util.ComparableTimSort.sort(ComparableTimSort.java:188)
+	at java.base/java.util.Arrays.sort(Arrays.java:1040)
+	at demo.App.main(App.java:17)
+```
+
+### Can we determine how the array elements are to be sorted?
+
+**YES**
+
+The `Arrays.sort()` can take an instance of [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) of a supertype
+
+### Others ...
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 9, 10, 2, 5, 12 };
+    Arrays.sort( a );
+
+    final int b = Arrays.binarySearch( a, 9 );
+    final int c = Arrays.binarySearch( a, 4 );
+
+    System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
+    System.out.printf( "Index of 9: %d%n", b );
+    System.out.printf( "Index of 4: %d%n", c );
+  }
+}
+```
 
     Output
 
@@ -797,7 +961,7 @@ Object[] b = a;
 
 1. Searching on an unsorted array may produce unexpected results
 
-    **⚠️ PROCEED WITH CAUTION!!**
+    {% include custom/proceed_with_caution.html %}
 
     ```java
     package demo;

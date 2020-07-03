@@ -1171,7 +1171,7 @@ public class Person {
 
 Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.  The above works exactly like the one before, when we used the `instanceof`.  Now, consider the following code fragment.
 
-**⚠️ PROCEED WITH CAUTION!!**
+{% include custom/proceed_with_caution.html %}
 
 ```java
     if ( object == null || object.getClass() != Person.class ) {

@@ -668,7 +668,7 @@ Without bridge methods Java will be looking for a method with the same signature
 
 Consider the following two classes.
 
-1.  A supertype class that defines one method
+1. A supertype class that defines one method
 
    ```java
    package demo;
@@ -706,6 +706,8 @@ public class demo.Subtype extends demo.Supertype {
   public java.lang.Object getIt();
 }
 ```
+
+The bridge method is a method that has the same signature, but a different return type.  While this is permitted here, we cannot manually create such method.
 
 ### Can we manually overload a method by changing its return type?
 
