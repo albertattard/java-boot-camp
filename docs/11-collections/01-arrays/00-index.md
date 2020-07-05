@@ -101,6 +101,8 @@ Alternative methods of array creation
 
 1. Use the `new` operator and provide the values too.
 
+   {% include custom/note.html details="The following example is not including the array's length." %}
+
    ```java
    package demo;
 
@@ -120,7 +122,7 @@ Alternative methods of array creation
    Array of int: [1, 2, 3, 4, 5]
    ```
 
-   {% include custom/note.html details="The above example did not include the array's length.  The following code fragment makes use of invalid syntax and will not compile." %}
+   {% include custom/dose_not_compile.html %}
 
    ```java
    final int[] a = new int[5] { 1, 2, 3, 4, 5 };
@@ -1047,6 +1049,8 @@ Employee(super=Person(name=Mary), employeeNumber=ENG-0700)
 ```
 
 ## Searching
+
+Pending...
 
 {% include custom/note.html details="Search depends on the array being sorted.  Searching will not work well if the given array is not sorted and may produce unexpected results." %}
 
