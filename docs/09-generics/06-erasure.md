@@ -428,7 +428,11 @@ After type erasure, the `StringBox` class will have two methods.
 * `put(Object)` method that takes an `Object`
 * `put(String)` method that takes a `String`
 
-Both methods are available, and both can be invoked.  Consider the following example.
+With that said, only the `put(String)` method is available for us to work with when working with the `StringBox` type.  The bridge method `put(Object)` is added by type erasure during compilation and is only there to retrofit generics.
+
+When we have a variable of type `StringBox`, we can only invoke the `put(String)` method.  The Java compiler will prevent us from invoking the bridge `put()` method.  There is no way for us to invoke the `StringBox`'s `put(Object)` method.
+
+We can go through the `StringBox`'s `put(Object)` method through the supertype, `Box`, using polymorphism.  Consider the following example.
 
 {% include custom/compile_but_throws.html e="ClassCastException" %}
 
@@ -444,7 +448,7 @@ public class App {
 }
 ```
 
-The above example makes use of raw types.  This means that the compiler will not provide us with type checks, and we can try to put anything we want into our box.  The above example fails at runtime with a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html).
+The above example makes use of raw types on purpose.  **Please avoid [raw types]({{ '/docs/generics/raw-types/' | absolute_url }})!!**  This means that the compiler will not provide us with type checks, and we can try to put anything we want into our box.  The above example fails at runtime with a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html), as an `Integer` is not a `String`.
 
 ```bash
 Exception in thread "main" java.lang.ClassCastException: class java.lang.Integer cannot be cast to class java.lang.String (java.lang.Integer and java.lang.String are in module java.base of loader 'bootstrap')
@@ -454,7 +458,7 @@ Exception in thread "main" java.lang.ClassCastException: class java.lang.Integer
 
 The Java runtime environment tried to type cast our value to a `String` and failed as this was an `Integer`.
 
-Now consider the following example that too makes use of raw types.
+Now consider the following example, that too makes use of raw types.
 
 ```java
 package demo;
@@ -473,7 +477,7 @@ In this example, we are calling the `put()` method that takes an `Object` (as th
 
 ![Raw Types]({{ '/assets/images/Raw-Types-Generics-Call-1.png' | absolute_url }})
 
-When using raw types we can access the `put()` method that takes a `String` directly too, by passing a `String`, as shown next.
+When using raw types we **cannot** access the `put()` method that takes a `String` directly.  That's because the variable `box` is of type `Box` (and not `StringBox`) which only has one `put()` method that takes an `Object`, even when we pass a `String`, as shown next.
 
 ```java
 package demo;
@@ -486,8 +490,6 @@ public class App {
   }
 }
 ```
-
-Despite the fact that this does not use generics, it still accesses our `put()` method, and not the bridge version.
 
 Inheritance adds complexity to generics.  Consider the following example.
 
