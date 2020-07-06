@@ -634,7 +634,32 @@ Both examples will produce the same result.  The second version removes the, unn
 
 ## Irregular arrays
 
-Multi-dimensional arrays can be irregular.  This means that the arrays have different lengths.  Consider the following example.
+Multidimensional arrays can be irregular.  This means that the arrays have different lengths.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3, 4 },
+      { 5, 6 },
+      { 7, 8, 9 }
+    };
+
+    for ( int i = 0; i < a.length; i++ ) {
+      final int[] row = a[i];
+      System.out.printf( "a[%d] = %s%n", i, Arrays.toString( row ) );
+    }
+  }
+}
+```
+
+The first array has 4 elements, while the second array has only 2 elements.  Multidimensional array is nothing more that an array of arrays.  Each nested array (also known as _inner array_) is an independent array which can have its own length.
+
+We can iterate through irregular arrays in a similar fashion we did with regular arrays.
 
 ```java
 package demo;
@@ -657,9 +682,7 @@ public class App {
 }
 ```
 
-The first array has 4 elements, while the second array has only 2 elements.  The nested for-loop still works as expected, as `j` will stop when it reaches the length of the current row (`j < a[i].length`).
-
-The above code will print the following.
+The nested for-loop still works as expected, as `j` will stop when it reaches the length of the current row (`j < a[i].length`).  The above code will print the following.
 
 ```bash
 a[0][0]=1
@@ -674,6 +697,106 @@ a[2][0]=7
 a[2][1]=8
 a[2][2]=9
 ```
+
+## Three (or more) dimensions
+
+A multidimensional array is nothing more than an array of arrays.  We can have as many dimensions as we need, as each dimension will simply contain another array.  The following example shows a three-dimensional array.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][][] a = {
+      {
+        { 1 },
+        { 2, 2 },
+        { 3, 3, 3 },
+        { 4, 4, 4, 4 }
+      },
+      {
+        { 5 },
+        { 6, 6 }
+      },
+      {
+        { 7 },
+        { 8, 8 },
+        { 9, 9, 9 }
+      }
+    };
+
+    for ( int i = 0; i < a.length; i++ ) {
+      System.out.printf( "a[%d]%n", i );
+      for ( int j = 0; j < a[i].length; j++ ) {
+        System.out.printf( "  a[%d][%d]%n", i, j );
+        for ( int k = 0; k < a[i][j].length; k++ ) {
+          System.out.printf( "    a[%d][%d][%d] = %d%n", i, j, k, a[i][j][k] );
+        }
+      }
+    }
+  }
+}
+```
+
+The number of dimensions is defined by the number of nested curly brackets, as shown in the following image.
+
+![Three-Dimensional-Array.png]({{ '/assets/images/Three-Dimensional-Array.png' | absolute_url }})
+
+We need an index (the number of square brackets `[]`) for every dimension we have.  The previous example makes use of a three-dimensional array.  This means that we need three indices to access each element.
+
+```java
+a[i][j][k]
+```
+
+The first index refers to the first dimension, as shown next.
+
+![Three Dimensional Array]({{ '/assets/images/Three-Dimensional-Array-1.png' | absolute_url }})
+
+The second index refers to the second dimension.
+
+![Three Dimensional Array]({{ '/assets/images/Three-Dimensional-Array-2.png' | absolute_url }})
+
+The third index points to the actual value.
+
+![Three Dimensional Array .png]({{ '/assets/images/Three-Dimensional-Array-3.png' | absolute_url }})
+
+We drew a two-dimensional array using a table in the [previous section](#two-dimensional-array).  A three-dimensional array can be represented as a cube, which is hard to draw in a meaningful manner.  Trees are an alternative way to draw multidimensional arrays.  The above example prints the three-dimensional array as a tree, as shown next.
+
+```bash
+a[0]
+  a[0][0]
+    a[0][0][0] = 1
+  a[0][1]
+    a[0][1][0] = 2
+    a[0][1][1] = 2
+  a[0][2]
+    a[0][2][0] = 3
+    a[0][2][1] = 3
+    a[0][2][2] = 3
+  a[0][3]
+    a[0][3][0] = 4
+    a[0][3][1] = 4
+    a[0][3][2] = 4
+    a[0][3][3] = 4
+a[1]
+  a[1][0]
+    a[1][0][0] = 5
+  a[1][1]
+    a[1][1][0] = 6
+    a[1][1][1] = 6
+a[2]
+  a[2][0]
+    a[2][0][0] = 7
+  a[2][1]
+    a[2][1][0] = 8
+    a[2][1][1] = 8
+  a[2][2]
+    a[2][2][0] = 9
+    a[2][2][1] = 9
+    a[2][2][2] = 9
+```
+
+Multidimensional arrays are useful, especially in data science, but they are hard to visualise.
 
 ## Arrays are reference types
 
