@@ -277,82 +277,101 @@ public class App {
 
 An array contains a number of elements.  The number of elements may be zero, in which case the array is said to be empty.  The elements contained in an array have no names.  Instead, these are referenced by array access expressions that use non-negative integer index values. If an array has _n_ components, we say _n_ is the length of the array.  The elements of the array are referenced using integer indices from `0` to `n - 1`, inclusive ([JLS-10](https://docs.oracle.com/javase/specs/jls/se14/html/jls-10.html)).
 
-1. Access each element by its index (zero based)
+Consider the following example.
 
-   ```java
-   package demo;
+```java
+package demo;
 
-   import java.util.Arrays;
+public class App {
+  public static void main( final String[] args ) {
+    final int[] numbers = new int[] { 1, 2, 3, 4, 5 };
+    final int first = numbers[0];
+    final int last = numbers[numbers.length - 1];
 
-   public class App {
-     public static void main( final String[] args ) {
-       final int[] a = new int[] { 1, 2, 3, 4, 5 };
-       a[0] = 7;
-       a[1]++;
-       a[2] += 2;
+    System.out.printf( "First element: %d%n", first );
+    System.out.printf( "Last element:  %d%n", last );
+  }
+}
+```
 
-       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-     }
+The first element in the array has an index of `0`, while the last element has an index of `length - 1`.
+
+We can access each element by its index (zero based) as shown in the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+ public static void main( final String[] args ) {
+   final int[] a = new int[] { 1, 2, 3, 4, 5 };
+   a[0] = 7;
+   a[1]++;
+   a[2] += 2;
+
+   System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+ }
+}
+```
+
+The above will print.
+
+```bash
+Array of int: [7, 3, 5, 4, 5]
+```
+
+We can modify all array's elements using the element's index as shown in the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+ public static void main( final String[] args ) {
+   final int[] a = new int[] { 1, 2, 3, 4, 5 };
+
+   /* Increment all elements by two */
+   a[0] += 2;
+   a[1] += 2;
+   a[2] += 2;
+   a[3] += 2;
+   a[4] += 2;
+
+   System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+ }
+}
+```
+
+The above example will print
+
+```bash
+Array of int: [3, 4, 5, 6, 7]
+```
+
+The above example does not scale well.  Imagine updating an array of 100 elements.  A for-loop is a better fit for this task.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+ public static void main( final String[] args ) {
+   final int[] a = new int[] { 1, 2, 3, 4, 5 };
+
+   /* Increment all elements by two */
+   for ( int i = 0; i < a.length; i++ ) {
+     a[i] += 2;
    }
-   ```
 
-   The above will print.
+   System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
+ }
+}
+```
 
-   ```bash
-   Array of int: [7, 3, 5, 4, 5]
-   ```
-
-1. Modify all array's elements
-
-   ```java
-   package demo;
-
-   import java.util.Arrays;
-
-   public class App {
-     public static void main( final String[] args ) {
-       final int[] a = new int[] { 1, 2, 3, 4, 5 };
-
-       /* Increment all elements by two */
-       a[0] += 2;
-       a[1] += 2;
-       a[2] += 2;
-       a[3] += 2;
-       a[4] += 2;
-
-       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-     }
-   }
-   ```
-
-   Output
-
-   ```bash
-   Array of int: [3, 4, 5, 6, 7]
-   ```
-
-   The above example does not scale well.  Imagine updating an array of 100 elements.  A for-loop is a better fit for this task.
-
-   ```java
-   package demo;
-
-   import java.util.Arrays;
-
-   public class App {
-     public static void main( final String[] args ) {
-       final int[] a = new int[] { 1, 2, 3, 4, 5 };
-
-       /* Increment all elements by two */
-       for ( int i = 0; i < a.length; i++ ) {
-         a[i] += 2;
-       }
-
-       System.out.printf( "Array of int: %s%n", Arrays.toString( a ) );
-     }
-   }
-   ```
-
-   This program will produce the same result and scales better.
+This program will produce the same result and scales better.
 
 ### Can we manipulate an array using the foreach loop?
 
