@@ -800,7 +800,26 @@ Multidimensional arrays are useful, especially in data science, but they are har
 
 ## Arrays are reference types
 
-Arrays are reference types.  Like any other reference type, modifying an array from one variable will affect all other variables pointing to the same array.  Consider the following example.
+Arrays are reference types.  This means that arrays are objects.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[] numbers = { 1, 2, 3, 4, 5 };
+    System.out.printf( "Numbers: %s%n", Arrays.toString( numbers ) );
+  }
+}
+```
+
+The above example creates an array of primitive `int`.  The array to which the variable `number` points is an object, and is found in the heap, as shown in the following diagram.
+
+![Array-Stack-Heap.png]({{ '/assets/images/Array-Stack-Heap.png' | absolute_url }})
+
+Like any other reference type, modifying an array from one variable will affect all other variables pointing to the same array.  Consider the following example.
 
 ```java
 package demo;
