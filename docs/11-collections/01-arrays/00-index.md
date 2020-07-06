@@ -93,7 +93,7 @@ Alternative methods of array creation
    }
    ```
 
-   The array is filled with the data type default value, `0` for numbers.
+   The array is filled with the data type default value, `0` for numeric primitives (including `char`).
 
    ```bash
    Array of int: [0, 0, 0, 0, 0]
@@ -174,11 +174,36 @@ The above will now work and print.
 The last element of the array is 5
 ```
 
-### Can we create a new array and use a different initial value?
+### Can we create a new array and use a different default value?
 
-**YES** (but not directly)
+**NO**
 
-The [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) method can be used to fill an array with a set of values, as shown in the following example.
+By default, the arrays are filled with `0` for primitive numeric types (including `char`), `false` in case of primitive `boolean` and `null` for all object types.  Please note that `int` array and `Integer` array are two different types or arrays.  The `int` array is an array of primitives, while the `Integer` array is an array of objects.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final int[] ints = new int[5];
+    final Integer[] integers = new Integer[5];
+    System.out.printf( "Array of int: %s%n", Arrays.toString( ints ) );
+    System.out.printf( "Array of Integers: %s%n", Arrays.toString( integers ) );
+  }
+}
+```
+
+The above example will print.
+
+```bash
+Array of int: [0, 0, 0, 0, 0]
+Array of Integers: [null, null, null, null, null]
+```
+
+We can fill an array with a value using the [Arrays.fill()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#fill(int%5B%5D,int)) method, as shown in the following example.
 
 ```java
 package demo;
