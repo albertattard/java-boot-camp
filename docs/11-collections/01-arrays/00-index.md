@@ -1041,6 +1041,8 @@ Arrays are nothing then variables that can contain more than one value.  Any oth
 
 ## Arrays are always mutable
 
+Consider the following example.
+
 {% include custom/note.html details="Making and array variable <code>final</code> does not make the array immutable" %}
 
 ```java
