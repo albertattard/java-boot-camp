@@ -817,7 +817,7 @@ public class App {
 
 The above example creates an array of primitive `int`.  The array to which the variable `number` points is an object, and is found in the heap, as shown in the following diagram.
 
-![Array-Stack-Heap.png]({{ '/assets/images/Array-Stack-Heap.png' | absolute_url }})
+![Array - Stack and Heap]({{ '/assets/images/Array-Stack-Heap-1.png' | absolute_url }})
 
 Like any other reference type, modifying an array from one variable will affect all other variables pointing to the same array.  Consider the following example.
 
@@ -844,6 +844,16 @@ Both variables, `a` and `b`, are pointing to the same object in the Java heap.  
 Array a contains: [10, 2, 3, 4, 5]
 Array b contains: [10, 2, 3, 4, 5]
 ```
+
+### How is an array of objects represented in the Java heap?
+
+The array contains a collection of variables that can be accessed through the array's name and the index.  When creating an array of objects, the array will not contain the actual objects, but their address in the heap, like a reference type variable, as shown in the following diagram.
+
+![Array - Stack and Heap]({{ '/assets/images/Array-Stack-Heap-2.png' | absolute_url }})
+
+The array shown in the above example contains two strings.  In the Java heap, we will have three entries, one for each string, and another one for the array itself.  The array elements will simply point to the respective object in the Java heap.
+
+The same concept applies when we deal with multidimensional arrays. An array is an object and like any other object it is saved in the heap.
 
 ## Arrays are always mutable
 
