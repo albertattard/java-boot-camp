@@ -141,12 +141,12 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int a = last( { 1, 2, 3, 4, 5 } );
-    System.out.printf( "The last element of the array is %d%n", a );
+    final boolean empty = isEmpty( { 1, 2, 3, 4, 5 } );
+    System.out.printf( "Is the array empty? %s%n", empty );
   }
 
-  private static int last( final int[] a ) {
-    return a[a.length - 1];
+  private static boolean isEmpty( final int[] array ) {
+    return array.length == 0;
   }
 }
 ```
@@ -158,12 +158,12 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int a = last( new int[] { 1, 2, 3, 4, 5 } );
-    System.out.printf( "The last element of the array is %d%n", a );
+    final boolean empty = isEmpty( new int[] { 1, 2, 3, 4, 5 } );
+    System.out.printf( "Is the array empty? %s%n", empty );
   }
 
-  private static int last( final int[] a ) {
-    return a[a.length - 1];
+  private static boolean isEmpty( final int[] array ) {
+    return array.length == 0;
   }
 }
 ```
@@ -171,7 +171,7 @@ public class App {
 The above will now work and print.
 
 ```bash
-The last element of the array is 5
+Is the array empty? false
 ```
 
 ### Can we create a new array and use a different default value?
