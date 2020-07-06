@@ -855,6 +855,190 @@ The array shown in the above example contains two strings.  In the Java heap, we
 
 The same concept applies when we deal with multidimensional arrays. An array is an object and like any other object it is saved in the heap.
 
+### Can we add `null`s to arrays?
+
+**It Depends**
+
+Arrays are variables that can contain more than one value.  Primitive variables do not support `null`s.  Arrays of primitive types, such as `int[]`, cannot contain `null` and trying to assign `null` to an array of a primitive type will cause a compiler error.
+
+{% include custom/dose_not_compile.html %}
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[] numbers = { 1, 2, null, 4, 5 };
+    System.out.printf( "Numbers: %s%n", Arrays.toString( numbers ) );
+  }
+}
+```
+
+The above will not work as we cannot set a primitive to `null`.
+
+{% include custom/dose_not_compile.html %}
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int number = null;
+    System.out.printf( "Number: %s%n", number );
+  }
+}
+```
+
+Both examples fail to compile for the same reason.
+
+In Java, all reference types can be set to `null` and there is nothing, to-date, in the language that prevents that.  We can mark a variable as immutable using the final keyword, but we cannot mark a variable as non-`null`.  Other programming languages, such as [Kotlin](https://kotlinlang.org/docs/reference/null-safety.html), have mechanisms in-place to prevent `null`s.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String name = null;
+    System.out.printf( "Name: %s%n", name );
+  }
+}
+```
+
+In the above example, the `String` variable `name` is set to `null`.  We can do the same with an array of object, as set any element of the array to `null`.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final String[] names = { "Jade", null, "Aden" };
+    System.out.printf( "Names: %s%n", Arrays.toString( names ) );
+  }
+}
+```
+
+The second element of the `String` array `names` is set to `null`
+
+### Can we prevent `null`s from being added to an array?
+
+**NO**
+
+In Java, all reference types can be set to `null` and there is nothing, to-date, in the language that prevents that.  We can mark a variable as immutable using the final keyword, but we cannot mark a variable as non-`null`.  Other programming languages, such as [Kotlin](https://kotlinlang.org/docs/reference/null-safety.html), have mechanisms in-place to prevent `null`s.
+
+If that's a requirement, then we need to create a wrapper class that encapsulates the array and checks before an item is added, as shown in the following example.
+
+```java
+package demo;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+public class NoNullsArray<T> {
+
+  private final T[] array;
+
+  public NoNullsArray( final Class<T> type, final int length, T initialValue ) {
+    checkNotNull( initialValue );
+
+    @SuppressWarnings( "unchecked" )
+    final T[] array = (T[]) Array.newInstance( type, length );
+    Arrays.fill( array, initialValue );
+
+    this.array = array;
+  }
+
+  public NoNullsArray<T> set( final T value, final int index ) {
+    checkNotNull( value );
+    array[index] = value;
+    return this;
+  }
+
+  public T get( final int index ) {
+    return array[index];
+  }
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object )
+      return true;
+
+    if ( !( object instanceof NoNullsArray ) )
+      return false;
+
+    final NoNullsArray<?> that = (NoNullsArray<?>) object;
+    return Arrays.equals( array, that.array );
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode( array );
+  }
+
+  @Override
+  public String toString() {
+    return Arrays.toString( array );
+  }
+}
+```
+
+The above example makes use of [generics]({{ '/docs/generics/' | absolute_url }}) and arrays, which is an advance topic.  Let's break down the above example.
+
+1. We use generics so that we can use this generic class with any reference type
+
+   ```java
+   public class NoNullsArray<T> { /* ... */ }
+   ```
+
+1. The array type uses the type parameter
+
+   ```java
+     private final T[] array;
+   ```
+
+   The above will be replaced to an array of `Object` during [type erasure]({{ '/docs/generics/erasure/' | absolute_url }}).
+
+1. The class constructor is a bit complicated.
+
+   ```java
+     public NoNullsArray( final Class<T> type, final int length, T initialValue ) {
+       checkNotNull( initialValue );
+
+       @SuppressWarnings( "unchecked" )
+       final T[] array = (T[]) Array.newInstance( type, length );
+       Arrays.fill( array, initialValue );
+
+       this.array = array;
+     }
+   ```
+
+   The array cannot contain `null`s, even when this is initialised.  When an array of `Object` is created, this is populated with `null`.  We need to overwrite this by initialising the array with a non-`null` value of the same type.
+
+   We do not know the actual type of the array and thus we need to rely on reflection and the [`Array.newInstance()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/reflect/Array.html#newInstance(java.lang.Class,int)) method to create our array.
+
+1. Setting the values of the array goes through the `set()` method which ensures that the new value is not `null`
+
+   ```java
+     public NoNullsArray<T> set( final T value, final int index ) {
+       checkNotNull( value );
+       array[index] = value;
+       return this;
+     }
+   ```
+
+Arrays are nothing then variables that can contain more than one value.  Any other behaviour needs to be achieved programmatically as shown above.
+
+{% include custom/note.html details="The above example is not exposing (leaking) the array itself.  Arrays are always mutable, <a href='#arrays-are-always-mutable'>as we will see next</a>, and leaking the array property will undermine the above class." %}
+
 ## Arrays are always mutable
 
 {% include custom/note.html details="Making and array variable <code>final</code> does not make the array immutable" %}
@@ -874,7 +1058,7 @@ public class App {
 }
 ```
 
-Output
+The `final` keyword indicates that a variable (and not the objects it points to) will not change its value.  In the above example, the variable `a` is assigned to an array of `int` and will always point to this array of `int` until it goes out of scope.  The array's elements can still change.
 
 ```bash
 Array of int: [10, 2, 3, 4, 5]
@@ -882,7 +1066,80 @@ Array of int: [10, 2, 3, 4, 5]
 
 {% include custom/note.html details="Java arrays are always mutable and there is nothing preventing that." %}
 
+As we saw in [in a previous example, when we tried to prevent `null` from being added to arrays](#can-we-prevent-nulls-from-being-added-to-an-array), we need to wrap our array into a class that prevents mutability in order to prevent mutability.
+
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) recommends using lists instead of arrays in [Item 28: Prefer lists to arrays](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch5.xhtml#lev28).  A `List`, different from an array, can be immutable.
+
+### Can we create a custom class to similar to `NoNullsArray` example to prevent mutability?
+
+**NO NEED**
+
+Java provides the [`Arrays.asList()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#asList(T...)) method that returns an immutable list.  We cannot modify the list once created and any attempts will throw a [`UnsupportedOperationException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/UnsupportedOperationException.html), as shown in the following example.
+
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
+
+```java
+package demo;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> names = Arrays.asList( "Jade", "Aden" );
+
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    names.add( "Mary" );
+
+    System.out.printf( "Names: %s%n", names );
+  }
+}
+```
+
+[Java 9](https://openjdk.java.net/projects/jdk9) improved the [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) interfaces and added several static methods, such as the [`of()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...)) method, that active the same thing, as shown above, but using more efficient data structures.
+
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
+
+```java
+package demo;
+
+import java.util.List;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> names = List.of( "Jade", "Aden" );
+
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    names.add( "Mary" );
+
+    System.out.printf( "Names: %s%n", names );
+  }
+}
+```
+
+The above example is more efficient that the previous example that relied on the `Arrays.asList()` method, as it does not create an array.  It simply creates a list of two elements and saves this in two variables, as shown in the following code.
+
+{% include custom/note.html details="The following code fragment was copied from the <code>java.util.ImmutableCollections</code> class, part of the Java API." %}
+
+```java
+static final class List12<E> extends AbstractImmutableList<E> implements Serializable {
+
+  private final E e0;
+  private final E e1;
+
+  List12(E e0) {
+    this.e0 = Objects.requireNonNull(e0);
+    this.e1 = null;
+  }
+
+  List12(E e0, E e1) {
+    this.e0 = Objects.requireNonNull(e0);
+    this.e1 = Objects.requireNonNull(e1);
+  }
+
+  /* Other methods removed for brevity */
+}
+```
 
 ## Defensive copying
 
