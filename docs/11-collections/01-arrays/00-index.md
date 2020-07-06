@@ -296,7 +296,9 @@ public class App {
 
 The first element in the array has an index of `0`, while the last element has an index of `length - 1`.
 
-We can access each element by its index (zero based) as shown in the following example.
+![One-Dimensional-Array.png]({{ '/assets/images/One-Dimensional-Array.png' | absolute_url }})
+
+We can access each element by its index (zero based), as shown in the following example.
 
 ```java
 package demo;
@@ -315,7 +317,7 @@ public class App {
 }
 ```
 
-The above will print.
+The above example is incrementing the contents of the array, `a[1]++` and `a[2] += 2`.  The above will print.
 
 ```bash
 Array of int: [7, 3, 5, 4, 5]
@@ -428,7 +430,9 @@ public class App {
 }
 ```
 
-## Read past the array's length
+## Can we read past the array's length?
+
+**NO**
 
 Consider the following example.
 
@@ -470,10 +474,114 @@ public class App {
       { 4, 5, 6 },
       { 7, 8, 9 }
     };
+  }
+}
+```
+
+The above example creates a two-dimensional array of type `int`.  A two-dimensional array is simply an array of arrays.  In one-dimensional arrays, we accessed the array elements using one index.  We can do the same with two-dimensional arrays, as shown in the following image.
+
+![Two-Dimensional Array]({{ '/assets/images/Two-Dimensional-Array-1.png' | absolute_url }})
+
+The following example captures the above image.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
+
+    final int[] lastRow = a[2];
+    System.out.printf( "Last row: %s%n", Arrays.toString( lastRow ) );
+  }
+}
+```
+
+The array variable `a` contains arrays of `int` (`int[]`).  We can access the elements of two-dimensional directly without creating an intermediate variable (`lastRow` in the previous example), as shown next.
+
+![Two-Dimensional Array]({{ '/assets/images/Two-Dimensional-Array-2.png' | absolute_url }})
+
+With two-dimensional arrays, we need two indices to access individual elements.  The following example captures the above image.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
+
+    System.out.printf( "The value at a[2][0] is: %d%n", a[2][0] );
+  }
+}
+```
+
+The element at indices `[2][0]` has a value of `7`, as shown next.
+
+```bash
+The value at a[2][0] is: 7
+```
+
+We can also iterate through the two-dimensional array, as shown in the following example.
+
+```java
+package demo;
+
+import java.util.Arrays;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
 
     for ( int i = 0; i < a.length; i++ ) {
-      for ( int j = 0; j < a[i].length; j++ ) {
-        System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
+      int[] row = a[i];
+      System.out.printf( "a[%d] = %s%n", i, Arrays.toString( row ) );
+    }
+  }
+}
+```
+
+The above example is only iterating on the first dimension of the array.  In fact, we are only using one index, `a[i]`.  The above example will print.
+
+```bash
+a[0] = [1, 2, 3]
+a[1] = [4, 5, 6]
+a[2] = [7, 8, 9]
+```
+
+We can iterate through both dimensions using two, nested, for-loops, as shown in the following example.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
+
+    for ( int i = 0; i < a.length; i++ ) {
+      final int[] row = a[i];
+
+      for ( int j = 0; j < row.length; j++ ) {
+        System.out.printf( "a[%d][%d]=%d%n", i, j, row[j] );
       }
       System.out.println();
     }
@@ -481,9 +589,7 @@ public class App {
 }
 ```
 
-The above example creates a two-dimensional array, a matrix, and iterate over each element.
-
-Output
+The above example, a simplified version of multidimensional array iteration, prints the following.
 
 ```bash
 a[0][0]=1
@@ -498,6 +604,33 @@ a[2][0]=7
 a[2][1]=8
 a[2][2]=9
 ```
+
+You will rarely see the above code in production as we are creating an unnecessarily variable for simplicity.  The above example is usually written as shown next.
+
+```java
+package demo;
+
+public class App {
+  public static void main( final String[] args ) {
+    final int[][] a = {
+      { 1, 2, 3 },
+      { 4, 5, 6 },
+      { 7, 8, 9 }
+    };
+
+    for ( int i = 0; i < a.length; i++ ) {
+      for ( int j = 0; j < a[i].length; j++ ) {
+        System.out.printf( "a[%d][%d]=%d%n", i, j, a[i][j] );
+      }
+      System.out.println();
+    }
+  }
+}
+```
+
+Both examples will produce the same result.  The second version removes the, unnecessary, `row` variable and used the `a[i]` directly instead, as shown in the following image.
+
+![Two-Dimensional-Array-Iteration.png]({{ '/assets/images/Two-Dimensional-Array-Iteration.png' | absolute_url }})
 
 ## Irregular arrays
 
