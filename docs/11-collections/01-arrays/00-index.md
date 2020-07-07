@@ -1312,60 +1312,6 @@ Running the same tests now, will pass.
 
 [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) talks about defensive copying in [Item 50: Make defensive copies when needed](https://www.oreilly.com/library/view/effective-java-3rd/9780134686097/ch8.xhtml#lev50) and describes how this can be used to protect against unexpected side effects.
 
-## Arrays of objects
-
-Arrays are objects
-
-```java
-package demo;
-
-import java.lang.reflect.Array;
-
-public class App {
-  public static void main( final String[] args ) {
-    final int[] a = { 1, 2, 3, 4, 5 };
-    final Object b = a;
-    System.out.printf( "Array of %d elements%n", Array.getLength( b ) );
-  }
-}
-```
-
-Output
-
-```bash
-Array of 5 elements
-```
-
-An array of objects can hold any type.  Consider the following example.
-
-{% include custom/proceed_with_caution.html %}
-
-```java
-package demo;
-
-import java.util.Arrays;
-
-public class App {
-  public static void main( final String[] args ) {
-    final Object[] a = new Object[5];
-
-    a[0] = "A String"; /* String */
-    a[1] = 21;         /* Integer */
-    a[2] = 42L;        /* Long */
-    a[3] = true;       /* Boolean */
-    a[4] = 'c';        /* Character */
-
-    System.out.printf( "Array: %s%n", Arrays.toString( a ) );
-  }
-}
-```
-
-Output
-
-```bash
-Array: [A String, 21, 42, true, c]
-```
-
 ## Arrays in Java are covariant
 
 As discussed in [the generics section]({{ '/docs/generics/variance/#covariance' | absolute_url }}), arrays in Java are covariant.  This means, that if `S` is a subtype of `T`, then `S[]` is a subtype of `T[]`.  Consider the following example.
