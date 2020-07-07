@@ -1467,7 +1467,7 @@ The `Arrays.sort()` can take an instance of [`Comparator`](https://docs.oracle.c
 
 A similar example was already discuss in a [previous section]({{ '/docs/generics/variance/#sorting-a-collection' | absolute_url }}).
 
-This may be a bit cryptic.  Consider the following `Person` class.
+Consider the following `Person` class.
 
 ```java
 package demo;
@@ -1584,9 +1584,13 @@ Employee(super=Person(name=Mary), employeeNumber=ENG-0700)
 
 ## Searching
 
-Pending...
+{% include custom/note.html details="Binary search depends on the array being sorted.  The binary search algorithm may not work if the given array is not sorted and may produce unexpected results." %}
 
-{% include custom/note.html details="Search depends on the array being sorted.  Searching will not work well if the given array is not sorted and may produce unexpected results." %}
+The `Arrays` class provides the [`binarySearch()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int)) method that takes two parameters, the array to search in and a criterion (also referred to as _key_), and returns the index of the element if found.  If the given criterion is not found, the method returns a negative number hinting where the criterion can be inserted while keeping the array sorted.
+
+As the method name indicates, the `binarySearch()` method uses the [binary search algorithm](https://en.wikipedia.org/wiki/Binary_search_algorithm), which has a performance of _log(n)_.
+
+Consider the following example.
 
 ```java
 package demo;
@@ -1608,7 +1612,7 @@ public class App {
 }
 ```
 
-Output
+The above example will print.
 
 ```bash
 Sorted array a: [2, 5, 9, 10, 12]
@@ -1616,41 +1620,39 @@ Index of 9: 2
 Index of 4: -2
 ```
 
-The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to be inserted in position `1`, that it `1 + the negative index`.
+The negative number indicates that the number is not in the array.  The number also indicates where the item can be inserted to maintain a sorted array.  The number 4 needs to be inserted in position `1`, that is `1 + the negative index`.  This offset is required as `0` is an existing index and `-0` is not a number.
 
-1. Searching on an unsorted array may produce unexpected results
+Searching on an unsorted array may produce unexpected results.  Consider the following example.
 
-    {% include custom/proceed_with_caution.html %}
+{% include custom/proceed_with_caution.html %}
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
+import java.util.Arrays;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final int[] a = { 9, 10, 2, 5, 12 };
+public class App {
+  public static void main( final String[] args ) {
+    final int[] a = { 9, 10, 2, 5, 12 };
 
-        /* Search on an unsorted array */
-        final int b = Arrays.binarySearch( a, 9 );
-        final int c = Arrays.binarySearch( a, 4 );
+    /* ⚠️ Search on an unsorted array */
+    final int b = Arrays.binarySearch( a, 9 );
+    final int c = Arrays.binarySearch( a, 4 );
 
-        System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
-        System.out.printf( "Index of 9: %d%n", b );
-        System.out.printf( "Index of 4: %d%n", c );
-      }
-    }
-    ```
+    System.out.printf( "Sorted array a: %s%n", Arrays.toString( a ) );
+    System.out.printf( "Index of 9: %d%n", b );
+    System.out.printf( "Index of 4: %d%n", c );
+  }
+}
+```
 
-    Output
+Different to what one would expect, the value `9` was not found in the array despite this exit, as shown next.
 
-    ```bash
-    Sorted array a: [9, 10, 2, 5, 12]
-    Index of 9: -5
-    Index of 4: -4
-    ```
-
-    The binary search was not able to find `9` and provided the wrong insertion point for the value `4`.
+```bash
+Sorted array a: [9, 10, 2, 5, 12]
+Index of 9: -5
+Index of 4: -4
+```
 
 ## An array of characters is not a String
 
