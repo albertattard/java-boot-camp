@@ -158,7 +158,7 @@ List [a, b, c]
 
 Array based collections are faster and take less space when compare to linked list based. Linked list has higher overheads per item when compared to arrays based.  The only one place linked list out performs the array is FIFO queue.  Iterating is faster with arrays as items in the array are close to each other.  ArrayList is slow when we need to add or remove elements as we need to shift things down.
 
-Technically, `Vector` and `Stack` and other classes also implement the `List` interface and provide the list features you expect. However, they are meant for other purposes, and their use as a list is therefore discouraged.
+Technically, `Stack` and other classes also implement the `List` interface and provide the list features you expect. However, they are meant for other purposes, and their use as a list is therefore discouraged.
 
 ## Double brace initialization
 
