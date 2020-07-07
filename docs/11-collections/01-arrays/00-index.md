@@ -1334,7 +1334,7 @@ public class App {
 }
 ```
 
-Be very careful with covariance as this can lead to unforseen problems.  Consider teh following example.
+Be very careful with covariance as this can lead to unforeseen problems.  Consider the following example.
 
 {% include custom/compile_but_throws.html e="ArrayStoreException" %}
 
@@ -1377,7 +1377,7 @@ public class App {
 }
 ```
 
-The primitive `char`, is not an `Object`, thus it does not take part in any inheritance.  An array primitive type `P` is not a subtype of any other array.
+The primitive `char`, is not an `Object`, thus it does not take part in any inheritance.  An array primitive type `P` is not a subtype of any other array of any other type.
 
 ## Sorting
 
