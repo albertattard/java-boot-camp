@@ -49,6 +49,7 @@ ga_tracking: UA-12098401-5
 
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 compress_html:
   clippings: all
