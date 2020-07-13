@@ -455,7 +455,80 @@ Each set implementation is compared in more details next.
 
 ## Set values **MUST BE** immutable
 
-{% include custom/pending.html %}
+**Modifying the elements after adding them to the set may break the set**.  Consider the following example.
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point point = new Point( 1, 1 );
+
+    final Set<Point> points = new HashSet<>();
+    points.add( point );
+
+    System.out.println( "-- Before modifying the element ----" );
+    System.out.printf( "Is point %s in set? %s%n", point, points.contains( point ) );
+
+    /* Modify the point */
+    point.y = 10;
+
+    System.out.println( "-- After modifying the element -----" );
+    System.out.printf( "Is point %s in set? %s%n", point, points.contains( point ) );
+    System.out.printf( "Elements in set: %s%n", points );
+  }
+}
+```
+
+In the above example, a point is added to the set and then modified.  After the point is modified, the set is not able to find the same point (the same object reference) and will print the following.
+
+```bash
+-- Before modifying the element ----
+Is point java.awt.Point[x=1,y=1] in set? true
+-- After modifying the element -----
+Is point java.awt.Point[x=1,y=10] in set? false
+Elements in set: [java.awt.Point[x=1,y=10]]
+```
+
+The strangest thing when debugging such problems is that the set seems to contain this element, as printed in the last line from the above output.  The issue here happened because the element now belongs to a different bucket and that's why the set is not able to find it.
+
+### How can we modify elements that are contained within a set?
+
+{% include custom/note.html details="Avoid working with mutable objects when containing these in a set." %}
+
+If an element within a set is mutable and needs to be updated, then it should first be removed from the set, updated and then added back to the set, as shown in the following example.
+
+{% include custom/proceed_with_caution.html %}
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point point = new Point( 1, 1 );
+
+    final Set<Point> points = new HashSet<>();
+    points.add( point );
+
+    /* Remove, update and add */
+    points.remove( point );
+    point.y = 10;
+    points.add( point );
+
+    System.out.printf( "Is point %s in set? %s%n", point, points.contains( point ) );
+  }
+}
+```
+
+The order in which these three operations happen is quite important as if we update the element before removing it, the remove may not remove the element and then end up with two instances of the same object in the same set.
 
 ## Double brace initialization
 
