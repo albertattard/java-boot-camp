@@ -532,13 +532,51 @@ The order in which these three operations happen is quite important as if we upd
 
 ## Double brace initialization
 
-{% include custom/pending.html %}
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>() { {
+      add( "a" );
+      add( "b" );
+      add( "c" );
+    } };
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add the elements to the list.  The above example is similar to the following.
+
+```java
+package demo;
+
+import java.util.HashSet;
+
+public class MyStringSet extends HashSet<String> {
+
+  /* Initialisation block */
+  {
+    add( "a" );
+    add( "b" );
+    add( "c" );
+  }
+}
+```
+
+I've never used this pattern and prefer other constructs instead, such as `Sets.of()`, [Guava Sets.newHashSet()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Sets.html#newHashSet-E...-) method.  I've added this example here as you may encounter this in code.
 
 ## Mutable and immutable sets
 
-Unmodifiable sets cannot be modified
+Immutable (also referred to as _unmodifiable_) sets cannot be modified, while mutable (also referred to as _modifiable_) sets can be modified.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT THROWS AN UnsupportedOperationException!!**
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
 
 ```java
 package demo;
@@ -549,16 +587,15 @@ import java.util.Set;
 
 public class App {
   public static void main( final String[] args ) {
-    final Set<String> a = new HashSet<>( 3 );
-    a.add( "a" );
-    a.add( "b" );
-    a.add( "c" );
+    final Set<String> modifiable = new HashSet<>( 3 );
+    modifiable.add( "a" );
+    modifiable.add( "b" );
+    modifiable.add( "c" );
 
-    /* Cannot modify the set through b */
-    final Set<String> b = Collections.unmodifiableSet( a );
+    final Set<String> unmodifiable = Collections.unmodifiableSet( modifiable );
 
-    /* Throws UnsupportedOperationException */
-    b.add( "d" );
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    unmodifiable.add( "d" );
   }
 }
 ```
@@ -568,7 +605,7 @@ Changing the unmodifiable set will throw an `UnsupportedOperationException`.
 ```bash
 Exception in thread "main" java.lang.UnsupportedOperationException
   at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
-  at demo.App.main(App.java:18)
+  at demo.App.main(App.java:17)
 ```
 
 Changes to the underlying set will also affect the immutable set
@@ -582,26 +619,161 @@ import java.util.Set;
 
 public class App {
   public static void main( final String[] args ) {
-    final Set<String> a = new HashSet<>( 3 );
-    a.add( "a" );
-    a.add( "b" );
-    a.add( "c" );
+    final Set<String> modifiable = new HashSet<>( 3 );
+    modifiable.add( "a" );
+    modifiable.add( "b" );
+    modifiable.add( "c" );
 
-    /* Cannot modify the set through b */
-    final Set<String> b = Collections.unmodifiableSet( a );
+    final Set<String> unmodifiable = Collections.unmodifiableSet( modifiable );
 
-    /* The immutable set b will be modified too */
-    a.add( "d" );
+    /* The immutable set will be modified too */
+    modifiable.add( "d" );
 
-    System.out.printf( "Set a: %s%n", a );
-    System.out.printf( "Set b: %s%n", b );
+    System.out.printf( "Set: %s%n", unmodifiable );
   }
 }
 ```
 
-Output
+The unmodifiable set uses the given set as its underlying data structure.  Therefore, any changes to the underlying data structure will affect the unmodifiable set too, as shown next.
 
 ```bash
-Set a: [a, b, c, d]
-Set b: [a, b, c, d]
+Set: [a, b, c, d]
 ```
+
+{% include custom/note.html details="This is a common misconception and many fall victim to this." %}
+
+Consider the following class.
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.Set;
+
+public class Data {
+
+  private final Set<Integer> sample;
+
+  public Data( final Set<Integer> sample ) {
+    this.sample = Collections.unmodifiableSet( sample );
+  }
+
+  public Set<Integer> getSample() {
+    return sample;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Data: %s", sample );
+  }
+}
+```
+
+The `Data` class contains an unmodifiable set, named `sample`.  We cannot add or remove data to/from the `sample` set.  Consider the following example.
+
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<Integer> source = new HashSet<>( 3 );
+    source.add( 7 );
+    source.add( 4 );
+    source.add( 11 );
+
+    final Data data = new Data( source );
+
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    data.getSample().add( 6 );
+  }
+}
+```
+
+The above example compiles and fails whenever we try to modify the `sample` set through the enclosing `Data` class.
+
+```bash
+Exception in thread "main" java.lang.UnsupportedOperationException
+	at java.base/java.util.Collections$UnmodifiableCollection.add(Collections.java:1062)
+	at demo.App.main(App.java:16)
+```
+
+The above example may give you the wrong impression that the sample set is immutable.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<Integer> source = new HashSet<>( 3 );
+    source.add( 7 );
+    source.add( 4 );
+    source.add( 11 );
+
+    final Data data = new Data( source );
+
+    /* Modify the source */
+    source.add( 6 );
+
+    /* The data is changed too as a side effect */
+    System.out.println( data );
+  }
+}
+```
+
+The above example is modifying the set through the `source` variable, which happens to be the underlying data structured of the immutable set, `sample`.  We are still able to modify the sample by modifying the underlying set.
+
+```bash
+Data: [11, 4, 6, 7]
+```
+
+**Defensive copying** is a technique which mitigates the negative effects caused by unintentional (or intentional) modifications of shared objects.  Instead of sharing the reference to the original set, we create a new set and use the reference to the newly created copy instead.  Thus, any modification made to the source will not affect our set.
+
+To address this problem, we need to change the following line
+
+```java
+    this.sample = Collections.unmodifiableSet( sample );
+```
+
+with
+
+```java
+   this.sample = Collections.unmodifiableSet( new HashSet<>( sample ) );
+```
+
+In the above fragment, we are first creating a copy of the given set into a new `HashSet` (`new HashSet<>( sample )`), then we wrap this into an immutable set (`Collections.unmodifiableSet( /* ... */ )`).  Following is the complete example.
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Data {
+
+  private final Set<Integer> sample;
+
+  public Data( final Set<Integer> sample ) {
+/**/this.sample = Collections.unmodifiableSet( new HashSet<>( sample ) );
+  }
+
+  public Set<Integer> getSample() {
+    return sample;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Data: %s", sample );
+  }
+}
+```
+
+Any changes made to the source set, will not affect our set.  The above example is truly immutable.

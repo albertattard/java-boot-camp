@@ -225,7 +225,7 @@ public class MyStringList extends ArrayList<String> {
 }
 ```
 
-I've never used this pattern and prefer other constructs instead, such as [Guava.asList()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Lists.html#asList-E-E:A-).  I've added this example here as you may encounter this in code.
+I've never used this pattern and prefer other constructs instead, such as `List.of()` or [Guava.'s `Lists.asList()`](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Lists.html#asList-E-E:A-).  I've added this example here as you may encounter this in code.
 
 ## Mutable and Immutable Lists
 
