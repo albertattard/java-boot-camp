@@ -21,7 +21,7 @@ The [`Set`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/ut
 
 ## Create Sets
 
-[Java 9](https://openjdk.java.net/projects/jdk9/) added static functions to the `Set` interface, [Set.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#of(E...)), that simplifies the creation of sets.
+[Java 9](https://openjdk.java.net/projects/jdk9/) added static methods to the `Set` interface, [Set.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#of(E...)), that simplifies the creation of sets.
 
 ```java
 package demo;
@@ -80,6 +80,12 @@ Generally, sets do not fail when duplicates are added.  Instead duplicate elemen
 A `HashSet` can be seen as a list of lists, where elements are placed in the bucket they belong.  A hash function is used to determine the bucket the elements belongs to, as shown in the following image.
 
 ![HashSet-Buckets-Hash-Function.png]({{ '/assets/images/HashSet-Buckets-Hash-Function.png' | absolute_url }})
+
+The `HashSet` will use the element's [`hashCode()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()) method to determine the bucket to which the element belongs, then the [`equals()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) method to determine whether this already exists within the bucket, as shown in the following image.
+
+![HashSet-Buckets-HashCode-Equals.png]({{ '/assets/images/HashSet-Buckets-HashCode-Equals.png' | absolute_url }})
+
+The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
 
 A `HashSet` can be created like any other object, as shown next.
 

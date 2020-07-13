@@ -432,7 +432,7 @@ public class App {
 
 When printing variable `albert`, we print `albert`'s `name` and `surname` properties and his `friend` (`john`) using `albert`'s ` toString()` method.  Then, Java invokes `john`'s `toString()` method to convert `john` to a `String`.  Now, given that `albert` is `john`'s friend, `albert`'s `toString()` method is called again from within `john`'s `toString()` method and the cycles starts all over again.  This is a recursive call and will theoretically run forever as shown in the following image.
 
-![Recursive toString() method]({{site.baseurl}}/assets/images/Recursive-toString-method.png)
+![Recursive toString() method]({{ '/assets/images/Recursive-toString-method.png' | absolute_url }})
 
 The above recursive call will keep going until we run out of memory and a `StackOverflowError` is thrown and the program crash.
 

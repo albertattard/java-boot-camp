@@ -37,7 +37,7 @@ public class App {
 }
 ```
 
-[Java 9]() added static functions to the `List` interface [`List.of()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...))
+[Java 9](https://openjdk.java.net/projects/jdk9/) added static methods to the `List` interface [`List.of()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...))
 
 ```java
 package demo;

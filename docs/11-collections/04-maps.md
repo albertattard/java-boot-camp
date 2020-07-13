@@ -9,6 +9,8 @@ permalink: docs/collections/maps/
 # Maps
 {: .no_toc }
 
+The [`Map`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html) interface is the base interface for collections which allows to store unique key/value pairs, no necessary in any particular order.
+
 ## Table of contents
 {: .no_toc .text-delta }
 
@@ -19,7 +21,7 @@ permalink: docs/collections/maps/
 
 ## Create Maps
 
-Java 9 added a default functions to the [Map](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html) interface [List.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#of(E...))
+[Java 9](https://openjdk.java.net/projects/jdk9/) added static methods to the [Map](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html) interface [Map.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Map.html#of(E...)).  Consider the following example.
 
 ```java
 package demo;
@@ -28,26 +30,57 @@ import java.util.Map;
 
 public class App {
   public static void main( final String[] args ) {
-    final Map<String, Integer> a = Map.of(
+    final Map<String, Integer> marks = Map.of(
       "Aden", 82,
       "Jade", 92,
       "Peter", 74,
       "Jane", 68
     );
-    System.out.printf( "Marks: %s%n", a );
+    System.out.printf( "Marks: %s%n", marks );
   }
 }
 ```
 
-The above example will print
+The above example create a map of students and their tests' mark, and simply print the map's elements (also referred to as _entries_), in no particular order.
 
 ```bash
 Marks: {Aden=82, Jane=68, Peter=74, Jade=92}
 ```
 
+Maps can only contain unique keys. The `Map.of()` method will throw an [`IllegalArgumentException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html) if duplicate keys are provided. Consider the following example.
+
+{% include custom/compile_but_throws.html e="IllegalArgumentException" %}
+
+```java
+package demo;
+
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, Integer> marks = Map.of(
+      "Aden", 82,
+      "Aden", 92
+    );
+    System.out.printf( "Marks: %s%n", marks );
+  }
+}
+```
+
+The above example will fail as expected.
+
+```bash
+Exception in thread "main" java.lang.IllegalArgumentException: duplicate key: Aden
+	at java.base/java.util.ImmutableCollections$MapN.<init>(ImmutableCollections.java:977)
+	at java.base/java.util.Map.of(Map.java:1328)
+	at demo.App.main(App.java:7)
+```
+
+Generally, maps do not fail when duplicate keys are added.  Instead, the value associated with the duplicate key will simply replace the existing value.  This is a unique behaviour of the `Map.of()` methods.
+
 ## Hashtable
 
-[Hashtable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html) example.
+[Hashtable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html) is an implementation of `Map`
 
 ```java
 package demo;
