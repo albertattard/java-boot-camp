@@ -47,7 +47,11 @@ The above example create a map of students and their tests' mark, and simply pri
 Marks: {Aden=82, Jane=68, Peter=74, Jade=92}
 ```
 
-Maps can only contain unique keys. The `Map.of()` method will throw an [`IllegalArgumentException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html) if duplicate keys are provided. Consider the following example.
+Maps take a _key_ and a _value_, the students' name and their marks in the above example, and stores them as _entries_, as shown in the following image,
+
+![Map-Entry.png]({{ '/assets/images/Map-Entry.png' | absolute_url }})
+
+Maps can only contain unique keys.  We cannot have two entries with the same key.  The `Map.of()` method will throw an [`IllegalArgumentException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html) if duplicate keys are provided. Consider the following example.
 
 {% include custom/compile_but_throws.html e="IllegalArgumentException" %}
 
@@ -80,7 +84,11 @@ Generally, maps do not fail when duplicate keys are added.  Instead, the value a
 
 ## Hashtable
 
-[Hashtable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html) is an implementation of `Map`
+[Hashtable](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Hashtable.html) is an implementation of `Map` interface based on [hash functions and buckets](https://en.wikipedia.org/wiki/Hash_table), as shown in the following image.
+
+![Hashtable-Buckets-Entries.png]({{ '/assets/images/Hashtable-Buckets-Entries.png' | absolute_url }})
+
+The image shown above is very similar to another image shown in the [sets page]({{ '/docs/collections/sets/#hashset' | absolute_url }}).  Hash bases sets, use maps 
 
 ```java
 package demo;
@@ -221,6 +229,10 @@ The items are returned in the key's natural order.
 ```bash
 Marks: {Aden=72, Jane=68, John=91, Jade=92, Peter=74}
 ```
+
+## Can we store `null`s?
+
+{% include custom/pending.html %}
 
 ## Which Map to Use?
 
