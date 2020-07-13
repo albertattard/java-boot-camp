@@ -397,25 +397,25 @@ Following is a basic example that tries to add a `null` for each of the above im
 
 ## Which set to use?
 
-`HashSet` is my first choice as it is very fast.  With that said, `HashSet` consumes more space when compared to `TreeSet`, which is relatively slower.  `LinkedHashSet` is a variant of `HashSet`, where the elements order is preserved, at some extra space cost.  The following table shows which set I prefer and a one sentence describing the motivation behind this decision.
+`HashSet` is my first choice as it is very fast.  With that said, `HashSet` consumes more space when compared to `TreeSet`.  `LinkedHashSet` is a variant of `HashSet`, where the elements' order is preserved, at some extra space cost.  The following table shows which set I prefer and a one sentence describing the motivation behind this decision.
 
-| Set | Motivation |
-| --- | --- |
-| `HashSet` | My default go-to set implementation |
+| Set             | Motivation                                                  |
+| --------------- | ----------------------------------------------------------- |
+| `HashSet`       | My default go-to set implementation                         |
 | `LinkedHashSet` | When I need to preserve the insertion order of the elements |
-| `TreeSet` | When ordering is important and no need to deal with `null`s |
+| `TreeSet`       | When ordering is important and no need to deal with `null`s |
 
 Each set implementation is compared in more details next.
 
 1. **Performance**
 
-   **`HashSet`** performs faster than `TreeSet`.  This comes to a surprise especially when searching element.
+   `HashSet` performs faster than `TreeSet`.  This comes to a surprise especially when searching element.
 
 1. **Ordering**
 
-   `HashSet` provides no ordering guarantees.  **`LinkedHashSet`** preserves the order in which the elements are added while **`TreeSet`** always contains the elements in an ordered manner (based on the elements natural ordering or the provided `Comparator`).
+   `HashSet` provides no ordering guarantees.  `LinkedHashSet` preserves the order in which the elements are added while `TreeSet` always contains the elements in an ordered manner (based on the elements natural ordering or the provided `Comparator`).
 
-   When an ordered set (a set of type [`SortedSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html)) is required, it is recommended to create a `HashSet` and populate it with the elements.  Then create an `TreeSet` from the `HashSet`, as shown next.
+   When an ordered set (a set of type [`SortedSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html)) is required, it is recommended to create a `HashSet` and populate it with the elements first.  Then create an `TreeSet` from the `HashSet`, as shown next.
 
    ```java
    package demo;
@@ -437,15 +437,21 @@ Each set implementation is compared in more details next.
    }
    ```
 
+   This example takes advantage from the bulk population of the `TreeSet` and does not suffer the cost associated with the rebalancing with every element addition.
+
 1. **`null` support**
 
-   `TreeSet` does not support `null`s.  **`HashSet`** and **`LinkedHashSet`** support `null`s.  Note that there can be at most one `null` in a set.
+   `TreeSet` does not support `null`s.  **`HashSet`** and **`LinkedHashSet`** support `null`s.
+
+   {% include custom/note.html details="There can be at most one <code>null</code> in a set." %}
 
 1. **Comparison**
 
    The `HashSet` and `LinkedHashSet` use the element's `hashCode()` method to determine which bucket to use and the `equals()` method to compare between elements within the same bucket.
 
    The `TreeSet` relies on the `compareTo()` method for same purpose.
+
+   The relation between the collections and the elements which they contain is discussed in more depth in the [relation to objects]({{ '/docs/collections/relation-to-objects/' | absolute_url }}) section.
 
 ## Set values **MUST BE** immutable
 
