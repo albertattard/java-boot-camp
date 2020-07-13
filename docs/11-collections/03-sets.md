@@ -314,7 +314,86 @@ Points [java.awt.Point[x=1,y=2]]
 
 ## Can we store `null`s?
 
-{% include custom/pending.html %}
+Some set implementations accept `null`s while others not, as shown in the following table.
+
+| Set             | Allows `null`s |
+|-----------------|:--------------:|
+| `HashSet`       |    **YES**     |
+| `LinkedHashSet` |    **YES**     |
+| `LinkedHashSet` |     **NO**     |
+
+
+Following is a basic example that tries to add a `null` for each of the above implementations
+
+1. `HashSet` (_accepts `null`s_)
+
+   ```java
+   package demo;
+
+   import java.util.HashSet;
+   import java.util.Set;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Set<String> names = new HashSet<>();
+       names.add( null );
+       System.out.printf( "Names %s%n", names );
+     }
+   }
+   ```
+
+   `HashSet` accepts `null`s.  At most, there can be only one `null` in a set.
+
+1. `LinkedHashSet` (_accepts `null`s_)
+
+   ```java
+   package demo;
+
+   import java.util.LinkedHashSet;
+   import java.util.Set;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Set<String> names = new LinkedHashSet<>();
+       names.add( null );
+       System.out.printf( "Names %s%n", names );
+     }
+   }
+   ```
+
+   `LinkedHashSet` accepts `null`s.  At most, there can be only one `null` in a set.
+
+1. `TreeSet` (_does not accepts `null`s_)
+
+   {% include custom/compile_but_throws.html e="NullPointerException"%}
+
+   ```java
+   package demo;
+
+   import java.util.Set;
+   import java.util.TreeSet;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Set<String> names = new TreeSet<>();
+
+       /* ⚠️ Throws NullPointerException!! */
+       names.add( null );
+
+       System.out.printf( "Names %s%n", names );
+     }
+   }
+   ```
+
+   `TreeSet` does not work with `null`s and a `NullPointerException` will be thrown if we attempt to add `null`s.
+
+   ```bash
+   Exception in thread "main" java.lang.NullPointerException
+       at java.base/java.util.TreeMap.compare(TreeMap.java:1291)
+       at java.base/java.util.TreeMap.put(TreeMap.java:536)
+       at java.base/java.util.TreeSet.add(TreeSet.java:255)
+       at demo.App.main(App.java:11)
+   ```
 
 ## Which set to use?
 
