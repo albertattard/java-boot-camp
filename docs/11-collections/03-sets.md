@@ -1,4 +1,4 @@
----
+ ---
 layout: default
 title: Sets
 parent: Collections
@@ -53,6 +53,7 @@ import java.util.Set;
 
 public class App {
   public static void main( final String[] args ) {
+    /* ⚠️ Throws IllegalArgumentException!! */
     final Set<String> a = Set.of( "a", "a", "a" );
     System.out.printf( "Set %s%n", a );
   }
@@ -65,7 +66,7 @@ The above example will fail as expected.
 Exception in thread "main" java.lang.IllegalArgumentException: duplicate element: a
 	at java.base/java.util.ImmutableCollections$SetN.<init>(ImmutableCollections.java:712)
 	at java.base/java.util.Set.of(Set.java:503)
-	at demo.App.main(App.java:7)
+	at demo.App.main(App.java:8)
 ```
 
 Generally, sets do not fail when duplicates are added.  Instead duplicate elements are simply ignored.  This is a unique behaviour of the `Set.of()` methods.
@@ -167,7 +168,7 @@ In the above examples, the output is always returned in alphabetical order.  Thi
 
 ## LinkedHashSet
 
-[LinkedHashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedHashSet.html)
+[`LinkedHashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/LinkedHashSet.html) is a [`HashSet`](#hashset) that also preserve the order in which items are returned.  Consider the following example.
 
 ```java
 package demo;
@@ -182,7 +183,39 @@ public class App {
     a.add( "c" );
     a.add( "a" );
 
-    /* Add an element that already exists */
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+The above program will always return the element in the same order these where added.
+
+```bash
+Set [b, c, a]
+```
+
+`LinkedHashSet` uses a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list) to preserve the order in which the elements are added to the set.
+
+## TreeSet
+
+[`TreeSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html) is another set implementation that uses a tree data structure.  The `TreeSet` is based on the [red–black self-balancing binary search tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) implementation.  The tree marks its nodes _red_ or _black_, hence the name, and rebalances itself following an addition or deletion of elements, guaranteeing searches in `O(log n)` time.  This makes mutation more complex as the tree needs to be rebalanced every time elements are added or removed.
+
+{% include custom/note.html details=" Different to what many believe, the <code>TreeSet</code> <strong>does not</strong> outperform the <code>HashSet</code> when searching elements.  In most case the `HashSet` finds elements faster than the <code>TreeSet</code>." %}
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new TreeSet<>();
+    a.add( "b" );
+    a.add( "c" );
     a.add( "a" );
 
     System.out.printf( "Set %s%n", a );
@@ -190,15 +223,7 @@ public class App {
 }
 ```
 
-Output
-
-```bash
-Set [b, c, a]
-```
-
-## TreeSet
-
-[TreeSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html)
+In the above example, the `TreeSet` stores the given strings in alphabetical order.  We can control how elements are handled by the `TreeSet` by providing a `Comparator` instance, as shown next.
 
 ```java
 package demo;
@@ -214,25 +239,22 @@ public class App {
     a.add( "c" );
     a.add( "a" );
 
-    /* Add an element that already exists */
-    a.add( "a" );
-
     System.out.printf( "Set %s%n", a );
   }
 }
 ```
 
-Output
+Different from the previous example, the set will return the elements in reverse order, as shown next.
 
 ```bash
 Set [c, b, a]
 ```
 
-The Java `TreeSet` is based on the [Red-Black tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree).  The order in which the elements are sorted is goverend by the provided comparator or by their natural ordering.
+The order in which the elements are sorted is governed by the provided `Comparator` or by their natural ordering (in the element implements [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html)).
 
-Note that adding items to a list which do not support natural ordering and without providing a comparator will throw a `ClassCastException` at runtime.
+Note that adding elements to a `TreeSet` which do not support natural ordering (elements do not implement `Comparable`) and without providing a `Comparator` will throw a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html) at runtime.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
+{% include custom/compile_but_throws.html e="ClassCastException" %}
 
 ```java
 package demo;
@@ -244,6 +266,8 @@ import java.util.TreeSet;
 public class App {
   public static void main( final String[] args ) {
     final Set<Point> a = new TreeSet<>();
+
+    /* ⚠️ Throws ClassCastException!! */
     a.add( new Point( 1, 2 ) );
 
     System.out.printf( "Points %s%n", a );
@@ -251,7 +275,7 @@ public class App {
 }
 ```
 
-The `Point` class does not implement the `Comparable` interface, thus this type of object does not provide natural ordering.  A comparator needs to be provided to the `TreeSet` to be able to work with the `Point` class.
+The [`Point`](https://docs.oracle.com/en/java/javase/14/docs/api/java.desktop/java/awt/Point.html) class does not implement the `Comparable` interface, thus this type of object does not provide natural ordering.  A `Comparator` needs to be provided to the `TreeSet` to be able to work with the `Point` class, as shown in the following example.
 
 ```java
 package demo;
@@ -275,11 +299,13 @@ public class App {
 }
 ```
 
-The above will print.
+We can store any object to the `TreeSet` as long as we provide a `Comparator` when the elements being stored do not implement `Comparable`.  The above will print.
 
 ```bash
 Points [java.awt.Point[x=1,y=2]]
 ```
+
+**The `TreeSet` always store the elements sorted**.
 
 ## Which set to use?
 
