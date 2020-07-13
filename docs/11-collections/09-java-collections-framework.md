@@ -2,7 +2,7 @@
 layout: default
 title: Java Collections Framework
 parent: Collections
-nav_order: 8
+nav_order: 9
 permalink: docs/collections/java-collections-framework/
 ---
 

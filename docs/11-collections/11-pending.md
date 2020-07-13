@@ -2,7 +2,7 @@
 layout: default
 title: Miscellaneous
 parent: Collections
-nav_order: 10
+nav_order: 11
 nav_exclude: true
 permalink: docs/collections/miscellaneous/
 ---

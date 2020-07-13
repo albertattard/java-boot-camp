@@ -1,12 +1,12 @@
 ---
 layout: default
-title: Queue and Stack
+title: Bags
 parent: Collections
-nav_order: 7
-permalink: docs/collections/queue-stack/
+nav_order: 4
+permalink: docs/collections/bags/
 ---
 
-# Queue and Stack
+# Bags
 {: .no_toc }
 
 ## Table of contents
@@ -16,11 +16,5 @@ permalink: docs/collections/queue-stack/
 {:toc}
 
 ---
-
-## Queues
-
-{% include custom/pending.html %}
-
-## Stacks
 
 {% include custom/pending.html %}

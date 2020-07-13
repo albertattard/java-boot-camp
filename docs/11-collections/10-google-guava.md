@@ -2,7 +2,7 @@
 layout: default
 title: Google Guava (Collections)
 parent: Collections
-nav_order: 9
+nav_order: 10
 permalink: docs/collections/google-guava/
 ---
 

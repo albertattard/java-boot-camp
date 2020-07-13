@@ -2,7 +2,7 @@
 layout: default
 title: Covariance and invariance
 parent: Collections
-nav_order: 5
+nav_order: 6
 permalink: docs/collections/covariance-invariance/
 ---
 

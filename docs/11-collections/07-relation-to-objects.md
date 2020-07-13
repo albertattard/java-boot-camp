@@ -2,7 +2,7 @@
 layout: default
 title: Relation to objects
 parent: Collections
-nav_order: 6
+nav_order: 7
 permalink: docs/collections/relation-to-objects/
 ---
 
