@@ -21,48 +21,68 @@ The [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/u
 
 ## Create Lists
 
-1. Create lists
+There are several ways how a list can be created.  Following is an example of how a list be can created from an array, using the [`Arrays`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Arrays.html) class.
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.Arrays;
-    import java.util.List;
+import java.util.Arrays;
+import java.util.List;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final List<String> a = Arrays.asList( "a", "b", "c" );
-        System.out.printf( "List %s%n", a );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = Arrays.asList( "a", "b", "c" );
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
 
-    Java 9 added a default functions to the [List](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) interface [List.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...))
+[Java 9]() added static functions to the `List` interface [`List.of()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html#of(E...))
 
-    ```java
-    package demo;
+```java
+package demo;
 
-    import java.util.List;
+import java.util.List;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final List<String> a = List.of( "a", "b", "c" );
-        System.out.printf( "List %s%n", a );
-      }
-    }
-    ```
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = List.of( "a", "b", "c" );
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
 
-    Output
+Output
 
-    ```bash
-    List [a, b, c]
-    ```
+```bash
+List [a, b, c]
+```
 
 ## Vector
 
-Vector uses Array internally as data structure.  They are dynamically resizable.  By default, Vector doubles the size of its array when its size is increased.
+[`Vector`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) uses an array internally as data structure.  They are dynamically resizable.  By default, `Vector` doubles the size of its array when its size is increased.
 
-[Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html)
+```java
+package demo;
+
+import java.util.List;
+import java.util.Vector;
+
+public class App {
+  public static void main( final String[] args ) {
+    final List<String> a = new Vector<>();
+    a.add( "b" );
+    a.add( "c" );
+
+    /* Add at a given existing location */
+    a.add( 0, "a" );
+
+    System.out.printf( "List %s%n", a );
+  }
+}
+```
+
+When initialising the `Vector`, it is best to provide an indication of the `Vector`'s size.  This enables the `Vector` to create an array once and mitigate the need of array resize.
 
 ```java
 package demo;
@@ -84,17 +104,22 @@ public class App {
 }
 ```
 
-Output
+Both examples will produce the same output.
 
 ```bash
 List [a, b, c]
 ```
 
+The `Vector`'s methods are `syncronised`.  This provides a thread-safety.
+
+{% include custom/note.html details="While each individual method is thread-safe and atomic, a gaurd is needed when wworking with multiple methods." %}
+
+```java
+```
+
 ## ArrayList
 
-ArrayList uses Array internally as data structure. They are dynamically resizable.  By default, ArrayList increases by half of its size when its size is increased.
-
-[ArrayList](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html)
+[`ArrayList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html) uses Array internally as data structure. They are dynamically resizable.  By default, ArrayList increases by half of its size when its size is increased.
 
 ```java
 package demo;
