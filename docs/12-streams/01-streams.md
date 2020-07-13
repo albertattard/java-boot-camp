@@ -363,3 +363,4 @@ public class App {
             1. `findFirst()`
 1. `map()` produces `1-to-1` while `flatMap()` produces `M-to-1` or `1-to-M` as required
 1. `spliterator()`
+1. [https://github.com/amaembo/streamex](https://github.com/amaembo/streamex)

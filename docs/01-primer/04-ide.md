@@ -20,6 +20,10 @@ Plugins
 1. [FindBugs-IDEA](https://plugins.jetbrains.com/plugin/3847-findbugs-idea)
 1. [jclasslib Bytecode viewer](https://plugins.jetbrains.com/plugin/9248-jclasslib-Bytecode-viewer)
 
+Educational Plugins
+
+1. [EduTools](https://plugins.jetbrains.com/plugin/10081-edutools)
+
 Setup command-line Launcher
 
 ![IntelliJ Create Command-Line Launcher]({{ '/assets/images/IntelliJ-Create-Command-Line-Launcher.png' | absolute_url }})
