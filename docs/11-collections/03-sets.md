@@ -198,7 +198,12 @@ Set [b, c, a]
 
 ## TreeSet
 
-[`TreeSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html) is another set implementation that uses a tree data structure.  The `TreeSet` is based on the [red–black self-balancing binary search tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) implementation.  The tree marks its nodes _red_ or _black_, hence the name, and rebalances itself following an addition or deletion of elements, guaranteeing searches in `O(log n)` time.  This makes mutation more complex as the tree needs to be rebalanced every time elements are added or removed.
+[`TreeSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/TreeSet.html) is another set implementation that uses a tree data structure.  The `TreeSet` is based on the [red–black self-balancing binary search tree](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree) implementation.
+
+![Red Black Tree](https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Red-black_tree_example.svg/2880px-Red-black_tree_example.svg.png)
+([Reference](https://en.wikipedia.org/wiki/Red%E2%80%93black_tree))
+
+The tree marks its nodes _red_ or _black_, hence the name, and rebalances itself following an addition or deletion of elements, guaranteeing searches in `O(log n)` time.  This makes mutation more complex as the tree needs to be rebalanced every time elements are added or removed.
 
 {% include custom/note.html details=" Different to what many believe, the <code>TreeSet</code> <strong>does not</strong> outperform the <code>HashSet</code> when searching elements.  In most case the `HashSet` finds elements faster than the <code>TreeSet</code>." %}
 
@@ -306,6 +311,10 @@ Points [java.awt.Point[x=1,y=2]]
 ```
 
 **The `TreeSet` always store the elements sorted**.
+
+## Can we store `null`s?
+
+{% include custom/pending.html %}
 
 ## Which set to use?
 
