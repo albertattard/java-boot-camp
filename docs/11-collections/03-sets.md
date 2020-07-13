@@ -320,7 +320,7 @@ Some set implementations accept `null`s while others not, as shown in the follow
 |-----------------|:--------------:|
 | `HashSet`       |    **YES**     |
 | `LinkedHashSet` |    **YES**     |
-| `LinkedHashSet` |     **NO**     |
+| `TreeSet`       |     **NO**     |
 
 
 Following is a basic example that tries to add a `null` for each of the above implementations
@@ -363,7 +363,7 @@ Following is a basic example that tries to add a `null` for each of the above im
 
    `LinkedHashSet` accepts `null`s.  At most, there can be only one `null` in a set.
 
-1. `TreeSet` (_does not accepts `null`s_)
+1. `TreeSet` (_does not accept `null`s_)
 
    {% include custom/compile_but_throws.html e="NullPointerException"%}
 
@@ -397,7 +397,55 @@ Following is a basic example that tries to add a `null` for each of the above im
 
 ## Which set to use?
 
-{% include custom/pending.html %}
+`HashSet` is my first choice as it is very fast.  With that said, `HashSet` consumes more space when compared to `TreeSet`, which is relatively slower.  `LinkedHashSet` is a variant of `HashSet`, where the elements order is preserved, at some extra space cost.  The following table shows which set I prefer and a one sentence describing the motivation behind this decision.
+
+| Set | Motivation |
+| --- | --- |
+| `HashSet` | My default go-to set implementation |
+| `LinkedHashSet` | When I need to preserve the insertion order of the elements |
+| `TreeSet` | When ordering is important and no need to deal with `null`s |
+
+Each set implementation is compared in more details next.
+
+1. **Performance**
+
+   **`HashSet`** performs faster than `TreeSet`.  This comes to a surprise especially when searching element.
+
+1. **Ordering**
+
+   `HashSet` provides no ordering guarantees.  **`LinkedHashSet`** preserves the order in which the elements are added while **`TreeSet`** always contains the elements in an ordered manner (based on the elements natural ordering or the provided `Comparator`).
+
+   When an ordered set (a set of type [`SortedSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedSet.html)) is required, it is recommended to create a `HashSet` and populate it with the elements.  Then create an `TreeSet` from the `HashSet`, as shown next.
+
+   ```java
+   package demo;
+
+   import java.util.HashSet;
+   import java.util.Set;
+   import java.util.SortedSet;
+   import java.util.TreeSet;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Set<String> temporary = new HashSet<>();
+       temporary.add( "Jade" );
+       temporary.add( "Aden" );
+
+       final SortedSet<String> ordered = new TreeSet<>( temporary );
+       System.out.printf( "Ordered:  %s%n", ordered );
+     }
+   }
+   ```
+
+1. **`null` support**
+
+   `TreeSet` does not support `null`s.  **`HashSet`** and **`LinkedHashSet`** support `null`s.  Note that there can be at most one `null` in a set.
+
+1. **Comparison**
+
+   The `HashSet` and `LinkedHashSet` use the element's `hashCode()` method to determine which bucket to use and the `equals()` method to compare between elements within the same bucket.
+
+   The `TreeSet` relies on the `compareTo()` method for same purpose.
 
 ## Set values **MUST BE** immutable
 
