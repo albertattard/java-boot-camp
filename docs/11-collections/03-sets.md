@@ -9,7 +9,7 @@ permalink: docs/collections/sets/
 # Sets
 {: .no_toc }
 
-The `Set` interface is the base interface for collections which allows to store unique items no necessary in any particular order.
+The [`Set`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html) interface is the base interface for collections which allows to store unique items, no necessary in any particular order.
 
 ## Table of contents
 {: .no_toc .text-delta }
@@ -21,32 +21,90 @@ The `Set` interface is the base interface for collections which allows to store 
 
 ## Create Sets
 
-1. Create sets
+[Java 9](https://openjdk.java.net/projects/jdk9/) added static functions to the `Set` interface, [Set.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#of(E...)), that simplifies the creation of sets.
 
-    Java 9 added a default functions to the [Set](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html) interface [Set.of()](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Set.html#of(E...))
+```java
+package demo;
 
-    ```java
-    package demo;
+import java.util.Set;
 
-    import java.util.Set;
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = Set.of( "a", "b", "c" );
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
 
-    public class App {
-      public static void main( final String[] args ) {
-        final Set<String> a = Set.of( "a", "b", "c" );
-        System.out.printf( "Set %s%n", a );
-      }
-    }
-    ```
+The above will simply print the set's elements, **in no particular order**.
 
-    Output
+```bash
+Set [a, b, c]
+```
 
-    ```bash
-    Set [a, b, c]
-    ```
+Sets can only contain unique elements.  The `Set.of()` method will throw an [`IllegalArgumentException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalArgumentException.html) if duplicate elements are provided.  Consider the following example.
+
+{% include custom/compile_but_throws.html e="IllegalArgumentException" %}
+
+```java
+package demo;
+
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = Set.of( "a", "a", "a" );
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+The above example will fail as expected.
+
+```bash
+Exception in thread "main" java.lang.IllegalArgumentException: duplicate element: a
+	at java.base/java.util.ImmutableCollections$SetN.<init>(ImmutableCollections.java:712)
+	at java.base/java.util.Set.of(Set.java:503)
+	at demo.App.main(App.java:7)
+```
+
+Generally, sets do not fail when duplicates are added.  Instead duplicate elements are simply ignored.  This is a unique behaviour of the `Set.of()` methods.
 
 ## HashSet
 
-[HashSet](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html)
+[`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) is an implementation of the `Set` interface based on [hash functions and buckets](https://en.wikipedia.org/wiki/Hash_table), as shown in the following image.
+
+![HashSet-Buckets.png]({{ '/assets/images/HashSet-Buckets.png' | absolute_url }})
+
+A `HashSet` can be seen as a list of lists, where elements are placed in the bucket they belong.  A hash function is used to determine the bucket the elements belongs to, as shown in the following image.
+
+![HashSet-Buckets-Hash-Function.png]({{ '/assets/images/HashSet-Buckets-Hash-Function.png' | absolute_url }})
+
+A `HashSet` can be created like any other object, as shown next.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>();
+    a.add( "b" );
+    a.add( "c" );
+    a.add( "a" );
+
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+The above example creates a set and adds three elements to the set.  We can provide hits to the `HashSet` constructor about its _initial capacity_ and the _load factor_.  The _load factor_ is the relation between number of buckets and the size of the set.  This is a trade-off between memory used and performance.  In most cases the default _load factor_ value works well, but there are cases where this needs to be tuned.
+
+{% include custom/note.html details="Premature optimization is the root of all evil."%}
+
+It is always recommended to provide an initial capacity when this is known as it minimises the number of times the `HashSet` has to resize its internal data structures, as shown in the following example.
 
 ```java
 package demo;
@@ -61,21 +119,51 @@ public class App {
     a.add( "c" );
     a.add( "a" );
 
-    /* Add an element that already exists */
+    System.out.printf( "Set %s%n", a );
+  }
+}
+```
+
+Both examples will print the same output.
+
+```bash
+Set [a, b, c]
+```
+
+The `HashSet`'s `add()` method returns a `boolean` indicating whether the element that was offered was added or not.  When adding an element that already exists in the set, the `add()` method returns `false`, as shown in the following example.
+
+```java
+package demo;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Set<String> a = new HashSet<>();
+    a.add( "b" );
+    a.add( "c" );
     a.add( "a" );
+
+    /* Add an element that already exists */
+    final boolean wasAdded = a.add( "a" );
+    System.out.printf( "Was duplicate added? %s%n", wasAdded ? "YES" : "NO" );
 
     System.out.printf( "Set %s%n", a );
   }
 }
 ```
 
-Output
+The `add()` method is defined by the [`Collection`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html) interface and all collections, sets included, must honour the contracts defined by the `Collection` interface.
+
+The duplicate element is not added to the set as also indicated in the following output.
 
 ```bash
+Was duplicate added? NO
 Set [a, b, c]
 ```
 
-The order in which the elements are returned is not guranteed and may vary between different versions of the JVM and JRE.
+In the above examples, the output is always returned in alphabetical order.  This may give the wrong impression that the `HashSet` always returns the elements in a given order.  **The order in which the elements are returned is not guaranteed and may vary between different versions of the JVM and JRE**.  There are other set implementations, such as [`LinkedHashSet`](#linkedhashset) and [`TreeSet`](#treeset), that always return the elements in a specific order.
 
 ## LinkedHashSet
 
