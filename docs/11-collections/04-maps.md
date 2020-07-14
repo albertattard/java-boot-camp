@@ -785,4 +785,210 @@ I've never used this pattern and prefer other constructs instead, such as `Map.o
 
 ## Mutable and immutable maps
 
-{% include custom/pending.html %}
+Immutable (also referred to as _unmodifiable_) maps cannot be modified, while mutable (also referred to as _modifiable_) maps can be modified.  Consider the following example.
+
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, String> modifiable = new HashMap<>( 3 );
+    modifiable.put( "a", "A" );
+    modifiable.put( "b", "B" );
+    modifiable.put( "c", "C" );
+
+    final Map<String, String> unmodifiable = Collections.unmodifiableMap( modifiable );
+
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    unmodifiable.put( "d", "D" );
+  }
+}
+```
+
+Changing the unmodifiable map will throw an `UnsupportedOperationException`.
+
+```bash
+Exception in thread "main" java.lang.UnsupportedOperationException
+	at java.base/java.util.Collections$UnmodifiableMap.put(Collections.java:1473)
+	at demo.App.main(App.java:17)
+```
+
+Changes to the underlying map will also affect the immutable map
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, String> modifiable = new HashMap<>( 3 );
+    modifiable.put( "a", "A" );
+    modifiable.put( "b", "B" );
+    modifiable.put( "c", "C" );
+
+    final Map<String, String> unmodifiable = Collections.unmodifiableMap( modifiable );
+
+    /* The immutable map will be modified too */
+    modifiable.put( "d", "D" );
+
+    System.out.printf( "Map: %s%n", unmodifiable );
+  }
+}
+```
+
+The unmodifiable map uses the given map as its underlying data structure.  Therefore, any changes to the underlying data structure will affect the unmodifiable map too, as shown next.
+
+```bash
+Map: {a=A, b=B, c=C, d=D}
+```
+
+{% include custom/note.html details="This is a common misconception and many fall victim to this." %}
+
+Consider the following class.
+
+```java
+package demo;
+
+import java.util.Collections;
+import java.util.Map;
+
+public class Data {
+
+  private final Map<String, Integer> sample;
+
+  public Data( final Map<String, Integer> sample ) {
+    this.sample = Collections.unmodifiableMap( sample );
+  }
+
+  public Map<String, Integer> getSample() {
+    return sample;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Data: %s", sample );
+  }
+}
+```
+
+The `Data` class contains an unmodifiable map, named `sample`.  We cannot add or remove data to/from the `sample` map.  Consider the following example.
+
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
+
+```java
+package demo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, Integer> source = new HashMap<>( 3 );
+    source.put( "a", 7 );
+    source.put( "b", 4 );
+    source.put( "c", 11 );
+
+    final Data data = new Data( source );
+
+    /* ⚠️ Throws UnsupportedOperationException!! */
+    data.getSample().put( "d", 6 );
+  }
+}
+```
+
+The above example compiles and fails whenever we try to modify the `sample` map through the enclosing `Data` class.
+
+```bash
+Exception in thread "main" java.lang.UnsupportedOperationException
+	at java.base/java.util.Collections$UnmodifiableMap.put(Collections.java:1473)
+	at demo.App.main(App.java:16)
+```
+
+The above example may give you the wrong impression that the sample map is immutable.  Consider the following example.
+
+```java
+package demo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, Integer> source = new HashMap<>( 3 );
+    source.put( "a", 7 );
+    source.put( "b", 4 );
+    source.put( "c", 11 );
+
+    final Data data = new Data( source );
+
+    /* Modify the source */
+    source.put( "d", 6 );
+
+    /* The data is changed too as a side effect */
+    System.out.println( data );
+  }
+}
+```
+
+The above example is modifying the map through the `source` variable, which happens to be the underlying data structured of the immutable map, `sample`.  We are still able to modify the sample by modifying the underlying map.
+
+```bash
+Data: {a=7, b=4, c=11, d=6}
+```
+
+**Defensive copying** is a technique which mitigates the negative effects caused by unintentional (or intentional) modifications of shared objects.  Instead of sharing the reference to the original map, we create a new map and use the reference to the newly created copy instead.  Thus, any modification made to the source will not affect our map.
+
+To address this problem, we need to change the following line
+
+```java
+    this.sample = Collections.unmodifiableMap( sample );
+```
+
+with (_if you are working with Java 9 or above_)
+
+```java
+    this.sample = Map.copyOf( sample );
+```
+
+or (_if you are working with Java 8 or you need to handle `null`s_)
+
+```java
+   this.sample = Collections.unmodifiableSet( new HashMap<>( sample ) );
+```
+
+There are at least two ways to solve this problem, both options will achieve the same thing.
+
+```java
+package demo;
+
+import java.util.Map;
+
+public class Data {
+
+  private final Map<String, Integer> sample;
+
+  public Data( final Map<String, Integer> sample ) {
+/**/this.sample = Map.copyOf( sample );
+  }
+
+  public Map<String, Integer> getSample() {
+    return sample;
+  }
+
+  @Override
+  public String toString() {
+    return String.format( "Data: %s", sample );
+  }
+}
+```
+
+Any changes made to the source map, will not affect our map.  The above example is truly immutable.

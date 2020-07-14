@@ -753,7 +753,7 @@ with (_if you are working with Java 9 or above_)
     this.sample = Set.copyOf( sample );
 ```
 
-or (_if you are working with Java 8_)
+or (_if you are working with Java 8 or you need to handle `null`s_)
 
 ```java
    this.sample = Collections.unmodifiableSet( new HashSet<>( sample ) );
