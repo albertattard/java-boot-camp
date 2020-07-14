@@ -152,7 +152,7 @@ public class App {
 }
 ```
 
-The above example creates a map and adds (puts) four entries to the set.  We can provide hits to the `Hashtable` constructor about its _initial capacity_ and the _load factor_.  The _load factor_ is the relation between number of buckets and the size of the map.  This is a trade-off between memory used and performance.  In most cases the default _load factor_ value works well, but there are cases where this needs to be tuned.
+The above example creates a map and adds (puts) four entries to the map.  We can provide hits to the `Hashtable` constructor about its _initial capacity_ and the _load factor_.  The _load factor_ is the relation between number of buckets and the size of the map.  This is a trade-off between memory used and performance.  In most cases the default _load factor_ value works well, but there are cases where this needs to be tuned.
 
 {% include custom/note.html details="Premature optimization is the root of all evil."%}
 
@@ -302,7 +302,7 @@ The entries will always be return in the same order these were added, as shown n
 Marks: {Aden=82, Jade=92, Peter=74, Jane=68}
 ```
 
-`LinkedHashSet` uses a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list) to preserve the order in which the elements are added to the set.
+`LinkedHashMap` uses a [doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list) to preserve the order in which the entries are added to the map.
 
 ## TreeMap
 
@@ -518,7 +518,7 @@ Following are some basic example that tries to work with `null` keys and values 
 
    `HashMap` accepts `null` keys and values.  At most, there can be only one `null` key in a map, but there can be as many `null` values.
 
-1. `LinkedHashSet` (_accepts `null` keys and values_)
+1. `LinkedHashMap` (_accepts `null` keys and values_)
 
    ```java
    package demo;
@@ -536,7 +536,7 @@ Following are some basic example that tries to work with `null` keys and values 
    }
    ```
 
-   `LinkedHashSet` accepts `null` keys and values.  At most, there can be only one `null` key in a map, but there can be as many `null` values.
+   `LinkedHashMap` accepts `null` keys and values.  At most, there can be only one `null` key in a map, but there can be as many `null` values.
 
 1. `TreeMap` (_does not accept `null` keys but accepts `null` values_)
 
@@ -566,8 +566,7 @@ Following are some basic example that tries to work with `null` keys and values 
    Exception in thread "main" java.lang.NullPointerException
        at java.base/java.util.TreeMap.compare(TreeMap.java:1291)
        at java.base/java.util.TreeMap.put(TreeMap.java:536)
-       at java.base/java.util.TreeSet.add(TreeSet.java:255)
-       at demo.App.main(App.java:11)
+       at demo.App.main(App.java:10)
    ```
 
    **Null Value**
@@ -597,7 +596,7 @@ Following are some basic example that tries to work with `null` keys and values 
 
 `HashMap` is my first choice as it is very fast and can handle `null`s.  With that said, `HashMap` consumes more space when compared to `TreeMap`.  `LinkedHashMap` is a variant of `HashMap`, where the entries' order is preserved, at some extra space cost.  The following table shows which map I prefer and a one sentence describing the motivation behind this decision.
 
-| Set             | Motivation                                                                   |
+| Map             | Motivation                                                                   |
 | --------------- | ---------------------------------------------------------------------------- |
 | `HashMap`       | My default go-to map implementation                                          |
 | `LinkedHashMap` | When I need to preserve the insertion order of the entries                   |
@@ -640,7 +639,7 @@ Each map implementation is compared in more details next.
 
 1. **`null` support**
 
-   `TreeMap` does not support `null` keys, but support `null` values.  `HashMap` and `LinkedHashSet` support `null` keys and values.
+   `TreeMap` does not support `null` keys, but support `null` values.  `HashMap` and `LinkedHashMap` support `null` keys and values.
 
    {% include custom/note.html details="There can be at most one <code>null</code> key in a map." %}
 
@@ -764,7 +763,7 @@ public class App {
 }
 ```
 
-The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add (put) the entries to the set.  The above example is similar to the following.
+The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add (put) the entries to the map.  The above example is similar to the following.
 
 ```java
 package demo;
