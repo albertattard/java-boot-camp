@@ -660,32 +660,33 @@ Each map implementation is compared in more details next.
 
 ## Map keys **MUST BE** immutable
 
-Consider the following example
+**Modifying the entry's key after adding them to the map may break the map**.  Consider the following example.
 
 ```java
 package demo;
 
-import java.awt.point;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class App {
   public static void main( final String[] args ) {
-    final Point a = new Point( 1, 1 );
+    final Point point = new Point( 1, 1 );
 
-    final Map<Point, String> m = new HashMap<>( 3 );
-    m.put( a, "Lower left corner" );
+    final Map<Point, String> points = new HashMap<>( 3 );
+    points.put( point, "Lower left corner" );
 
     System.out.println( "-- Before modifying the key ----" );
-    System.out.printf( "The map contains %d points%n", m.size() );
-    System.out.printf( "Is point %s in map? %s%n", a, m.containsKey( a ) );
+    System.out.printf( "The map contains %d points%n", points.size() );
+    System.out.printf( "Is point %s in map? %s%n", point, points.containsKey( point ) );
 
     /* Modify the key */
-    a.y = 10;
+    point.y = 10;
 
     System.out.println( "-- After modifying the key -----" );
-    System.out.printf( "The map contains %d points%n", m.size() );
-    System.out.printf( "Is point %s in map? %s%n", a, m.containsKey( a ) );
+    System.out.printf( "The map contains %d points%n", points.size() );
+    System.out.printf( "Is point %s in map? %s%n", point, points.containsKey( point ) );
+    System.out.printf( "The map contains: %s%n", points );
   }
 }
 ```
@@ -699,9 +700,47 @@ Is point java.awt.Point[x=1,y=1] in map? true
 -- After modifying the key -----
 The map contains 1 points
 Is point java.awt.Point[x=1,y=10] in map? false
+The map contains: {java.awt.Point[x=1,y=10]=Lower left corner}
 ```
 
-**Mutable objects are not good candidates as map keys**
+The strangest thing when debugging such problems is that the map seems to contain this key, as printed in the last line from the above output.  The issue here happened because the element now belongs to a different bucket and that's why the map is not able to find it.
+
+### How can we modify keys that are contained within a map?
+
+{% include custom/note.html details="Avoid working with mutable keys." %}
+
+If a key within a map is mutable and needs to be updated, then it should first be removed from the map, updated and then added back to the map, as shown in the following example.
+
+{% include custom/proceed_with_caution.html %}
+
+```java
+package demo;
+
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Point point = new Point( 1, 1 );
+
+    final Map<Point, String> points = new HashMap<>( 3 );
+    points.put( point, "Lower left corner" );
+
+    /* Remove, update and put back */
+    final String description = points.remove( point );
+    point.y = 10;
+    points.put( point, description );
+
+    System.out.printf( "The map contains %d points%n", points.size() );
+    System.out.printf( "Is point %s in map? %s%n", point, points.containsKey( point ) );
+  }
+}
+```
+
+The order in which these three operations happen is quite important as if we update the entry's key before removing it, the remove may not remove the element and then end up with two instances of the same object in the same map.
+
+**Mutable objects are not good candidates as map keys**.
 
 ## Double brace initialization
 
