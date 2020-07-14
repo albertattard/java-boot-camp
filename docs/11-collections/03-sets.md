@@ -73,15 +73,15 @@ Generally, sets do not fail when duplicates are added.  Instead duplicate elemen
 
 ## HashSet
 
-[`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) is an implementation of the `Set` interface based on [hash functions and buckets](https://en.wikipedia.org/wiki/Hash_table), as shown in the following image.
+[`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) is an implementation of the `Set` interface based on [hash functions and buckets](https://en.wikipedia.org/wiki/Hash_table), as shown in the following diagram.
 
 ![HashSet-Buckets.png]({{ '/assets/images/HashSet-Buckets.png' | absolute_url }})
 
-A `HashSet` can be seen as a list of lists, where elements are placed in the bucket they belong.  A hash function is used to determine the bucket the elements belongs to, as shown in the following image.
+A `HashSet` can be seen as a list of lists, where elements are placed in the bucket they belong.  A hash function is used to determine the bucket the elements belongs to, as shown in the following diagram.
 
 ![HashSet-Buckets-Hash-Function.png]({{ '/assets/images/HashSet-Buckets-Hash-Function.png' | absolute_url }})
 
-The `HashSet` will use the element's [`hashCode()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()) method to determine the bucket to which the element belongs, then the [`equals()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) method to determine whether this already exists within the bucket, as shown in the following image.
+The `HashSet` will use the element's [`hashCode()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()) method to determine the bucket to which the element belongs, then the [`equals()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) method to determine whether this already exists within the bucket, as shown in the following diagram.
 
 ![HashSet-Buckets-HashCode-Equals.png]({{ '/assets/images/HashSet-Buckets-HashCode-Equals.png' | absolute_url }})
 
@@ -211,7 +211,7 @@ Set [b, c, a]
 
 The tree marks its nodes _red_ or _black_, hence the name, and rebalances itself following an addition or deletion of elements, guaranteeing searches in `O(log n)` time.  This makes mutation more complex as the tree needs to be rebalanced every time elements are added or removed.
 
-{% include custom/note.html details=" Different to what many believe, the <code>TreeSet</code> <strong>does not</strong> outperform the <code>HashSet</code> when searching elements.  In most case the `HashSet` finds elements faster than the <code>TreeSet</code>." %}
+{% include custom/note.html details="Different to what many believe, the <code>TreeSet</code> <strong>does not</strong> outperform the <code>HashSet</code> when searching elements.  In most case the `HashSet` finds elements faster than the <code>TreeSet</code>." %}
 
 Consider the following example.
 
@@ -261,7 +261,7 @@ Different from the previous example, the set will return the elements in reverse
 Set [c, b, a]
 ```
 
-The order in which the elements are sorted is governed by the provided `Comparator` or by their natural ordering (in the element implements [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html)).
+The order in which the elements are sorted is governed by the provided `Comparator` or by their natural ordering (the element implements [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html)).
 
 Note that adding elements to a `TreeSet` which do not support natural ordering (elements do not implement `Comparable`) and without providing a `Comparator` will throw a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html) at runtime.
 
@@ -327,7 +327,6 @@ Some set implementations accept `null`s while others not, as shown in the follow
 | `HashSet`       |    **YES**     |
 | `LinkedHashSet` |    **YES**     |
 | `TreeSet`       |     **NO**     |
-
 
 Following is a basic example that tries to add a `null` for each of the above implementations
 
