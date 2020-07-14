@@ -747,19 +747,23 @@ To address this problem, we need to change the following line
     this.sample = Collections.unmodifiableSet( sample );
 ```
 
-with
+with (_if you are working with Java 9 or above_)
+
+```java
+    this.sample = Set.copyOf( sample );
+```
+
+or (_if you are working with Java 8_)
 
 ```java
    this.sample = Collections.unmodifiableSet( new HashSet<>( sample ) );
 ```
 
-In the above fragment, we are first creating a copy of the given set into a new `HashSet` (`new HashSet<>( sample )`), then we wrap this into an immutable set (`Collections.unmodifiableSet( /* ... */ )`).  Following is the complete example.
+There are at least two ways to solve this problem, both options will achieve the same thing.
 
 ```java
 package demo;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 public class Data {
@@ -767,7 +771,7 @@ public class Data {
   private final Set<Integer> sample;
 
   public Data( final Set<Integer> sample ) {
-/**/this.sample = Collections.unmodifiableSet( new HashSet<>( sample ) );
+/**/this.sample = Set.copyOf( sample );
   }
 
   public Set<Integer> getSample() {
