@@ -446,7 +446,7 @@ Each set implementation is compared in more details next.
 
 1. **`null` support**
 
-   `TreeSet` does not support `null`s.  **`HashSet`** and **`LinkedHashSet`** support `null`s.
+   `TreeSet` does not support `null`s.  `HashSet` and `LinkedHashSet` support `null`s.
 
    {% include custom/note.html details="There can be at most one <code>null</code> in a set." %}
 

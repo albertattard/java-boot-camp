@@ -595,15 +595,68 @@ Following are some basic example that tries to work with `null` keys and values 
 
 ## Which Map to Use?
 
-HashTable synchronised
+`HashMap` is my first choice as it is very fast and can handle `null`s.  With that said, `HashMap` consumes more space when compared to `TreeMap`.  `LinkedHashMap` is a variant of `HashMap`, where the entries' order is preserved, at some extra space cost.  The following table shows which map I prefer and a one sentence describing the motivation behind this decision.
 
-Hashmap
-1. HashMap is non synchronized. It is not-thread safe and can’t be shared between many threads without proper synchronization code whereas Hashtable is synchronized. It is thread-safe and can be shared with many threads.
-2. HashMap allows one null key and multiple null values whereas Hashtable doesn’t allow any null key or value.
-3. HashMap is generally preferred over HashTable if thread synchronization is not needed
+| Set             | Motivation                                                                   |
+| --------------- | ---------------------------------------------------------------------------- |
+| `HashMap`       | My default go-to map implementation                                          |
+| `LinkedHashMap` | When I need to preserve the insertion order of the entries                   |
+| `TreeMap`       | When ordering is important and no need to deal with `null` keys              |
+| `Hashtable`     | Never.  I use `ConcurrentHashMap` instead when need to deal with concurrency |
 
-Why HashTable doesn’t allow null and HashMap does?
-To successfully store and retrieve objects from a HashTable, the objects used as keys must implement the hashCode method and the equals method. Since null is not an object, it can’t implement these methods. HashMap is an advanced version and improvement on the Hashtable. HashMap was created later.
+Each map implementation is compared in more details next.
+
+1. **Performance**
+
+   `HashMap` performs faster than `TreeMap`.  This comes to a surprise especially when searching element.
+
+1. **Ordering**
+
+   `HashMap` provides no ordering guarantees.  `LinkedHashMap` preserves the order in which the entries are added while `Treemap` always contains the entries in an ordered manner (based on the entry's key natural ordering or the provided `Comparator`).
+
+   When an ordered map (a map of type [`SortedMap`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/SortedMap.html)) is required, it is recommended to create a `HashMap` and populate it with the entries first.  Then create an `TreeMap` from the `HashMap`, as shown next.
+
+   ```java
+   package demo;
+
+   import java.util.HashMap;
+   import java.util.Map;
+   import java.util.SortedMap;
+   import java.util.TreeMap;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, Integer> temporary = new HashMap<>();
+       temporary.put( "Jade", 82 );
+       temporary.put( "Aden", 84 );
+
+       final SortedMap<String, Integer> ordered = new TreeMap<>( temporary );
+       System.out.printf( "Ordered:  %s%n", ordered );
+     }
+   }
+   ```
+
+   This example takes advantage from the bulk population of the `TreeMap` and does not suffer the cost associated with the rebalancing with every entry addition.
+
+1. **`null` support**
+
+   `TreeMap` does not support `null` keys, but support `null` values.  `HashMap` and `LinkedHashSet` support `null` keys and values.
+
+   {% include custom/note.html details="There can be at most one <code>null</code> key in a map." %}
+
+1. **Comparison**
+
+   The `HashMap` and `LinkedHashMap` use the entry's key `hashCode()` method to determine which bucket to use and the entry's key `equals()` method to compare between entries within the same bucket.
+
+   The `TreeMap` relies on the entry's key `compareTo()` method for same purpose.
+
+   The relation between the collections and the elements which they contain is discussed in more depth in the [relation to objects]({{ '/docs/collections/relation-to-objects/' | absolute_url }}) section.
+
+1. **Concurrency**
+
+   Only the `Hashtable` provide thread-safety.  The `HashMap`, `LinkedHashMap` and the `TreeMap` are not thread-safe and provide no thread-safety.
+
+   As mentioned before, prefer the `ConcurrentHashMap` over the `Hashtable` when dealing with concurrent situations.
 
 ## Map keys **MUST BE** immutable
 
