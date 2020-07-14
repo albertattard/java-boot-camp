@@ -215,7 +215,7 @@ The entry for the given key is replaced by the new entry and the previous entry'
 Previous mark: 82
 ```
 
-In some of above examples, the output is always returned in particular order.  This may give the wrong impression that the `Hashtable` always returns the elements in a given order.  **The order in which the elements are returned is not guaranteed and may vary between different versions of the JVM and JRE**.  There are other map implementations, such as [`LinkedHashMap`](#linkedhashmap) and [`TreeMap`](#treemap), that always return the elements in a specific order.
+In some of above examples, the output is always returned in particular order.  This may give the wrong impression that the `Hashtable` always returns the elements in a given order.  **The order in which the entries are returned is not guaranteed and may vary between different versions of the JVM and JRE**.  There are other map implementations, such as [`LinkedHashMap`](#linkedhashmap) and [`TreeMap`](#treemap), that always return the elements in a specific order.
 
 `Hashtable` is one of the oldest `Map` implementation.  Java provides better implementations of `Map`, such as [`HashMap`](#hashmap) when concurrency is not an issue or [`ConcurrentHashMap`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html) when we need to work with multiple threads.
 
@@ -441,7 +441,157 @@ Marks: {Student(name=Aden)=82}
 
 ## Can we store `null`s?
 
-{% include custom/pending.html %}
+Some map implementations accept `null`s as both key and value while others do not, as shown in the following table.
+
+| Map             | Allows `null` keys | Allows `null` values |
+| --------------- | :----------------: | :------------------: |
+| `Hashtable`     |       **NO**       |        **NO**        |
+| `HashMap`       |      **YES**       |       **YES**        |
+| `LinkedHashMap` |      **YES**       |       **YES**        |
+| `TreeMap`       |       **NO**       |       **YES**        |
+
+Following are some basic example that tries to work with `null` keys and values for each of the above implementations
+
+1. `Hashtable` (_does not accept `null`s_)
+
+   **Null Key**
+
+   {% include custom/compile_but_throws.html e="NullPointerException"%}
+
+   ```java
+   package demo;
+
+   import java.util.Hashtable;
+   import java.util.Map;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new Hashtable<>();
+
+       /* ⚠️ Throws NullPointerException!! */
+       map.put( "k", null );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   **Null Value**
+
+   {% include custom/compile_but_throws.html e="NullPointerException"%}
+
+   ```java
+   package demo;
+
+   import java.util.Hashtable;
+   import java.util.Map;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new Hashtable<>();
+
+       /* ⚠️ Throws NullPointerException!! */
+       map.put( null, "v" );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   Both examples will fail with a `NullPointerException`.
+
+1. `HashMap` (_accepts `null` keys and values_)
+
+   ```java
+   package demo;
+
+   import java.util.HashMap;
+   import java.util.Map;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new HashMap<>();
+       map.put( null, "v" );
+       map.put( "k", null );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   `HashMap` accepts `null` keys and values.  At most, there can be only one `null` key in a map, but there can be as many `null` values.
+
+1. `LinkedHashSet` (_accepts `null` keys and values_)
+
+   ```java
+   package demo;
+
+   import java.util.LinkedHashMap;
+   import java.util.Map;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new LinkedHashMap<>();
+       map.put( null, "v" );
+       map.put( "k", null );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   `LinkedHashSet` accepts `null` keys and values.  At most, there can be only one `null` key in a map, but there can be as many `null` values.
+
+1. `TreeMap` (_does not accept `null` keys but accepts `null` values_)
+
+   **Null Key**
+
+   {% include custom/compile_but_throws.html e="NullPointerException"%}
+
+   ```java
+   package demo;
+
+   import java.util.Map;
+   import java.util.TreeMap;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new TreeMap<>();
+       /* ⚠️ Throws NullPointerException!! */
+       map.put( null, "v" );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   `TreeMap` does not work with `null` keys and a `NullPointerException` will be thrown if we attempt to add `null`s.
+
+   ```bash
+   Exception in thread "main" java.lang.NullPointerException
+       at java.base/java.util.TreeMap.compare(TreeMap.java:1291)
+       at java.base/java.util.TreeMap.put(TreeMap.java:536)
+       at java.base/java.util.TreeSet.add(TreeSet.java:255)
+       at demo.App.main(App.java:11)
+   ```
+
+   **Null Value**
+
+   ```java
+   package demo;
+
+   import java.util.Map;
+   import java.util.TreeMap;
+
+   public class App {
+     public static void main( final String[] args ) {
+       final Map<String, String> map = new TreeMap<>();
+       map.put( "k", null );
+       System.out.printf( "Map %s%n", map );
+     }
+   }
+   ```
+
+   `TreeMap` can contain `null` values and the above will print.
+
+   ```bash
+   Map {k=null}
+   ```
 
 ## Which Map to Use?
 
