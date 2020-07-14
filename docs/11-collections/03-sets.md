@@ -557,7 +557,7 @@ public class App {
 }
 ```
 
-The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add the elements to the list.  The above example is similar to the following.
+The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add the elements to the set.  The above example is similar to the following.
 
 ```java
 package demo;
@@ -575,7 +575,7 @@ public class MyStringSet extends HashSet<String> {
 }
 ```
 
-I've never used this pattern and prefer other constructs instead, such as `Sets.of()`, [Guava Sets.newHashSet()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Sets.html#newHashSet-E...-) method.  I've added this example here as you may encounter this in code.
+I've never used this pattern and prefer other constructs instead, such as `Set.of()`, [Guava Sets.newHashSet()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Sets.html#newHashSet-E...-) method.  I've added this example here as you may encounter this in code.
 
 ## Mutable and immutable sets
 

@@ -744,7 +744,45 @@ The order in which these three operations happen is quite important as if we upd
 
 ## Double brace initialization
 
-{% include custom/pending.html %}
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Map<String, String> a = new HashMap<>() { {
+      put( "a", "A" );
+      put( "b", "B" );
+      put( "c", "C" );
+    } };
+    System.out.printf( "Map %s%n", a );
+  }
+}
+```
+
+The above example makes use of double brace initialization.  An inner anonymous class is created and the init block is used to add (put) the entries to the set.  The above example is similar to the following.
+
+```java
+package demo;
+
+import java.util.HashMap;
+
+public class MyStringMap extends HashMap<String, String> {
+
+  /* Initialisation block */
+  {
+    put( "a", "A" );
+    put( "b", "B" );
+    put( "c", "C" );
+  }
+}
+```
+
+I've never used this pattern and prefer other constructs instead, such as `Map.of()`, [Guava Maps.newHashMap()](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/Maps.html#newHashMap--) method.  I've added this example here as you may encounter this in code.
 
 ## Mutable and immutable maps
 
