@@ -508,7 +508,7 @@ This is very convenient as while the `totalArea()` method can iterate the given 
 
 ### Can a generic type implement two or more interfaces?
 
-Yes.
+**YES**
 
 Consider the following classes
 
