@@ -23,8 +23,6 @@ Bags are not part of the Java collections framework.  In this page will use two 
 
 ## The bag data type
 
-The bag data type is not supported by the Java collections framework and we need to use another collections library, such as [Google Guava](#google-guava) or [Eclipse Collections](#eclipse-collections) to name two.
-
 Consider a fruit basket containing two _apples_ and an _orange_.  Storing the fruit in a bag data type will look like the following diagram.
 
 ![Bag Data Type]({{ '/assets/images/Bag Data Type.png' | absolute_url }})
@@ -34,6 +32,8 @@ Taking an apple and an orange will reduce the count for apple and will remove th
 ![Take Fruit from Bag]({{ '/assets/images/Bag - Take Fruit from Bag.png' | absolute_url }})
 
 Elements which count is less than 1 are removed from the bag.
+
+A `Bag<T>` can be seen as a special `Map<T, Integer>` (or `Map<T, Long>`), where together with the element, it stores the number of occurrences.  The bag is a good option when a Map<T, Integer> is required as the bag type provides most of the boilerplate core required.  For example, [counting an element that does not exist](#retrieve-the-count-of-an-element-that-does-not-exist) will yield `0` instead of `null`.
 
 ### Google Guava
 
@@ -89,7 +89,7 @@ public class App {
     final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Orange" );
     fruitBasket.add( "Apple" );
 
-    final int apples = fruitBasket.count( f -> f.equals( "Apple" ) );
+    final int apples = fruitBasket.occurrencesOf( "Apple" );
     System.out.printf( "We have %d apples in the basket%n", apples );
   }
 }
@@ -234,11 +234,13 @@ Running the above example, will produce unexpected results as the `hashCode()` m
 We have 0 apple in the basket
 ```
 
+{% include custom/note.html details="This is above result may vary between runs." %}
+
 The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
 
 ### Eclipse Collections
 
-The Eclipse collection `Bag`'s [`count()`](https://www.eclipse.org/collections/javadoc/10.2.0/org/eclipse/collections/api/RichIterable.html#count-org.eclipse.collections.api.block.predicate.Predicate-) method takes a [`Predicate`](https://www.eclipse.org/collections/javadoc/10.2.0/org/eclipse/collections/api/block/predicate/Predicate.html), which provides more control to the caller but adds to the verbosity. 
+The Eclipse collection `Bag`'s [`count()`](https://www.eclipse.org/collections/javadoc/10.2.0/org/eclipse/collections/api/RichIterable.html#count-org.eclipse.collections.api.block.predicate.Predicate-) method takes a [`Predicate`](https://www.eclipse.org/collections/javadoc/10.2.0/org/eclipse/collections/api/block/predicate/Predicate.html), which provides more control to the caller but adds to the verbosity.
 
 ```java
 package demo;
@@ -248,11 +250,86 @@ import org.eclipse.collections.api.factory.Bags;
 
 public class App {
   public static void main( final String[] args ) {
-    final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Orange" );
-    fruitBasket.add( "Apple" );
+    final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Apple", "Orange" );
 
     final int banana = fruitBasket.count( f -> f.equals( "Banana" ) );
     System.out.printf( "We have %d banana in the basket%n", banana );
   }
 }
 ```
+
+The `Bag` interface also provides the [`occurrencesOf()`](https://www.eclipse.org/collections/javadoc/10.2.0/org/eclipse/collections/api/bag/Bag.html#occurrencesOf-java.lang.Object-) method which achieves the same thing.
+
+```java
+package demo;
+
+import org.eclipse.collections.api.bag.MutableBag;
+import org.eclipse.collections.api.factory.Bags;
+
+public class App {
+  public static void main( final String[] args ) {
+    final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Apple", "Orange" );
+
+    final int banana = fruitBasket.occurrencesOf( "Banana" );
+    System.out.printf( "We have %d banana in the basket%n", banana );
+  }
+}
+```
+
+The `occurrencesOf()` method relies on the object's [`equals()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) and [`hashCode()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()) methods.
+
+{% include custom/do_not_use_as_is.html details="The following example does not work as expected as the <code>hashCode()</code> method is not implemented on purpose." %}
+
+```java
+package demo;
+
+import lombok.AllArgsConstructor;
+import org.eclipse.collections.api.bag.MutableBag;
+import org.eclipse.collections.api.factory.Bags;
+
+import java.util.Objects;
+
+public class App {
+  public static void main( final String[] args ) {
+    final MutableBag<Fruit> fruitBasket = Bags.mutable.of( new Fruit( "Apple" ), new Fruit( "Apple" ), new Fruit( "Orange" ) );
+    System.out.printf( "The basket has %s%n", fruitBasket );
+
+    final int apples = fruitBasket.occurrencesOf( new Fruit( "Apple" ) );
+    System.out.printf( "We have %d apples in the basket%n", apples );
+  }
+}
+
+@AllArgsConstructor
+class Fruit {
+
+  private final String name;
+
+  @Override
+  public boolean equals( final Object object ) {
+    if ( this == object )
+      return true;
+
+    if ( !( object instanceof Fruit ) )
+      return false;
+
+    final Fruit that = (Fruit) object;
+    return Objects.equals( name, that.name );
+  }
+
+  @Override
+  public String toString() {
+    return name;
+  }
+}
+```
+
+Running the above example, will produce unexpected results as the `hashCode()` method is not implemented.
+
+```bash
+The basket has [Apple, Orange, Apple]
+We have 0 apple in the basket
+```
+
+{% include custom/note.html details="This is above result may vary between runs." %}
+
+The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
