@@ -752,7 +752,7 @@ Consider the following interfaces
 
 Both interfaces define a method, named `compute()`, that return a different type.  Now consider the following class that implements both interfaces.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

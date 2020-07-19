@@ -43,7 +43,7 @@ Sorted: [Aden, Jade, Mario, Mary, Peter]
 
 Can we sort any array like that?  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
+{% include custom/compile_but_throws.html e="ClassCastException" %}
 
 ```java
 package demo;
@@ -135,7 +135,7 @@ Arrays.sort( persons );
 
 We can implement the `Comparable` interface and add natural ordering as shown next.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
+{% include custom/do_not_use_as_is.html details="The following example is not safe and may throw a <code>NullPointerException</code>." %}
 
 ```java
 package demo;
@@ -216,7 +216,7 @@ Note that `b` cannot be `null`.  We cannot pass a `null` to the `compareTo()` me
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `NullPointerException`!!**
+{% include custom/compile_but_throws.html e="NullPointerException" %}
 
 ```java
 package demo;
@@ -467,7 +467,7 @@ Given any two objects of the same type, `a` and `b` (these objects do not have t
 
 Before Java 8, we had to implement the `Comparator` interface.  Java 8 introduced lambda and interface static method, which simplified the use of the `Comparator` interface.  Following is a longer version of the above code, that will achieve the same thing.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT TAKE ADVANTAGE OF NEW CODE STYLE!!**
+{% include custom/do_not_use_as_is.html details="The following example does not take advantage of new code style." %}
 
 ```java
 package demo;
@@ -566,7 +566,7 @@ public class Person {
 
 Now consider the following example, were we try to sort an array of persons that have `null` as their `name`.  Note that the person objects are not `null`, but the property being used to sort the array is `null`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `NullPointerException`!!**
+{% include custom/compile_but_throws.html e="NullPointerException" %}
 
 ```java
 package demo;
@@ -721,7 +721,7 @@ Note that the properties are set to `public` for convenience.
 
 Say that we would like to sort the persons based on their age.  We will use a `Comparator`, but the same applies if we use a `Comparable` instead.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
+{% include custom/do_not_use_as_is.html details="The following example make use of bad programming practice." %}
 
 ```java
 package demo;
@@ -758,7 +758,7 @@ Sorted by age: [Person{name='Aden', age=11}, Person{name='Jade', age=13}]
 
 The above instance of the `Comparator` interface is broken despite its appearance.  Consider the following (extreme) situation
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT IT IS NOT SAFE!!**
+{% include custom/do_not_use_as_is.html details="The following example make use of bad programming practice." %}
 
 ```java
 package demo;

@@ -341,7 +341,7 @@ As in our example the `Itr` is private and never exposed to the outside word.
 
 Another use of inner instance classes is to represent a type internally.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE MAKE USE OF INNER INSTANCE CLASS, WHERE A INNER STATIC CLASS WOULD HAVE SUFFICED!!**
+{% include custom/do_not_use_as_is.html details="The following example makes use of an inner instance class where an inner static class would have sufficed." %}
 
 ```java
 package demo;
@@ -1595,7 +1595,7 @@ Up to now, we can control our types using a combination of private constructors 
 
 One of the downsides of the above approach is that the `Coin` class may become a bit bulky especially once we start pouring in logic.  Java 15 will introduce a new concept of sealed classes, where the sealed class will define the classes that it permits to extend it, as shown next.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH JAVA 14 OR BEFORE!!**
+{% include custom/require_java_version.html v="15 in preview mode" %}
 
 ```java
 package demo;

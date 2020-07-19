@@ -30,7 +30,7 @@ permalink: docs/data-types/strings/
 
 As of Java 15, Java will start supporting text block, also referred to as multiline Strings, defined by [JEP-378](https://openjdk.java.net/jeps/378).  The text block will be defined by the [Java language specification 3.10.6, currently available as preview](https://docs.oracle.com/javase/specs/jls/se14/preview/specs/text-blocks-jls.html).
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH JAVA 14 OR BEFORE!!**
+{% include custom/require_java_version.html v="15 (or Java 14 in preview mode)" %}
 
 ```java
 package demo;

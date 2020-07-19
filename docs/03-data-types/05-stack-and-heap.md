@@ -219,7 +219,7 @@ Point - x:7, y:3
 
 A variable can be declared but not initialised.  Such variable cannot be used before it is initialised.
 
-**⚠️ THE FOLLOWING DOES NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

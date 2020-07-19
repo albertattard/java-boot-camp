@@ -197,7 +197,7 @@ public interface HasName {
 
 In Java 1.5 we could not use the `@Override` to indicate that we are overriding this method.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL NOT COMPILE WITH VERSIONS OF JAVA PRIOR TO JAVA 1.6!!**
+{% include custom/require_java_version.html v="1.6" %}
 
 ```java
 package demo;

@@ -231,7 +231,7 @@ I've never used this pattern and prefer other constructs instead, such as `List.
 
 Unmodifiable lists cannot be modified
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT THROWS AN `UnsupportedOperationException`!!**
+{% include custom/compile_but_throws.html e="UnsupportedOperationException" %}
 
 ```java
 package demo;

@@ -179,7 +179,7 @@ public class App {
 
 The `Box` shown before has **ONE** constructor.  When creating an instance of a `Box`, the caller needs to also provide the box form (either `BoxForm.OPEN` or `BoxForm.CLOSED`).
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -277,7 +277,7 @@ public class Box {
 
 A constructor can call another constructor using `this()` and passes the required parameters.  `this()` needs to be the first statement called within the constructor.  The following example does not compile.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;
@@ -448,7 +448,7 @@ The class `BoxDimensions` captures the dimensions of a box.  Say that we would l
 
 These two constructors have the same signature as shown in the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE DOES NOT COMPILE!!**
+{% include custom/dose_not_compile.html %}
 
 ```java
 package demo;

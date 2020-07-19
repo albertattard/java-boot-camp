@@ -745,7 +745,7 @@ public class LightBox {
 
 Using the finite state machine, only the active state can invoke method.  Trying to invoke a method through a non-active state will throw an `IllegalStateException`.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW AN `IllegalStateException`!!**
+{% include custom/compile_but_throws.html e="IllegalStateException" %}
 
 ```java
 package demo;
@@ -1130,7 +1130,7 @@ A class cannot invoke any of the *grandparent*'s constructors.  Consider the fol
 
 1. The child class, `C`
 
-    **⚠️ THE FOLLOWING DOES NOT COMPILE!!**
+    {% include custom/dose_not_compile.html %}
 
     ```java
     package demo;

@@ -285,7 +285,7 @@ public class Person {
 
 Unfortunately, sensitive information tends to get leaked through the `toString()` method.  Consider the following example of a credit card.
 
-**⚠️ THE FOLLOWING EXAMPLE LEAKS SENSITIVE INFORMATION.  DO NOT USE IT AS IS!!**
+{% include custom/do_not_use_as_is.html details="The following example leaks sensitive information."%}
 
 ```java
 package demo;
@@ -565,7 +565,7 @@ Are the objects equal? true
 
 Overriding the `equals()` method can help us solve this problem.
 
-**⚠️ THE FOLLOWING EXAMPLE IS MISSING AN IMPORTANT METHOD.  DO NOT USE IT AS IS!!**
+{% include custom/do_not_use_as_is.html details="The following example is missing an important method" %}
 
 ```java
 package demo;

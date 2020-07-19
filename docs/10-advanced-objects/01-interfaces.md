@@ -545,7 +545,7 @@ public class App {
 
 Note that type downcasting is checked and a [`ClassCastException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/ClassCastException.html) is thrown if the types are not compatible.  Consider the following example.
 
-**⚠️ THE FOLLOWING EXAMPLE WILL COMPILE BUT WILL THROW A `ClassCastException`!!**
+{% include custom/compile_but_throws.html e="ClassCastException" %}
 
 ```java
 package demo;
