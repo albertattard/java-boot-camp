@@ -316,13 +316,13 @@ Set contains 1 elements
 
 ## How does the `hashCode()` method effect performance?
 
-The performance of the hash based collections is direclty related to how well distributed the elements are in its buckets.  A badly implemented `hashCode()` method may drive the performance of such functions down.
+The performance of the hash-based collections is directly related to how well distributed the elements are in its buckets.  A badly implemented `hashCode()` method may drive the performance of such collections down.
 
 [The `hashCode()` method must return the same value for two objects that are considered equal]({{ '/docs/simple-objects/the-object-class/#the-equals-and-hashcode-methods' | absolute_url }}).  Two objects that are not equal can return the same hash code value.
 
-Consider the following innefficient example.
+Consider the following inefficient example.
 
-{% include custom/not_recommended.html details="The following example performs poorly with hash based collections on purpose." %}
+{% include custom/not_recommended.html details="The following example performs poorly with hash-based collections on purpose." %}
 
 ```java
 package demo;
@@ -354,12 +354,8 @@ public class App {
 
     @Override
     public int hashCode() {
+      /* ⚠️ This will cause the hash-based collections to perform poorly!! */
       return 1;
-    }
-
-    @Override
-    public String toString() {
-      return value;
     }
   }
 
@@ -384,7 +380,7 @@ public class App {
 }
 ```
 
-Creating a set of 1,000 elements takes few milliseconds, but creating another set with 100,000 elements takes minutes.  The following table compares several set sizes and the time it takes to create such tests with a badly implemented `hashCode()` method.
+Creating a set of 1,000 elements takes few milliseconds but creating another set with 100,000 elements takes minutes.  The following table compares several set sizes and the time it takes to create such tests with a poorly implemented `hashCode()` method.
 
 | Size    | Time Taken        |
 | ------: | ----------------: |
@@ -394,12 +390,99 @@ Creating a set of 1,000 elements takes few milliseconds, but creating another se
 |  50,000 |   93 seconds      |
 | 100,000 |    8 minutes      |
 
-![Poor HashCode]({{ '/assets/images/Hash Based Collection - Poor HashCode.png' | absolute_url }})
+The time take to populate the set grows exponential to the size of the set as shown in the following graph.
 
+![Hash Based Collection Performance]({{ '/assets/images/Hash Based Collection - Performance - 1.png' | absolute_url }})
 
+The data of the above graph was derived from the following data.
+
+```bash
 Creating a set of 1000 unique elements took 102 milliseconds
 Creating a set of 10000 unique elements took 2527 milliseconds
 Creating a set of 25000 unique elements took 15355 milliseconds
 Creating a set of 50000 unique elements took 92971 milliseconds
 Creating a set of 100000 unique elements took 494658 milliseconds
+```
 
+Using the [`Objects.hashCode()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Objects.html#hashCode(java.lang.Object)) method to compute the hash will improve the performance drastically.
+
+Consider the following example.
+
+```java
+package demo;
+
+import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.time.StopWatch;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class App {
+
+  @AllArgsConstructor
+  public static class Key {
+    private final String value;
+
+    @Override
+    public boolean equals( final Object object ) {
+      if ( this == object )
+        return true;
+      if ( !( object instanceof Key ) )
+        return false;
+      final Key key = (Key) object;
+      return Objects.equals( value, key.value );
+    }
+
+    @Override
+    public int hashCode() {
+/**/  return Objects.hashCode( value );
+    }
+  }
+
+  public static void main( String[] args ) {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+
+    final Set<Key> set = createSet( 1_000 );
+
+    stopWatch.stop();
+
+    System.out.printf( "Creating a set of %d unique elements took %d milliseconds%n", set.size(), stopWatch.getTime() );
+  }
+
+  private static Set<Key> createSet( final int size ) {
+    return IntStream
+      .range( 0, size )
+      .mapToObj( i -> new Key( String.format( "Element %d", i ) ) )
+      .collect( Collectors.toCollection( HashSet::new ) )
+      ;
+  }
+}
+```
+
+Using the default implementation, inserting 100,000 unique elements takes less than a second ,as shown in the following table.
+
+| Size    | Poor Implementation | Default Implementation |
+| ------: | ------------------: | ---------------------: |
+|   1,000 |    102 milliseconds |        78 milliseconds |
+|  10,000 |      3 seconds      |       235 milliseconds |
+|  25,000 |     15 seconds      |       296 milliseconds |
+|  50,000 |     93 seconds      |       415 milliseconds |
+| 100,000 |      8 minutes      |       657 milliseconds |
+
+The difference in the hash-based collection is captured by the following graph.
+
+![Hash Based Collection Performance]({{ '/assets/images/Hash Based Collection - Performance - 2.png' | absolute_url }})
+
+The data of the above graph was derived from the following data.
+
+```bash
+Creating a set of 1000 unique elements took 78 milliseconds
+Creating a set of 10000 unique elements took 235 milliseconds
+Creating a set of 25000 unique elements took 296 milliseconds
+Creating a set of 50000 unique elements took 415 milliseconds
+Creating a set of 100000 unique elements took 657 milliseconds
+```
