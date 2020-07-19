@@ -360,7 +360,7 @@ public class App {
 
 One of the advantages of the foreach loop is that you do not need to worry about the end of the array.  A common mistake when looping an array is exceeding the array's length as shown next.
 
-**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS AN ArrayIndexOutOfBoundsException!!**
+{% include custom/compile_but_throws.html e="ArrayIndexOutOfBoundsException" %}
 
 ```java
 package demo;

@@ -382,7 +382,7 @@ Paying with: CreditCard{number=XXXX-XXXX-XXXX-3456, cvv=XXX}
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS A StackOverflowError!!**
+{% include custom/compile_but_throws.html e="StackOverflowError" %}
 
 ```java
 package demo;
@@ -726,42 +726,56 @@ The `equals()` and `hashCode()` methods are very important methods as these are 
 
 1. **Reflexive**: An object is always equal to itself.<br/>
     `a.equals(a)` always return `true`.
-1. **Symmetry**: If an object, `a`, is equal to another object, `b`, then the second object `b` must also be equal to the first object `a`.<br/>
-    | When          | Returns | Then          | Must    |
-    |---------------|---------|---------------|---------|
-    | `a.equals(b)` | `true`  | `b.equals(a)` | `true`  |
-    | `a.equals(b)` | `false` | `b.equals(a)` | `false` |
-1. **Transitive**: If an object, `a`, is equal to another object, `b`, and the second object `b` is equals to yet another object, `c`, then the first object `a` must also be equal to the third object `c`.<br/>
-    | When          | Returns | And           |Returns  | Then          | Must    |
-    |---------------|---------|---------------|---------|---------------|---------|
-    | `a.equals(b)` | `true`  | `b.equals(c)` | `true`  | `a.equals(c)` | `true`  |
-    | `a.equals(b)` | `true`  | `b.equals(c)` | `false` | `a.equals(c)` | `false` |
-    | `a.equals(b)` | `false` | `b.equals(c)` | `true`  | `a.equals(c)` | `false` |
-1. **Consistent**: If two objects are equal at one point in time, and nothing has changed in the meantime, these objects should remain equal.<br/>
-    As mentioned in [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), the [`URL` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/net/URL.html) "_relies on comparison of the IP addresses of the hosts associated with the URLs. Translating a host name to an IP address can require network access, and it isn't guaranteed to yield the same results over time. This can cause the URL equals method to violate the equals contract and has caused problems in practice. The behavior of URL’s equals method was a big mistake and should not be emulated. Unfortunately, it cannot be changed due to compatibility requirements. To avoid this sort of problem, equals methods should perform only deterministic computations on memory-resident objects._"<br/>
+
+1. **Symmetry**: If an object, `a`, is equal to another object, `b`, then the second object `b` must also be equal to the first object `a`.
+
+   | When          | Returns | Then          | Must    |
+   | ------------- | ------- | ------------- | ------- |
+   | `a.equals(b)` | `true`  | `b.equals(a)` | `true`  |
+   | `a.equals(b)` | `false` | `b.equals(a)` | `false` |
+
+1. **Transitive**: If an object, `a`, is equal to another object, `b`, and the second object `b` is equals to yet another object, `c`, then the first object `a` must also be equal to the third object `c`.
+
+   | When          | Returns | And           | Returns | Then          | Must    |
+   | ------------- | ------- | ------------- | ------- | ------------- | ------- |
+   | `a.equals(b)` | `true`  | `b.equals(c)` | `true`  | `a.equals(c)` | `true`  |
+   | `a.equals(b)` | `true`  | `b.equals(c)` | `false` | `a.equals(c)` | `false` |
+   | `a.equals(b)` | `false` | `b.equals(c)` | `true`  | `a.equals(c)` | `false` |
+
+1. **Consistent**: If two objects are equal at one point in time, and nothing has changed in the meantime, these objects should remain equal.
+
+   As mentioned in [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/), the [`URL` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/net/URL.html) "_relies on comparison of the IP addresses of the hosts associated with the URLs. Translating a host name to an IP address can require network access, and it isn't guaranteed to yield the same results over time. This can cause the URL equals method to violate the equals contract and has caused problems in practice. The behavior of URL’s equals method was a big mistake and should not be emulated. Unfortunately, it cannot be changed due to compatibility requirements. To avoid this sort of problem, equals methods should perform only deterministic computations on memory-resident objects._"<br/>
     ([reference](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev10))
+
 1. **No external influence**: An object should not rely on external factors to determine whether two objects are equal or not, for the reasons described above.
+
 1. **No object is equal to `null`**: An object `a` is never equal to `null`.<br/>
     `a.equals(null)` always return `false`.
 
 The above rules do not mention the relation between the outcome of the `equals()` method and the outcome of the `hashCode()` method.  Following is a set of rules that govern this relation.
 
-1. **Consistent**: The hash code value of an object should remain the same throughout the execution of the program, as long as the object does not change.<br/>
-    The hash code value of an object can change between different executions of the program.
-1. **If equal, same hash code**: If two objects, `a` and `b`, are equal, then these two objects must have the same hash code value.<br/>
-    | When          | Returns | Then                           | Must   |
-    |---------------|---------|--------------------------------|--------|
-    | `a.equals(b)` | `true`  | `a.hashCode() == b.hashCode()` | `true` |
-1. **If same hash code, not necessarily equal**.  Hash code does not replace equality as two objects may have the same hash code and not be equal.<br/>
-    | When                           | Returns | Then          | May be  |
-    |--------------------------------|---------|---------------|---------|
-    | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `true`  |
-    | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `false` |
+1. **Consistent**: The hash code value of an object should remain the same throughout the execution of the program, as long as the object does not change.
 
-    Note that if two objects have a different hash code value, then these objects must not be equal.<br/>
-    | When                           | Returns | Then          | Must    |
-    |--------------------------------|---------|---------------|---------|
-    | `a.hashCode() == b.hashCode()` | `false` | `a.equals(b)` | `false` |
+   The hash code value of an object can change between different executions of the program.
+
+1. **If equal, same hash code**: If two objects, `a` and `b`, are equal, then these two objects must have the same hash code value.
+
+   | When          | Returns | Then                           | Must   |
+   |---------------|---------|--------------------------------|--------|
+   | `a.equals(b)` | `true`  | `a.hashCode() == b.hashCode()` | `true` |
+
+1. **If same hash code, not necessarily equal**.  Hash code does not replace equality as two objects may have the same hash code and not be equal.
+
+   | When                           | Returns | Then          | May be  |
+   |--------------------------------|---------|---------------|---------|
+   | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `true`  |
+   | `a.hashCode() == b.hashCode()` | `true`  | `a.equals(b)` | `false` |
+
+   Note that if two objects have a different hash code value, then these objects must not be equal.
+
+   | When                           | Returns | Then          | Must    |
+   |--------------------------------|---------|---------------|---------|
+   | `a.hashCode() == b.hashCode()` | `false` | `a.equals(b)` | `false` |
 
 ### Be careful with recursive `equals()` (and `hashCode()`) calls
 
@@ -769,7 +783,7 @@ This is very similar to [Be careful with recursive `toString()` calls](#be-caref
 
 Consider the following example.
 
-**⚠️ THE FOLLOWING PROGRAM COMPILES BUT THROWS A StackOverflowError!!**
+{% include custom/compile_but_throws.html e="StackOverflowError" %}
 
 ```java
 package demo;
@@ -923,141 +937,141 @@ There are several approaches to address this problem.
 
 1. Do not have the `friend` property (or any other property that leads to recursive calls) as part of the equality/hash computation
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Objects;
+   import java.util.Objects;
 
-    public class Person {
+   public class Person {
 
-      private final String name;
-      private final String surname;
+     private final String name;
+     private final String surname;
 
-      private Person friend;
+     private Person friend;
 
-      public Person() { /* ... */ }
+     public Person() { /* ... */ }
 
-      public Person( final String name ) { /* ... */ }
+     public Person( final String name ) { /* ... */ }
 
-      public Person( final String name, final String surname ) { /* ... */ }
+     public Person( final String name, final String surname ) { /* ... */ }
 
-      public void setFriend( final Person friend ) { /* ... */ }
+     public void setFriend( final Person friend ) { /* ... */ }
 
-      @Override
-      public boolean equals( final Object object ) {
-        if ( this == object ) {
-          return true;
-        }
+     @Override
+     public boolean equals( final Object object ) {
+       if ( this == object ) {
+         return true;
+       }
 
-        if ( !( object instanceof Person ) ) {
-          return false;
-        }
+       if ( !( object instanceof Person ) ) {
+         return false;
+       }
 
-        final Person that = (Person) object;
-        return Objects.equals( name, that.name ) &&
-          Objects.equals( surname, that.surname );
-      }
+       final Person that = (Person) object;
+       return Objects.equals( name, that.name ) &&
+         Objects.equals( surname, that.surname );
+     }
 
-      @Override
-      public int hashCode() {
-        return Objects.hash( name, surname );
-      }
+     @Override
+     public int hashCode() {
+       return Objects.hash( name, surname );
+     }
 
-      @Override
-      public String toString() { /* ... */ }
-    }
-    ```
+     @Override
+     public String toString() { /* ... */ }
+   }
+   ```
 
 1. Refactor the classes such that it avoids recursive calls
 
-    Create a class that represents friendship.
+   Create a class that represents friendship.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Objects;
+   import java.util.Objects;
 
-    public class Friendship {
+   public class Friendship {
 
-      private final Person a;
-      private final Person b;
+     private final Person a;
+     private final Person b;
 
-      public Friends( final Person a, final Person b ) {
-        this.a = a;
-        this.b = b;
-      }
+     public Friends( final Person a, final Person b ) {
+       this.a = a;
+       this.b = b;
+     }
 
-      @Override
-      public boolean equals( final Object object ) {
-        if ( this == object ) {
-          return true;
-        }
+     @Override
+     public boolean equals( final Object object ) {
+       if ( this == object ) {
+         return true;
+       }
 
-        if ( !( object instanceof Friends ) ) {
-          return false;
-        }
+       if ( !( object instanceof Friends ) ) {
+         return false;
+       }
 
-        final Friends that = (Friends) object;
-        return Objects.equals( a, that.a ) &&
-          Objects.equals( b, that.b );
-      }
+       final Friends that = (Friends) object;
+       return Objects.equals( a, that.a ) &&
+         Objects.equals( b, that.b );
+     }
 
-      @Override
-      public int hashCode() {
-        return Objects.hash( a, b );
-      }
+     @Override
+     public int hashCode() {
+       return Objects.hash( a, b );
+     }
 
-      @Override
-      public String toString() {
-        return String.format( "Friendship{a=%s, b=%s}", a, b );
-      }
-    }
-    ```
+     @Override
+     public String toString() {
+       return String.format( "Friendship{a=%s, b=%s}", a, b );
+     }
+   }
+   ```
 
-    Remove the `friend` property from the `Person` class.
+   Remove the `friend` property from the `Person` class.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Objects;
+   import java.util.Objects;
 
-    public class Person {
+   public class Person {
 
-      private final String name;
-      private final String surname;
+     private final String name;
+     private final String surname;
 
-      public Person() { /* ... */ }
+     public Person() { /* ... */ }
 
-      public Person( final String name ) { /* ... */ }
+     public Person( final String name ) { /* ... */ }
 
-      public Person( final String name, final String surname ) { /* ... */ }
+     public Person( final String name, final String surname ) { /* ... */ }
 
-      @Override
-      public boolean equals( final Object object ) {
-        if ( this == object ) {
-          return true;
-        }
+     @Override
+     public boolean equals( final Object object ) {
+       if ( this == object ) {
+         return true;
+       }
 
-        if ( !( object instanceof Person ) ) {
-          return false;
-        }
+       if ( !( object instanceof Person ) ) {
+         return false;
+       }
 
-        final Person that = (Person) object;
-        return Objects.equals( name, that.name ) &&
-          Objects.equals( surname, that.surname );
-      }
+       final Person that = (Person) object;
+       return Objects.equals( name, that.name ) &&
+         Objects.equals( surname, that.surname );
+     }
 
-      @Override
-      public int hashCode() {
-        return Objects.hash( name, surname );
-      }
+     @Override
+     public int hashCode() {
+       return Objects.hash( name, surname );
+     }
 
-      @Override
-      public String toString() {
-        return String.format( "Person{name=%s, surname=%s}", name, surname );
-      }
-    }
-    ```
+     @Override
+     public String toString() {
+       return String.format( "Person{name=%s, surname=%s}", name, surname );
+     }
+   }
+   ```
 
 There may be other valid approaches that avoid recursive calls.
 
@@ -1279,32 +1293,32 @@ Break down of the above example.
 
 1. The `main()` method is fairly straight forward.  An object of type `Person` is created and passed to the `waitInLobby()` method.  The `letSomeTimePass()` method is called next followed by the `callNext()` method.
 
-    ```java
-    public static void main( final String[] args ) {
-      final Person patient = new Person( "Aden" );
+   ```java
+   public static void main( final String[] args ) {
+     final Person patient = new Person( "Aden" );
 
-      waitInLobby( patient );
-      letSomeTimePass();
-      callNext( patient );
-    }
-    ```
+     waitInLobby( patient );
+     letSomeTimePass();
+     callNext( patient );
+   }
+   ```
 
 1. The `waitInLobby()` method is harder to understand.
 
-    ```java
-    private static void waitInLobby( final Person patient ) {
-      final Thread t = new Thread( () -> {
-        synchronized ( patient ) {
-          try {
-            display( "Waiting in the lobby to be called" );
-            patient.wait();
-            display( "My name was called!!" );
-          } catch ( InterruptedException e ) { }
-        }
-      }, "waiting in lobby" );
-      t.start();
-    }
-    ```
+   ```java
+   private static void waitInLobby( final Person patient ) {
+     final Thread t = new Thread( () -> {
+       synchronized ( patient ) {
+         try {
+           display( "Waiting in the lobby to be called" );
+           patient.wait();
+           display( "My name was called!!" );
+         } catch ( InterruptedException e ) { }
+       }
+     }, "waiting in lobby" );
+     t.start();
+   }
+   ```
 
     The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the [`notify()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notify()) or [`notifyAll()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notifyAll()) methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
 
@@ -1316,29 +1330,29 @@ Break down of the above example.
 
 1. The `letSomeTimePass()` pauses the current thread for 500 milliseconds.
 
-    ```java
-    private static void letSomeTimePass() {
-      try {
-        display("letting some time pass…");
-        Thread.sleep( 500 );
-      } catch ( InterruptedException e ) { }
-    }
-    ```
+   ```java
+   private static void letSomeTimePass() {
+     try {
+       display("letting some time pass…");
+       Thread.sleep( 500 );
+     } catch ( InterruptedException e ) { }
+   }
+   ```
 
-    Similar to the `wait()` method, the thread which is sleeping may be interrupted, in which case an `InterruptedException` is thrown.
+   Similar to the `wait()` method, the thread which is sleeping may be interrupted, in which case an `InterruptedException` is thrown.
 
 1. The `callNext()` method obtains the lock on the person using the `synchronized` block and then invoked the `notifyAll()` method.
 
-    ```java
-    private static void callNext( final Person patient ) {
-      synchronized ( patient ) {
-        displayf( "%s, the doctor is ready to see you", patient );
-        a.notifyAll();
-      }
-    }
-    ```
+   ```java
+   private static void callNext( final Person patient ) {
+     synchronized ( patient ) {
+       displayf( "%s, the doctor is ready to see you", patient );
+       a.notifyAll();
+     }
+   }
+   ```
 
-    The `notifyAll()` method notifies all threads that the object (the object to which variable `patient` points to) is ready to wake up and resume operation.  This will cause the `wait()` method to stop waiting and unblocks the other thread (created in the `waitInLobby()` method).  The `notify()` method behaves similarly to the `notifyAll()` with the difference that only one thread is notified and not all threads.  If the notified thread is not the right thread (not the thread that was blocked waiting), then the notification is lost, and the blocked thread will hang waiting forever.  It is always recommended to use the `notifyAll()` method instead of the `notify()` method.
+   The `notifyAll()` method notifies all threads that the object (the object to which variable `patient` points to) is ready to wake up and resume operation.  This will cause the `wait()` method to stop waiting and unblocks the other thread (created in the `waitInLobby()` method).  The `notify()` method behaves similarly to the `notifyAll()` with the difference that only one thread is notified and not all threads.  If the notified thread is not the right thread (not the thread that was blocked waiting), then the notification is lost, and the blocked thread will hang waiting forever.  It is always recommended to use the `notifyAll()` method instead of the `notify()` method.
 
 The example prints the following.
 
