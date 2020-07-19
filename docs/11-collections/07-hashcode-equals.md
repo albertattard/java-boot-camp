@@ -316,7 +316,7 @@ Set contains 1 elements
 
 ## How does the `hashCode()` method effect performance?
 
-The performance of the hash-based collections is directly related to how well distributed the elements are in its buckets.  A badly implemented `hashCode()` method may drive the performance of such collections down.
+The performance of the hash-based collections is directly related to how well distributed the elements are in its buckets.  A poorl implemented `hashCode()` method may drive the performance of such collections down.
 
 [The `hashCode()` method must return the same value for two objects that are considered equal]({{ '/docs/simple-objects/the-object-class/#the-equals-and-hashcode-methods' | absolute_url }}).  Two objects that are not equal can return the same hash code value.
 
