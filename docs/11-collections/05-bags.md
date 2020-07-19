@@ -333,3 +333,78 @@ We have 0 apple in the basket
 {% include custom/note.html details="This is above result may vary between runs." %}
 
 The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
+
+## Take elements from the bag
+
+Elements can be added and removed from the bag in a similar fashion to other collections.  We can only take things that exists in the bag.  We cannot take more than available in the bag, thus we will never have negative counts.
+
+### Google Guava
+
+Consider the following example.
+
+```java
+package demo;
+
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Multiset<String> fruitBasket = HashMultiset.create();
+    fruitBasket.add( "Apple" );
+    fruitBasket.add( "Apple" );
+    fruitBasket.add( "Orange" );
+
+    final boolean tookOneOrange = fruitBasket.remove( "Orange" );
+    System.out.printf( "Managed to take one orange from the basket. %s%n", tookOneOrange ? "YES" : "NO" );
+
+    final boolean tookTheSecondOrange = fruitBasket.remove( "Orange" );
+    System.out.printf( "Managed to take the second orange from the basket. %s%n", tookTheSecondOrange ? "YES" : "NO" );
+
+    final int oranges = fruitBasket.count( "Orange" );
+    System.out.printf( "We have %d oranges in the basket%n", oranges );
+  }
+}
+```
+
+The above example takes two oranges from the basket that contains one orange, using the [`remove()`](https://guava.dev/releases/21.0/api/docs/com/google/common/collect/HashMultiset.html#remove-java.lang.Object-) method.  The `remove()` method removes one occurrence from the bag if one is found and returns `true`.  The `remove()` method will simply return `false` if there are no more elements in the bag for the given key.
+
+```bash
+Managed to take one orange from the basket. YES
+Managed to take the second orange from the basket. NO
+We have 0 oranges in the basket
+```
+
+### Eclipse Collections
+
+Consider the following example.
+
+```java
+package demo;
+
+import org.eclipse.collections.api.bag.MutableBag;
+import org.eclipse.collections.api.factory.Bags;
+
+public class App {
+  public static void main( final String[] args ) {
+    final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Apple", "Orange" );
+
+    final boolean tookOneOrange = fruitBasket.remove( "Orange" );
+    System.out.printf( "Managed to take one orange from the basket. %s%n", tookOneOrange ? "YES" : "NO" );
+
+    final boolean tookTheSecondOrange = fruitBasket.remove( "Orange" );
+    System.out.printf( "Managed to take the second orange from the basket. %s%n", tookTheSecondOrange ? "YES" : "NO" );
+
+    final int oranges = fruitBasket.occurrencesOf( "Orange" );
+    System.out.printf( "We have %d oranges in the basket%n", oranges );
+  }
+}
+```
+
+The above example takes two oranges from the basket that contains one orange, using the [`remove()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collection.html#remove(java.lang.Object)) method.  The `remove()` method removes one occurrence from the bag if one is found and returns `true`.  The `remove()` method will simply return `false` if there are no more elements in the bag for the given key.
+
+```bash
+Managed to take one orange from the basket. YES
+Managed to take the second orange from the basket. NO
+We have 0 oranges in the basket
+```
