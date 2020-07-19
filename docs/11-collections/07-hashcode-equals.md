@@ -486,3 +486,5 @@ Creating a set of 25000 unique elements took 296 milliseconds
 Creating a set of 50000 unique elements took 415 milliseconds
 Creating a set of 100000 unique elements took 657 milliseconds
 ```
+
+The above example made use from the default string's hash code method which has a very good distribution.  There are cases where we need to compute the hash code ourselves and take advantage of the current domain.  Before doing so though, **test first to verify whether the default implementation is good enough**.  Implement a new hash code algorithm only if the default implementation is truly hurting the application's performance.
