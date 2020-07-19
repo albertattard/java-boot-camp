@@ -95,6 +95,66 @@ public class App {
 }
 ```
 
+## Size of a bag
+
+The size of the bag is equivalent to the sum of all its elements.  In our bag of fruit, we have three fruits, two apples and an orange.  In this case, the bag's size is `3`.  This is different for the `Map` data type, where the size of the map is the number of its keys.  In this case, it will be `2`.
+
+### Google Guava
+
+Consider the following example.
+
+```java
+package demo;
+
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+
+public class App {
+  public static void main( final String[] args ) {
+    final Multiset<String> fruitBasket = HashMultiset.create();
+    fruitBasket.add( "Apple" );
+    fruitBasket.add( "Apple" );
+    fruitBasket.add( "Orange" );
+
+    final int numberOfFruit = fruitBasket.size();
+    System.out.printf( "We have %d fruit in the basket%n", numberOfFruit );
+  }
+}
+```
+
+The size of the above bag is `3` as shown in the following output.
+
+```bash
+We have 3 fruit in the basket
+```
+
+### Eclipse Collections
+
+Consider the following example.
+
+```java
+package demo;
+
+import org.eclipse.collections.api.bag.MutableBag;
+import org.eclipse.collections.api.factory.Bags;
+
+public class App {
+  public static void main( final String[] args ) {
+    final MutableBag<String> fruitBasket = Bags.mutable.of( "Apple", "Orange" );
+    fruitBasket.add( "Apple" );
+
+    final int numberOfFruit = fruitBasket.size();
+    System.out.printf( "We have %d fruit in the basket%n", numberOfFruit );
+  }
+}
+```
+
+The size of the above bag is `3` as shown in the following output.
+
+```bash
+We have 3 fruit in the basket
+```
+
 ## Retrieve the count of an element that does not exist
 
 While bags can be seen as `Map<T, Integer>`, these behave slightly different.  Counting elements that do not exist will return a `0` and not `null`.
