@@ -30,12 +30,12 @@ According to [Google Trends](https://trends.google.com/trends/explore?q=maven,gr
 
 1. **Flexible**
 
-    Changing the build lifecycle using Maven is harder than expected.  Gradle addressed this and made it easy to customise the lifecycles as required ([reference](https://gradle.org/maven-vs-gradle/)).
+   Changing the build lifecycle using Maven is harder than expected.  Gradle addressed this and made it easy to customise the lifecycles as required ([reference](https://gradle.org/maven-vs-gradle/)).
 
 1. **Performant**
 
-    ![Performance](https://gradle.org/images/performance/maven-vs-gradle.gif)<br/>
-    ([Reference](https://gradle.org/gradle-vs-maven-performance/))
+   ![Performance](https://gradle.org/images/performance/maven-vs-gradle.gif)<br/>
+   ([Reference](https://gradle.org/gradle-vs-maven-performance/))
 
 1. **Better Dependency Management**
 
@@ -45,36 +45,36 @@ According to [Google Trends](https://trends.google.com/trends/explore?q=maven,gr
 
 1. Install
 
-    Either using `SDKMAN`
+   Either using `SDKMAN`
 
-    ```bash
-    $ sdk install gradle 6.3
-    ```
+   ```bash
+   $ sdk install gradle 6.3
+   ```
 
-    or using `brew`
+   or using `brew`
 
-    ```bash
-    $ brew install gradle
-    ```
+   ```bash
+   $ brew install gradle
+   ```
 
 1. Verify
 
-    ```bash
-    $ gradle -version
+   ```bash
+   $ gradle -version
 
-    ------------------------------------------------------------
-    Gradle 6.3
-    ------------------------------------------------------------
+   ------------------------------------------------------------
+   Gradle 6.3
+   ------------------------------------------------------------
 
-    Build time:   2020-03-24 19:52:07 UTC
-    Revision:     bacd40b727b0130eeac8855ae3f9fd9a0b207c60
+   Build time:   2020-03-24 19:52:07 UTC
+   Revision:     bacd40b727b0130eeac8855ae3f9fd9a0b207c60
 
-    Kotlin:       1.3.70
-    Groovy:       2.5.10
-    Ant:          Apache Ant(TM) version 1.10.7 compiled on September 1 2019
-    JVM:          14.0.1 (AdoptOpenJDK 14.0.1+7)
-    OS:           Mac OS X 10.15.4 x86_64
-    ```
+   Kotlin:       1.3.70
+   Groovy:       2.5.10
+   Ant:          Apache Ant(TM) version 1.10.7 compiled on September 1 2019
+   JVM:          14.0.1 (AdoptOpenJDK 14.0.1+7)
+   OS:           Mac OS X 10.15.4 x86_64
+   ```
 
 For more details, please refer to: [https://gradle.org/install/](https://gradle.org/install/).
 
