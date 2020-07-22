@@ -56,15 +56,16 @@ The specification is the authority on language behaviour, but it is terse and no
 
 These specifications are not always easy to read and not meant as a beginner's tutorial.
 
-### 🤔 Given that the specification is hard to read and understand, why should I care?
+### Given that the specification is hard to read and understand, why should I care?
 
 With the understanding that this may be too technical and do not worry if you do not understand any of this.
 
 Consider the following code fragment.
 
-{% capture code %}{% raw %}int a = -7;
-int b = +a;{% endraw %}{% endcapture %}
-{% include code.html code=code lang="java" file="Unary Operator Example" %}
+```java
+int a = -7;
+int b = +a;
+```
 
 The above code fragment shows the use of the `+` unary operator. This operator is rarely used, and its behaviour is unknown to many. The description provided by an official [Java tutorial](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/op1.html) is:
 
@@ -82,7 +83,7 @@ That is very misleading. This operator's real functionality is explained in the 
 
 "_Unary numeric promotion ([§5.6](https://docs.oracle.com/javase/specs/jls/se14/html/jls-5.html#jls-5.6)) is performed on the operand. The type of the unary plus expression is the promoted type of the operand. The result of the unary plus expression is not a variable, but a value, even if the result of the operand expression is a variable._"
 
-In other words, variables of types `byte`, `short` and `char` are promoted to type `int`. The previous example will simply print `-7`.
+In other words, variables of types `byte`, `short` and `char` are promoted to type `int`.  The previous example will simply print `-7`.
 
 ## Recommended reading
 
