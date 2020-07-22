@@ -656,7 +656,7 @@ The above will print.
 The enum HEARTS has an ordinal of 2
 ```
 
-**What will happen if we use an ordinal that does not exists?**
+**What will happen if we use an ordinal that does not exist?**
 
 Surprisingly enough, this question belongs to arrays ([discussed later on](04%20-%20Collections.md#arrays)).  The array returned by the `values()` method will have four elements.  Trying to retrieve an element from the array past the enum ordinal will throw an `ArrayIndexOutOfBoundsException`.
 

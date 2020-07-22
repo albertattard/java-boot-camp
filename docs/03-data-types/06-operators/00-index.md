@@ -128,6 +128,6 @@ true || false = true
 
 {% include custom/pending.html %}
 
-## Miscellaneous
+## What's the difference between the `==` operator and `equals()` method?
 
-1. `==` and `equals()`
+{% include custom/pending.html %}
