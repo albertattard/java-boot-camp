@@ -119,7 +119,7 @@ Apart from the above, a constructor is similar to a method.
 
 ## How many constructors can a class have?
 
-**A class can have as many constructors as needs as long as each constructor has a unique signature**.
+{% include custom/note.html details="A class can have as many constructors as needs as long as each constructor has a unique signature." %}
 
 Let say that we would like to have the possibility to create an instance of a `Box` and also set its state (open/closed).  We can do that by using a constructor.
 
@@ -187,6 +187,7 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
+    /* ⚠️ The box class does not have a constructor with no parameters!! */
     final Box a = new Box();
   }
 }
@@ -292,6 +293,7 @@ public class Box {
 
   public Box() {
     label = "...";
+    /* ⚠️ There cannot be any statement before the call to `this()`!! */
     this( BoxForm.CLOSED );
   }
 
@@ -339,6 +341,7 @@ public class MagicBox {
   public final Point location;
 
   public MagicBox() {
+    /* ⚠️ The compiler cannot determine which constructor to call!! */
     this( null );
   }
 
@@ -371,42 +374,42 @@ The call `this( null )` matches both the constructors that have one reference ty
 
 1. The constructor that takes a `String`
 
-    ```java
-    public MagicBox( final String name ) { /* ... */ }
-    ```
+   ```java
+   public MagicBox( final String name ) { /* ... */ }
+   ```
 
 1. The constructor that takes a `Point`
 
-    ```java
-    public MagicBox( final Point location ) { /* ... */ }
-    ```
+   ```java
+   public MagicBox( final Point location ) { /* ... */ }
+   ```
 
 There are several ways to address this problem.  Three of which are listed below.
 
 1. The default constructor can do nothing as by default the properties will be set to `null`.
 
-    ```java
-    public MagicBox() {
-    }
-    ```
+   ```java
+   public MagicBox() {
+   }
+   ```
 
 1. We can type cast the `null` to either a `String` as shown next or a `Point`
 
-    ```java
-    public MagicBox() {
-      this( (String) null );
-    }
-    ```
+   ```java
+   public MagicBox() {
+     this( (String) null );
+   }
+   ```
 
-    [Type casting is covered in depth later on](#the-instanceof-and-type-cast-operators).
+   [Type casting is covered in depth later on]({{ '/docs/advanced-objects/instanceof-type-cast/' | absolute_url }}).
 
 1. Alternatively, the default constructor can invoke the constructor that takes two parameters.
 
-    ```java
-    public MagicBox() {
-      this( null, null );
-    }
-    ```
+   ```java
+   public MagicBox() {
+     this( null, null );
+   }
+   ```
 
 All approaches are valid, but a better option if to use *static factory methods*.
 
@@ -432,19 +435,19 @@ The class `BoxDimensions` captures the dimensions of a box.  Say that we would l
 
 1. Takes two parameters the `base` and the `height`.  The following table shows the mapping between the properties and the parameters.
 
-    | Parameter | Property |
-    |-----------|----------|
-    | `base`    | `width`  |
-    | `base`    | `depth`  |
-    | `height`  | `height` |
+   | Parameter | Property |
+   | --------- | -------- |
+   | `base`    | `width`  |
+   | `base`    | `depth`  |
+   | `height`  | `height` |
 
 1. Takes two parameters the `side` and the `depth`.  The following table shows the mapping between the properties and the parameters.
 
-    | Parameter | Property |
-    |-----------|----------|
-    | `side`    | `width`  |
-    | `side`    | `height` |
-    | `depth`   | `depth`  |
+   | Parameter | Property |
+   | --------- | -------- |
+   | `side`    | `width`  |
+   | `side`    | `height` |
+   | `depth`   | `depth`  |
 
 These two constructors have the same signature as shown in the following example.
 
@@ -483,7 +486,7 @@ Which constructor are we referring to in the above fragment?
 
 There were several attempts to solve this problem, some of them are not that good.  A not so good approach is to use a different type to represent one of the parameters (not the object's property).
 
-**⚠️ NOT RECOMMENDED!!**
+{% include custom/not_recommended.html details="The following example uses a different type simply to have a new signature." %}
 
 ```java
 package demo;
@@ -494,6 +497,7 @@ public class BoxDimensions {
   private final int height;
   private final int depth;
 
+  /* ⚠️ Do not abuse from types to create a different signature!! */
   public BoxDimensions( final int base, final float height ) { /* ... */ }
 
   public BoxDimensions( final int side, final int depth ) { /* ... */ }
@@ -504,15 +508,15 @@ The above code fragment uses `float` to differentiate between the constructors.
 
 1. Calls the *base* and *height* version of the constructor.
 
-    ```java
-    new BoxDimensions(1, 2F);
-    ```
+   ```java
+   new BoxDimensions(1, 2F);
+   ```
 
 1. Calls the *side* and *depth* version of the constructor.
 
-    ```java
-    new BoxDimensions(1, 1);
-    ```
+   ```java
+   new BoxDimensions(1, 1);
+   ```
 
 This will work, but we have better options and is only mentioned here so that you are aware of it.
 
@@ -562,6 +566,7 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
+    /* ⚠️ The Math class constructor is not visible!! */
     final Math math = new Math();
   }
 }
@@ -575,7 +580,7 @@ Java is a **general purpose programming language** that supports, [procedural pr
 
 ## Can we call methods from within a constructor?
 
-Yes, but that's not recommended as you may experiences some surprises.  The [section *Can a constructor in a parent class call a method in a subclass?*](#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass) covers this question in some depths.
+Yes, but that's not recommended as you may experiences some surprises.  The [section *Can a constructor in a parent class call a method in a subclass?*]({{ '/docs/simple-objects/inheritance/#can-a-constructor-in-a-parent-class-call-a-method-in-a-subclass' | absolute_url }}) covers this question in some depths.
 
 Be mindful when invoking methods from within the constructors.  Prefer [static factory methods](#what-are-static-factory-methods) over constructors and invoke the setup methods before returning the object.
 
