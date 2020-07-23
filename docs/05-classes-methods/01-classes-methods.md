@@ -29,14 +29,14 @@ import java.util.Random;
 
 public class App {
   public static void main( final String[] args ) {
-    System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
-    System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
+   System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
+   System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
 
-    final Random r = new Random();
-    final int a = r.nextInt( 6 ) + 1;
-    final int b = r.nextInt( 6 ) + 1;
+   final Random r = new Random();
+   final int a = r.nextInt( 6 ) + 1;
+   final int b = r.nextInt( 6 ) + 1;
 
-    System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
+   System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
   }
 }
 ```
@@ -55,17 +55,17 @@ Output
 
 1. Cannot understand what the following is doing by simply reading the code
 
-    ```java
-    final int a = r.nextInt( 6 ) + 1;
-    ```
+   ```java
+   final int a = r.nextInt( 6 ) + 1;
+   ```
 
-    We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement.
+   We can deduct that this is related to rolling of dice based on the log messages preceding and following this statement.
 
 1. All output messages have the same format:
 
-    ```java
-    System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
-    ```
+   ```java
+   System.out.printf( "[%tH:%<tM:%<tS] message%n", LocalTime.now() );
+   ```
 
 1. It is not easy to test the above code despite its simplicity
 
@@ -73,130 +73,130 @@ Output
 
 1. Move the dice logic to a separate class
 
-    Create a file called `Dice.java`
+   Create a file called `Dice.java`
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Random;
+   import java.util.Random;
 
-    public class Dice {
+   public class Dice {
 
-      public static int roll() {
-        final Random r = new Random();
-        return r.nextInt( 6 ) + 1;
-      }
+    public static int roll() {
+      final Random r = new Random();
+      return r.nextInt( 6 ) + 1;
     }
-    ```
+   }
+   ```
 
-    **Note that a class which is declared `public` should be in a file of the same name**, otherwise it will not compile.  The public class `Dice` must be in a file with the same name, `Dice.java`.
+   {% include custom/note.html details="Note that a class which is declared `public` should be in a file of the same name**, otherwise it will not compile.  The public class `Dice` must be in a file with the same name, <code>Dice.java</code>." %}
 
 1. Use the new method `roll()` defined in the `Dice` class
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.time.LocalTime;
+   import java.time.LocalTime;
 
-    public class App {
-      public static void main( final String[] args ) {
-        System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
-        System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
+   public class App {
+    public static void main( final String[] args ) {
+      System.out.printf( "[%tH:%<tM:%<tS] Game started%n", LocalTime.now() );
+      System.out.printf( "[%tH:%<tM:%<tS] Please roll the 🎲%n", LocalTime.now() );
 
-        final int a = Dice.roll();
-        final int b = Dice.roll();
+      final int a = Dice.roll();
+      final int b = Dice.roll();
 
-        System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
-      }
+      System.out.printf( "[%tH:%<tM:%<tS] You rolled %d and %d%n", LocalTime.now(), a, b );
     }
-    ```
+   }
+   ```
 
 1. Move the messaging logic to a separate class
 
-    Create a file called `Display.java`
+   Create a file called `Display.java`
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.time.LocalTime;
+   import java.time.LocalTime;
 
-    public class Display {
-      public static void print( final String message ) {
-        System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
-      }
-    }
-    ```
+   public class Display {
+     public static void print( final String message ) {
+       System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+     }
+   }
+   ```
 
 1. Use the new method `print()` defined in the `Display` class
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        Display.print( "Game started" );
-        Display.print( "Please roll the 🎲" );
+   public class App {
+     public static void main( final String[] args ) {
+       Display.print( "Game started" );
+       Display.print( "Please roll the 🎲" );
 
-        final int a = Dice.roll();
-        final int b = Dice.roll();
+       final int a = Dice.roll();
+       final int b = Dice.roll();
 
-        /* We still had to format the string */
-        Display.print( String.format( "You rolled %d and %d", a, b ) );
-      }
-    }
-    ```
+       /* We still had to format the string */
+       Display.print( String.format( "You rolled %d and %d", a, b ) );
+     }
+   }
+   ```
 
 1. Add formatting support to the `Display` class
 
-    ```java
-      public static void printf( final String pattern, final Object... parameters ) {
-        print( String.format( pattern, parameters ) );
-      }
-    ```
+   ```java
+     public static void printf( final String pattern, final Object... parameters ) {
+       print( String.format( pattern, parameters ) );
+     }
+   ```
 
-    Full example
+   Full example
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.time.LocalTime;
+   import java.time.LocalTime;
 
-    public class Display {
-      public static void printf( final String pattern, final Object... parameters ) {
-        print( String.format( pattern, parameters ) );
-      }
+   public class Display {
+     public static void printf( final String pattern, final Object... parameters ) {
+       print( String.format( pattern, parameters ) );
+     }
 
-      public static void print( final String message ) {
-        System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
-      }
-    }
-    ```
+     public static void print( final String message ) {
+       System.out.printf( "[%tH:%<tM:%<tS] %s%n", LocalTime.now(), message );
+     }
+   }
+   ```
 
 1. Use the new `printf()` method
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        Display.print( "Game started" );
-        Display.print( "Please roll the 🎲" );
+   public class App {
+     public static void main( final String[] args ) {
+       Display.print( "Game started" );
+       Display.print( "Please roll the 🎲" );
 
-        final int a = Dice.roll();
-        final int b = Dice.roll();
+       final int a = Dice.roll();
+       final int b = Dice.roll();
 
-        Display.printf( "You rolled %d and %d", a, b );
-      }
-    }
-    ```
+       Display.printf( "You rolled %d and %d", a, b );
+     }
+   }
+   ```
 
 1. How does refactoring simplify testing?
 
-    Not much.  The code is simpler to ready, but still very hard to test.
+   Not much.  The code is simpler to ready, but still very hard to test.
 
-    One key takeaway here is that using `static` methods, bound our `main()` method to the `Dice.roll()` and the `Display.print()` methods and this makes our method hard to test.  There are tools we can use that will allow us to test our code, but issue here is our design.
+   One key takeaway here is that using `static` methods, bound our `main()` method to the `Dice.roll()` and the `Display.print()` methods and this makes our method hard to test.  There are tools we can use that will allow us to test our code, but issue here is our design.
 
-    **Always tackle the root problem and do not throw more complexity at it**.
+   {% include custom/note.html details="Always tackle the root problem and do not throw more complexity at it." %}
 
 ## Is `void` a type?
 
@@ -229,8 +229,9 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    int a;
-    void b;
+   int a;
+   /* ⚠️ Cannot create a variable of type void!! */
+   void b;
   }
 }
 ```
@@ -251,8 +252,8 @@ import java.util.Random;
 public class Dice {
 
   public static int roll() {
-    final Random r = new Random();
-    return r.nextInt( 6 ) + 1;
+   final Random r = new Random();
+   return r.nextInt( 6 ) + 1;
   }
 }
 ```
@@ -261,25 +262,25 @@ public class Dice {
 
 1. Every time the `roll()` method is invoked, a new instance of `Random` is created.
 
-    Do we need to create a new instance, every time we invoke the `roll()` method?
+   Do we need to create a new instance, every time we invoke the `roll()` method?
 
 ### Refactoring
 
 1. The `random` variable can be moved outside the method and make it a class level variable
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Random;
+   import java.util.Random;
 
-    public class Dice {
+   public class Dice {
 
-      public static int roll() {
-        return RANDOM_GENERATOR.nextInt( 6 ) + 1;
-      }
+     public static int roll() {
+       return RANDOM_GENERATOR.nextInt( 6 ) + 1;
+     }
 
-      public static final Random RANDOM_GENERATOR = new Random();
-    }
-    ```
+     public static final Random RANDOM_GENERATOR = new Random();
+   }
+   ```
 
-    Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
+   Note that we now have a longer and more meaningful name, `RANDOM_GENERATOR`.  The bigger the variable scope, the more thought needs to be put into the variable's name.
