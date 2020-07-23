@@ -60,7 +60,7 @@ public class App {
   public static void main( final String[] args ) {
     final Box a = new Box();
 
-    /* Cannot reassign!! */
+    /* ⚠️ Cannot reassign!! */
     a = new Box();
   }
 }
@@ -197,4 +197,4 @@ Item weighing 1,2000Kg, needs to go to Destination: Testing
 Item weighing 1,2000Kg, needs to go to Destination: Programming
 ```
 
-**It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on](04%20-%20Collections.md#defensive-copying)), to mitigate mutation side effects.
+**It is not recommended to mix mutable and immutable types as this may give you a `false` sense of security**.  By mistake, one may believe that the `Item` is immutable, when it is not.  If you need to rely on mutable state within immutable objects, make use of mechanisms, such as defensive copying ([discussed later on]({{ '/docs/collections/arrays/#defensive-copying' | absolute_url }})), to mitigate mutation side effects.
