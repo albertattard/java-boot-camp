@@ -678,7 +678,7 @@ Set contains Aden? false
 Set contains Peter? false
 ```
 
-{% include custom/note.html details="While the <code>List</code> was able to find the person with name <code>"Aden"</code>, the <code>HashSet</code> was not." %}
+{% include custom/note.html details="While the <code>List</code> was able to find the person with name <code>Aden</code>, the <code>HashSet</code> was not." %}
 
 ```bash
 -- Search the set ---------
