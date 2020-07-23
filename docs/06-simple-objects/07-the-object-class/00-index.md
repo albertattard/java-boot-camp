@@ -42,7 +42,7 @@ public class Person extends Object {
 
 The `Person` class has no methods defined, yet the IDE still shows a list of methods we can use.
 
-![Methods Inherited from the Object Class]({{site.baseurl}}/assets/images/Methods-Inherited-from-the-Object-Class.png)
+![Methods Inherited from the Object Class]({{ '/assets/images/Methods-Inherited-from-the-Object-Class.png' | absolute_url }})
 
 consider the following example.
 
@@ -178,7 +178,7 @@ public class Person {
     final boolean hasSurname = !isNullOrEmpty( surname );
 
     if ( hasName && hasSurname ) {
-      // return name + " " + surname;
+      /* return name + " " + surname; */
       return String.format( "%s %s", name, surname );
     }
 
@@ -261,7 +261,7 @@ public class Person {
     final boolean hasSurname = !isNullOrEmpty( surname );
 
     if ( hasName && hasSurname ) {
-      // return name + " " + surname;
+      /* return name + " " + surname; */
       return String.format( "%s %s", name, surname );
     }
 
@@ -406,6 +406,7 @@ public class Person {
 
   @Override
   public String toString() {
+    /* ⚠️ There is a cyclic dependency which may cause a StackOverflowError!! s*/
     return String.format( "Person{name=%s, surname=%s, friend=%s}", name, surname, friend );
   }
 }
@@ -444,41 +445,41 @@ The above program will fail with an `StackOverflowError`.
 
 ```bash
 Exception in thread "main" java.lang.StackOverflowError
-	at java.base/java.lang.StringUTF16.checkIndex(StringUTF16.java:1587)
-	at java.base/java.lang.StringUTF16.charAt(StringUTF16.java:1384)
-	at java.base/java.lang.StringUTF16$CharsSpliterator.tryAdvance(StringUTF16.java:1194)
-	at java.base/java.util.stream.IntPipeline.forEachWithCancel(IntPipeline.java:163)
-	at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:502)
-	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:488)
-	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
-	at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
-	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-	at java.base/java.util.stream.IntPipeline.findFirst(IntPipeline.java:528)
-	at java.base/java.text.DecimalFormatSymbols.findNonFormatChar(DecimalFormatSymbols.java:778)
-	at java.base/java.text.DecimalFormatSymbols.initialize(DecimalFormatSymbols.java:758)
-	at java.base/java.text.DecimalFormatSymbols.<init>(DecimalFormatSymbols.java:115)
-	at java.base/sun.util.locale.provider.DecimalFormatSymbolsProviderImpl.getInstance(DecimalFormatSymbolsProviderImpl.java:85)
-	at java.base/java.text.DecimalFormatSymbols.getInstance(DecimalFormatSymbols.java:182)
-	at java.base/java.util.Formatter.getZero(Formatter.java:2437)
-	at java.base/java.util.Formatter.<init>(Formatter.java:1956)
-	at java.base/java.util.Formatter.<init>(Formatter.java:1978)
-	at java.base/java.lang.String.format(String.java:3302)
-	at demo.Person.toString(Person.java:29)
-	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
-	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
-	at java.base/java.util.Formatter.format(Formatter.java:2673)
-	at java.base/java.util.Formatter.format(Formatter.java:2609)
-	at java.base/java.lang.String.format(String.java:3302)
-	at demo.Person.toString(Person.java:29)
-    ...
-	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
-	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
-	at java.base/java.util.Formatter.format(Formatter.java:2673)
-	at java.base/java.util.Formatter.format(Formatter.java:2609)
-	at java.base/java.lang.String.format(String.java:3302)
-	at demo.Person.toString(Person.java:29)
-	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
-	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+  at java.base/java.lang.StringUTF16.checkIndex(StringUTF16.java:1587)
+  at java.base/java.lang.StringUTF16.charAt(StringUTF16.java:1384)
+  at java.base/java.lang.StringUTF16$CharsSpliterator.tryAdvance(StringUTF16.java:1194)
+  at java.base/java.util.stream.IntPipeline.forEachWithCancel(IntPipeline.java:163)
+  at java.base/java.util.stream.AbstractPipeline.copyIntoWithCancel(AbstractPipeline.java:502)
+  at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:488)
+  at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:474)
+  at java.base/java.util.stream.FindOps$FindOp.evaluateSequential(FindOps.java:150)
+  at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+  at java.base/java.util.stream.IntPipeline.findFirst(IntPipeline.java:528)
+  at java.base/java.text.DecimalFormatSymbols.findNonFormatChar(DecimalFormatSymbols.java:778)
+  at java.base/java.text.DecimalFormatSymbols.initialize(DecimalFormatSymbols.java:758)
+  at java.base/java.text.DecimalFormatSymbols.<init>(DecimalFormatSymbols.java:115)
+  at java.base/sun.util.locale.provider.DecimalFormatSymbolsProviderImpl.getInstance(DecimalFormatSymbolsProviderImpl.java:85)
+  at java.base/java.text.DecimalFormatSymbols.getInstance(DecimalFormatSymbols.java:182)
+  at java.base/java.util.Formatter.getZero(Formatter.java:2437)
+  at java.base/java.util.Formatter.<init>(Formatter.java:1956)
+  at java.base/java.util.Formatter.<init>(Formatter.java:1978)
+  at java.base/java.lang.String.format(String.java:3302)
+  at demo.Person.toString(Person.java:29)
+  at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+  at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+  at java.base/java.util.Formatter.format(Formatter.java:2673)
+  at java.base/java.util.Formatter.format(Formatter.java:2609)
+  at java.base/java.lang.String.format(String.java:3302)
+  at demo.Person.toString(Person.java:29)
+  ...
+  at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+  at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+  at java.base/java.util.Formatter.format(Formatter.java:2673)
+  at java.base/java.util.Formatter.format(Formatter.java:2609)
+  at java.base/java.lang.String.format(String.java:3302)
+  at demo.Person.toString(Person.java:29)
+  at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+  at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
 ```
 
 Following is a better example that avoids recursive `toString()` method.
@@ -530,7 +531,7 @@ public class App {
     final Person b = new Person( "Aden" );
 
     final boolean areEquals = a.equals( b );
-    System.out.printf( "Are the objects equal? %s%n", areEquals );
+    System.out.printf( "Are these objects equal? %s%n", areEquals );
   }
 }
 ```
@@ -538,7 +539,7 @@ public class App {
 We have two instances which have the same content, a person with the same name.  What will the `equals()` method return?
 
 ```bash
-Are the objects equal? false
+Are these objects equal? false
 ```
 
 Despite having the same name (`"Aden"`) and surname (`null`), the [`equals()` as defined by the `Object` class](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)) will only check whether the variables are pointing to the same instance in the *Java heap*.
@@ -552,7 +553,7 @@ public class App {
     final Person b = a;
 
     final boolean areEquals = a.equals( b );
-    System.out.printf( "Are the objects equal? %s%n", areEquals );
+    System.out.printf( "Are these objects equal? %s%n", areEquals );
   }
 }
 ```
@@ -560,7 +561,7 @@ public class App {
 In the above example, both variables `a` and `b` point to the same object in the *Java heap*.  The above will print `true`.
 
 ```bash
-Are the objects equal? true
+Are these objects equal? true
 ```
 
 Overriding the `equals()` method can help us solve this problem.
@@ -613,12 +614,12 @@ public static boolean equals(Object a, Object b) {
 }
 ```
 
-**How come we didn't static import the utilities `equals()` method?**  Note that we cannot static import a method, when another method with the same name already exists in the class.
+{% include custom/note.html details="We cannot import a static method, when another method with the same name already exists in the class." %}
 
 If we rerun the same program we had before, we will get the expected output, as our `equals()` method is now used.
 
 ```bash
-Are the objects equal? true
+Are these objects equal? true
 ```
 
 The `equals()` method is used a lot by the Java API in conjunction with the [`hashCode()` method](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#hashCode()).  The relation between these two methods is so strong that the [Effective Java](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/) book has an item about this, [Item 11: Always override hashCode when you override equals](https://learning.oreilly.com/library/view/effective-java-3rd/9780134686097/ch3.xhtml#lev11).
@@ -663,7 +664,7 @@ public class App {
 }
 ```
 
-The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage](05---Collections.md).  Running the above **may** produce the following output.
+The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage]({{ '/docs/collections/' | absolute_url }}).  Running the above **may** ([read more here if you cannot wait to understand why 'may' is in bold]{{ '/docs/collections/hashcode-equals/' absolute_url }}) produce the following output.
 
 ```bash
 -- Collections ------------
@@ -677,7 +678,7 @@ Set contains Aden? false
 Set contains Peter? false
 ```
 
-Note that while the `List` was able to find the person with name `"Aden"`, the `HashSet` was not.
+{% include custom/note.html details="While the <code>List</code> was able to find the person with name <code>"Aden"</code>, the <code>HashSet</code> was not." %}
 
 ```bash
 -- Search the set ---------
@@ -818,6 +819,7 @@ public class Person {
     final Person that = (Person) object;
     return Objects.equals( name, that.name ) &&
       Objects.equals( surname, that.surname ) &&
+      /* ⚠️ There is a cyclic dependency which may cause a StackOverflowError!! s*/
       Objects.equals( friend, that.friend );
   }
 
@@ -852,18 +854,18 @@ public class App {
 
 The following image shows how this deadly friendship cases an infinite recursive call.
 
-![Recursive hashCode() method]({{site.baseurl}}/assets/images/Recursive-hashCode-method.png)
+![Recursive hashCode() method]({{ '/assets/images/Recursive-hashCode-method.png' | absolute_url }})
 
 ```bash
 Exception in thread "main" java.lang.StackOverflowError
-	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
-	at java.base/java.util.Objects.hash(Objects.java:147)
-	at demo.Person.hashCode(Person.java:48)
-	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
-	at java.base/java.util.Objects.hash(Objects.java:147)
-    ...
-	at demo.Person.hashCode(Person.java:48)
-	at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+  at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+  at java.base/java.util.Objects.hash(Objects.java:147)
+  at demo.Person.hashCode(Person.java:48)
+  at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
+  at java.base/java.util.Objects.hash(Objects.java:147)
+  ..
+  at demo.Person.hashCode(Person.java:48)
+  at java.base/java.util.Arrays.hashCode(Arrays.java:4498)
 ```
 
 Same applies to the `equals()` method.  The example that triggers this problem is a bit more elaborate as we need to create a matching pair of objects which will cause the `equals()` to enter into a deadly recursive dance.
@@ -895,40 +897,40 @@ As expected, the `equals()` methods will enter a recursive call that will only e
 
 ```bash
 Exception in thread "main" java.lang.StackOverflowError
-	at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
-	at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
-	at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3973)
-	at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
-	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
-	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
-	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
-	at java.base/java.util.regex.Pattern$BranchConn.match(Pattern.java:4718)
-	at java.base/java.util.regex.Pattern$GroupTail.match(Pattern.java:4840)
-	at java.base/java.util.regex.Pattern$BmpCharPropertyGreedy.match(Pattern.java:4349)
-	at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
-	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4754)
-	at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
-	at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3974)
-	at java.base/java.util.regex.Pattern$Start.match(Pattern.java:3627)
-	at java.base/java.util.regex.Matcher.search(Matcher.java:1729)
-	at java.base/java.util.regex.Matcher.find(Matcher.java:773)
-	at java.base/java.util.Formatter.parse(Formatter.java:2702)
-	at java.base/java.util.Formatter.format(Formatter.java:2655)
-	at java.base/java.util.Formatter.format(Formatter.java:2609)
-	at java.base/java.lang.String.format(String.java:3302)
-	at demo.Person.toString(Person.java:55)
-	at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
-	at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
-	at java.base/java.util.Formatter.format(Formatter.java:2673)
-	at java.base/java.io.PrintStream.format(PrintStream.java:1209)
-	at java.base/java.io.PrintStream.printf(PrintStream.java:1105)
-	at demo.Person.equals(Person.java:31)
-	at java.base/java.util.Objects.equals(Objects.java:78)
-    ...
-	at java.base/java.util.Objects.equals(Objects.java:78)
-	at demo.Person.equals(Person.java:43)
-	at java.base/java.util.Objects.equals(Objects.java:78)
-	at demo.Person.equals(Person.java:43)
+  at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
+  at java.base/java.util.regex.Pattern$BmpCharPredicate.lambda$union$2(Pattern.java:5646)
+  at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3973)
+  at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
+  at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+  at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+  at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+  at java.base/java.util.regex.Pattern$BranchConn.match(Pattern.java:4718)
+  at java.base/java.util.regex.Pattern$GroupTail.match(Pattern.java:4840)
+  at java.base/java.util.regex.Pattern$BmpCharPropertyGreedy.match(Pattern.java:4349)
+  at java.base/java.util.regex.Pattern$GroupHead.match(Pattern.java:4809)
+  at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4754)
+  at java.base/java.util.regex.Pattern$Branch.match(Pattern.java:4752)
+  at java.base/java.util.regex.Pattern$BmpCharProperty.match(Pattern.java:3974)
+  at java.base/java.util.regex.Pattern$Start.match(Pattern.java:3627)
+  at java.base/java.util.regex.Matcher.search(Matcher.java:1729)
+  at java.base/java.util.regex.Matcher.find(Matcher.java:773)
+  at java.base/java.util.Formatter.parse(Formatter.java:2702)
+  at java.base/java.util.Formatter.format(Formatter.java:2655)
+  at java.base/java.util.Formatter.format(Formatter.java:2609)
+  at java.base/java.lang.String.format(String.java:3302)
+  at demo.Person.toString(Person.java:55)
+  at java.base/java.util.Formatter$FormatSpecifier.printString(Formatter.java:3031)
+  at java.base/java.util.Formatter$FormatSpecifier.print(Formatter.java:2908)
+  at java.base/java.util.Formatter.format(Formatter.java:2673)
+  at java.base/java.io.PrintStream.format(PrintStream.java:1209)
+  at java.base/java.io.PrintStream.printf(PrintStream.java:1105)
+  at demo.Person.equals(Person.java:31)
+  at java.base/java.util.Objects.equals(Objects.java:78)
+  ...
+  at java.base/java.util.Objects.equals(Objects.java:78)
+  at demo.Person.equals(Person.java:43)
+  at java.base/java.util.Objects.equals(Objects.java:78)
+  at demo.Person.equals(Person.java:43)
 ```
 
 **How can we avoid this problem?**
@@ -1183,7 +1185,7 @@ public class Person {
 }
 ```
 
-Note that the above version of the `equals()` method is slightly different from the previous version.  Instead of using the `instanceof` operator we are comparing the classes.  The above works exactly like the one before, when we used the `instanceof`.  Now, consider the following code fragment.
+{% include custom/note.html details="The above version of the <code>equals()</code> method is slightly different from the previous version.  Instead of using the <code>instanceof</code> operator we are comparing the classes.  The above works exactly like the one before, when we used the <code>instanceof</code>.  Now, consider the following code fragment." %}
 
 {% include custom/proceed_with_caution.html %}
 
@@ -1230,9 +1232,9 @@ Are these equal? true
 
 This example also breaks the `equals()` contract as the above is not reflective.  This is a typical example of premature optimisation is the root of evil.
 
-## 🤔 The `wait()`, `notify()` and `notifyAll()` methods
+## The `wait()`, `notify()` and `notifyAll()` methods
 
-**🤔 This section touches a quite advanced topic and it is understandable if you do not comprehend any of the methods mentioned here**.  It is perfectly safe to skip this section and move to the next.
+{% include custom/note.html details="This section touches a quite advanced topic and it is understandable if you do not comprehend any of the methods mentioned here**.  It is perfectly safe to skip this section and move to the next." %}
 
 Java supported multithreading since its early days ([more than 25 years ago](https://en.wikipedia.org/wiki/Java_(software_platform))).  When working with threads, we may need to wait for something to happen before continuing.  Say we have a doctor's appointment.  We go to the clinic, register at the desk and then wait for our name to be called.  This can be achieved using any of [the `wait()` methods](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#wait()).
 
@@ -1320,13 +1322,13 @@ Break down of the above example.
    }
    ```
 
-    The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the [`notify()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notify()) or [`notifyAll()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notifyAll()) methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
+   The method starts by creating a thread, `t`, which will be used to wait.  A new thread is required as when the `wait()` method is invoked, the thread from which the method is called, is paused until the [`notify()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notify()) or [`notifyAll()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Object.html#notifyAll()) methods are called on the same object.  If we invoke the `wait()` on the main thread, our program may hang forever.
 
-    The `wait()` method need to be invoked within [a `synchronized` block](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html).  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
+   The `wait()` method need to be invoked within [a `synchronized` block](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html).  Each object (not primitives) in Java has an [intrinsic lock](https://docs.oracle.com/javase/tutorial/essential/concurrency/locksync.html), that can be used to control the access to this object by other threads.  If an object needs to be modified by multiple threads, the `synchronized` block can be used so that the threads do not step on each other and put the object in an inconsistent state.
 
-    The `wait()` method will pause the current thread indefinitely.  The overloaded versions of this method provide a timeout to prevent threads from hanging there forever.
+   The `wait()` method will pause the current thread indefinitely.  The overloaded versions of this method provide a timeout to prevent threads from hanging there forever.
 
-    Like most of the concurrent operations, the `wait()` method may throw [an `InterruptedException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/InterruptedException.html) if it is interrupted while waiting which need to be caught.  Using the `wait()` method outside a `synchronized` block will throw [an `IllegalMonitorStateException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalMonitorStateException.html).
+   Like most of the concurrent operations, the `wait()` method may throw [an `InterruptedException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/InterruptedException.html) if it is interrupted while waiting which need to be caught.  Using the `wait()` method outside a `synchronized` block will throw [an `IllegalMonitorStateException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/IllegalMonitorStateException.html).
 
 1. The `letSomeTimePass()` pauses the current thread for 500 milliseconds.
 

@@ -78,7 +78,7 @@ The above example goes to great length to refer to everything through the `this`
 
 The `this` keyword can be used to access `static` methods, **but that's not required nor recommended**.
 
-**⚠️ NOT RECOMMENDED!!**
+{% include custom/not_recommended.html details="The following example access the static member <code>staticMethod()</code> through instance variable, <code>yhis</code>." %}
 
 ```java
 package demo;
@@ -90,6 +90,7 @@ public class App {
   }
 
   private void instanceMethod() {
+    /* ⚠️ It is not recommended to invoke the static members through instance variables!! */
     this.staticMethod();
   }
 
@@ -121,6 +122,7 @@ public class App {
     final Runnable r = new Runnable() {
       @Override
       public void run() {
+        /* ⚠️ The inner anonymous class does not define a property named number!! */
         System.out.printf( "number = %d%n", this.number );
       }
     };
@@ -148,24 +150,24 @@ Let's breakdown the `instanceMethod()` method down.
 
 1. The first `printf()` method call is within the `instanceMethod()` method defined within the `App` class.  Therefore, the `this` keyword shown here refers to an object of type `App`.
 
-    ```java
-      private void instanceMethod() {
-        System.out.printf( "number = %d%n", this.number );
-    ```
+   ```java
+     private void instanceMethod() {
+       System.out.printf( "number = %d%n", this.number );
+   ```
 
 1. The second `printf()` method call is within the inner class, defined within the `instanceMethod()` method.
 
-    ```java
-        /* Create an inner anonymous class */
-        final Runnable r = new Runnable() {
-          @Override
-          public void run() {
-            System.out.printf( "number = %d%n", this.number );
-          }
-        };
-    ```
+   ```java
+       /* Create an inner anonymous class */
+       final Runnable r = new Runnable() {
+         @Override
+         public void run() {
+           System.out.printf( "number = %d%n", this.number );
+         }
+       };
+   ```
 
-    The `printf()` method shown above is invoked from within the `run()` method that is within the inner anonymous class.  Therefore, the `this` keyword here refers to the objects defined by the inner anonymous class, and not the object defined by the `App` class.
+   The `printf()` method shown above is invoked from within the `run()` method that is within the inner anonymous class.  Therefore, the `this` keyword here refers to the objects defined by the inner anonymous class, and not the object defined by the `App` class.
 
 We can specify which `this` we are referring to by prefixing the class name.
 
@@ -192,7 +194,7 @@ Following is an updated example
 
 As before, we can always prefix the `this` keywords with the class name as shown above.
 
-## 🤔 How does `this` works with nested inner anonymous classes?
+## How does `this` works with nested inner anonymous classes?
 
 Consider the following challenge.
 
@@ -220,12 +222,13 @@ public class App {
 
         /* 
          * Inner anonymous class within another inner anonymous class 
-         * referred to in our example as inner-inner anonymous class 
+         * referred to in our example as: 'inner, inner, anonymous class' 
          */
         new Runnable() {
           @Override
           public void run() {
             System.out.printf( "number (app)  = %d%n", App.this.number );
+            /* ⚠️ The inner, inner, anonymous class does not define a property named number!! */
             System.out.printf( "number (iac)  = %d%n", this.number );
           }
         }.run();
@@ -241,34 +244,40 @@ public class App {
 }
 ```
 
-The above example will not compile.  Also, inner anonymous classes should not introduce new state as it makes things more complex for nothing.  The *inner-inner anonymous class* (the *inner-inner anonymous class* is the inner anonymous class defined within the `run()` within the *inner anonymous class*) has no way to refer to its outer class thus, there is no way we can get the `number` property defined by the *inner anonymous class*.
+The above example will not compile.  Also, inner anonymous classes should not introduce new state as it makes things more complex for nothing.  The *inner-inner anonymous class* (the *inner, inner, anonymous class* is the inner anonymous class defined within the `run()` within the *inner anonymous class*) has no way to refer to its outer class thus, there is no way we can get the `number` property defined by the *inner anonymous class*.
 
-Moving the property to within the method would make it available to the *inner-inner anonymous class*.
+Moving the property to within the method would make it available to the *inner, inner, anonymous class*.
 
 ```java
+  private void instanceMethod() {
+    System.out.printf( "number (app) = %d%n", this.number );
+
     /* Inner anonymous class */
     final Runnable r = new Runnable() {
 
-      private final int number = 3;
+/* DELETED private final int number = 3; */
 
       @Override
       public void run() {
-        System.out.printf( "number (app)  = %d%n", App.this.number );
-        System.out.printf( "number (iac)  = %d%n", this.number );
+/**/    final int number = 3;
 
-        /* 
-         * Inner anonymous class within another inner anonymous class 
-         * referred to in our example as inner-inner anonymous class 
+        System.out.printf( "number (app)  = %d%n", App.this.number );
+        System.out.printf( "number (iac)  = %d%n", number );
+
+        /*
+         * Inner anonymous class within another inner anonymous class
+         * referred to in our example as: 'inner, inner, anonymous class'
          */
         new Runnable() {
           @Override
           public void run() {
             System.out.printf( "number (app)  = %d%n", App.this.number );
-            System.out.printf( "number (iac)  = %d%n", this.number );
+            System.out.printf( "number (iac)  = %d%n", number );
           }
         }.run();
 
       }
     };
+    r.run();
+  }
 ```
-

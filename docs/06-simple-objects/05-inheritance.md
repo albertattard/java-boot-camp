@@ -503,9 +503,9 @@ No, our program should throw an `IllegalStateException` if the `putItem()` metho
     }
     ```
 
-## 🤔 Can we design our classes to automatically prevents the object from going into invalid state (finite state machine)?
+## Can we design our classes to automatically prevents the object from going into invalid state (finite state machine)?
 
-**🤔 Please note that this is quite an advance topic and it is understandable if you don't understand and comprehend the examples shown in this section**.
+{% include custom/note.html details="Please note that this is quite an advance topic and it is understandable if you don't understand and comprehend the examples shown in this section." %}
 
 Yes.  We can design our classes such that our objects can never be in an invalid state.  This approach moves towards functional programming.  Our light box can be in either open/close and empty/full state.
 
