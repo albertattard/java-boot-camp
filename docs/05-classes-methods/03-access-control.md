@@ -31,7 +31,7 @@ import java.util.Random;
 public class Dice {
 
   public static int roll() {
-    return RANDOM_GENERATOR.nextInt( 6 ) + 1;
+   return RANDOM_GENERATOR.nextInt( 6 ) + 1;
   }
 
   public static final Random RANDOM_GENERATOR = new Random(1);
@@ -50,23 +50,23 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    /* This method is hacked by an attacker */
-    initGame();
+   /* This method is hacked by an attacker */
+   initGame();
 
-    /* This will always roll a 6 */
-    playGame();
+   /* This will always roll a 6 */
+   playGame();
   }
 
   public static void playGame() {
-    final int a = Dice.roll();
-    System.out.printf( "I rolled a %s%n", a );
+   final int a = Dice.roll();
+   System.out.printf( "I rolled a %s%n", a );
   }
 
   public static void initGame() {
-    /* Skip some numbers so that the next roll, rolls a 6 */
-    for ( int i = 0; i < 19; i++ ) {
-      Dice.RANDOM_GENERATOR.nextInt();
-    }
+   /* Skip some numbers so that the next roll, rolls a 6 */
+   for ( int i = 0; i < 19; i++ ) {
+     Dice.RANDOM_GENERATOR.nextInt();
+   }
   }
 }
 ```
@@ -75,32 +75,32 @@ Observations
 
 1. The attacker first called the `nextInt()` method `19` times.
 
-    ```java
-        for ( int i = 0; i < 19; i++ ) {
-          Dice.random.nextInt();
-        }
-    ```
+   ```java
+       for ( int i = 0; i < 19; i++ ) {
+         Dice.random.nextInt();
+       }
+   ```
 
    The attacker knows that the 20th roll will yield a `6`.
 
 1. The attacker then rolled the dice normally
 
-    ```java
-        final int a = Dice.roll();
-        System.out.printf( "I rolled a %s%n", a );
-    ```
+   ```java
+       final int a = Dice.roll();
+       System.out.printf( "I rolled a %s%n", a );
+   ```
 
-    and obtained the expected the attacker wanted.
+   and obtained the expected the attacker wanted.
 
-    ```bash
-    I rolled a 6
-    ```
+   ```bash
+   I rolled a 6
+   ```
 
-    The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
+   The attacker can also skip ahead some numbers to make the opponent lose, by rolling a smaller number.
 
 1. The `Dice` class uses static fields on purpose.  Only one instance of the `static` field `RANDOM_GENERATOR` exists and anyone can access it from anywhere in the code.
 
-Using access modifies, access to classes and their members (properties, static fields and methods) can be restricted.  Making the static field `random` `private` will not allow an attacker to access the static field directly.
+Using access modifies, access to classes and their members (properties, static fields and methods) can be restricted.  Making the static field `random`, `private`, will not allow an attacker to access the static field directly.
 
 ```java
 package demo;
@@ -110,7 +110,7 @@ import java.util.Random;
 public class Dice {
 
   public static int roll() {
-    return RANDOM_GENERATOR.nextInt( 6 ) + 1;
+   return RANDOM_GENERATOR.nextInt( 6 ) + 1;
   }
 
   private static final Random RANDOM_GENERATOR = new Random( 1 );
@@ -127,23 +127,24 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    /* This method is hacked by an attacker */
-    initGame();
+   /* This method is hacked by an attacker */
+   initGame();
 
-    /* This will always roll a 6 */
-    playGame();
+   /* This will always roll a 6 */
+   playGame();
   }
 
   public static void playGame() {
-    final int a = Dice.roll();
-    System.out.printf( "I rolled a %s%n", a );
+   final int a = Dice.roll();
+   System.out.printf( "I rolled a %s%n", a );
   }
 
   public static void initGame() {
-    /* Skip some numbers */
-    for ( int i = 0; i < 19; i++ ) {
-      Dice.RANDOM_GENERATOR.nextInt();
-    }
+   /* Skip some numbers */
+   for ( int i = 0; i < 19; i++ ) {
+     /* ⚠️ Cannot access the private field!! */
+     Dice.RANDOM_GENERATOR.nextInt();
+   }
   }
 }
 ```
@@ -152,8 +153,8 @@ The following error will be produced
 
 ```bash
 src/main/java/demo/App.java:21: error: RANDOM_GENERATOR has private access in Dice
-      Dice.RANDOM_GENERATOR.nextInt();
-          ^
+     Dice.RANDOM_GENERATOR.nextInt();
+         ^
 ```
 
 ## Classes access modifiers table
@@ -183,7 +184,7 @@ package demo;
 
 public class A {
   public static void printIt() {
-    System.out.printf( "The value of c is %d%n", B.c );
+   System.out.printf( "The value of c is %d%n", B.c );
   }
 }
 
@@ -213,13 +214,13 @@ public class App {
   private static final int c = 7;
 
   public static void main( final String[] args ) {
-    final Runnable r = new Runnable() {
-      @Override
-      public void run() {
-        System.out.printf( "The value of c is %d%n", c );
-      }
-    };
-    r.run();
+   final Runnable r = new Runnable() {
+     @Override
+     public void run() {
+       System.out.printf( "The value of c is %d%n", c );
+     }
+   };
+   r.run();
   }
 }
 ```
@@ -230,7 +231,7 @@ An inner anonymous class is created within the `App` class.
 final Runnable r = new Runnable() {
   @Override
   public void run() {
-    System.out.printf( "The value of c is %d%n", c );
+   System.out.printf( "The value of c is %d%n", c );
   }
 };
 ```

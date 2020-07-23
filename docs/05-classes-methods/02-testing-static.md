@@ -19,7 +19,7 @@ permalink: docs/classes-methods/testing-static/
 
 ## How can we test functionality that makes use of static methods?
 
-**The scope of this section is to highlight shortcomings of static methods and while itt refers to objects it is not a comprehensive guide to OOP.**  OOP is discussed in depth in the following sections.
+{% include custom/note.html details="The scope of this section is to highlight shortcomings of static methods and while itt refers to objects it is not a comprehensive guide to OOP.  OOP is discussed in depth in the following sections." %}
 
 The following test invokes our game.
 
@@ -32,7 +32,7 @@ public class AppTest {
 
   @Test
   public void shouldDisplayTheDiceRolled() {
-    App.main( null );
+   App.main( null );
   }
 }
 ```
@@ -55,257 +55,258 @@ Note that it is hard to refactor code that does not have tests and also maintain
 
 1. Move the game into a separate method `playGame()`.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        playGame();
-      }
+   public class App {
+     public static void main( final String[] args ) {
+       playGame();
+     }
 
-      public static void playGame() {
-        Display.print( "Game started" );
-        Display.print( "Please roll the 🎲" );
+     public static void playGame() {
+       Display.print( "Game started" );
+       Display.print( "Please roll the 🎲" );
 
-        final int a = Dice.roll();
-        final int b = Dice.roll();
+       final int a = Dice.roll();
+       final int b = Dice.roll();
 
-        Display.printf( "You rolled %d and %d", a, b );
-      }
-    }
-    ```
+       Display.printf( "You rolled %d and %d", a, b );
+     }
+   }
+   ```
 
-    This will not solve the problem, but it's one small step in the right direction.
+   This will not solve the problem, but it's one small step in the right direction.
 
-    Later on, we need to work with test doubles.  Given that we cannot change the signature of the `main()` method, we need to create a new method and use this one.
+   Later on, we need to work with test doubles.  Given that we cannot change the signature of the `main()` method, we need to create a new method and use this one.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.Test;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      public void shouldDisplayTheDiceRolled() {
-        App.playGame();
-      }
-    }
-    ```
+     @Test
+     public void shouldDisplayTheDiceRolled() {
+       App.playGame();
+     }
+   }
+   ```
 
-    The test will still print something to the console, which is hard to assert.
+   The test will still print something to the console, which is hard to assert.
 
-    ```bash
-    [12:34:56] Game started
-    [12:34:56] Please roll the 🎲
-    [12:34:56] You rolled 3 and 3
-    ```
+   ```bash
+   [12:34:56] Game started
+   [12:34:56] Please roll the 🎲
+   [12:34:56] You rolled 3 and 3
+   ```
 
 1. Predict the next `roll()` outcome
 
-    One of the challenges we face in testing this application is that we cannot predict the next roll outcome using the current `Dice` class, as the `Dice` class uses a random number generator.
+   One of the challenges we face in testing this application is that we cannot predict the next roll outcome using the current `Dice` class, as the `Dice` class uses a random number generator.
 
 1. Use weighted dice for testing
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class WeightedDice {
+   public class WeightedDice {
 
-      public static int roll() {
-        return nextRollValue;
-      }
+     public static int roll() {
+       return nextRollValue;
+     }
 
-      public static int NEXT_ROLL_VALUE = 6;
-    }
-    ```
+     public static int NEXT_ROLL_VALUE = 6;
+   }
+   ```
 
-    The `WeightedDice` does not use random number generator.  Instead, it returns the value of `NEXT_ROLL_VALUE`.  Using this version of the dice will allow us to control the behaviour of the game.
+   The `WeightedDice` does not use random number generator.  Instead, it returns the value of `NEXT_ROLL_VALUE`.  Using this version of the dice will allow us to control the behaviour of the game.
 
 1. How can we us the `WeightedDice`?
 
-    The `playGame()` method is calling the `Dice`'s `roll()`.  If we need to swap this we need pass the `Dice` as a parameter to the `playGame()` method.  If we want to pass the `Dice` as a parameter to the `playGame()` method, then we need to convert the `Dice` to an object.
+   The `playGame()` method is calling the `Dice`'s `roll()`.  If we need to swap this we need pass the `Dice` as a parameter to the `playGame()` method.  If we want to pass the `Dice` as a parameter to the `playGame()` method, then we need to convert the `Dice` to an object.
 
 1. Make `Dice` an object
 
-    Somehow, we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
+   Somehow, we need to control what the dice rolls are and what is it being printed.  We can do that be controlling the `Dice` output and capturing the `Display` inputs.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import java.util.Random;
+   import java.util.Random;
 
-    public class Dice {
+   public class Dice {
 
-      public int roll() {
-        return randomGenerator.nextInt( 6 ) + 1;
-      }
+     public int roll() {
+       return randomGenerator.nextInt( 6 ) + 1;
+     }
 
-      public final Random randomGenerator = new Random();
-    }
-    ```
+     public final Random randomGenerator = new Random();
+   }
+   ```
 
-    Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` fields are written upper case and use underscore to delimit words.  Properties and all methods are usually written in camelcase.
+   Note that the variable name was changed from `RANDOM_GENERATOR` to `randomGenerator` too.  `static` fields are written upper case and use underscore to delimit words.  Properties and all methods are usually written in camelcase.
 
-    Use the `Dice` object in the `playGame()` method.
+   Use the `Dice` object in the `playGame()` method.
 
-    ```java
-    final Dice dice = new Dice();
-    final int a = dice.roll();
-    final int b = dice.roll();
-    ```
+   ```java
+   final Dice dice = new Dice();
+   final int a = dice.roll();
+   final int b = dice.roll();
+   ```
 
-    Complete example.
+   Complete example.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        playGame();
-      }
+   public class App {
+     public static void main( final String[] args ) {
+       playGame();
+     }
 
-      public static void playGame() {
-        Display.print( "Game started" );
-        Display.print( "Please roll the 🎲" );
+     public static void playGame() {
+       Display.print( "Game started" );
+       Display.print( "Please roll the 🎲" );
 
-        final Dice dice = new Dice();
-        final int a = dice.roll();
-        final int b = dice.roll();
+       final Dice dice = new Dice();
+       final int a = dice.roll();
+       final int b = dice.roll();
 
-        Display.printf( "You rolled %d and %d", a, b );
-      }
-    }
-    ```
+       Display.printf( "You rolled %d and %d", a, b );
+     }
+   }
+   ```
 
-    The above example is creating the `Dice` object.  The next step would be to pass an instance of the `Dice` class to the `playGame()` method.
+   The above example is creating the `Dice` object.  The next step would be to pass an instance of the `Dice` class to the `playGame()` method.
 
 1. Provide a `Dice` instance to the `playGame()` method
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static void main( final String[] args ) {
-        final Dice dice = new Dice();
-        playGame( dice );
-      }
+   public class App {
+     public static void main( final String[] args ) {
+       final Dice dice = new Dice();
+       playGame( dice );
+     }
 
-      public static void playGame( final Dice dice ) {
-        Display.print( "Game started" );
-        Display.print( "Please roll the 🎲" );
+     public static void playGame( final Dice dice ) {
+       Display.print( "Game started" );
+       Display.print( "Please roll the 🎲" );
 
-        final int a = dice.roll();
-        final int b = dice.roll();
+       final int a = dice.roll();
+       final int b = dice.roll();
 
-        Display.printf( "You rolled %d and %d", a, b );
-      }
-    }
-    ```
+       Display.printf( "You rolled %d and %d", a, b );
+     }
+   }
+   ```
 
-    Note that now we need to provide an instance of `Dice` in the test too.
+   Note that now we need to provide an instance of `Dice` in the test too.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.Test;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      public void shouldDisplayTheDiceRolled() {
-        final Dice dice = new Dice();
-        App.playGame( dice );
-      }
-    }
-    ```
+     @Test
+     public void shouldDisplayTheDiceRolled() {
+       final Dice dice = new Dice();
+       App.playGame( dice );
+     }
+   }
+   ```
 
 1. Convert the `WeightedDice` to an object too.
 
-    If we want to swap the `Dice` with a `WeightedDice` during testing, we need to convert the latter to an object too.
+   If we want to swap the `Dice` with a `WeightedDice` during testing, we need to convert the latter to an object too.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class WeightedDice {
+   public class WeightedDice {
 
-      public int roll() {
-        return nextRollValue;
-      }
+     public int roll() {
+       return nextRollValue;
+     }
 
-      public int nextRollValue = 6;
-    }
-    ```
+     public int nextRollValue = 6;
+   }
+   ```
 
 1. How can we us the `WeightedDice`?
 
-    {% include custom/dose_not_compile.html %}
+   {% include custom/dose_not_compile.html %}
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.Test;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      public void shouldDisplayTheDiceRolled() {
-        final Dice dice = new WeightedDice();
-        App.playGame( dice );
-      }
-    }
-    ```
+     @Test
+     public void shouldDisplayTheDiceRolled() {
+       /* The WeightedDice is not a subtype of Dice!! */
+       final Dice dice = new WeightedDice();
+       App.playGame( dice );
+     }
+   }
+   ```
 
-    `Dice` and `WeightedDice` are two different types.  The `WeightedDice` class is only used for testing and can inherit from the `Dice` class.  Inheritance will be covered in depth in the [inheritance section](#inheritance).
+   `Dice` and `WeightedDice` are two different types.  The `WeightedDice` class is only used for testing and can inherit from the `Dice` class.  Inheritance will be covered in depth in the [inheritance section]({{ '/docs/simple-objects/inheritance/' | absolute_url }}).
 
-    ```java
-    public class WeightedDice extends Dice {
-    ```
+   ```java
+   public class WeightedDice extends Dice {
+   ```
 
-    Complete example
+   Complete example
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class WeightedDice extends Dice {
+   public class WeightedDice extends Dice {
 
-      @Override
-      public int roll() {
-        return nextRollValue;
-      }
+     @Override
+     public int roll() {
+       return nextRollValue;
+     }
 
-      public int nextRollValue = 6;
-    }
-    ```
+     public int nextRollValue = 6;
+   }
+   ```
 
-    Now the `WeightedDice` can be used instead of the `Dice`.  The test will now work.
+   Now the `WeightedDice` can be used instead of the `Dice`.  The test will now work.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.Test;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      public void shouldDisplayTheDiceRolled() {
-        final WeightedDice dice = new WeightedDice();
-        dice.nextRollValue = 2;
+     @Test
+     public void shouldDisplayTheDiceRolled() {
+       final WeightedDice dice = new WeightedDice();
+       dice.nextRollValue = 2;
 
-        App.playGame( dice );
-      }
-    }
-    ```
+       App.playGame( dice );
+     }
+   }
+   ```
 
-    Note that irrespective how many times we run the above test, the dice values will always be `2`.  This is great for testing.
+   Note that irrespective how many times we run the above test, the dice values will always be `2`.  This is great for testing.
 
-    ```bash
-    [12:34:56] Game started
-    [12:34:56] Please roll the 🎲
-    [12:34:56] You rolled 2 and 2
-    ```
+   ```bash
+   [12:34:56] Game started
+   [12:34:56] Please roll the 🎲
+   [12:34:56] You rolled 2 and 2
+   ```
 
-    The `WeightedDice` is also referred as a [test double](https://martinfowler.com/bliki/TestDouble.html).
+   The `WeightedDice` is also referred as a [test double](https://martinfowler.com/bliki/TestDouble.html).
 
 We can continue refactoring the application and provide a test double for the `Display` and verify that the right message is being printed.
 
@@ -328,10 +329,10 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final int a = 7;
-    final int b = 3;
-    final int m = Math.max( a, b );
-    System.out.printf( "%d is the largest between %d and %d%n", m, a, b );
+   final int a = 7;
+   final int b = 3;
+   final int m = Math.max( a, b );
+   System.out.printf( "%d is the largest between %d and %d%n", m, a, b );
   }
 }
 ```
@@ -345,9 +346,9 @@ package demo;
 
 public class App {
   public static void main( final String[] args ) {
-    final Math nullVariable = null;
-    final int m = nullVariable.max( 7, 3 );
-    System.out.printf( "%d is the largest number%n", m );
+   final Math nullVariable = null;
+   final int m = nullVariable.max( 7, 3 );
+   System.out.printf( "%d is the largest number%n", m );
   }
 }
 ```
@@ -380,11 +381,11 @@ import java.awt.Point;
 public class App {
 
   public static void main( final String[] args ) {
-    final Point a = new Point( 1, 2 );
-    final Point b = new Point( 3, 4 );
+   final Point a = new Point( 1, 2 );
+   final Point b = new Point( 3, 4 );
 
-    System.out.printf( "Point a: %s%n", a );
-    System.out.printf( "Point b: %s%n", b );
+   System.out.printf( "Point a: %s%n", a );
+   System.out.printf( "Point b: %s%n", b );
   }
 }
 ```
@@ -414,10 +415,10 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final Person aden = new Person();
-    aden.name = "Aden";
+   final Person aden = new Person();
+   aden.name = "Aden";
 
-    System.out.printf( "Person name (aden): %s%n", aden.name );
+   System.out.printf( "Person name (aden): %s%n", aden.name );
   }
 }
 ```
@@ -436,14 +437,14 @@ package demo;
 public class App {
 
   public static void main( final String[] args ) {
-    final Person aden = new Person();
-    aden.name = "Aden";
+   final Person aden = new Person();
+   aden.name = "Aden";
 
-    final Person jade = new Person();
-    jade.name = "Jade";
+   final Person jade = new Person();
+   jade.name = "Jade";
 
-    System.out.printf( "Person name (aden): %s%n", aden.name );
-    System.out.printf( "Person name (jade): %s%n", jade.name );
+   System.out.printf( "Person name (aden): %s%n", aden.name );
+   System.out.printf( "Person name (jade): %s%n", jade.name );
   }
 }
 ```
@@ -487,5 +488,4 @@ A `static` field is not part of the object and thus it is not part of the *Java 
 
 Therefore, there is only one copy of the `static` field, `name`.  If one modifies a `static` field, all variables will be affected.  IntelliJ suggests refactoring the code and access the `static` field through the class name.
 
-![Access static field through class name]({{site.baseurl}}/assets/images/Access-static-field-through-class-name.png)
-
+![Access static field through class name]({{ '/assets/images/Access-static-field-through-class-name.png' | absolute_url }})
