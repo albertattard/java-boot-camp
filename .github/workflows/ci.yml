@@ -17,18 +17,18 @@ jobs:
         --volume="${{ github.workspace }}:/srv/jekyll" \
         jekyll/builder:latest /bin/bash -c "gem install bundler && chmod -R 777 /srv/jekyll && jekyll build && bundle exec just-the-docs rake search:init"
 
-  jekyll-3-8-5:
-    name: Build Jekyll site (v3.8.5)
-    runs-on: ubuntu-latest
-    steps:
-
-    - uses: actions/checkout@master
-
-    - name: Build the site in the jekyll/builder container
-      run: |
-        docker run --rm \
-        --volume="${{ github.workspace }}:/srv/jekyll" \
-        jekyll/builder:3.8.5 /bin/bash -c "gem install bundler && chmod -R 777 /srv/jekyll && jekyll build && bundle exec just-the-docs rake search:init"
+#  jekyll-3-8-5:
+#    name: Build Jekyll site (v3.8.5)
+#    runs-on: ubuntu-latest
+#    steps:
+#
+#    - uses: actions/checkout@master
+#
+#    - name: Build the site in the jekyll/builder container
+#      run: |
+#        docker run --rm \
+#        --volume="${{ github.workspace }}:/srv/jekyll" \
+#        jekyll/builder:3.8.5 /bin/bash -c "gem install bundler && chmod -R 777 /srv/jekyll && jekyll build && bundle exec just-the-docs rake search:init"
 
   assets:
     name: Format and test CSS and JS
@@ -38,7 +38,7 @@ jobs:
     - uses: actions/checkout@v2
       # Using this so the this instead of GITHUB_TOKEN so that this workflow can trigger another
       with:
-        token: ${{ secrets.PAT }} 
+        token: ${{ secrets.PAT }}
     - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
