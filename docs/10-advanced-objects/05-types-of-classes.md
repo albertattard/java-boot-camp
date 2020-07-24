@@ -755,7 +755,7 @@ public class ClassWithInnerClasses {
 
 Inner static classes can be seen as a super set of the inner instance classes as they can also have static members.  We can convert all inner instance classes with inner static classes, but not vice versa as inner instance classes cannot have static members as [discussed before](#can-we-have-static-methods-within-inner-instance-classes), while inner static class do.
 
-We can refactor the `Data` class, shown [before when we discussed *how can inner instance classes represent data in a different form?*](#how-can-inner-instance-classes-represent-data-in-a-different-form), to make use of inner static class instead.
+We can refactor the `Data` class, shown before when we discussed [*how can inner instance classes represent data in a different form?*](#how-can-inner-instance-classes-represent-data-in-a-different-form), to make use of inner static class instead.
 
 ```java
 package demo;
