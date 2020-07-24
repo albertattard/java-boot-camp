@@ -664,7 +664,7 @@ public class App {
 }
 ```
 
-The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage]({{ '/docs/collections/' | absolute_url }}).  Running the above **may** ([read more here if you cannot wait to understand why 'may' is in bold]{{ '/docs/collections/hashcode-equals/' | absolute_url }}) produce the following output.
+The above example creates two collections, a [`List`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/List.html) and a [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html) to highlight a problem.  [Collections are covered in depth at a later stage]({{ '/docs/collections/' | absolute_url }}).  Running the above **may** ([read more here if you cannot wait to understand why 'may' is in bold]({{ '/docs/collections/hashcode-equals/' | absolute_url }})) produce the following output.
 
 ```bash
 -- Collections ------------
