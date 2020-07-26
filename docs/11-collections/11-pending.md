@@ -9,8 +9,6 @@ permalink: docs/collections/miscellaneous/
 
 ## Miscellaneous
 
-1. [Deque](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Deque.html) better than [Stack](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Stack.html)
-1. The importance of a good hashing function
 1. HashMap make use of Comparable too (since Java 8)
 1. [WeakHashMap](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/WeakHashMap.html)
 1. [Vector](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) + [Enumeration](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Enumeration.html) has some bugs -> [Iterator](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Iterator.html) is better
