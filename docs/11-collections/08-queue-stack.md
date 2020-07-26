@@ -66,6 +66,110 @@ No one else is waiting in the queue
 
 ## Priority Queue
 
+The Java collections framework also provides a [`PriorityQueue`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/PriorityQueue.html), where the elements are ordered based on their priority and not based on the order these are added.  Consider the following example.
+
+```java
+package demo;
+
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public class App {
+
+  @Data
+  private static class Student implements Comparable<Student> {
+
+    private final String name;
+    private final int mark;
+
+    @Override
+    public int compareTo( final Student that ) {
+      return StringUtils.compare( name, that.name );
+    }
+  }
+
+  public static void main( final String[] args ) {
+    final Queue<Student> students = new PriorityQueue<>();
+    students.add( new Student( "Jade", 85 ) );
+    students.add( new Student( "Aden", 82 ) );
+
+    while ( false == students.isEmpty() ) {
+      Student next = students.poll();
+      System.out.printf( "Processing %s (students remaining in the queue %d)%n", next, students.size() );
+    }
+
+    System.out.println( "No one else is waiting in the queue" );
+  }
+}
+```
+
+Elements added to the `PriorityQueue` needs to implement [`Comparable`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Comparable.html) as the `PriorityQueue` will use the elements natural ordering to place them in the right order in the queue.  The `Student` are ordered by their name, alphabetically.
+
+```bash
+Processing App.Student(name=Aden, mark=82) (students remaining in the queue 1)
+Processing App.Student(name=Jade, mark=85) (students remaining in the queue 0)
+No one else is waiting in the queue
+```
+
+A [`Comparator`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Comparator.html) can be used instead to order the elements in the `PriorityQueue`.  Consider the following example.
+
+```java
+package demo;
+
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+public class App {
+
+  @Data
+  private static class Student implements Comparable<Student> {
+
+/**/public static final Comparator<Student> BY_BEST_MARK = Comparator.comparingInt( Student::getMark ).reversed();
+
+    private final String name;
+    private final int mark;
+
+    @Override
+    public int compareTo( final Student that ) {
+      return StringUtils.compare( name, that.name );
+    }
+  }
+
+  public static void main( final String[] args ) {
+
+/**/final Queue<Student> students = new PriorityQueue<>( Student.BY_BEST_MARK );
+    students.add( new Student( "Jade", 85 ) );
+    students.add( new Student( "Aden", 82 ) );
+
+    while ( false == students.isEmpty() ) {
+      Student next = students.poll();
+      System.out.printf( "Processing %s (students remaining in the queue %d)%n", next, students.size() );
+    }
+
+    System.out.println( "No one else is waiting in the queue" );
+  }
+}
+```
+
+A `Comparator` is added to the `Student` class which compares the students by their marks.  Students with the highest marks will comes first.
+
+```bash
+Processing App.Student(name=Jade, mark=85) (students remaining in the queue 1)
+Processing App.Student(name=Aden, mark=82) (students remaining in the queue 0)
+No one else is waiting in the queue
+```
+
+{% include custom/note.html details="When a <code>Comparator</code> is provided, the elements being places in the <code>PriorityQueue</code> do not need to implement <code>Comparable</code>.' %}
+
+The practice shown above, where a `Comparator` is provided by the same data class is quite common and found in many classes, such as the [`String`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html) class and its [`CASE_INSENSITIVE_ORDER`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/String.html#CASE_INSENSITIVE_ORDER) static field.
+
 ## Stacks
 
 ![Stack Data Structure]({{ '/assets/images/Stack-Data-Structure.png' | absolute_url }})
