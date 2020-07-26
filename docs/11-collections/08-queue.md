@@ -189,7 +189,7 @@ A [`Stack`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/ut
 
 ![Stack Data Structure]({{ '/assets/images/Stack-Data-Structure.png' | absolute_url }})
 
-Elements are added and retrieved from one end of the stack, the top of the stack. A stack of plates is an example of a stack, as shown next.
+Elements are added and retrieved from one end of the stack, the top of the stack.  A stack of plates is an example of a stack, as shown next.
 
 ![Stack of Plates]({{ '/assets/images/Stack-of-plates.png' | absolute_url }})
 
@@ -197,4 +197,37 @@ We can only interact with the top of the stack.  We cannot retrieve the bottom p
 
 {% include custom/note.html details="Do not use the <code>Stack</code> class as this was not well implemented." %}
 
-The [`Deque`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Deque.html) is a preferred implementation.  This is not a pure stack as it supports both LIFO and FIFO ordering.
+The [`Deque`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Deque.html) is a preferred stack implementation.  This is not a pure stack as it supports both LIFO and FIFO ordering.
+
+Consider the following example.
+
+```java
+package demo;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class App {
+
+  public static void main( final String[] args ) {
+    final Deque<String> students = new ArrayDeque<>();
+    students.add( "Jade" );
+    students.add( "Aden" );
+
+    while ( false == students.isEmpty() ) {
+      String next = students.pollLast();
+      System.out.printf( "Processing %s (students remaining in the queue %d)%n", next, students.size() );
+    }
+
+    System.out.println( "No one else is waiting in the queue" );
+  }
+}
+```
+
+The above example uses the [`pollLast()`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Deque.html#pollLast()) method to operate the queue in a LIFO order.
+
+```bash
+Processing Aden (students remaining in the queue 1)
+Processing Jade (students remaining in the queue 0)
+No one else is waiting in the queue
+```
