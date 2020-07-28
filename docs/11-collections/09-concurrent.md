@@ -219,3 +219,139 @@ public class App {
 The size of the set will vary between different runs.
 
 Hash based collections, such as [`HashSet`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/HashSet.html), may seem immune to concurrency problems, but that's incorrect.  Any non-thread safe object should not be used by multiple thread without any concurrent protection.
+
+## Concurrent List
+
+### `CopyOnWriteArrayList`
+
+A thread-safe list, ideal when the number of reads is much higher to the number of writes.  Java provides several concurrent lists, such as the [`CopyOnWriteArrayList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/CopyOnWriteArrayList.html), shown next.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CyclicBarrier;
+import java.util.function.IntConsumer;
+
+public class App {
+
+  public static void main( final String[] args ) throws Exception {
+    final int size = 100;
+    final List<String> list = new CopyOnWriteArrayList<>();
+    final IntConsumer task = index -> list.add( String.format( "Element %d", index ) );
+
+    runUsingMultipleThreads( task, size );
+
+    System.out.printf( "Expecting a list of %d elements but found %d%n", size, list.size() );
+  }
+
+  private static void runUsingMultipleThreads( final IntConsumer consumer, final int size ) throws Exception { /* ... */ }
+
+  private static List<Thread> createAndStartThreads( final int size, final IntConsumer consumer ) { /* ... */ }
+
+  private static Runnable awaitAllThreadsAndRun( final CyclicBarrier barrier, final Runnable runnable ) { /* ... */ }
+
+  private static void waitAllThreadsToFinish( final List<Thread> threads ) throws InterruptedException { /* ... */ }
+}
+```
+
+The above example will always yield the same result.  The `CopyOnWriteArrayList` is a thread-safe variant of [`ArrayList`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ArrayList.html) in which all mutative operations (`add()`, `set()`, and so on) are implemented by **creating a fresh copy of the underlying array**.
+
+"_This is ordinarily too costly but may be more efficient than alternatives when traversal operations vastly outnumber mutations and is useful when you cannot or don't want to synchronize traversals, yet need to preclude interference among concurrent threads.  The "snapshot" style iterator method uses a reference to the state of the array at the point that the iterator was created. This array never changes during the lifetime of the iterator, so interference is impossible and the iterator is guaranteed not to throw [`ConcurrentModificationException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/ConcurrentModificationException.html). The iterator will not reflect additions, removals, or changes to the list since the iterator was created. Element-changing operations on iterators themselves (remove, set, and add) are not supported. These methods throw [`UnsupportedOperationException`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/UnsupportedOperationException.html)._"<br />
+([Reference](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/CopyOnWriteArrayList.html))
+
+### `Vector`
+
+The [`Vector`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Vector.html) class is an old collection, which all methods are `synchronized`.  Only one thread can access one method at a given point in time.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.CyclicBarrier;
+import java.util.function.IntConsumer;
+
+public class App {
+
+  public static void main( final String[] args ) throws Exception {
+    final int size = 100;
+    final List<String> list = new Vector<>();
+    final IntConsumer task = index -> list.add( String.format( "Element %d", index ) );
+
+    runUsingMultipleThreads( task, size );
+
+    System.out.printf( "Expecting a list of %d elements but found %d%n", size, list.size() );
+  }
+
+  private static void runUsingMultipleThreads( final IntConsumer consumer, final int size ) throws Exception { /* ... */ }
+
+  private static List<Thread> createAndStartThreads( final int size, final IntConsumer consumer ) { /* ... */ }
+
+  private static Runnable awaitAllThreadsAndRun( final CyclicBarrier barrier, final Runnable runnable ) { /* ... */ }
+
+  private static void waitAllThreadsToFinish( final List<Thread> threads ) throws InterruptedException { /* ... */ }
+}
+```
+
+Being thread-safe, the `Vector` will always ends up with 100 elements.
+
+### `Collections.synchronizedList(List)`
+
+There are cases when we cannot control the type of list being used.  In such cases we can warp the list with a synchronized list, using the [`Collections.synchronizedList(List)`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/Collections.html#synchronizedList(java.util.List)) method.  Using the wrapped list instead, we can safely access the wrapped list from multiple threads as all access is synchronized.  This means that only one thread can access any synchronized method at any point in time.
+
+```java
+package demo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CyclicBarrier;
+import java.util.function.IntConsumer;
+
+public class App {
+
+  public static void main( final String[] args ) throws Exception {
+    final int size = 100;
+    final List<String> list = new ArrayList<>();
+    final List<String> synchronizedList = Collections.synchronizedList( list );
+    final IntConsumer task = index -> synchronizedList.add( String.format( "Element %d", index ) );
+
+    runUsingMultipleThreads( task, size );
+
+    System.out.printf( "Expecting a list of %d elements but found %d%n", size, list.size() );
+  }
+
+  private static void runUsingMultipleThreads( final IntConsumer consumer, final int size ) throws Exception { /* ... */ }
+
+  private static List<Thread> createAndStartThreads( final int size, final IntConsumer consumer ) { /* ... */ }
+
+  private static Runnable awaitAllThreadsAndRun( final CyclicBarrier barrier, final Runnable runnable ) { /* ... */ }
+
+  private static void waitAllThreadsToFinish( final List<Thread> threads ) throws InterruptedException { /* ... */ }
+}
+```
+
+In the above example we are using a non-thread safe list, then `ArrayList`.
+
+```java
+    final List<String> list = new ArrayList<>();
+```
+
+Instead of adding new elements to the `ArrayList`, we wrapped the non-thread safe list into a synchronized list, using the `Collections.synchronizedList()` method.
+
+```java
+    final List<String> synchronizedList = Collections.synchronizedList( list );
+    final IntConsumer task = index -> synchronizedList.add( String.format( "Element %d", index ) );
+```
+
+This guarantees that only one thread modifies the list at any given point in time and thus ensures that all 100 elements are added.
+
+## Concurrent Queue
+
+### `ConcurrentLinkedQueue`
+
+[`ConcurrentLinkedQueue`](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/util/concurrent/ConcurrentLinkedQueue.html)

@@ -7,7 +7,7 @@ nav_order: 8
 permalink: docs/collections/queue-stack/
 ---
 
-# Queue and Stack
+# Queue, Priority Queue and Stack
 {: .no_toc }
 
 ## Table of contents
