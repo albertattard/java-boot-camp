@@ -19,190 +19,191 @@ permalink: docs/testing/junit-5/
 
 ## Scenario
 
-A player is playing a dice game and 10 or more are required for the placer to win.  Write a function that determines whether the player has won.  This function will take two integers as an input and will return true if the sum of the given integers are equal to or greater than 10.
+A player is playing a dice game that requires 10 or more to win.  Write a method that determines whether the player has won.  This method will take two integers as an input and will return `true` if the sum of the given integers is equal to or greater than `10`.
 
 ## Add JUnit 5
 
 1. Add the [junit-jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) aggregator dependency and configure that `test` task to make use of [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
 
-    ```groovy
-    dependencies {
-      testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
-    }
+   ```groovy
+   dependencies {
+     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+   }
 
-    test {
-      useJUnitPlatform()
-    }
-    ```
+   test {
+     useJUnitPlatform()
+   }
+   ```
 
-    The Maven repository make use of older dependency configurations.  Use the new dependency configuration `testImplementation` that replaced the `testCompile` dependency configuration.
+   The Maven repository make use of older dependency configurations.  Use the new dependency configuration `testImplementation` that replaced the `testCompile` dependency configuration.
 
-    ![Maven JUnit 5]({{site.baseurl}}/assets/images/Maven-JUnit-5.png)
+   ![Maven JUnit 5]({{ '/assets/images/Maven-JUnit-5.png' | absolute_url }})
+   ([Reference](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter/5.7.0-M1))
 
-    Use the latest version when possible.
+   Use the latest version when possible.
 
-    **You may need to refresh gradle to see the changes in the IDE**
+   You may need to refresh gradle to see the changes in the IDE.
 
-    ![Refresh Gradle]({{site.baseurl}}/assets/images/Refresh-Gradle.png)
+   ![Refresh Gradle]({{ '/assets/images/Refresh-Gradle.png' | absolute_url }})
 
-    Notice that the new libraries will be included under the *External Libraries*
+   You can press the `[command] + [shift] + [I]` shortcut to refresh Gradle and update the external dependencies.  The new libraries will be included under the *External Libraries*, a shown next.
 
-    ![JUnit 5 Dependency]({{site.baseurl}}/assets/images/JUnit-5-Dependency.png)
+   ![JUnit 5 Dependency]({{ '/assets/images/JUnit-5-Dependency.png' | absolute_url }})
 
 1. Open the `App.java` class, press `[command] + [shift] + [T]` and select the *Create New Test...* menu option
 
-    ![Create new Test]({{site.baseurl}}/assets/images/Create-New-Test.png)
+   ![Create new Test]({{ '/assets/images/Create-New-Test.png' | absolute_url }})
 
-    A warning will appear if the test directory is missing.
+   A warning will appear if the test directory is missing.
 
-    ![No Test Roots Found]({{site.baseurl}}/assets/images/No-Test-Roots-Found.png)
+   ![No Test Roots Found]({{ '/assets/images/No-Test-Roots-Found.png' | absolute_url }})
 
-    Click *Cancel* and create the `test` directory under `src` folder first.
+   Click *Cancel* and create the `test` directory under `src` folder first.
 
-    ![New Test Directory]({{site.baseurl}}/assets/images/New-Test-Directory.png)
+   ![New Test Directory]({{ '/assets/images/New-Test-Directory.png' | absolute_url }})
 
-    Create the test class.
+   Create the test class.
 
-    ![Create Test]({{site.baseurl}}/assets/images/Create-Test.png)
+   ![Create Test]({{ '/assets/images/Create-Test.png' | absolute_url }})
 
-    A blank test class under the `test` directory will be created.
+   A blank test class under the `test` directory will be created.
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import static org.junit.jupiter.api.Assertions.*;
+   import static org.junit.jupiter.api.Assertions.*;
 
-    class AppTest {
+   class AppTest {
 
-    }
-    ```
+   }
+   ```
 
-    Please refer to [gradle documentation](
+   Please refer to [gradle documentation](
 https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layout) for more information about the project structure.
 
 1. Write the first test
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.api.Test;
 
-    import static org.junit.jupiter.api.Assertions.fail;
+   import static org.junit.jupiter.api.Assertions.fail;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
-      public void shouldReturnTrueIfWon() {
-        fail( "Simulating error" );
-      }
+    @Test
+    @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
+    public void shouldReturnTrueIfWon() {
+      fail( "Simulating error" );
     }
-    ```
+   }
+   ```
 
-    **Note that the method does not have the `static` key word**.
+   {include custom/note.html details="The method does not have the <code>static</code> key word." %}
 
-    This test fails on purpose.
+   This test fails on purpose.
 
 1. Run the test
 
-    ```bash
-    $ ./gradlew test
+   ```bash
+   $ ./gradlew test
 
-    > Task :test FAILED
+   > Task :test FAILED
 
-    AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise FAILED
-        org.opentest4j.AssertionFailedError at AppTest.java:13
-    ...
-    BUILD FAILED in 1s
-    3 actionable tasks: 2 executed, 1 up-to-date
-    ```
+   AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise FAILED
+      org.opentest4j.AssertionFailedError at AppTest.java:13
+   ...
+   BUILD FAILED in 1s
+   3 actionable tasks: 2 executed, 1 up-to-date
+   ```
 
 1. Add the proper assertion
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.api.Test;
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.api.Test;
 
-    import static org.junit.jupiter.api.Assertions.assertTrue;
+   import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    public class AppTest {
+   public class AppTest {
 
-      @Test
-      @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
-      public void shouldReturnTrueIfWon() {
-        assertTrue( App.hasWon( 5, 5 ) );
-      }
-    }
-    ```
+     @Test
+     @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
+     public void shouldReturnTrueIfWon() {
+       assertTrue( App.hasWon( 5, 5 ) );
+     }
+   }
+   ```
 
    Add a basic implementation (that throws an exception when invoked on purpose)
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static boolean hasWon( final int a, final int b ) {
-        throw UnsupportedOperationException("Coming soon...");
-      }
-    }
-    ```
+   public class App {
+     public static boolean hasWon( final int a, final int b ) {
+       throw UnsupportedOperationException("Coming soon...");
+     }
+   }
+   ```
 
-    Run the tests
+   Run the tests
 
-    ```bash
-    $ ./gradlew test
-    ```
+   ```bash
+   $ ./gradlew test
+   ```
 
-    The test will fail as expected.
+   The test will fail as expected.
 
 1. Implement the functionality
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    public class App {
-      public static boolean hasWon( final int a, final int b ) {
-        return a + b >= 10;
-      }
-    }
-    ```
+   public class App {
+     public static boolean hasWon( final int a, final int b ) {
+       return a + b >= 10;
+     }
+   }
+   ```
 
-    **Note that in TDD, we would simply return `true` (just enough to make the test passes)**.
+   {% include custom/note.html details="Note that in TDD, we would simply return <code>true</code> (just enough to make the test passes)." %}
 
-    Run the tests again, this time these should pass.
+   Run the tests again, this time these should pass.
 
-    ```bash
-    $ ./gradlew test
+   ```bash
+   $ ./gradlew test
 
-    BUILD SUCCESSFUL in 1s
-    4 actionable tasks: 4 executed
-    ```
+   BUILD SUCCESSFUL in 1s
+   4 actionable tasks: 4 executed
+   ```
 
 1. The output does not include the tests that were executed.
 
-    Update `build.gradle`
+   Update `build.gradle`
 
-    ```groovy
-    test {
-      useJUnitPlatform()
-      testLogging {
-        events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
-      }
-    }
-    ```
+   ```groovy
+   test {
+     useJUnitPlatform()
+     testLogging {
+       events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
+     }
+   }
+   ```
 
-    Run the tests again.
+   Run the tests again.
 
-    ```bash
-    $ ./gradlew clean test
+   ```bash
+   $ ./gradlew clean test
 
-      > Task :test
+     > Task :test
 
-      AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise PASSED
-    ```
+     AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise PASSED
+   ```
 
 ## Parameterized test
 
@@ -210,46 +211,46 @@ The following example makes use of the [`@CsvSource` annotation](https://junit.o
 
 1. Convert the test to make use of parameters instead
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.api.DisplayName;
-    import org.junit.jupiter.params.ParameterizedTest;
-    import org.junit.jupiter.params.provider.CsvSource;
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.params.ParameterizedTest;
+   import org.junit.jupiter.params.provider.CsvSource;
 
-    import static org.junit.jupiter.api.Assertions.assertTrue;
+   import static org.junit.jupiter.api.Assertions.assertTrue;
 
-    public class AppTest {
+   public class AppTest {
 
-      @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
-      @CsvSource( { "5, 5", "5, 6", "6, 5", "6, 6" } )
-      public void shouldReturnTrueIfWon( int a, int b ) {
-        assertTrue( App.hasWon( a, b ) );
-      }
-    }
-    ```
+     @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
+     @CsvSource( { "5, 5", "5, 6", "6, 5", "6, 6" } )
+     public void shouldReturnTrueIfWon( int a, int b ) {
+       assertTrue( App.hasWon( a, b ) );
+     }
+   }
+   ```
 
-    Note that there is no `@Test` annotation was replaced by the `@ParameterizedTest` annotation.  The annotation `@DisplayName` is not required either as the test will take the name from the `@ParameterizedTest` annotation.
+   Note that there is no `@Test` annotation was replaced by the `@ParameterizedTest` annotation.  The annotation `@DisplayName` is not required either as the test will take the name from the `@ParameterizedTest` annotation.
 
 1. Run the test
 
-    ```bash
-    $ ./gradlew test
-    ```
+   ```bash
+   $ ./gradlew test
+   ```
 
-    Note that the test will be executed 4 times, one for each line
+   Note that the test will be executed 4 times, one for each line
 
-    ```bash
-    > Task :test
+   ```bash
+   > Task :test
 
-    AppTest > Dice values 5 and 5 should yield a victory PASSED
+   AppTest > Dice values 5 and 5 should yield a victory PASSED
 
-    AppTest > Dice values 5 and 6 should yield a victory PASSED
+   AppTest > Dice values 5 and 6 should yield a victory PASSED
 
-    AppTest > Dice values 6 and 5 should yield a victory PASSED
+   AppTest > Dice values 6 and 5 should yield a victory PASSED
 
-    AppTest > Dice values 6 and 6 should yield a victory PASSED
-    ```
+   AppTest > Dice values 6 and 6 should yield a victory PASSED
+   ```
 
 ## Load test data from files (`@CsvFileSource`)
 
@@ -272,7 +273,7 @@ public class AppTest {
   @ParameterizedTest( name = "The value {0} should be converted to {1}" )
   @CsvSource( { "(10), -10" } )
   public void shouldConvertInput( int actual, int expected ) {
-    assertEquals( actual, expected );
+   assertEquals( actual, expected );
   }
 }
 ```
@@ -288,80 +289,80 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
 1. Create a custom converter
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.params.converter.ArgumentConversionException;
-    import org.junit.jupiter.params.converter.DefaultArgumentConverter;
-    import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+   import org.junit.jupiter.params.converter.ArgumentConversionException;
+   import org.junit.jupiter.params.converter.DefaultArgumentConverter;
+   import org.junit.jupiter.params.converter.SimpleArgumentConverter;
 
-    import java.util.regex.Pattern;
+   import java.util.regex.Pattern;
 
-    public final class CustomNumberConverter extends SimpleArgumentConverter {
+   public final class CustomNumberConverter extends SimpleArgumentConverter {
 
-      private static final Pattern REGEX = Pattern.compile( "\\(\\d+\\)" );
+     private static final Pattern REGEX = Pattern.compile( "\\(\\d+\\)" );
 
-      @Override
-      protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
-        final String updated = replaceRoundBracketsWithMinus( source );
-        return DefaultArgumentConverter.INSTANCE.convert( updated, targetType );
-      }
+     @Override
+     protected Object convert( final Object source, final Class<?> targetType ) throws ArgumentConversionException {
+       final String updated = replaceRoundBracketsWithMinus( source );
+       return DefaultArgumentConverter.INSTANCE.convert( updated, targetType );
+     }
 
-      private String replaceRoundBracketsWithMinus( final Object source ) {
-        final String value = source.toString();
-        if ( REGEX.matcher( value ).matches() ) {
-          return "-" + value.subSequence( 1, value.length() - 1 );
-        }
-        return value;
-      }
-    }
-    ```
+     private String replaceRoundBracketsWithMinus( final Object source ) {
+       final String value = source.toString();
+       if ( REGEX.matcher( value ).matches() ) {
+         return "-" + value.subSequence( 1, value.length() - 1 );
+       }
+       return value;
+     }
+   }
+   ```
 
 1. Use the custom converter
 
-    ```java
-    package demo;
+   ```java
+   package demo;
 
-    import org.junit.jupiter.params.ParameterizedTest;
-    import org.junit.jupiter.params.converter.ConvertWith;
-    import org.junit.jupiter.params.provider.CsvSource;
+   import org.junit.jupiter.params.ParameterizedTest;
+   import org.junit.jupiter.params.converter.ConvertWith;
+   import org.junit.jupiter.params.provider.CsvSource;
 
-    import static org.junit.jupiter.api.Assertions.assertEquals;
+   import static org.junit.jupiter.api.Assertions.assertEquals;
 
-    public class AppTest {
+   public class AppTest {
 
-      @ParameterizedTest( name = "The value {0} should be converted to {1}" )
-      @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
-      public void shouldConvertInput(
-        @ConvertWith( CustomNumberConverter.class ) int actual,
-        int expected
-      ) {
-        assertEquals( actual, expected );
-      }
-    }
-    ```
+     @ParameterizedTest( name = "The value {0} should be converted to {1}" )
+     @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
+     public void shouldConvertInput(
+       @ConvertWith( CustomNumberConverter.class ) int actual,
+       int expected
+     ) {
+       assertEquals( actual, expected );
+     }
+   }
+   ```
 
 1. Run the test
 
-    ```bash
-    $ ./gradlew test
+   ```bash
+   $ ./gradlew test
 
-    ...
+   ...
 
-    AppTest > The value (1) should be converted to -1 PASSED
+   AppTest > The value (1) should be converted to -1 PASSED
 
-    AppTest > The value (10) should be converted to -10 PASSED
+   AppTest > The value (10) should be converted to -10 PASSED
 
-    AppTest > The value (100) should be converted to -100 PASSED
+   AppTest > The value (100) should be converted to -100 PASSED
 
-    AppTest > The value (1000) should be converted to -1000 PASSED
+   AppTest > The value (1000) should be converted to -1000 PASSED
 
-    AppTest > The value 10 should be converted to 10 PASSED
+   AppTest > The value 10 should be converted to 10 PASSED
 
-    ...
-    ```
+   ...
+   ```
 
-    The values are converted using our converter and then by the default converter.
+   The values are converted using our converter and then by the default converter.
 
 ## Tests tagging
 
@@ -391,9 +392,9 @@ import com.google.common.base.Preconditions;
 public class App {
 
   public static boolean hasWon( final int a, final int b ) {
-    Preconditions.checkArgument( a >= 1 && a <= 6, "Invalid dice value %d", a );
-    Preconditions.checkArgument( b >= 1 && b <= 6, "Invalid dice value %d", b );
-    return a + b >= 10;
+   Preconditions.checkArgument( a >= 1 && a <= 6, "Invalid dice value %d", a );
+   Preconditions.checkArgument( b >= 1 && b <= 6, "Invalid dice value %d", b );
+   return a + b >= 10;
   }
 }
 ```
@@ -426,13 +427,13 @@ class AppTest {
 
   @ParameterizedTest( name = "should throw an IllegalArgumentException({0}) when provided the invalid dice value {1}" )
   @CsvSource( {
-    "Invalid dice value 7, 7, 1",
-    "Invalid dice value 7, 1, 7",
-    "Invalid dice value 0, 0, 7",
+   "Invalid dice value 7, 7, 1",
+   "Invalid dice value 7, 1, 7",
+   "Invalid dice value 0, 0, 7",
   } )
   public void shouldThrowAnExceptionWhen( String expectedErrorMessage, int a, int b ) {
-    final IllegalArgumentException exception = assertThrows( IllegalArgumentException.class, () -> App.hasWon( a, b ) );
-    assertEquals( expectedErrorMessage, exception.getMessage() );
+   final IllegalArgumentException exception = assertThrows( IllegalArgumentException.class, () -> App.hasWon( a, b ) );
+   assertEquals( expectedErrorMessage, exception.getMessage() );
   }
 }
 ```
@@ -470,32 +471,32 @@ public class AppTest {
 
   @Test
   public void test1() {
-    System.out.println( "@Test 1" );
+   System.out.println( "@Test 1" );
   }
 
   @Test
   public void test2() {
-    System.out.println( "@Test 2" );
+   System.out.println( "@Test 2" );
   }
 
   @BeforeAll
   public static void setupOnce() {
-    System.out.println( "@BeforeAll" );
+   System.out.println( "@BeforeAll" );
   }
 
   @AfterAll
   public static void teardownOnce() {
-    System.out.println( "@AfterAll" );
+   System.out.println( "@AfterAll" );
   }
 
   @BeforeEach
   public void setupBeforeEachTest() {
-    System.out.println( "@BeforeEach" );
+   System.out.println( "@BeforeEach" );
   }
 
   @AfterEach
   public void teardownAfterEachTest() {
-    System.out.println( "@AfterEach" );
+   System.out.println( "@AfterEach" );
   }
 }
 ```
@@ -512,24 +513,24 @@ Will show how each method is called.
 > Task :test
 
 AppTest STANDARD_OUT
-    @BeforeAll
+   @BeforeAll
 
 AppTest > test1() STANDARD_OUT
-    @BeforeEach
-    @Test 1
-    @AfterEach
+   @BeforeEach
+   @Test 1
+   @AfterEach
 
 AppTest > test1() PASSED
 
 AppTest > test2() STANDARD_OUT
-    @BeforeEach
-    @Test 2
-    @AfterEach
+   @BeforeEach
+   @Test 2
+   @AfterEach
 
 AppTest > test2() PASSED
 
 AppTest STANDARD_OUT
-    @AfterAll
+   @AfterAll
 
 BUILD SUCCESSFUL in 1s
 4 actionable tasks: 4 executed
@@ -551,8 +552,8 @@ Note that the methods invoked by an `@AfterEach` are called even when the tests 
 1. [`IgnoreCondition`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.migrationsupport/org/junit/jupiter/migrationsupport/conditions/IgnoreCondition.html)
 1. [`assertAll()`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Assertions.html#assertAll(java.util.Collection))
 1. [Assumptions](https://junit.org/junit5/docs/5.7.0-M1/api/org/junit/jupiter/api/Assumptions.html) class in Junit 5 :
-    1. Assumptions.assumeTrue() –  If the  condition is true, then run the test, else aborting the test.
-    1. Assumptions.false() –  If the  condition is false, then run the test, else aborting the test.
-    1. Assumptions.assumingThat() –   is much more flexible, If condition is true then executes, else do not abort test continue rest of code in test.
+   1. Assumptions.assumeTrue() –  If the  condition is true, then run the test, else aborting the test.
+   1. Assumptions.false() –  If the  condition is false, then run the test, else aborting the test.
+   1. Assumptions.assumingThat() –   is much more flexible, If condition is true then executes, else do not abort test continue rest of code in test.
 1. TestNG (alternative to JUnit)
 1. [add an aggregator example](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.params/org/junit/jupiter/params/aggregator/AggregateWith.html)
