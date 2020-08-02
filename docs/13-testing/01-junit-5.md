@@ -240,11 +240,41 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
    Dice game test > should return true if the sum of the given integers is equal to or greater than 10, false otherwise PASSED
    ```
 
+## IntelliJ and `@DisplayName`
+
+IntelliJ may not pick up the `@DisplayName` annotation values. as shown next.
+
+![IntelliJ Test Name]({{ '/assets/images/IntelliJ Test Name - 1.png' | absolute_url }})
+
+This can be easily fixed.
+
+1. Open IntelliJ preferences and filter for `gradle`, as shown next
+
+   {% include custom/note.html details="Press <code>[command] + [,]</code> to open the preferences for any application running on a Mac OS." %}
+
+   ![IntelliJ Preferences Gradle]({{ '/assets/images/IntelliJ Preferences Gradle.png' | absolute_url }})
+
+   Our project is using Gradle to build, run and test our project.
+
+1. Change the *Run tests using* to *IntelliJ*, as shown next.
+
+   ![IntelliJ Preferences Gradle]({{ '/assets/images/IntelliJ Preferences Gradle - Run Tests.png' | absolute_url }})
+
+1. Run the test from within IntelliJ
+
+   Open the test class `AppTest` and press `[control] + [shift] + [R]`
+
+   ![IntelliJ Test Name]({{ '/assets/images/IntelliJ Test Name - 2.png' | absolute_url }})
+
 ## Parameterized test
 
 The following example makes use of the [`@CsvSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvSource.html) annotation as we have multiple parameters.  In case of single parameters, the [`@ValueSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/ValueSource.html) annotation can be used.
 
 1. Convert the test to make use of parameters instead
+
+   Update file: `src/test/java/demo/AppTest.java`
+
+   {% include custom/note.html details="The <code>@Test</code> annotation is replaced by the <code>@ParameterizedTest</code> annotation." %}
 
    ```java
    package demo;
@@ -255,18 +285,17 @@ The following example makes use of the [`@CsvSource`](https://junit.org/junit5/d
 
    import static org.junit.jupiter.api.Assertions.assertTrue;
 
+   @DisplayName( "Dice game test" )
    class AppTest {
 
      @CsvSource( { "5, 5", "5, 6", "6, 5", "6, 6" } )
      @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
      @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
-     public void shouldReturnTrueIfWon( int a, int b ) {
+     void shouldReturnTrueIfWon( int a, int b ) {
        assertTrue( App.hasWon( a, b ) );
      }
    }
    ```
-
-   {% include custom/note.html details="The <code>@Test</code> annotation is replaced by the <code>@ParameterizedTest</code> annotation." %}
 
 1. Run the test
 
@@ -279,13 +308,13 @@ The following example makes use of the [`@CsvSource`](https://junit.org/junit5/d
    ```bash
    > Task :test
 
-   AppTest > Dice values 5 and 5 should yield a victory PASSED
+   Dice game test > Dice values 5 and 5 should yield a victory PASSED
 
-   AppTest > Dice values 5 and 6 should yield a victory PASSED
+   Dice game test > Dice values 5 and 6 should yield a victory PASSED
 
-   AppTest > Dice values 6 and 5 should yield a victory PASSED
+   Dice game test > Dice values 6 and 5 should yield a victory PASSED
 
-   AppTest > Dice values 6 and 6 should yield a victory PASSED
+   Dice game test > Dice values 6 and 6 should yield a victory PASSED
    ```
 
 ## Load test data from files (`@CsvFileSource`)
@@ -315,7 +344,7 @@ class AppTest {
 
   @ParameterizedTest( name = "The value {0} should be converted to {1}" )
   @CsvSource( { "(10), -10" } )
-  public void shouldConvertInput( int actual, int expected ) {
+  void shouldConvertInput( int actual, int expected ) {
    assertEquals( actual, expected );
   }
 }
@@ -376,7 +405,7 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
      @ParameterizedTest( name = "The value {0} should be converted to {1}" )
      @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
-     public void shouldConvertInput(
+     void shouldConvertInput(
        @ConvertWith( CustomNumberConverter.class ) int actual,
        int expected
      ) {
@@ -474,7 +503,7 @@ class AppTest {
    "Invalid dice value 7, 1, 7",
    "Invalid dice value 0, 0, 7",
   } )
-  public void shouldThrowAnExceptionWhen( String expectedErrorMessage, int a, int b ) {
+  void shouldThrowAnExceptionWhen( String expectedErrorMessage, int a, int b ) {
    final IllegalArgumentException exception = assertThrows( IllegalArgumentException.class, () -> App.hasWon( a, b ) );
    assertEquals( expectedErrorMessage, exception.getMessage() );
   }
