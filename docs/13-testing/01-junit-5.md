@@ -266,6 +266,8 @@ This can be easily fixed.
 
    ![IntelliJ Test Name]({{ '/assets/images/IntelliJ Test Name - 2.png' | absolute_url }})
 
+   The tests names should not reflect the `@DisplayName` annotation values.
+
 ## Parameterized test
 
 The following example makes use of the [`@CsvSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvSource.html) annotation as we have multiple parameters.  In case of single parameters, the [`@ValueSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/ValueSource.html) annotation can be used.
@@ -325,8 +327,29 @@ Instead of putting all the inputs in the source code, we can put the inputs in a
 
    Create file: `src/test/resources/samples/game_won.csv`
 
-   ```csv
    ```
+   Die 1,Die 2
+   5,5
+   5,6
+   6,5
+   6,6
+   ```
+
+1. IntelliJ treats CSV files differently, as shown in the following image.
+
+   ![IntelliJ see CSV data as table]({{ '/assets/images/IntelliJ see CSV data as table - 1.png' | absolute_url }})
+
+   A small table like icon will appear at the top right corner and two tabs are shown at the bottom left corner of the editor.
+
+1. Click on the table like icon to open the CSV preferences for this file.
+
+   ![IntelliJ see CSV data as table]({{ '/assets/images/IntelliJ see CSV data as table - 2.png' | absolute_url }})
+
+1. The data tab is now selected, as shown next.
+
+   ![IntelliJ see CSV data as table]({{ '/assets/images/IntelliJ see CSV data as table - 3.png' | absolute_url }})
+
+   We can easily edit the CSV using the data tab which will automatically add the delimiters for us.
 
 ## Custom converters
 
