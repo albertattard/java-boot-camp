@@ -35,20 +35,22 @@ A player is playing a dice game that requires 10 or more to win.  Write a method
    }
    ```
 
-   The Maven repository make use of older dependency configurations.  Use the new dependency configuration `testImplementation` that replaced the `testCompile` dependency configuration.
+   The Maven repository make use of older Gradle dependency configurations.  Use the new dependency configuration `testImplementation` that replaced the `testCompile` dependency configuration, as the latter is now [deprecated]( https://docs.gradle.org/current/userguide/java_plugin.html).
 
    ![Maven JUnit 5]({{ '/assets/images/Maven-JUnit-5.png' | absolute_url }})
    ([Reference](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter/5.7.0-M1))
 
    Use the latest version when possible.
 
-   You may need to refresh gradle to see the changes in the IDE.
+   You may need to refresh Gradle to see the changes in the IDE.
 
    ![Refresh Gradle]({{ '/assets/images/Refresh-Gradle.png' | absolute_url }})
 
    You can press the `[command] + [shift] + [I]` shortcut to refresh Gradle and update the external dependencies.  The new libraries will be included under the *External Libraries*, a shown next.
 
    ![JUnit 5 Dependency]({{ '/assets/images/JUnit-5-Dependency.png' | absolute_url }})
+
+## Create the first test
 
 1. Open the `App.java` class, press `[command] + [shift] + [T]` and select the *Create New Test...* menu option
 
@@ -78,10 +80,31 @@ A player is playing a dice game that requires 10 or more to win.  Write a method
    }
    ```
 
-   Please refer to [gradle documentation](
+   Please refer to [Gradle documentation](
 https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layout) for more information about the project structure.
 
+1. Provide a better description
+
+   Update file: `src/test/java/demo/AppTest.java`
+
+   {% include custom/note.html details="The following test class uses the package-private access modifier.  <a href='https://github.com/junit-team/junit5/issues/679'>JUnit 4 required the class and test method to be <code>public</code>, which is not required in JUnit 5 to improve test encapsulation.</a>" %}
+
+   ```java
+   package demo;
+
+   import org.junit.jupiter.api.DisplayName;
+
+   @DisplayName( "Dice game test" )
+   class AppTest {
+
+   }
+   ```
+
 1. Write the first test
+
+   Update file: `src/test/java/demo/AppTest.java`
+
+   {% include custom/note.html details="The test method does not have the <code>static</code> key word." %}
 
    ```java
    package demo;
@@ -91,35 +114,40 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
    import static org.junit.jupiter.api.Assertions.fail;
 
-   public class AppTest {
+   @DisplayName( "Dice game test" )
+   class AppTest {
 
     @Test
     @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
-    public void shouldReturnTrueIfWon() {
+    void shouldReturnTrueIfWon() {
       fail( "Simulating error" );
     }
    }
    ```
-
-   {include custom/note.html details="The method does not have the <code>static</code> key word." %}
 
    This test fails on purpose.
 
 1. Run the test
 
    ```bash
-   $ ./gradlew test
+   $ ./gradlew clean test
 
    > Task :test FAILED
 
-   AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise FAILED
-      org.opentest4j.AssertionFailedError at AppTest.java:13
+   Dice game test > should return true if the sum of the given integers is equal to or greater than 10, false otherwise FAILED
+     org.opentest4j.AssertionFailedError at AppTest.java:14
+
    ...
+
    BUILD FAILED in 1s
-   3 actionable tasks: 2 executed, 1 up-to-date
+   4 actionable tasks: 2 executed, 2 up-to-date
    ```
 
 1. Add the proper assertion
+
+   Update file: `src/test/java/demo/AppTest.java`
+
+   {% include custom/dose_not_compile.html %}
 
    ```java
    package demo;
@@ -129,11 +157,12 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
    import static org.junit.jupiter.api.Assertions.assertTrue;
 
-   public class AppTest {
+   @DisplayName( "Dice game test" )
+   class AppTest {
 
      @Test
      @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
-     public void shouldReturnTrueIfWon() {
+     void shouldReturnTrueIfWon() {
        assertTrue( App.hasWon( 5, 5 ) );
      }
    }
@@ -141,12 +170,14 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
    Add a basic implementation (that throws an exception when invoked on purpose)
 
+   Update file: `src/main/java/demo/App.java`
+
    ```java
    package demo;
 
    public class App {
      public static boolean hasWon( final int a, final int b ) {
-       throw UnsupportedOperationException("Coming soon...");
+       throw new UnsupportedOperationException("Coming soon...");
      }
    }
    ```
@@ -154,12 +185,14 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
    Run the tests
 
    ```bash
-   $ ./gradlew test
+   $ ./gradlew clean test
    ```
 
    The test will fail as expected.
 
 1. Implement the functionality
+
+   Update file: `src/main/java/demo/App.java`
 
    ```java
    package demo;
@@ -176,7 +209,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
    Run the tests again, this time these should pass.
 
    ```bash
-   $ ./gradlew test
+   $ ./gradlew clean test
 
    BUILD SUCCESSFUL in 1s
    4 actionable tasks: 4 executed
@@ -184,7 +217,7 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
 1. The output does not include the tests that were executed.
 
-   Update `build.gradle`
+   Update file: `build.gradle`
 
    ```groovy
    test {
@@ -197,17 +230,19 @@ https://docs.gradle.org/current/userguide/java_plugin.html#sec:java_project_layo
 
    Run the tests again.
 
+   {% include custom/note.html details="It is important to run the <code>clean</code> Gradle task as otherwise the tests may not run given that no changes are made to the code." %}
+
    ```bash
    $ ./gradlew clean test
 
-     > Task :test
+   > Task :test
 
-     AppTest > should return true if the sum of the given integers is equal to or greater than 10, false otherwise PASSED
+   Dice game test > should return true if the sum of the given integers is equal to or greater than 10, false otherwise PASSED
    ```
 
 ## Parameterized test
 
-The following example makes use of the [`@CsvSource` annotation](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvSource.html) as we have multiple parameters.  In case of single parameters, the [`@ValueSource` annotation](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/ValueSource.html) can be used.
+The following example makes use of the [`@CsvSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvSource.html) annotation as we have multiple parameters.  In case of single parameters, the [`@ValueSource`](https://junit.org/junit5/docs/current/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/ValueSource.html) annotation can be used.
 
 1. Convert the test to make use of parameters instead
 
@@ -220,22 +255,23 @@ The following example makes use of the [`@CsvSource` annotation](https://junit.o
 
    import static org.junit.jupiter.api.Assertions.assertTrue;
 
-   public class AppTest {
+   class AppTest {
 
-     @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
      @CsvSource( { "5, 5", "5, 6", "6, 5", "6, 6" } )
+     @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
+     @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
      public void shouldReturnTrueIfWon( int a, int b ) {
        assertTrue( App.hasWon( a, b ) );
      }
    }
    ```
 
-   Note that there is no `@Test` annotation was replaced by the `@ParameterizedTest` annotation.  The annotation `@DisplayName` is not required either as the test will take the name from the `@ParameterizedTest` annotation.
+   {% include custom/note.html details="The <code>@Test</code> annotation is replaced by the <code>@ParameterizedTest</code> annotation." %}
 
 1. Run the test
 
    ```bash
-   $ ./gradlew test
+   $ ./gradlew clean test
    ```
 
    Note that the test will be executed 4 times, one for each line
@@ -254,7 +290,14 @@ The following example makes use of the [`@CsvSource` annotation](https://junit.o
 
 ## Load test data from files (`@CsvFileSource`)
 
-{% include custom/pending.html %}
+Instead of putting all the inputs in the source code, we can put the inputs in a CSV file and have these loaded by the test, using the [`@CsvFileSource`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.params/org/junit/jupiter/params/provider/CsvFileSource.html) annotation.
+
+1. Create the test sample file
+
+   Create file: `src/test/resources/samples/game_won.csv`
+
+   ```csv
+   ```
 
 ## Custom converters
 
@@ -268,7 +311,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AppTest {
+class AppTest {
 
   @ParameterizedTest( name = "The value {0} should be converted to {1}" )
   @CsvSource( { "(10), -10" } )
@@ -329,7 +372,7 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
    import static org.junit.jupiter.api.Assertions.assertEquals;
 
-   public class AppTest {
+   class AppTest {
 
      @ParameterizedTest( name = "The value {0} should be converted to {1}" )
      @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
@@ -345,7 +388,7 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 1. Run the test
 
    ```bash
-   $ ./gradlew test
+   $ ./gradlew clean test
 
    ...
 
@@ -441,7 +484,7 @@ class AppTest {
 The above example runs three tests.
 
 ```bash
-$ ./gradlew test
+$ ./gradlew clean test
 
 > Task :test
 
@@ -467,7 +510,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AppTest {
+class AppTest {
 
   @Test
   public void test1() {
