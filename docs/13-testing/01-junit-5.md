@@ -509,7 +509,274 @@ BUILD FAILED in 1s
 
 ## Tests tagging
 
-{% include custom/pending.html %}
+```java
+package demo;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+@DisplayName( "Playing with tags" )
+class AppTest {
+
+  @Test
+  @DisplayName( "should always run this test" )
+  void shouldRunTest() {
+  }
+
+  @Test
+  @DisplayName( "should only run this test when the slow tag is active" )
+  void shouldRunSlowTest() {
+  }
+}
+```
+
+1. a
+
+   ```java
+   package demo;
+
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.api.Tag;
+   import org.junit.jupiter.api.Test;
+
+   @DisplayName( "Playing with tags" )
+   class AppTest {
+
+     @Test
+     @DisplayName( "should always run this test" )
+     void shouldRunTest() {
+     }
+
+     @Test
+     @Tag( "slow" )
+     @DisplayName( "should only run this test when the slow tag is active" )
+     void shouldRunSlowTest() {
+     }
+   }
+   ```
+
+1. b
+
+   ```bash
+   $ ./gradlew clean test
+
+   > Task :test
+
+   Playing with tags > should only run this test when the slow tag is active PASSED
+
+   Playing with tags > should always run this test PASSED
+
+   BUILD SUCCESSFUL in 2s
+   5 actionable tasks: 5 executed
+   ```
+
+1. c
+
+   ```groovy
+   test {
+     useJUnitPlatform {
+       excludeTags "slow"
+     }
+
+     testLogging {
+       events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
+     }
+   }
+   ```
+
+   Re-run the tests should not contain the tests tagged by the slow tag
+
+   ```bash
+   $ ./gradlew clean test
+
+   > Task :test
+
+   Playing with tags > should always run this test PASSED
+
+   BUILD SUCCESSFUL in 2s
+   5 actionable tasks: 5 executed
+   ```
+
+1. d
+
+   ```groovy
+   task slowTest(type: Test) {
+     description = 'Runs the slow tests.'
+     group = 'verification'
+
+     useJUnitPlatform {
+       includeTags "slow"
+     }
+
+     testLogging {
+       events = ['FAILED', 'PASSED', 'SKIPPED', 'STANDARD_OUT']
+     }
+
+     shouldRunAfter test
+   }
+   ```
+
+   ```bash
+   $ ./gradlew tasks
+   ```
+
+   ```
+   Verification tasks
+   ------------------
+   check - Runs all checks.
+   slowTest - Runs the slow tests.
+   test - Runs the unit tests.
+   ```
+
+1. e
+
+   ```bash
+   ./gradlew clean slowTest
+
+   > Task :slowTest
+
+   Playing with tags > should only run this test when the slow tag is active PASSED
+
+   BUILD SUCCESSFUL in 2s
+   5 actionable tasks: 5 executed
+   ```
+
+1. f
+
+   ```bash
+   $ ./gradlew build taskTree
+   ```
+
+   ```bash
+   :build
+   +--- :assemble
+   ...
+   \--- :check
+        \--- :test
+             +--- :classes
+             |    +--- :compileJava
+             |    \--- :processResources
+             \--- :testClasses
+                  +--- :compileTestJava
+                  |    \--- :classes
+                  |         +--- :compileJava
+                  |         \--- :processResources
+                  \--- :processTestResources
+   ```
+
+   ```groovy
+   check {
+     dependsOn slowTest
+   }
+   ```
+
+   ```bash
+   $ ./gradlew check taskTree
+   ```
+
+   ```bash
+   :check
+   +--- :slowTest
+   |    +--- :classes
+   |    |    +--- :compileJava
+   |    |    \--- :processResources
+   |    \--- :testClasses
+   |         +--- :compileTestJava
+   |         |    \--- :classes
+   |         |         +--- :compileJava
+   |         |         \--- :processResources
+   |         \--- :processTestResources
+   \--- :test
+        +--- :classes
+        |    +--- :compileJava
+        |    \--- :processResources
+        \--- :testClasses
+             +--- :compileTestJava
+             |    \--- :classes
+             |         +--- :compileJava
+             |         \--- :processResources
+             \--- :processTestResources
+   ```
+
+1. g
+
+   ```bash
+   ./gradlew clean check
+
+   > Task :test
+
+   Playing with tags > should always run this test PASSED
+
+   > Task :slowTest
+
+   Playing with tags > should only run this test when the slow tag is active PASSED
+
+   BUILD SUCCESSFUL in 2s
+   6 actionable tasks: 6 executed
+   ```
+
+### Custom annotations
+
+1. a
+
+   ```java
+   package demo;
+
+   import org.junit.jupiter.api.Tag;
+   import org.junit.jupiter.api.Test;
+
+   import java.lang.annotation.ElementType;
+   import java.lang.annotation.Retention;
+   import java.lang.annotation.RetentionPolicy;
+   import java.lang.annotation.Target;
+
+   @Test
+   @Tag( "slow" )
+   @Retention( RetentionPolicy.RUNTIME )
+   @Target( { ElementType.METHOD } )
+   public @interface SlowTest {
+   }
+   ```
+
+1. b
+
+   ```java
+   package demo;
+
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.api.Test;
+
+   @DisplayName( "Playing with tags" )
+   class AppTest {
+
+     @Test
+     @DisplayName( "should always run this test" )
+     void shouldRunTest() {
+     }
+
+     @SlowTest
+     @DisplayName( "should only run this test when the slow tag is active" )
+     void shouldRunSlowTest() {
+     }
+   }
+   ```
+
+1. c
+
+   ```bash
+   $ ./gradlew clean check
+
+   > Task :test
+
+   Playing with tags > should always run this test PASSED
+
+   > Task :slowTest
+
+   Playing with tags > should only run this test when the slow tag is active PASSED
+
+   BUILD SUCCESSFUL in 3s
+   6 actionable tasks: 6 executed
+   ```
 
 ## Nested tests
 
@@ -568,7 +835,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AppTest {
 
-  @ParameterizedTest( name = "should throw an IllegalArgumentException({0}) when provided the invalid dice value {1}" )
+  @ParameterizedTest( name = "should throw an IllegalArgumentException({0}) when provided the invalid dice values {1} and {2}" )
   @CsvSource( {
    "Invalid dice value 7, 7, 1",
    "Invalid dice value 7, 1, 7",
