@@ -509,6 +509,8 @@ BUILD FAILED in 1s
 
 ## Tests tagging
 
+Consider the following test class.
+
 ```java
 package demo;
 
@@ -530,7 +532,30 @@ class AppTest {
 }
 ```
 
-1. a
+The test class shown above has two (blank) test methods.  The second test method, `shouldRunSlowTest()` is a slow running test.  We may not want to run this test everytime as it would slow development down.  With that said, we would like to control when this test runs.
+
+JUnit 5 supports tags which can be used to group tests and only run the tests that we want.
+
+1. Run the tests
+
+   ```bash
+   $ ./gradlew clean test
+
+   > Task :test
+
+   Playing with tags > should only run this test when the slow tag is active PASSED
+
+   Playing with tags > should always run this test PASSED
+
+   BUILD SUCCESSFUL in 2s
+   5 actionable tasks: 5 executed
+   ```
+
+   Both tests are executed.
+
+1. Tag the slow test with the [`@Tag`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.api/org/junit/jupiter/api/Tag.html) annotation
+
+   Update file: `src/test/java/demo/AppTest.java`
 
    ```java
    package demo;
@@ -555,22 +580,11 @@ class AppTest {
    }
    ```
 
-1. b
+   The `@Tag` annotation takes the tag name as its value, `"slow"` in our example.
 
-   ```bash
-   $ ./gradlew clean test
+1. Exclude the _slow_ tests
 
-   > Task :test
-
-   Playing with tags > should only run this test when the slow tag is active PASSED
-
-   Playing with tags > should always run this test PASSED
-
-   BUILD SUCCESSFUL in 2s
-   5 actionable tasks: 5 executed
-   ```
-
-1. c
+   Update file: `build.gradle`
 
    ```groovy
    test {
@@ -584,7 +598,7 @@ class AppTest {
    }
    ```
 
-   Re-run the tests should not contain the tests tagged by the slow tag
+   Re-run the tests.  This time, the slow tests should not be included.
 
    ```bash
    $ ./gradlew clean test
@@ -597,7 +611,9 @@ class AppTest {
    5 actionable tasks: 5 executed
    ```
 
-1. d
+1. Define a new test type, `slowTest`
+
+   Update file: `build.gradle`
 
    ```groovy
    task slowTest(type: Test) {
@@ -616,9 +632,13 @@ class AppTest {
    }
    ```
 
+   List all gradle tasks.
+
    ```bash
    $ ./gradlew tasks
    ```
+
+   The `slowTest` should be listed under the _Verification tasks_, as shown next.
 
    ```
    Verification tasks
@@ -628,7 +648,7 @@ class AppTest {
    test - Runs the unit tests.
    ```
 
-1. e
+1. Run the slow tests
 
    ```bash
    ./gradlew clean slowTest
@@ -641,11 +661,15 @@ class AppTest {
    5 actionable tasks: 5 executed
    ```
 
-1. f
+1. Add the `slowTest` Gradle task to the build flow
+
+   Our new Gradle task is not part of the build flow.  Running `./gradlew build` will not run the slow tests.  List the Gradle tasks on which `build` depends.
 
    ```bash
    $ ./gradlew build taskTree
    ```
+
+   The `build` task depends on the `check` task, which depends on the `test` task, as shown next.
 
    ```bash
    :build
@@ -664,15 +688,21 @@ class AppTest {
                   \--- :processTestResources
    ```
 
+   Make the Gradle `check` task depend on the Gradle `slowTest` task.
+
    ```groovy
    check {
      dependsOn slowTest
    }
    ```
 
+   Verify that the Gradle `check` task depends on the `slowTest` task.
+
    ```bash
    $ ./gradlew check taskTree
    ```
+
+   The Gradle `check` task depends on both the `test` and the `slowTest` tasks.
 
    ```bash
    :check
@@ -698,7 +728,7 @@ class AppTest {
              \--- :processTestResources
    ```
 
-1. g
+1. Run both tests
 
    ```bash
    ./gradlew clean check
