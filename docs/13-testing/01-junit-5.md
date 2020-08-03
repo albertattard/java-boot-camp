@@ -17,10 +17,6 @@ permalink: docs/testing/junit-5/
 
 ---
 
-## Scenario
-
-A player is playing a dice game that requires 10 or more to win.  Write a method that determines whether the player has won.  This method will take two integers as an input and will return `true` if the sum of the given integers is equal to or greater than `10`.
-
 ## Add JUnit 5
 
 1. Add the [junit-jupiter](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter) aggregator dependency and configure that `test` task to make use of [JUnit 5](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-gradle).
@@ -51,6 +47,8 @@ A player is playing a dice game that requires 10 or more to win.  Write a method
    ![JUnit 5 Dependency]({{ '/assets/images/JUnit-5-Dependency.png' | absolute_url }})
 
 ## Create the first test
+
+A player is playing a dice game that requires 10 or more to win.  Write a method that determines whether the player has won.  This method will take two integers as an input and will return `true` if the sum of the given integers is equal to or greater than `10`.
 
 1. Open the `App.java` class, press `[command] + [shift] + [T]` and select the *Create New Test...* menu option
 
@@ -351,24 +349,57 @@ Instead of putting all the inputs in the source code, we can put the inputs in a
 
    We can easily edit the CSV using the data tab which will automatically add the delimiters for us.
 
+1. Use the CSV file
+
+   ```java
+   package demo;
+
+   import org.junit.jupiter.api.DisplayName;
+   import org.junit.jupiter.params.ParameterizedTest;
+   import org.junit.jupiter.params.provider.CsvFileSource;
+
+   import static org.junit.jupiter.api.Assertions.assertTrue;
+
+   @DisplayName( "Dice game test" )
+   class AppTest {
+
+     @CsvFileSource( resources = "/samples/game_won.csv", numLinesToSkip = 1 )
+     @ParameterizedTest( name = "Dice values {0} and {1} should yield a victory" )
+     @DisplayName( "should return true if the sum of the given integers is equal to or greater than 10, false otherwise" )
+     void shouldReturnTrueIfWon( int a, int b ) {
+       assertTrue( App.hasWon( a, b ) );
+     }
+   }
+   ```
+
+   The `@CsvSource` annotation is replaced by the `@CsvFileSource` annotation.
+
+   ```java
+     @CsvFileSource( resources = "/samples/game_won.csv", numLinesToSkip = 1 )
+   ```
+
+   The first line is skipped as this is the CSV header line and it should not be used as parameter.
+
 ## Custom converters
 
-In some applications, negative numbers are wrapped in round brackets.  For example, the negative ten is represented as `(10)`.
+In some applications, negative numbers are wrapped in round brackets.  For example, _negative ten_ is represented as `(10)`.
 
 ```java
 package demo;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName( "Custom negative number conversion" )
 class AppTest {
 
-  @ParameterizedTest( name = "The value {0} should be converted to {1}" )
   @CsvSource( { "(10), -10" } )
+  @ParameterizedTest( name = "The value ''{0}'' should be converted to {1}" )
   void shouldConvertInput( int actual, int expected ) {
-   assertEquals( actual, expected );
+    assertEquals( actual, expected );
   }
 }
 ```
@@ -376,10 +407,22 @@ class AppTest {
 The above will fail to convert the value `(10)` to `-10`
 
 ```bash
-org.junit.jupiter.api.extension.ParameterResolutionException: Error converting parameter at index 0: Failed to convert String "(10)" to type java.lang.Integer
+$ ./gradlew clean test
 
-  at org.junit.jupiter.params.ParameterizedTestMethodContext.parameterResolutionException(ParameterizedTestMethodContext.java:273)
-  ...
+> Task :test FAILED
+
+Custom negative number conversion > The value (10) should be converted to -10 FAILED
+    org.junit.jupiter.api.extension.ParameterResolutionException at ParameterizedTestMethodContext.java:273
+        Caused by: org.junit.jupiter.params.converter.ArgumentConversionException at DefaultArgumentConverter.java:122
+            Caused by: java.lang.NumberFormatException at NumberFormatException.java:68
+
+1 test completed, 1 failed
+
+...
+
+
+BUILD FAILED in 1s
+5 actionable tasks: 5 executed
 ```
 
 1. Create a custom converter
@@ -418,15 +461,17 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
    ```java
    package demo;
 
+   import org.junit.jupiter.api.DisplayName;
    import org.junit.jupiter.params.ParameterizedTest;
    import org.junit.jupiter.params.converter.ConvertWith;
    import org.junit.jupiter.params.provider.CsvSource;
 
    import static org.junit.jupiter.api.Assertions.assertEquals;
 
+   @DisplayName( "Custom negative number conversion" )
    class AppTest {
 
-     @ParameterizedTest( name = "The value {0} should be converted to {1}" )
+     @ParameterizedTest( name = "The value ''{0}'' should be converted to {1}" )
      @CsvSource( { "(1), -1", "(10), -10", "(100), -100", "(1000), -1000", "10, 10" } )
      void shouldConvertInput(
        @ConvertWith( CustomNumberConverter.class ) int actual,
@@ -437,6 +482,8 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
    }
    ```
 
+   The first argument is annotated with the [`@ConvertWith`](https://junit.org/junit5/docs/5.7.0-M1/api/org.junit.jupiter.params/org/junit/jupiter/params/converter/ConvertWith.html).  JUnit will use this converter to convert the string CSV value to integer.
+
 1. Run the test
 
    ```bash
@@ -444,17 +491,18 @@ org.junit.jupiter.api.extension.ParameterResolutionException: Error converting p
 
    ...
 
-   AppTest > The value (1) should be converted to -1 PASSED
+   Custom negative number conversion > The value '(1)' should be converted to -1 PASSED
 
-   AppTest > The value (10) should be converted to -10 PASSED
+   Custom negative number conversion > The value '(10)' should be converted to -10 PASSED
 
-   AppTest > The value (100) should be converted to -100 PASSED
+   Custom negative number conversion > The value '(100)' should be converted to -100 PASSED
 
-   AppTest > The value (1000) should be converted to -1000 PASSED
+   Custom negative number conversion > The value '(1000)' should be converted to -1000 PASSED
 
-   AppTest > The value 10 should be converted to 10 PASSED
+   Custom negative number conversion > The value '10' should be converted to 10 PASSED
 
-   ...
+   BUILD SUCCESSFUL in 2s
+   5 actionable tasks: 5 executed
    ```
 
    The values are converted using our converter and then by the default converter.
