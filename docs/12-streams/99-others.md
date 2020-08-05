@@ -1,3 +1,10 @@
+---
+published: false
+nav_exclude: true
+search_exclude: true
+permalink: docs/streams/pending/
+---
+
 ## Streams
 
 {% include custom/note.html details="This section is about the data sequence concept, not about IO streams, such as reading-from/writing-to files." %}
