@@ -21,11 +21,11 @@ permalink: docs/testing/matchers/
 
 [Hamcrest](http://hamcrest.org/JavaHamcrest/) is a framework for writing matcher objects allowing 'match' rules to be defined declaratively.
 
-1. Add the [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest-all/1.3) dependency
+1. Add the [Hamcrest](https://mvnrepository.com/artifact/org.hamcrest/hamcrest) dependency
 
     ```groovy
     dependencies {
-      testImplementation 'org.hamcrest:hamcrest-all:1.3'
+      testImplementation 'org.hamcrest:hamcrest:2.2'
     }
     ```
 
@@ -70,11 +70,11 @@ permalink: docs/testing/matchers/
 
 [Assertj](https://assertj.github.io/doc/) is a java library providing a rich set of assertions, truly helpful error messages, improves test code readability and is designed to be super easy to use.
 
-1. Add the [Assertj](https://mvnrepository.com/artifact/org.assertj/assertj-core/3.15.0) dependency
+1. Add the [Assertj](https://mvnrepository.com/artifact/org.assertj/assertj-core/) dependency
 
     ```groovy
     dependencies {
-      testImplementation 'org.assertj:assertj-core:3.15.0'
+      testImplementation 'org.assertj:assertj-core:3.16.1'
     }
     ```
 
@@ -121,15 +121,15 @@ permalink: docs/testing/matchers/
 
 According to [Google Trends](https://trends.google.com/trends/explore?q=hamcrest,assertj), the matchers share similar popularity.
 
-![Harmcrest vs AssertJ]({{site.baseurl}}/assets/images/Harmcrest-vs.-AssertJ.png)
+![Harmcrest vs AssertJ]({{ '/assets/images/Harmcrest-vs.-AssertJ.png' | absolute_url }})
 
 The good news is that these are not mutually exclusive and it is not uncommon to find them both.
 
 ```groovy
 dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
-  testImplementation 'org.hamcrest:hamcrest-all:1.3'
-  testImplementation 'org.assertj:assertj-core:3.15.0'
+  testImplementation 'org.hamcrest:hamcrest:2.2'
+  testImplementation 'org.assertj:assertj-core:3.16.1'
 }
 ```
 
