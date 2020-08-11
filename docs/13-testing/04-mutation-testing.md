@@ -27,7 +27,7 @@ PITest requires some Gradle configuration
 
     ```groovy
     plugins {
-      id 'info.solidsoft.pitest' version '1.4.8'
+      id 'info.solidsoft.pitest' version '1.5.1'
     }
     ```
 
