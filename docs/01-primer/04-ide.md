@@ -12,6 +12,7 @@ permalink: docs/primer/ide/
 
 Plugins
 
+1. [One Dark theme](https://plugins.jetbrains.com/plugin/11938-one-dark-theme)
 1. [Nyan Progress Bar](https://plugins.jetbrains.com/plugin/8575-nyan-progress-bar)
 1. [Key Promoter X](https://plugins.jetbrains.com/plugin/9792-key-promoter-x)
 1. [Lombok](https://plugins.jetbrains.com/plugin/6317-lombok)
