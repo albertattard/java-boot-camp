@@ -97,10 +97,30 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
    ```console
    > Task :dependencies
 
-   ------------------------------------------------------------
-   Root project
-   ------------------------------------------------------------
+   ...
 
+   testCompileClasspath - Compile classpath for source set 'test'.
+   +--- com.google.guava:guava:28.2-jre
+   |    +--- com.google.guava:failureaccess:1.0.1
+   |    +--- com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
+   |    +--- com.google.code.findbugs:jsr305:3.0.2
+   |    +--- org.checkerframework:checker-qual:2.10.0
+   |    +--- com.google.errorprone:error_prone_annotations:2.3.4
+   |    \--- com.google.j2objc:j2objc-annotations:1.3
+   \--- org.junit.jupiter:junit-jupiter-api:5.6.0
+        +--- org.junit:junit-bom:5.6.0
+        |    +--- org.junit.jupiter:junit-jupiter-api:5.6.0 (c)
+        |    \--- org.junit.platform:junit-platform-commons:1.6.0 (c)
+        +--- org.apiguardian:apiguardian-api:1.1.0
+        +--- org.opentest4j:opentest4j:1.2.0
+        \--- org.junit.platform:junit-platform-commons:1.6.0
+             +--- org.junit:junit-bom:5.6.0 (*)
+             \--- org.apiguardian:apiguardian-api:1.1.0
+
+   ...
+
+   BUILD SUCCESSFUL in 769ms
+   1 actionable task: 1 executed
    ```
 
 ## Package Project
