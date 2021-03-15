@@ -21,7 +21,7 @@ permalink: docs/primer/hello-world-application/
 
 1. Run the project
 
-   ```bash
+   ```console
    $ ./gradlew run
 
    > Task :run
@@ -38,7 +38,7 @@ permalink: docs/primer/hello-world-application/
 
    Using the `-i` (or `--info`) [logging option](https://docs.gradle.org/current/userguide/logging.html#logging), Gradle will produce more information.
 
-   ```bash
+   ```console
    $ ./gradlew run -i
    ...
    > Configure project :
@@ -63,13 +63,13 @@ permalink: docs/primer/hello-world-application/
 
    Display the other tasks the `run` task depends on
 
-   ```bash
+   ```console
    $ ./gradlew run taskTree
    ```
 
    The result shows an inverted tree, where the top nodes depend on the lower nodes
 
-   ```bash
+   ```console
    :run
    \--- :classes
         +--- :compileJava
@@ -88,13 +88,13 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
 1. List project dependencies
 
-   ```bash
+   ```console
    $ ./gradlew dep
    ```
 
    This is very useful to identify any conflicting dependencies
 
-   ```bash
+   ```console
    > Task :dependencies
 
    ------------------------------------------------------------
@@ -131,19 +131,19 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
 1. Build the project
 
-   ```bash
+   ```console
    $ ./gradlew clean build
    ```
 
    This will produce a [JAR](https://docs.oracle.com/javase/8/docs/technotes/guides/jar/jarGuide.html) file at
 
-   ```
+   ```console
    build/libs/demo.jar
    ```
 
    JAR is a simple ZIP file.  Unzip it.
 
-   ```bash
+   ```console
    $ unzip build/libs/demo.jar -d temp
    Archive:  build/libs/demo.jar
      creating: temp/META-INF/
@@ -154,7 +154,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    The `temp` directory contains two folders and each folder will contain one file.
 
-   ```
+   ```console
    $ tree temp
    temp
    ├── META-INF
@@ -167,7 +167,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    The `temp/META-INF/MANIFEST.MF` file is a text file created by one of the Gradle tasks.
 
-   ```bash
+   ```console
    $ cat temp/META-INF/MANIFEST.MF
    Manifest-Version: 1.0
    ```
@@ -179,7 +179,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    The Bytecode produced when compiling this class can be viewed using the `javap` command as shown next.
 
-   ```bash
+   ```console
    $ ./gradlew build
    $ javap -c build/classes/java/main/demo/App.class
    Compiled from "App.java"
@@ -221,7 +221,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
 1. Run the application
 
-   ```bash
+   ```console
    $ java -jar build/libs/demo.jar
    no main manifest attribute, in build/libs/demo.jar
    ```
@@ -244,20 +244,20 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    Build the project
 
-   ```bash
+   ```console
    $ ./gradlew clean build
    ```
 
    Remove the `temp` directory and unzip it again
 
-   ```bash
+   ```console
    $ rm -rf temp
    $ unzip build/libs/demo.jar -d temp
    ```
 
    The manifest now contains the `Main-Class` attribute.
 
-   ```bash
+   ```console
    $ cat temp/META-INF/MANIFEST.MF
    Manifest-Version: 1.0
    Main-Class: demo.App
@@ -265,12 +265,12 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    Run the application.
 
-   ```bash
+   ```console
    $ java -jar build/libs/demo.jar
    ```
 
    This time, it should work.
 
-   ```bash
+   ```console
    Hello world.
    ```
