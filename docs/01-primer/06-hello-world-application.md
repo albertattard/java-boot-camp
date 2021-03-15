@@ -95,7 +95,7 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
    This is very useful to identify any conflicting dependencies
 
    ```console
-   Test
+   > Task :dependencies
    ```
 
 ## Package Project
