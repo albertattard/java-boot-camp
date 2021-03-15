@@ -96,6 +96,11 @@ Gradle tasks add functionality to Gradle.  Dependencies add functionality to the
 
    ```console
    > Task :dependencies
+
+   ------------------------------------------------------------
+   Root project
+   ------------------------------------------------------------
+
    ```
 
 ## Package Project
